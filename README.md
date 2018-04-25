@@ -10,19 +10,19 @@ It comes along with a set of handy readers for almost all output formats:
 
 * VTK Domain output
 
-        ogs5py.read.readvtk
+        ogs5py.reader.readvtk
 
 * PVD Domain output
 
-        ogs5py.read.readpvd
+        ogs5py.reader.readpvd
 
 * TECPLOT point output
 
-        ogs5py.read.readtec_point
+        ogs5py.reader.readtec_point
 
 * TECPLOT polyline output
 
-        ogs5py.read.readtec_polyline
+        ogs5py.reader.readtec_polyline
 
 
 Example
