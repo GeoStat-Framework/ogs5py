@@ -279,17 +279,33 @@ class inspect_tecplot(object):
         self.var_ct = reader.GetNumberOfDataArrays()
         self.var_names = [reader.GetDataArrayName(i).strip()
                           for i in range(self.var_ct)]
-        # get zone_names
-        self.zone_ct = reader.GetNumberOfBlocks()
-        self.zone_names = [reader.GetBlockName(i).strip()
-                           for i in range(self.zone_ct)]
+        # get block_names
+        self.block_ct = reader.GetNumberOfBlocks()
+        self.block_names = [reader.GetBlockName(i).strip()
+                            for i in range(self.block_ct)]
         # get the zone positions within the file
         self.start = []
         self.zone_lines = []
         self.zone_length = []
         self.skip = []
         if get_zone_sizes:
+            self._get_zone_ct()
             self._get_zone_sizes()
+
+    def _get_zone_ct(self):
+        '''
+        Get number and names of zones in file
+        '''
+        self.zone_ct = 0
+        self.zone_names = []
+        with open(self.infile, "r") as f:
+            line = f.readline()
+            while line:
+                split = line.split()
+                if split[0] == "ZONE":
+                    self.zone_ct += 1
+                    self.zone_names.append(split[1].split('"')[1])
+                line = f.readline()
 
     def _get_zone_sizes(self):
         '''
@@ -350,8 +366,8 @@ class inspect_tecplot(object):
             # calculate the block-sizes between the data-blocks
             self.skip = [self.start[0]]
             for i in range(1, self.zone_ct):
-                self.skip.append(self.start[i] - self.start[i-1]
-                                 - self.zone_lines[i-1]+1)
+                self.skip.append(self.start[i] - self.start[i-1] -
+                                 self.zone_lines[i-1]+1)
 
     def get_zone_table_data(self):
         '''
@@ -384,7 +400,7 @@ class inspect_tecplot(object):
         reader.Update()
         file_blocks = reader.GetOutput()
         # iterate over all blocks
-        for i in range(self.zone_ct):
+        for i in range(self.block_ct):
             # get the i-th block which is an instance of class vtkDataObject
             block = file_blocks.GetBlock(i)
             # read the single block
@@ -448,14 +464,14 @@ def readtec_block(infile):
     # inspect the tecplot file
     info = inspect_tecplot(infile, get_zone_sizes=False)
     zone_data = info.get_zone_block_data()
-    if info.zone_ct == 1 and info.zone_names[0] == "DEFAULT":
+    if info.block_ct == 1 and info.block_names[0] == "DEFAULT":
         return zone_data[0]
     # get the time-steps from the zone_names (e.g. ZONE T="TIME=0.0")
     # if that doesn't work, just give the zone-names as "time"
     try:
-        time = np.array([float(info.zone_names[i][:-1])
-                         for i in range(info.zone_ct)])
+        time = np.array([float(info.block_names[i][:-1])
+                         for i in range(info.block_ct)])
     except Exception:
-        time = info.zone_names
+        time = info.block_names
     # separate the time-variable and store blocks in DATA
     return {"TIME": time, "DATA": zone_data}

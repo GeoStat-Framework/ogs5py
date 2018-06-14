@@ -60,20 +60,25 @@ def load_ogs5gli(filepath, verbose=True):
         reading = True
         # read the first line
         line = gli.readline().strip()
+        found_first = False
         while reading:
             # if end of file without '#STOP' keyword reached, raise Error
             filepos = gli.tell()
             if not gli.readline() and not line.startswith("#STOP"):
                 raise EOFError("reached end of file... unexpected")
             gli.seek(filepos)
-
             # skip blank lines
             if not line:
+                line = gli.readline().strip()
+                continue
+            # skip header
+            if not found_first and not line.startswith("#"):
                 line = gli.readline().strip()
                 continue
 
             # check for points
             elif line.startswith("#POINTS"):
+                found_first = True
                 if verbose:
                     print("found 'POINTS'")
                 pnts = np.empty((0, 3), dtype=float)
@@ -102,6 +107,7 @@ def load_ogs5gli(filepath, verbose=True):
 
             # check for polyline
             elif line.startswith("#POLYLINE"):
+                found_first = True
                 if verbose:
                     print("found 'POLYLINE'")
                 ply = dcp(EMPTY_PLY)
@@ -131,6 +137,7 @@ def load_ogs5gli(filepath, verbose=True):
 
             # check for surface
             elif line.startswith("#SURFACE"):
+                found_first = True
                 if verbose:
                     print("found 'SURFACE'")
                 srf = dcp(EMPTY_SRF)
@@ -161,6 +168,7 @@ def load_ogs5gli(filepath, verbose=True):
 
             # check for volume
             elif line.startswith("#VOLUME"):
+                found_first = True
                 if verbose:
                     print("found 'VOLUME'")
                 vol = dcp(EMPTY_VOL)

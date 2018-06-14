@@ -10,9 +10,6 @@ import os
 import tempfile
 import numpy as np
 from ogs5py.fileclasses.msh.tools import export_mesh
-# from traits.etsconfig.api import ETSConfig
-# ETSConfig.toolkit = "qt4"  # 'wx'
-
 os.environ['QT_API'] = 'pyqt'
 os.environ['ETS_TOOLKIT'] = 'qt4'
 
@@ -59,6 +56,8 @@ def show_mesh(mesh, show_element_id=True):
     # stop if mayavi is not installed
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
+        print("..if you are running an IPython console" +
+              ", don't run it under qt5. Mayavi still ueses qt4.")
         return
 
     # close all mayavi scenes
