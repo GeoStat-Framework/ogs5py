@@ -60,7 +60,7 @@ class PCT(object):
 
     def save(self, path):
         '''
-        Save the actual GLI external file in the given path.
+        Save the actual PCT external file in the given path.
 
         Parameters
         ----------
