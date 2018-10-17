@@ -532,8 +532,13 @@ def export_mesh(filepath, mesh, file_format=None,
     if not export_material_id and add_data_by_id is None:
         cell_data = None
 
-    mio.write(filepath, points, cells,
-              cell_data=cell_data, file_format=file_format)
+    mesh_out = mio.Mesh(
+        points, cells, point_data=None, cell_data=cell_data, field_data=None
+    )
+    mio.write(filepath, mesh_out, file_format=file_format)
+
+#    mio.write(filepath, points, cells,
+#              cell_data=cell_data, file_format=file_format)
 
 
 def convert_meshio(points, cells,
