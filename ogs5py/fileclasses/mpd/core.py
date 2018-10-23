@@ -27,15 +27,20 @@ class MPD(OGSfile):
     ----
     See: ``add_block``
 
-    See: https://svn.ufz.de/ogs/browser/trunk/sources/FEM/rf_mmp_new.cpp#L5375
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mmp
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L5260
     """
 
     MKEYS = ["MEDIUM_PROPERTIES_DISTRIBUTED"]
-    SKEYS = [["MSH_TYPE",
-              "MMP_TYPE",
-              "DIS_TYPE",
-              "CONVERSION_FACTOR",
-              "DATA"]]
+    # sorted
+    SKEYS = [[
+        "MSH_TYPE",
+        "MMP_TYPE",
+        "DIS_TYPE",
+        "CONVERSION_FACTOR",
+        "DATA",
+    ]]
 
     STD = {}
 

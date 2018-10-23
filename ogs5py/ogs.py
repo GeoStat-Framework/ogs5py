@@ -85,7 +85,7 @@ class OGS(object):
 
     Attributes
     ----------
-    bc : Boundary Condition
+    bc  : Boundary Condition
         Information of the Boundary Conditions for the model.
     cct : Communication Table
         Information of the Communication Table for the model.
@@ -139,7 +139,8 @@ class OGS(object):
 
     """
 
-    def __init__(self, task_root=CWD, task_id="ogs", output_dir=None):
+    def __init__(self, task_root=CWD+"/ogs5model",
+                 task_id="model", output_dir=None):
         '''
         Initialize an OGS file.
 
@@ -148,10 +149,9 @@ class OGS(object):
         task_root : string, optional
             Path to the destiny folder. Default is the current working dir
         task_id : string, optional
-            Name for the ogs task. Default: "ogs"
+            Name for the ogs task. Default: "model"
         output_dir : string, optional
             Path to the output directory. Default is the task_root folder.
-
         '''
         self._task_root = task_root
         self._task_id = task_id
@@ -196,16 +196,16 @@ class OGS(object):
 
     @task_root.setter
     def task_root(self, value):
-        # del self.POINTS
         self._task_root = value
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).task_root = value
-        for i in len(self.mpd):
+        print(self.mpd)
+        for i in range(len(self.mpd)):
             self.mpd[i].task_root = value
-        for i in len(self.gli_ext):
+        for i in range(len(self.gli_ext)):
             self.gli_ext[i].task_root = value
-        for i in len(self.rfr):
+        for i in range(len(self.rfr)):
             self.rfr[i].task_root = value
 
     @property
@@ -217,7 +217,6 @@ class OGS(object):
 
     @task_id.setter
     def task_id(self, value):
-        # del self.POINTS
         self._task_id = value
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
@@ -314,26 +313,9 @@ class OGS(object):
         '''
         method to call all write_file() methods that are initialized
         '''
-        self.bc.write_file()
-        self.cct.write_file()
-        self.fct.write_file()
-        self.gem.write_file()
-        self.gli.write_file()
-        self.ic.write_file()
-        self.krc.write_file()
-        self.mcp.write_file()
-        self.mfp.write_file()
-        self.mmp.write_file()
-        self.msh.write_file()
-        self.msp.write_file()
-        self.num.write_file()
-        self.out.write_file()
-        self.pcs.write_file()
-        self.pct.write_file()
-        self.rei.write_file()
-        self.rfd.write_file()
-        self.st.write_file()
-        self.tim.write_file()
+        for ext in OGS_EXT:
+            # workaround to get access to class-members by name
+            getattr(self, ext[1:]).write_file()
 
         for mpd_file in self.mpd:
             mpd_file.write_file()
@@ -355,9 +337,43 @@ class OGS(object):
         self.gli_ext = []
         self.rfr = []
 
-    def load_model(self, task_root, skip_files=None, skip_ext=None):
+    def load_model(self, task_root, task_id=None,
+                   use_task_root=False, use_task_id=False,
+                   skip_files=None, skip_ext=None,
+                   encoding=None):
         '''
         Load an existing OGS5 model.
+
+        Parameters
+        ----------
+        task_root : str
+            Path to the destiny folder.
+        task_id : str or None, optional
+            Task ID of the model to load. If None is given, it will be
+            determind by the found files. Default: None
+        use_task_root : Bool, optional
+            State if the given task_root should be used for this model.
+            Default: False
+        use_task_root : Bool, optional
+            State if the given task_id should be used for this model.
+            Default: False
+        skip_files : list or None, optional
+            List of file-names, that should not be read. Default: None
+        skip_ext : list or None, optional
+            List of file-extensions, that should not be read. Default: None
+        encoding : str or None, optional
+            encoding of the given files. If ``None`` is given, the system
+            standard is used. Default: ``None``
+
+        Notes
+        -----
+        This method will search for all known OGS5 file-extensions in the
+        given path (task_root).
+        Additional files from:
+            - GLI (POINT_VECTOR + TIN)
+            - MMP (distributed media properties)
+            - IC (RESTART)
+        will be read automatically.
         '''
         self.reset()
 
@@ -366,86 +382,122 @@ class OGS(object):
         if skip_ext is None:
             skip_ext = []
 
+        task_id_found = False
+
+        if use_task_root:
+            self.task_root = task_root
+
+        if task_id is None:
+            task_id_search = "*"
+        else:
+            task_id_search = str(task_id)
+            if use_task_id:
+                self.task_id = str(task_id)
+
+        # iterate over all ogs file-extensions
         for ext in OGS_EXT:
+            # skip certain file extensions if wanted
             if ext in skip_ext or ext[1:] in skip_ext:
                 continue
-            files = glob.glob(os.path.join(task_root, "*"+ext))
-            if files:
-                fil = files[0]
-                if os.path.basename(fil) in skip_files or fil in skip_files:
-                    continue
-                # workaround to get access to class-members by name
-                getattr(self, ext[1:]).read_file(fil)
-                # append GEOMETRY defnitions
-                if ext == ".gli":
-                    for ply in self.gli.POLYLINES:
-                        # POINT_VECTOR definition of a POLYLINE
-                        ext_name = ply["POINT_VECTOR"]
-                        if ext_name is not None:
-                            f_name, f_ext = os.path.splitext(ext_name)
-                            ext_file = GLIext(typ="POINT_VECTOR",
-                                              file_name=f_name,
-                                              file_ext=f_ext,
-                                              task_root=self.task_root)
-                            path = os.path.join(task_root, ext_name)
-                            ext_file.read_file(path)
-                            self.gli_ext.append(dcp(ext_file))
-                    for srf in self.gli.SURFACES:
-                        # Triangulation definition of a SURFACE
-                        ext_name = srf["TIN"]
-                        if ext_name is not None:
-                            f_name, f_ext = os.path.splitext(ext_name)
-                            ext_file = GLIext(typ="TIN",
-                                              file_name=f_name,
-                                              file_ext=f_ext,
-                                              task_root=self.task_root)
-                            path = os.path.join(task_root, ext_name)
-                            ext_file.read_file(path)
-                            self.gli_ext.append(dcp(ext_file))
-                # append MEDIUM_PROPERTIES_DISTRIBUTED defnitions
-                if ext == ".mmp":
-                    for i in range(len(self.mmp.mainkw)):
-                        # external PERMEABILITY_DISTRIBUTION
-                        if "PERMEABILITY_DISTRIBUTION" in self.mmp.subkw[i]:
-                            index = self.mmp.subkw[i].index(
-                                "PERMEABILITY_DISTRIBUTION")
-                            ext_name = self.mmp.cont[i][index][0][0]
-                            f_name, f_ext = os.path.splitext(ext_name)
-                            ext_file = MPD(file_name=f_name,
-                                           file_ext=f_ext,
-                                           task_root=self.task_root)
-                            path = os.path.join(task_root, ext_name)
-                            ext_file.read_file(path)
-                            self.mpd.append(dcp(ext_file))
-                        # external POROSITY_DISTRIBUTION
-                        if "POROSITY_DISTRIBUTION" in self.mmp.subkw[i]:
-                            index = self.mmp.subkw[i].index(
-                                "POROSITY_DISTRIBUTION")
-                            ext_name = self.mmp.cont[i][index][0][0]
-                            f_name, f_ext = os.path.splitext(ext_name)
-                            ext_file = MPD(file_name=f_name,
-                                           file_ext=f_ext,
-                                           task_root=self.task_root)
-                            path = os.path.join(task_root, ext_name)
-                            ext_file.read_file(path)
-                            self.mpd.append(dcp(ext_file))
-                # append RESART defnitions
-                if ext == ".ic":
-                    for i in range(len(self.ic.mainkw)):
-                        if "DIS_TYPE" in self.ic.subkw[i]:
-                            index = self.ic.subkw[i].index("DIS_TYPE")
-                            if self.ic.cont[i][index][0][0] != "RESTART":
-                                continue
-                            ext_name = self.ic.cont[i][index][0][1]
-                            f_name, f_ext = os.path.splitext(ext_name)
-                            ext_file = RFR(file_name=f_name,
-                                           file_ext=f_ext,
-                                           task_root=self.task_root)
-                            path = os.path.join(task_root, ext_name)
-                            ext_file.read_file(path)
-                            self.rfr.append(dcp(ext_file))
+            # search for files with given extension
+            files = glob.glob(os.path.join(task_root, task_id_search+ext))
+            # if nothing was found, skip
+            if not files:
+                continue
+            # take the first found file if there are multiple
+            fil = files[0]
+            # take the found task_id
+            if not task_id_found:
+                task_id_found = True
+                task_id_search = os.path.splitext(os.path.basename(fil))[0]
+                if task_id is None:
+                    print("ogs5py load_model: task_id found - "+task_id_search)
+                task_id = task_id_search
+                if use_task_id:
+                    self.task_id = task_id
+            # skip file if wanted
+            if os.path.basename(fil) in skip_files or fil in skip_files:
+                continue
+            # workaround to get access to class-members by name
+            getattr(self, ext[1:]).read_file(fil, encoding=encoding)
+            # append GEOMETRY defnitions
+            if ext == ".gli":
+                for ply in self.gli.POLYLINES:
+                    # POINT_VECTOR definition of a POLYLINE
+                    ext_name = ply["POINT_VECTOR"]
+                    if ext_name is not None:
+                        raw_file_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        ext_file = GLIext(typ="POINT_VECTOR",
+                                          file_name=f_name,
+                                          file_ext=f_ext,
+                                          task_root=self.task_root)
+                        path = os.path.join(task_root, ext_name)
+                        ext_file.read_file(path, encoding=encoding)
+                        self.gli_ext.append(dcp(ext_file))
+                for srf in self.gli.SURFACES:
+                    # Triangulation definition of a SURFACE
+                    ext_name = srf["TIN"]
+                    if ext_name is not None:
+                        raw_file_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        ext_file = GLIext(typ="TIN",
+                                          file_name=f_name,
+                                          file_ext=f_ext,
+                                          task_root=self.task_root)
+                        path = os.path.join(task_root, ext_name)
+                        ext_file.read_file(path, encoding=encoding)
+                        self.gli_ext.append(dcp(ext_file))
+            # append MEDIUM_PROPERTIES_DISTRIBUTED defnitions
+            if ext == ".mmp":
+                for i in range(len(self.mmp.mainkw)):
+                    # external PERMEABILITY_DISTRIBUTION
+                    if "PERMEABILITY_DISTRIBUTION" in self.mmp.subkw[i]:
+                        index = self.mmp.subkw[i].index(
+                            "PERMEABILITY_DISTRIBUTION")
+                        ext_name = self.mmp.cont[i][index][0][0]
+                        raw_file_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        ext_file = MPD(file_name=f_name,
+                                       file_ext=f_ext,
+                                       task_root=self.task_root)
+                        path = os.path.join(task_root, ext_name)
+                        ext_file.read_file(path, encoding=encoding)
+                        self.mpd.append(dcp(ext_file))
+                    # external POROSITY_DISTRIBUTION
+                    if "POROSITY_DISTRIBUTION" in self.mmp.subkw[i]:
+                        index = self.mmp.subkw[i].index(
+                            "POROSITY_DISTRIBUTION")
+                        ext_name = self.mmp.cont[i][index][0][0]
+                        raw_file_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        ext_file = MPD(file_name=f_name,
+                                       file_ext=f_ext,
+                                       task_root=self.task_root)
+                        path = os.path.join(task_root, ext_name)
+                        ext_file.read_file(path, encoding=encoding)
+                        self.mpd.append(dcp(ext_file))
+            # append RESART defnitions
+            if ext == ".ic":
+                for i in range(len(self.ic.mainkw)):
+                    if "DIS_TYPE" in self.ic.subkw[i]:
+                        index = self.ic.subkw[i].index("DIS_TYPE")
+                        if self.ic.cont[i][index][0][0] != "RESTART":
+                            continue
+                        ext_name = self.ic.cont[i][index][0][1]
+                        raw_file_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        ext_file = RFR(file_name=f_name,
+                                       file_ext=f_ext,
+                                       task_root=self.task_root)
+                        path = os.path.join(task_root, ext_name)
+                        ext_file.read_file(path, encoding=encoding)
+                        self.rfr.append(dcp(ext_file))
+        # if nothing was found print out
+        if not task_id_found:
+            print("ogs5py: laod_model - nothing was found at: "+task_root)
 
-    def run_model(self, ogs_root=None,
+    def run_model(self, ogs_root=None, ogs_name="ogs",
                   print_log=True, save_log=True,
                   log_path=None, log_name=None):
         '''
@@ -456,6 +508,9 @@ class OGS(object):
         ogs_root : str or None, optional
             path to the ogs executable. If ``None`` is given, the default sys
             path will be searched with ``which``. Default: None
+        ogs_name : str or None, optional
+            Name of to the ogs executable to search for.
+            Just used if ,ogs_root is ``None``. Default: ``"ogs"``
         print_log : bool, optional
             state if the ogs output should be displayed in the terminal.
             Default: True
@@ -472,7 +527,7 @@ class OGS(object):
 
         # look for the standard ogs executable in the standard-path
         if ogs_root is None:
-            check_ogs = which("ogs")
+            check_ogs = which(ogs_name)
             if check_ogs is None:
                 print("Please put the ogs executable in the default sys path: "
                       + str(os.defpath.split(os.pathsep)))

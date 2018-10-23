@@ -24,12 +24,19 @@ class CCT(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/cct
+
+    https://github.com/ufz/ogs5/blob/master/FEM/fct_mpi.cpp#L27
     """
 
     MKEYS = ["COMMUNICATION_TABLE"]
-    SKEYS = [["MYRANK",
-              "NEIGHBOR",
-              "NNEIGHBORS"]]
+    # sorted
+    SKEYS = [[
+        "MYRANK",
+        "NNEIGHBORS",
+        "NEIGHBOR",
+    ]]
 
     STD = {}
 

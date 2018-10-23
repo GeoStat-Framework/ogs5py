@@ -40,30 +40,37 @@ class BC(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/bc
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_bc_new.cpp#L228
     """
 
     MKEYS = ["BOUNDARY_CONDITION"]
-    SKEYS = [["COMP_NAME",
-              "CONSTRAINED",
-              "COPY_VALUE",
-              "DIS_TYPE",
-              "DIS_TYPE_CONDITION",
-              "EPSILON",
-              "EXCAVATION",
-              "FCT_TYPE",
-              "GEO_TYPE",
-              "MSH_TYPE",
-              "NO_DISP_INCREMENT",
-              "PCS_TYPE",
-              "PRESSURE_AS_HEAD",
-              "PRIMARY_VARIABLE",
-              "TIME_CONTROLLED_ACTIVE",
-              "TIM_TYPE"]]
+    # sorted
+    SKEYS = [[
+        "PCS_TYPE",
+        "PRIMARY_VARIABLE",
+        "COMP_NAME",
+        "GEO_TYPE",
+        "DIS_TYPE",
+        "TIM_TYPE",
+        "FCT_TYPE",
+        "MSH_TYPE",
+        "DIS_TYPE_CONDITION",
+        "EPSILON",
+        "TIME_CONTROLLED_ACTIVE",
+        "EXCAVATION",
+        "NO_DISP_INCREMENT",
+        "COPY_VALUE",
+        "PRESSURE_AS_HEAD",
+        "CONSTRAINED",
+    ]]
 
     STD = {"PCS_TYPE": "GROUNDWATER_FLOW",
            "PRIMARY_VARIABLE": "HEAD",
-           "DIS_TYPE": [["CONSTANT", 0.0]],
-           "GEO_TYPE": [["POLYLINE", "BC"]]}
+           "DIS_TYPE": ["CONSTANT", 0.0],
+           "GEO_TYPE": ["POLYLINE", "BC"]}
 
     def __init__(self, **OGS_Config):
         '''

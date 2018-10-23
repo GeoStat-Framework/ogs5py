@@ -23,6 +23,10 @@ class RFD(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/rfd
+
+    https://github.com/ufz/ogs5/blob/master/FEM/files0.cpp#L370
     """
 
     MKEYS = ["PROJECT",

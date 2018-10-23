@@ -41,29 +41,36 @@ class REI(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/rei
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_react_int.cpp#L173
     """
 
     MKEYS = ["REACTION_INTERFACE"]
-    SKEYS = [["ALL_PCS_DUMP",
-              "DISSOLVED_NEUTRAL_CO2_SPECIES_NAME",
-              "HEATPUMP_2DH_TO_2DV",
-              "INITIAL_CONDITION_OUTPUT",
-              "MOL_PER",
-              "PCS_RENAME_INIT",
-              "PCS_RENAME_POST",
-              "PCS_RENAME_PRE",
-              "POROSITY_RESTART",
-              "PRESSURE",
-              "P_VLE",
-              "RESIDUAL",
-              "SODIUM_SPECIES_NAME",
-              "SOLID_SPECIES_DUMP_MOLES",
-              "TEMPERATURE",
-              "UPDATE_INITIAL_SOLID_COMPOSITION",
-              "VLE",
-              "WATER_CONCENTRATION",
-              "WATER_SATURATION_LIMIT",
-              "WATER_SPECIES_NAME"]]
+    # sorted
+    SKEYS = [[
+        "MOL_PER",
+        "WATER_CONCENTRATION",
+        "WATER_SPECIES_NAME",
+        "DISSOLVED_NEUTRAL_CO2_SPECIES_NAME",
+        "SODIUM_SPECIES_NAME",
+        "PRESSURE",
+        "TEMPERATURE",
+        "WATER_SATURATION_LIMIT",
+        "RESIDUAL",
+        "SOLID_SPECIES_DUMP_MOLES",
+        "ALL_PCS_DUMP",
+        "INITIAL_CONDITION_OUTPUT",
+        "UPDATE_INITIAL_SOLID_COMPOSITION",
+        "VLE",
+        "P_VLE",
+        "POROSITY_RESTART",
+        "HEATPUMP_2DH_TO_2DV",
+        "PCS_RENAME_INIT",
+        "PCS_RENAME_PRE",
+        "PCS_RENAME_POST",
+    ]]
 
     STD = {}
 

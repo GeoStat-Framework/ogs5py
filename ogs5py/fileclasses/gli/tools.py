@@ -15,7 +15,7 @@ from ogs5py.tools._types import (PLY_KEY_LIST, PLY_TYPES,
                                  EMPTY_GLI, EMPTY_PLY, EMPTY_SRF, EMPTY_VOL)
 
 
-def load_ogs5gli(filepath, verbose=True):
+def load_ogs5gli(filepath, verbose=True, encoding=None):
     '''
     load a given OGS5 gli file
 
@@ -25,6 +25,9 @@ def load_ogs5gli(filepath, verbose=True):
         path to the '*.msh' OGS5 mesh file to load
     verbose : bool, optional
         Print information of the reading process. Default: True
+    encoding : str or None, optional
+        encoding of the given file. If ``None`` is given, the system
+        standard is used. Default: ``None``
 
     Returns
     -------
@@ -55,7 +58,7 @@ def load_ogs5gli(filepath, verbose=True):
 
     out = dcp(EMPTY_GLI)
 
-    with open(filepath, "r") as gli:
+    with open(filepath, "r", encoding=encoding) as gli:
         # looping variable for reading
         reading = True
         # read the first line
@@ -206,7 +209,7 @@ def load_ogs5gli(filepath, verbose=True):
 
             # handle unknown infos
             else:
-                raise ValueError("file contains unknown infos: " +
+                raise ValueError("GLI: file contains unknown infos: " +
                                  line.strip())
 
     return out
@@ -330,80 +333,3 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
         if verbose:
             print("write #STOP")
         print("#STOP", end="", file=gli_f)
-
-
-def load_media_prop_dist(filepath, verbose=True):
-    '''
-    load a given OGS5 '#MEDIUM_PROPERTIES_DISTRIBUTED' file
-
-    Parameters
-    ----------
-    filepath : string
-        path to the OGS5 '#MEDIUM_PROPERTIES_DISTRIBUTED' flie
-    verbose : bool, optional
-        Print information of the reading process. Default: True
-
-    Returns
-    -------
-    out : dict
-        dictionary contains the distributed properties stored in the given file
-            key : string
-                information of the key-value (string)
-            DATA : float
-                Array with all properties
-    '''
-
-    # initilize the output
-    out = {}
-
-    with open(filepath, "r") as mpd:
-        # looping variable for reading
-        reading = True
-        found_start = False
-        while reading:
-            # read the next line
-            line = mpd.readline()
-
-            # if end of file without '$DATA' keyword reached, raise Error
-            if not line:
-                raise EOFError("reached end of file... unexpected")
-
-            # skip blank lines
-            elif not line.strip():
-                continue
-
-            # check for header
-            elif line.split()[0] == "#MEDIUM_PROPERTIES_DISTRIBUTED":
-                if found_start:
-                    raise ValueError("corrupted file")
-                else:
-                    found_start = True
-                    if verbose:
-                        print("found '#MEDIUM_PROPERTIES_DISTRIBUTED'")
-
-            # check for keywords
-            elif line.split()[0][0] == "$":
-                if not found_start:
-                    raise ValueError("corrupted file")
-                key = line.split()[0][1:]
-                if verbose:
-                    print("read '"+key+"'")
-                # the important information is given by "DATA"
-                if key == "DATA":
-                    data = np.fromfile(mpd, sep=" ")
-                    # get the IDs separatly
-                    data_ids = data.reshape((-1, 2))[:, 0]
-                    data_ids = data_ids.astype(int)
-                    # reorder the values according to the IDs
-                    # (if they are not sorted (possible?!))
-                    data_val = data.reshape((-1, 2))[:, 1]
-                    data_val = data_val[data_ids]
-                    # store the data
-                    out[key] = data_val
-                    # stop reading
-                    reading = False
-                # return first line after keyword as value
-                else:
-                    out[key] = mpd.readline().split()
-
-    return out

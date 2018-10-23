@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-tools for the ogs5py-mesh package
+tools for the ogs5py package
 
 @author: sebastian
 """
@@ -319,7 +319,90 @@ def replace(arr, inval, outval):
     return arrtmp.reshape(arr.shape)
 
 
-def unique_rows(data, decimals=4):
+def unique_rows(data, decimals=4, fast=True):
+    '''
+    unique made row-data with respect to given precision
+
+    this is constructed to work best if point-pairs appear.
+    The output is sorted like the input data.
+    data needs to be 2D
+
+    Parameters
+    ----------
+    data : ndarray
+        2D array containing the list of vectors that should be made unique
+    decimals : int, optional
+        Number of decimal places to round the 'data' to (default: 3).
+        If decimals is negative, it specifies the number of positions
+        to the left of the decimal point.
+        This will not round the output, it is just for comparison of the
+        vectors.
+    fast : bool, optional
+        If fast is True, the vector comparison is executed by a decimal
+        comparison. If fast is False, all pairwise distances are calculated.
+        Default: True
+
+    Returns
+    -------
+    result : ndarray
+        2D array of unique rows of data
+    ix : ndarray
+        index positions of output in input data (data[ix] = result)
+        len(ix) = result.shape[0]
+    ixr : ndarray
+        reversed index positions of input in output data (result[ixr] = data)
+        len(ixr) = data.shape[0]
+
+    Notes
+    -----
+    This routine will preserve the order within the given array as effectively
+    as possible. If you use it with a stack of 2 arrays and the first one is
+    already unique, the resulting array will still have the first array at the
+    beginning.
+    '''
+    if data.ndim != 2:
+        raise ValueError("unique_rows: Wrong input shape. Only 2D allowed!")
+    if fast:
+        # round the input to the given precicion
+        tmp = np.around(data, decimals=decimals)
+        # using the 1D numpy 'unique' function by defining a special dtype
+        # since numpy 1.13.0 actually not needed anymore (axis parameter added)
+        tmp = np.ascontiguousarray(tmp).view(np.dtype((np.void,
+                                                       tmp.dtype.itemsize
+                                                       * tmp.shape[1])))
+    else:
+        # get the tolerance from the given decimals
+        tol = np.power(10., -decimals)
+        # calculate all distances to each other (fancy!)
+        dim_i = []
+        for i in range(data.shape[1]):
+            # is this a bottle neck? ... apparently
+            dim_i.append(np.subtract.outer(data[:, i], data[:, i])**2)
+        distance = np.sqrt(np.sum(dim_i, axis=0))
+        # just use the upper triangle above the diagonal
+        distance[np.tril_indices_from(distance)] = np.inf
+        # look which points are close
+        close = np.where(distance < tol)
+        # generate the indizes of the points
+        tmp = np.arange(data.shape[0], dtype=np.int64)
+        # replace indizes of close points with indizes of the reference points
+        # prevent chains/bulks of points by using the first nearest point
+        pos, ind = np.unique(close[1], return_index=True)
+        val = close[0][ind]
+        tmp[pos] = val
+    # now sort the indices and make them unique
+    __, i_x, i_xr = np.unique(tmp, return_index=True, return_inverse=True)
+    out = data[i_x]
+    # sort the output according to the input
+    sort = np.argsort(i_x)
+    ixsort = i_x[sort]
+    # this line is a pain in the neck
+    ixrsort = replace(i_xr, sort, np.arange(len(i_x)))
+
+    return out[sort], ixsort, ixrsort
+
+
+def unique_rows_old(data, decimals=4):
     '''
     returns unique made data with respect to given precision in "decimals"
     The output is sorted like the input data.

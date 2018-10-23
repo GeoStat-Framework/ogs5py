@@ -18,7 +18,9 @@ from ogs5py.tools._types import (ELEM_NAMES,
 from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
 
 
-def load_ogs5msh(filepath, verbose=True, ignore_unknown=False, max_node_no=8):
+def load_ogs5msh(filepath, verbose=True,
+                 ignore_unknown=False, max_node_no=8,
+                 encoding=None):
     '''
     load a given OGS5 mesh file
 
@@ -34,6 +36,9 @@ def load_ogs5msh(filepath, verbose=True, ignore_unknown=False, max_node_no=8):
         If you know the maximal node number per elements in the mesh file,
         you can optimise the reading a bit. By default the algorithm will
         assume hexahedrons as 'largest' elements in the mesh. Default: 8
+    encoding : str or None, optional
+        encoding of the given file. If ``None`` is given, the system
+        standard is used. Default: ``None``
 
     Returns
     -------
@@ -68,7 +73,7 @@ def load_ogs5msh(filepath, verbose=True, ignore_unknown=False, max_node_no=8):
     # set the mesh-count to -1, it works as index for the output
     no_msh = -1
 
-    with open(filepath, "r") as msh:
+    with open(filepath, "r", encoding=encoding) as msh:
         # looping variable for reading
         reading = True
         while reading:
@@ -172,7 +177,7 @@ def load_ogs5msh(filepath, verbose=True, ignore_unknown=False, max_node_no=8):
                                   engine='c',
                                   delim_whitespace=True,
                                   nrows=no_elements,
-                                  names=range(max_node_no+3)).as_matrix()
+                                  names=range(max_node_no+3)).values
                 # check if all given element-typs are OGS known
                 check_elem = np.in1d(tmp[:, 2], ELEM_NAMES)
                 if not np.all(check_elem):
@@ -776,7 +781,6 @@ def unique_nodes(mesh, decimals=3):
         This will not round the output, it is just for comparison of the
         node vectors.
     '''
-
     mesh = combine(mesh, EMPTY_MSH, decimals)
 
 

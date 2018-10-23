@@ -28,16 +28,23 @@ class FCT(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/fct
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_fct.cpp#L82
     """
 
     MKEYS = ["FUNCTION"]
-    SKEYS = [["DATA",
-              "DIMENSION",
-              "DIS_TYPE",
-              "GEO_TYPE",
-              "MATRIX",
-              "TYPE",
-              "VARIABLES"]]
+    # sorted
+    SKEYS = [[
+        "TYPE",
+        "GEO_TYPE",
+        "DIS_TYPE",
+        "VARIABLES",
+        "DIMENSION",
+        "MATRIX",
+        "DATA",
+    ]]
 
     STD = {}
 

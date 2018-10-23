@@ -34,20 +34,27 @@ class IC(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/ic
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_ic_new.cpp#L222
     """
 
     MKEYS = ["INITIAL_CONDITION"]
-    SKEYS = [["COMP_NAME",
-              "DIS_TYPE",
-              "GEO_TYPE",
-              "PCS_TYPE",
-              "PRIMARY_VARIABLE",
-              "STORE_VALUES"]]
+    # sorted
+    SKEYS = [[
+        "PCS_TYPE",
+        "PRIMARY_VARIABLE",
+        "COMP_NAME",
+        "STORE_VALUES",
+        "DIS_TYPE",
+        "GEO_TYPE",
+    ]]
 
     STD = {"PCS_TYPE": "GROUNDWATER_FLOW",
            "PRIMARY_VARIABLE": "HEAD",
            "GEO_TYPE": "DOMAIN",
-           "DIS_TYPE": [["CONSTANT", 0.0]]}
+           "DIS_TYPE": ["CONSTANT", 0.0]}
 
     def __init__(self, **OGS_Config):
         '''
@@ -127,12 +134,12 @@ class RFR(object):
                 for data_i, data_e in enumerate(self.data):
                     print(str(data_i)+"\t"+str(data_e), file=fout)
 
-    def read_file(self, path):
+    def read_file(self, path, encoding=None):
         '''
         Write the actual OGS input file to the given folder.
         Its path is given by "task_root+task_id+f_type".
         '''
-        with open(path, "r") as fin:
+        with open(path, "r", encoding=encoding) as fin:
             lines = []
             for __ in range(4):
                 lines.append(fin.readline().splitlines()[0])

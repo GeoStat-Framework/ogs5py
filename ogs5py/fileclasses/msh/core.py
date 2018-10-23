@@ -83,6 +83,11 @@ class MSHsgl(OGSfile):
                 else:
                     print("given mesh is not valid")
 
+    # Pretend that there is a main keyword in the standard BASE-FORMAT
+    @property
+    def is_empty(self):
+        return not bool(self._meshlist[0]["elements"])
+
     # meshlist
     # this is a workaround to make multi-layer and single-layer meshes usable
     @property
@@ -553,6 +558,9 @@ class MSHsgl(OGSfile):
             If you know the maximal node number per elements in the mesh file,
             you can optimise the reading a bit. By default the algorithm will
             assume hexahedrons as 'largest' elements in the mesh. Default: 8
+        encoding : str or None, optional
+            encoding of the given file. If ``None`` is given, the system
+            standard is used. Default: ``None``
 
         Notes
         -----
@@ -565,23 +573,29 @@ class MSHsgl(OGSfile):
                   "Try loading within the multimesh class.")
         else:
             tmp = [tmp]
-        if check_mesh_list(tmp):
+        if "verbose" in kwargs:
+            verbose = kwargs["verbose"]
+        else:
+            verbose = False
+        if check_mesh_list(tmp, verbose=verbose):
             self._block = 0
             self._meshlist = tmp
         else:
             print("given mesh is not valid")
 
-    def read_file(self, path):
+    def read_file(self, path, encoding=None):
         '''
         Load an OGS5 mesh from file.
-        kwargs will be forwarded to "tools.load_ogs5msh"
 
         Parameters
         ----------
         path : str
             path to the '*.msh' OGS5 mesh file to load
+        encoding : str or None, optional
+            encoding of the given file. If ``None`` is given, the system
+            standard is used. Default: ``None``
         '''
-        self.load(path, verbose=False, ignore_unknown=True)
+        self.load(path, verbose=False, ignore_unknown=True, encoding=encoding)
 
     def set_dict(self, mesh_dict):
         '''
@@ -626,22 +640,26 @@ class MSHsgl(OGSfile):
             Print information of the writing process. Default: True
         '''
         # no top-comment allowed in MSH file
-        if self.check():
+        if "verbose" in kwargs:
+            verbose = kwargs["verbose"]
+        else:
+            kwargs["verbose"] = verbose = False
+        if self.check(verbose=verbose):
             save_ogs5msh(path, self._meshlist, top_com=None, **kwargs)
         else:
             print("the mesh could not be saved since it is not valid")
 
-    def write_file(self):
-        '''
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
-        '''
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
-        # save the data
-        self.save(f_path, verbose=False)
+#    def write_file(self):
+#        '''
+#        Write the actual OGS input file to the given folder.
+#        Its path is given by "task_root+task_id+f_type".
+#        '''
+#        # create the file path
+#        if not os.path.exists(self.task_root):
+#            os.makedirs(self.task_root)
+#        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+#        # save the data
+#        self.save(f_path, verbose=False)
 
     def import_mesh(self, filepath, **kwargs):
         '''
@@ -675,7 +693,7 @@ class MSHsgl(OGSfile):
         else:
             print("given mesh is not valid")
 
-    def export_mesh(self, filepath, **kwargs):
+    def export_mesh(self, filepath, verbose=False, **kwargs):
         '''
         export the mesh to an unstructured mesh in diffrent file-formats
         kwargs will be forwarded to "tools.export_mesh"
@@ -687,6 +705,8 @@ class MSHsgl(OGSfile):
         file_format : str, optional
             Here you can specify the fileformat. If 'None' it will be
             determined by file extension. Default: None
+        verbose : bool, optional
+            Print information for the executed checks. Default: True
         export_material_id : bool, optional
             Here you can specify if the material_id should be exported.
             Default: True
@@ -699,7 +719,7 @@ class MSHsgl(OGSfile):
         This routine calls the 'write' function from the meshio package
         and converts the input (see here: https://github.com/nschloe/meshio)
         '''
-        if self.check():
+        if self.check(verbose=verbose):
             export_mesh(filepath, self._dict, **kwargs)
         else:
             print("the mesh could not be exported since it is not valid")
@@ -1028,6 +1048,9 @@ class MSH(MSHsgl):
         value = int(value)
         if 0 <= value < len(self.__meshlist):
             self._block = value
+        if value == len(self.__meshlist):
+            self._block = value
+            self.__meshlist.append(EMPTY_MSH)
 
     @block.deleter
     def block(self):

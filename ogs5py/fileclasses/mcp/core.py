@@ -44,32 +44,39 @@ class MCP(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mcp
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rfmat_cp.cpp#L269
     """
 
     MKEYS = ["COMPONENT_PROPERTIES"]
-    SKEYS = [["ACENTRIC_FACTOR",
-              "A_ZERO",
-              "BUBBLE_VELOCITY",
-              "CRITICAL_PRESSURE",
-              "CRITICAL_TEMPERATURE",
-              "DECAY",
-              "DIFFUSION",
-              "FLUID_ID",
-              "FLUID_PHASE",
-              "FORMULA",
-              "ISOTHERM",
-              "MAXIMUM_AQUEOUS_SOLUBILITY",
-              "MINERAL_DENSITY",
-              "MOBILE",
-              "MOLAR_DENSITY",
-              "MOLAR_VOLUME",
-              "MOLAR_WEIGHT",
-              "MOL_MASS",
-              "NAME",
-              "OutputMassOfComponentInModel",
-              "TRANSPORT_PHASE",
-              "VALENCE",
-              "VOLUME_DIFFUSION"]]
+    # sorted
+    SKEYS = [[
+        "NAME",
+        "FORMULA",
+        "MOBILE",
+        "TRANSPORT_PHASE",
+        "FLUID_PHASE",
+        "MOL_MASS",
+        "CRITICAL_PRESSURE",
+        "CRITICAL_TEMPERATURE",
+        "ACENTRIC_FACTOR",
+        "FLUID_ID",
+        "MOLAR_VOLUME",
+        "VOLUME_DIFFUSION",
+        "MINERAL_DENSITY",
+        "DIFFUSION",
+        "DECAY",
+        "ISOTHERM",
+        "BUBBLE_VELOCITY",
+        "MOLAR_DENSITY",
+        "MOLAR_WEIGHT",
+        "MAXIMUM_AQUEOUS_SOLUBILITY",
+        "OutputMassOfComponentInModel",
+        "VALENCE",
+        "A_ZERO",
+    ]]
 
     STD = {}
 

@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug 17 15:40:47 2017
-
-@author: sebastian
+Helper functions for the tecplot readers in ogs5py
 """
 from __future__ import division, print_function
 import os

@@ -52,6 +52,13 @@ class GLI(OGSfile):
             print("given gli_dict is not valid.. will set default")
             self.__dict = dcp(EMPTY_GLI)
 
+#        self.mainkw = [""]
+
+    # Pretend that there is a main keyword in the standard BASE-FORMAT
+    @property
+    def is_empty(self):
+        return self.POINTS is None
+
     #######################
     # POINTS
     #######################
@@ -295,7 +302,7 @@ class GLI(OGSfile):
         '''
         self.__dict = EMPTY_GLI
 
-    def load(self, filepath, **kwargs):
+    def load(self, filepath, verbose=False, encoding=None, **kwargs):
         '''
         Load an OGS5 gli from file.
         kwargs will be forwarded to "tools.load_ogs5gli"
@@ -307,23 +314,26 @@ class GLI(OGSfile):
         verbose : bool, optional
             Print information of the reading process. Default: True
         '''
-        tmp = load_ogs5gli(filepath, **kwargs)
-        if check_gli_dict(tmp):
+        tmp = load_ogs5gli(filepath, verbose=verbose,
+                           encoding=encoding, **kwargs)
+        if check_gli_dict(tmp, verbose=verbose):
             self.__dict = tmp
         else:
-            print("given gli is not valid")
+            print("GLI.load: given gli is not valid")
 
-    def read_file(self, path):
+    def read_file(self, path, encoding=None):
         '''
         Load an OGS5 gli from file.
-        kwargs will be forwarded to "tools.load_ogs5gli"
 
         Parameters
         ----------
         path : string
             path to the '*.msh' OGS5 mesh file to load
+        encoding : str or None, optional
+            encoding of the given file. If ``None`` is given, the system
+            standard is used. Default: ``None``
         '''
-        self.load(path, verbose=False)
+        self.load(path, verbose=False, encoding=encoding)
 
     def set_dict(self, gli_dict):
         '''
@@ -382,22 +392,26 @@ class GLI(OGSfile):
         verbose : bool, optional
             Print information of the writing process. Default: True
         '''
-        if self.check():
+        if "verbose" in kwargs:
+            verbose = kwargs["verbose"]
+        else:
+            kwargs["verbose"] = verbose = False
+        if self.check(verbose=verbose):
             save_ogs5gli(path, self.__dict, top_com=self.top_com, **kwargs)
         else:
             print("the mesh could not be saved since it is not valid")
 
-    def write_file(self):
-        '''
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
-        '''
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
-        # save the data
-        self.save(f_path, verbose=False)
+#    def write_file(self):
+#        '''
+#        Write the actual OGS input file to the given folder.
+#        Its path is given by "task_root+task_id+f_type".
+#        '''
+#        # create the file path
+#        if not os.path.exists(self.task_root):
+#            os.makedirs(self.task_root)
+#        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+#        # save the data
+#        self.save(f_path, verbose=False)
 
     def check(self, verbose=True):
         '''
@@ -920,10 +934,14 @@ class GLIext(object):
         '''
         np.savetxt(path, self.data)
 
-    def read_file(self, path):
+    def read_file(self, path, **kwargs):
         '''
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Read a given GLI_EXT input file.
+
+        Parameters
+        ----------
+        path : str
+            path to the file
         '''
         data = np.loadtxt(path, ndmin=2)
         if data.shape[1] == 9:

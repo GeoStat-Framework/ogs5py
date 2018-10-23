@@ -40,25 +40,32 @@ class ST(OGSfile):
     Info
     ----
     See: ``add_block``
+
+    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/st
+
+    https://github.com/ufz/ogs5/blob/master/FEM/rf_st_new.cpp#L221
     """
 
     MKEYS = ["SOURCE_TERM"]
-    SKEYS = [["AIR_BREAKING",
-              "CHANNEL",
-              "COMP_NAME",
-              "CONSTRAINED",
-              "DISTRIBUTE_VOLUME_FLUX",
-              "DIS_TYPE",
-              "EXPLICIT_SURFACE_WATER_PRESSURE",
-              "FCT_TYPE",
-              "GEO_TYPE",
-              "MSH_TYPE",
-              "NEGLECT_SURFACE_WATER_PRESSURE",
-              "NODE_AVERAGING",
-              "PCS_TYPE",
-              "PRIMARY_VARIABLE",
-              "TIME_INTERPOLATION",
-              "TIM_TYPE"]]
+    # sorted
+    SKEYS = [[
+        "PCS_TYPE",
+        "PRIMARY_VARIABLE",
+        "COMP_NAME",
+        "GEO_TYPE",
+        "DIS_TYPE",
+        "NODE_AVERAGING",
+        "DISTRIBUTE_VOLUME_FLUX",
+        "NEGLECT_SURFACE_WATER_PRESSURE",
+        "EXPLICIT_SURFACE_WATER_PRESSURE",
+        "CHANNEL",
+        "AIR_BREAKING",
+        "TIM_TYPE",
+        "TIME_INTERPOLATION",
+        "FCT_TYPE",
+        "MSH_TYPE",
+        "CONSTRAINED",
+    ]]
 
     STD = {"PCS_TYPE": "GROUNDWATER_FLOW",
            "PRIMARY_VARIABLE": "HEAD",
