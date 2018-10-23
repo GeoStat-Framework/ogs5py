@@ -4,7 +4,7 @@
 .spyproject/
 __pycache__
 info/
-#_build
+docs/build
 #_static
 #_templates
 #docs/
