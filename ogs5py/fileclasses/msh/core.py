@@ -577,11 +577,11 @@ class MSHsgl(OGSfile):
             verbose = kwargs["verbose"]
         else:
             verbose = False
-#        if check_mesh_list(tmp, verbose=verbose):
-        self._block = 0
-        self._meshlist = tmp
-#        elif verbose:
-#            print("given mesh is not valid")
+        if check_mesh_list(tmp, verbose=verbose):
+            self._block = 0
+            self._meshlist = tmp
+        elif verbose:
+            print("given mesh is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
         '''

@@ -241,7 +241,9 @@ def load_ogs5msh(filepath, verbose=True,
     if len(out) == 1:
         out = out[0]
     elif len(out) == 0:
-        raise ValueError("no 'FEM_MSH' found")
+        out = dcp(EMPTY_MSH)
+        print(filepath+": no 'FEM_MSH' found.. maybe old format")
+#        raise ValueError("no 'FEM_MSH' found")
 
     return out
 
@@ -348,7 +350,9 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
             data.sort_values(by=0, inplace=True)
             data.to_csv(msh, header=None, index=None, sep=' ', mode='a')
 
-            msh.write("\n")
+            # add lines between LAYERS
+            if i < len(mesh) - 1:
+                msh.write("\n")
 
         if verbose:
             print("writing finished: STOP")

@@ -629,7 +629,7 @@ class OGS(object):
                 log_file.write(log_str)
 
         # check for success
-        if "normally" in log_str.splitlines()[-2]:
+        if "Simulation time" in log_str.splitlines()[-1]:
             return True
         # if simulation was not successfull return False
         return False
