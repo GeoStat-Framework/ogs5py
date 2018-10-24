@@ -139,6 +139,9 @@ class RFR(object):
         Write the actual OGS input file to the given folder.
         Its path is given by "task_root+task_id+f_type".
         '''
+        # in python3 open was replaced with io.open
+        from io import open
+
         with open(path, "r", encoding=encoding) as fin:
             lines = []
             for __ in range(4):

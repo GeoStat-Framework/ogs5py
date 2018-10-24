@@ -67,6 +67,8 @@ def load_ogs5msh(filepath, verbose=True,
     and will violate the read data if present.
     '''
     import pandas as pd
+    # in python3 open was replaced with io.open
+    from io import open
 
     # initilize the output
     out = []

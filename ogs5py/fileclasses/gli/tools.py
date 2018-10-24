@@ -55,6 +55,8 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
     The $AREA keyword within the Nodes definition is NOT supported
     and will violate the read data if present.
     '''
+    # in python3 open was replaced with io.open
+    from io import open
 
     out = dcp(EMPTY_GLI)
 

@@ -5,7 +5,6 @@ History
 -------
 Written,  SM, Mar 2018
 """
-
 from __future__ import print_function, division
 import os
 import shutil
@@ -513,6 +512,8 @@ class OGSfile(object):
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
         '''
+        from io import open
+
         self.reset()
 
         with open(path, "r", encoding=encoding) as fin:

@@ -57,4 +57,5 @@ class MPD(OGSfile):
             file_name = self.task_id
         self.task_id = file_name
         self.f_type = file_ext
+        # no top comment allowed in the MPD file
         self.top_com = None

@@ -77,6 +77,9 @@ from ogs5py.tools._types import OGS_EXT
 # current working directory
 CWD = os.getcwd()
 
+# Top Comment for ogs5py
+TOP_COM = "|-----------Written with ogs5py-----------|"
+
 
 class OGS(object):
     """Class for an OGS5 model.
@@ -187,6 +190,23 @@ class OGS(object):
         # create a list for RESTART files in the INITIAL_CONDITION
         self.rfr = []
 
+        # store the Top Comment
+        self._top_com = TOP_COM
+
+    @property
+    def top_com(self):
+        """
+        Get and set the top comment for the ogs files.
+        """
+        return self._top_com
+
+    @top_com.setter
+    def top_com(self, value):
+        self._top_com = value
+        for ext in OGS_EXT:
+            # workaround to get access to class-members by name
+            getattr(self, ext[1:]).top_com = value
+
     @property
     def task_root(self):
         """
@@ -200,7 +220,6 @@ class OGS(object):
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).task_root = value
-        print(self.mpd)
         for i in range(len(self.mpd)):
             self.mpd[i].task_root = value
         for i in range(len(self.gli_ext)):
@@ -418,8 +437,10 @@ class OGS(object):
             # skip file if wanted
             if os.path.basename(fil) in skip_files or fil in skip_files:
                 continue
+
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).read_file(fil, encoding=encoding)
+
             # append GEOMETRY defnitions
             if ext == ".gli":
                 for ply in self.gli.POLYLINES:
@@ -448,6 +469,7 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.gli_ext.append(dcp(ext_file))
+
             # append MEDIUM_PROPERTIES_DISTRIBUTED defnitions
             if ext == ".mmp":
                 for i in range(len(self.mmp.mainkw)):
@@ -477,6 +499,7 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.mpd.append(dcp(ext_file))
+
             # append RESART defnitions
             if ext == ".ic":
                 for i in range(len(self.ic.mainkw)):
@@ -493,9 +516,10 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.rfr.append(dcp(ext_file))
+
         # if nothing was found print out
         if not task_id_found:
-            print("ogs5py: laod_model - nothing was found at: "+task_root)
+            print("ogs5py.OGS.laod_model - nothing was found at: "+task_root)
 
     def run_model(self, ogs_root=None, ogs_name="ogs",
                   print_log=True, save_log=True,
@@ -567,7 +591,7 @@ class OGS(object):
         # see: https://stackoverflow.com/a/17698359/6696397
         subproc = subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
-                                   # universal_newlines=True,
+                                   stderr=subprocess.PIPE,
                                    bufsize=1)
         if print_log or save_log:
             # in python 3 we need to encode the subprocess output
@@ -577,10 +601,11 @@ class OGS(object):
                 encoding = "utf-8"
             with subproc.stdout:
                 for line in iter(subproc.stdout.readline, b''):
+                    line = line.decode(encoding)
                     if print_log:
-                        print(line.decode(encoding), end="")
+                        print(line, end="")
                     if save_log:
-                        log_str += line.decode(encoding)
+                        log_str += line
         subproc.wait()
 
         # save log to file
