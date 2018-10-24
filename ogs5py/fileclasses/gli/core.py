@@ -321,7 +321,7 @@ class GLI(OGSfile):
         else:
             print("GLI.load: given gli is not valid")
 
-    def read_file(self, path, encoding=None):
+    def read_file(self, path, encoding=None, verbose=False):
         '''
         Load an OGS5 gli from file.
 
@@ -332,8 +332,10 @@ class GLI(OGSfile):
         encoding : str or None, optional
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
+        verbose : bool, optional
+            Print information of the reading process. Default: False
         '''
-        self.load(path, verbose=False, encoding=encoding)
+        self.load(path, verbose=verbose, encoding=encoding)
 
     def set_dict(self, gli_dict):
         '''
@@ -885,7 +887,7 @@ class GLIext(object):
             self.data = np.array(data)
         else:
             if self.typ == "TIN":
-                self.data = np.zeros((0, 9))
+                self.data = np.zeros((0, 10))
             else:
                 self.data = np.zeros((0, 3))
         if not self.check(False):
@@ -907,16 +909,17 @@ class GLIext(object):
             Validity of the given gli.
         '''
         if self.data.ndim == 2:
-            if self.typ == "TIN" and self.data.shape[1] != 9:
+            if self.typ not in ["TIN", "POINT_VECTOR"]:
+                print("Gli external: Wrong typ given")
+                return False
+            elif self.typ == "TIN" and self.data.shape[1] != 10:
                 print("Gli external: For 'TIN' the data must contain " +
-                      "9 Values per line")
+                      "id + 9 Values per line")
                 return False
             elif self.typ == "POINT_VECTOR" and self.data.shape[1] != 3:
                 print("Gli external: For 'POINT_VECTOR' the data must " +
                       "contain 3 Values per line")
                 return False
-            print("Gli external: Wrong typ given")
-            return False
         else:
             if verbose:
                 print("Gli external: data dimension is not 2")
@@ -943,14 +946,19 @@ class GLIext(object):
         path : str
             path to the file
         '''
+        if "verbose" in kwargs:
+            verbose = kwargs["verbose"]
+        else:
+            verbose = False
+        # read data
         data = np.loadtxt(path, ndmin=2)
-        if data.shape[1] == 9:
+        if data.shape[1] == 10:
             self.typ = "TIN"
             self.data = data
         elif data.shape[1] == 3:
             self.typ = "POINT_VECTOR"
             self.data = data
-        else:
+        elif verbose:
             print("Gli external: File data not valid")
 
     def write_file(self):

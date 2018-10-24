@@ -6,7 +6,6 @@ Containing the classes for the OGS5 mesh files.
 """
 
 from __future__ import division, print_function, absolute_import
-import os
 from copy import deepcopy as dcp
 import numpy as np
 from ogs5py.fileclasses.msh import generator as gen
@@ -567,23 +566,24 @@ class MSHsgl(OGSfile):
         The $AREA keyword within the Nodes definition is NOT supported
         and will violate the read data if present.
         '''
+#        kwargs["verbose"] = True
         tmp = load_ogs5msh(filepath, **kwargs)
-        if isinstance(tmp, list) and isinstance(self, MSHsgl):
+        if isinstance(tmp, list) and not isinstance(self, MSH):
             print(filepath+" may contains a multi-layer mesh." +
                   "Try loading within the multimesh class.")
-        else:
+        elif not isinstance(tmp, list):
             tmp = [tmp]
         if "verbose" in kwargs:
             verbose = kwargs["verbose"]
         else:
             verbose = False
-        if check_mesh_list(tmp, verbose=verbose):
-            self._block = 0
-            self._meshlist = tmp
-        else:
-            print("given mesh is not valid")
+#        if check_mesh_list(tmp, verbose=verbose):
+        self._block = 0
+        self._meshlist = tmp
+#        elif verbose:
+#            print("given mesh is not valid")
 
-    def read_file(self, path, encoding=None):
+    def read_file(self, path, encoding=None, verbose=False):
         '''
         Load an OGS5 mesh from file.
 
@@ -594,8 +594,11 @@ class MSHsgl(OGSfile):
         encoding : str or None, optional
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
+        verbose : bool, optional
+            Print information of the reading process. Default: True
         '''
-        self.load(path, verbose=False, ignore_unknown=True, encoding=encoding)
+        self.load(path, verbose=verbose,
+                  ignore_unknown=True, encoding=encoding)
 
     def set_dict(self, mesh_dict):
         '''

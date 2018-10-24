@@ -262,7 +262,6 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
     verbose : bool, optional
         Print information of the writing process. Default: True
     '''
-
     with open(filepath, "w") as gli_f:
         if top_com:
             if verbose:

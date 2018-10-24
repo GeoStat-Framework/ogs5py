@@ -359,7 +359,7 @@ class OGS(object):
     def load_model(self, task_root, task_id=None,
                    use_task_root=False, use_task_id=False,
                    skip_files=None, skip_ext=None,
-                   encoding=None):
+                   encoding=None, verbose=False):
         '''
         Load an existing OGS5 model.
 
@@ -383,6 +383,8 @@ class OGS(object):
         encoding : str or None, optional
             encoding of the given files. If ``None`` is given, the system
             standard is used. Default: ``None``
+        verbose : bool, optional
+            Print information of the reading process. Default: False
 
         Notes
         -----
@@ -400,46 +402,52 @@ class OGS(object):
             skip_files = []
         if skip_ext is None:
             skip_ext = []
-
-        task_id_found = False
-
+        # search for possible task_ids in the directory
+        found_ids = search_task_id(task_root)
+        if not found_ids:
+            if verbose:
+                print("ogs5py.OGS.laod_model - nothing was found at: " +
+                      task_root)
+            return False
+        # take the first found task_id
+        if task_id is None:
+            # take the first found task_id
+            task_id = found_ids[0]
+        # check if the given task_id is found
+        elif task_id not in found_ids:
+            if verbose:
+                print("ogs5py.OGS.laod_model - didn't find given task_id: " +
+                      task_root)
+                print(found_ids)
+            return False
+        # overwrite the task_root
         if use_task_root:
             self.task_root = task_root
-
-        if task_id is None:
-            task_id_search = "*"
-        else:
-            task_id_search = str(task_id)
-            if use_task_id:
-                self.task_id = str(task_id)
+        # overwrite the task_id
+        if use_task_id:
+            self.task_id = task_id
 
         # iterate over all ogs file-extensions
         for ext in OGS_EXT:
+            if verbose:
+                print(ext, end=" ")
             # skip certain file extensions if wanted
             if ext in skip_ext or ext[1:] in skip_ext:
                 continue
             # search for files with given extension
-            files = glob.glob(os.path.join(task_root, task_id_search+ext))
+            files = glob.glob(os.path.join(task_root, task_id+ext))
             # if nothing was found, skip
             if not files:
                 continue
             # take the first found file if there are multiple
             fil = files[0]
-            # take the found task_id
-            if not task_id_found:
-                task_id_found = True
-                task_id_search = os.path.splitext(os.path.basename(fil))[0]
-                if task_id is None:
-                    print("ogs5py load_model: task_id found - "+task_id_search)
-                task_id = task_id_search
-                if use_task_id:
-                    self.task_id = task_id
             # skip file if wanted
             if os.path.basename(fil) in skip_files or fil in skip_files:
                 continue
-
             # workaround to get access to class-members by name
-            getattr(self, ext[1:]).read_file(fil, encoding=encoding)
+            getattr(self, ext[1:]).read_file(fil,
+                                             encoding=encoding,
+                                             verbose=verbose)
 
             # append GEOMETRY defnitions
             if ext == ".gli":
@@ -517,10 +525,6 @@ class OGS(object):
                         ext_file.read_file(path, encoding=encoding)
                         self.rfr.append(dcp(ext_file))
 
-        # if nothing was found print out
-        if not task_id_found:
-            print("ogs5py.OGS.laod_model - nothing was found at: "+task_root)
-
     def run_model(self, ogs_root=None, ogs_name="ogs",
                   print_log=True, save_log=True,
                   log_path=None, log_name=None):
@@ -547,8 +551,12 @@ class OGS(object):
         log_name : str or None, optional
             Name of the log file. Default: None
             (task_id+"_log.txt")
-        '''
 
+        Return
+        ------
+        success : bool
+            State if OGS5 returned, that it terminated 'normally'.
+        '''
         # look for the standard ogs executable in the standard-path
         if ogs_root is None:
             check_ogs = which(ogs_name)
@@ -593,19 +601,17 @@ class OGS(object):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
                                    bufsize=1)
-        if print_log or save_log:
-            # in python 3 we need to encode the subprocess output
-            # since its binary (only if universal_newlines=False)
-            encoding = sys.stdout.encoding
-            if not encoding:
-                encoding = "utf-8"
-            with subproc.stdout:
-                for line in iter(subproc.stdout.readline, b''):
-                    line = line.decode(encoding)
-                    if print_log:
-                        print(line, end="")
-                    if save_log:
-                        log_str += line
+        # in python 3 we need to encode the subprocess output
+        # since its binary (only if universal_newlines=False)
+        encoding = sys.stdout.encoding
+        if not encoding:
+            encoding = "utf-8"
+        with subproc.stdout:
+            for line in iter(subproc.stdout.readline, b''):
+                line = line.decode(encoding)
+                if print_log:
+                    print(line, end="")
+                log_str += line
         subproc.wait()
 
         # save log to file
@@ -621,3 +627,36 @@ class OGS(object):
             # write the log-file
             with open(log, "w") as log_file:
                 log_file.write(log_str)
+
+        # check for success
+        if "normally" in log_str.splitlines()[-2]:
+            return True
+        # if simulation was not successfull return False
+        return False
+
+
+def search_task_id(task_root):
+    '''
+    Search for OGS model names in the given path
+
+    Parameters
+    ----------
+    task_root : str
+        Path to the destiny folder.
+
+    Return
+    ------
+    found_ids : list of str
+        List of all found task_ids.
+    '''
+    found_ids = []
+    # iterate over all ogs file-extensions
+    for ext in OGS_EXT:
+        # search for files with given extension
+        files = glob.glob(os.path.join(task_root, "*"+ext))
+        # take the first found file if there are multiple
+        for fil in files:
+            tmp_id = os.path.splitext(os.path.basename(fil))[0]
+            if tmp_id not in found_ids:
+                found_ids.append(tmp_id)
+    return found_ids

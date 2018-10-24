@@ -18,6 +18,12 @@ class PCT(object):
         '''
         Input
         -----
+        data : np.array or None
+            particle data. Default: None
+        s_flag : int, optional
+            1 for same pseudo-random series,
+            0 for different pseudo-random series.
+            Default: 1
         '''
         self.s_flag = s_flag
         self.task_root = task_root
@@ -84,27 +90,15 @@ class PCT(object):
                 print(str(self.data.shape[0]), file=fout)
                 np.savetxt(fout, self.data)
 
-    def read_file(self, path):
+    def read_file(self, path, **kwargs):
         '''
         Write the actual OGS input file to the given folder.
         Its path is given by "task_root+task_id+f_type".
         '''
         with open(path, "r") as fin:
-                self.s_flag = int(fin.readline())
-
+                self.s_flag = int(fin.readline().split(";")[0].split()[0])
+        # use numpy to read the data
         self.data = np.loadtxt(path, skiprows=2)
-
-#    def write_file(self):
-#        '''
-#        Write the actual OGS input file to the given folder.
-#        Its path is given by "task_root+task_id+f_type".
-#        '''
-#        # create the file path
-#        if not os.path.exists(self.task_root):
-#            os.makedirs(self.task_root)
-#        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
-#        # save the data
-#        self.save(f_path)
 
     def write_file(self):
         '''

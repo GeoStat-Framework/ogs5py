@@ -84,7 +84,9 @@ def load_ogs5msh(filepath, verbose=True,
 
             # if end of file without '#STOP' keyword reached, raise Error
             if not line:
-                raise EOFError("reached end of file... unexpected")
+                print(filepath+": reached end of file... unexpected")
+                break
+#                raise EOFError(filepath+": reached end of file... unexpected")
 
             # skip blank lines
             elif not line.strip():
@@ -95,7 +97,7 @@ def load_ogs5msh(filepath, verbose=True,
                 # increase mesh count since FEM_MSH was found
                 no_msh += 1
                 # creat new empty output-dictionary
-                out.append({"mesh_data": {}})
+                out.append(dcp(EMPTY_MSH))
                 if verbose:
                     print("found 'FEM_MSH' number: "+str(no_msh))
 
@@ -175,20 +177,26 @@ def load_ogs5msh(filepath, verbose=True,
                 filepos = msh.tell()
                 # read the elements with pandas
                 # names=range(max_node_no) to assure rectangular shape by cols
-                tmp = pd.read_csv(msh,
-                                  engine='c',
-                                  delim_whitespace=True,
-                                  nrows=no_elements,
-                                  names=range(max_node_no+3)).values
+                tmp = pd.read_csv(
+                    msh,
+                    engine='c',
+                    delim_whitespace=True,
+                    nrows=no_elements,
+                    names=range(max_node_no+4),  # +4 for the "-1" entry
+                ).values
                 # check if all given element-typs are OGS known
-                check_elem = np.in1d(tmp[:, 2], ELEM_NAMES)
+                pos_ele = 2  # can be shift to right, if "-1" occures
+                check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
                 if not np.all(check_elem):
-                    if verbose:
-                        print("unsupported cell-types found:")
-                        print(np.unique(tmp[np.invert(check_elem), 2]))
+                    pos_ele = 3  # skip the "-1" entry
+                check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
+                if not np.all(check_elem):
+                    if verbose or True:
+                        print(filepath+": unsupported cell-types found:")
+                        print(np.unique(tmp[np.invert(check_elem), pos_ele]))
                     if not ignore_unknown:
                         raise ValueError("file contains unknown element types")
-                    else:
+                    elif verbose:
                         print("...they will be skipped!")
                 # read the elements
                 # read the Material-ID as material_id
@@ -197,10 +205,10 @@ def load_ogs5msh(filepath, verbose=True,
                 out[no_msh]["material_id"] = {}
                 out[no_msh]["element_id"] = {}
                 # iterate over all valid given element-types
-                for elem in np.unique(tmp[check_elem, 2]):
-                    pos = (tmp[:, 2] == elem)
+                for elem in np.unique(tmp[check_elem, pos_ele]):
+                    pos = (tmp[:, pos_ele] == elem)
                     out[no_msh]["elements"][elem] = \
-                        tmp[pos, 3:3+NODE_NO[elem]].astype(int)
+                        tmp[pos, pos_ele+1:pos_ele+1+NODE_NO[elem]].astype(int)
                     out[no_msh]["material_id"][elem] = \
                         tmp[pos, 1].astype(int)
                     out[no_msh]["element_id"][elem] = \
@@ -215,8 +223,6 @@ def load_ogs5msh(filepath, verbose=True,
                     msh.readline()
 
             elif line.split()[0] == "#STOP":
-                if no_msh == -1:
-                    raise ValueError("no 'FEM_MSH' found")
                 if verbose:
                     print("found '#STOP'")
                 # stop reading the file
@@ -234,6 +240,8 @@ def load_ogs5msh(filepath, verbose=True,
     # if a single mesh is found, return it directly
     if len(out) == 1:
         out = out[0]
+    elif len(out) == 0:
+        raise ValueError("no 'FEM_MSH' found")
 
     return out
 

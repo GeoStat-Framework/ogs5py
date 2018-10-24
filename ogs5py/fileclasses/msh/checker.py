@@ -320,7 +320,7 @@ def check_mesh_dict(mesh, verbose=True):
            mesh["material_id"][elem].ndim == 1 and \
            mesh["material_id"][elem].shape[0] == \
            mesh["elements"][elem].shape[0] and \
-           np.min(mesh["material_id"][elem]) >= 0:
+           np.min(mesh["material_id"][elem]) >= -1:
             if verbose:
                 print(" mesh['material_id']['"+elem+"'] valid")
         else:

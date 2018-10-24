@@ -31,19 +31,73 @@ TIM - Time settings
 
 from __future__ import absolute_import
 
-from ogs5py.ogs import OGS
-from ogs5py.fileclasses import (BC, CCT, FCT, GEM, GLI, GLIext, IC, RFR, KRC,
-                                MCP, MFP, MMP, MPD, MSH, MSP, NUM, OUT,
-                                PCS, REI, RFD, ST, TIM)
-from ogs5py.tools._types import (PCS_TYP, PRIM_VAR_BY_PCS)
+from ogs5py.ogs import (
+    OGS,
+    search_task_id,
+)
+from ogs5py.fileclasses import (
+    BC,
+    CCT,
+    FCT,
+    GEM,
+    GLI,
+    GLIext,
+    IC,
+    RFR,
+    KRC,
+    MCP,
+    MFP,
+    MMP,
+    MPD,
+    MSH,
+    MSP,
+    NUM,
+    OUT,
+    PCS,
+    REI,
+    RFD,
+    ST,
+    TIM,
+)
+from ogs5py.tools._types import (
+    PCS_TYP,
+    PRIM_VAR_BY_PCS,
+)
 # from ogs5py.reader import (readvtk,
 #                            readpvd,
 #                            readtec_point,
 #                            readtec_polyline)
 
-__all__ = ["BC", "CCT", "FCT", "GEM", "GLI", "GLIext", "IC", "RFR", "KRC",
-           "MCP", "MFP", "MMP", "MPD", "MSH", "MSP", "NUM", "OUT",
-           "PCS", "REI", "RFD", "ST", "TIM"]
-__all__ += ["OGS"]
-__all__ += ["PCS_TYP", "PRIM_VAR_BY_PCS"]
+__all__ = [
+    "BC",
+    "CCT",
+    "FCT",
+    "GEM",
+    "GLI",
+    "GLIext",
+    "IC",
+    "RFR",
+    "KRC",
+    "MCP",
+    "MFP",
+    "MMP",
+    "MPD",
+    "MSH",
+    "MSP",
+    "NUM",
+    "OUT",
+    "PCS",
+    "REI",
+    "RFD",
+    "ST",
+    "TIM",
+]
+__all__ += [
+    "OGS",
+    "search_task_id",
+]
+__all__ += [
+    "PCS_TYP",
+    "PRIM_VAR_BY_PCS",
+]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]

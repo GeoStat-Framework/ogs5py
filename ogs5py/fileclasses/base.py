@@ -500,7 +500,7 @@ class OGSfile(object):
         self.copy_file = None
         self.copy_path = None
 
-    def read_file(self, path, encoding=None):
+    def read_file(self, path, encoding=None, verbose=False):
         '''
         Read an existing OGS input file
 
@@ -511,7 +511,11 @@ class OGSfile(object):
         encoding : str or None, optional
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
+        verbose : bool, optional
+            Print information of the reading process. Default: False
         '''
+        # in python3 open was replaced with io.open
+        # so we can use encoding key word in python2
         from io import open
 
         self.reset()
@@ -521,15 +525,17 @@ class OGSfile(object):
             mkw = search_mkw(fin)
             # if no main keyword is found, the file is corrupted
             if not mkw:
-                print("ogs5py " + self.get_file_type() +
-                      ": Given path is not a readable ogs-file: "+path)
+                if verbose:
+                    print("ogs5py " + self.get_file_type() +
+                          ": Given path is not a readable ogs-file: "+path)
                 return
             subkw_found = False
             stop_found = mkw == "STOP"
             # if the STOP keyword is found first, the file is corrupted
             if stop_found:
-                print("ogs5py " + self.get_file_type() +
-                      ": ogs-file is empty: "+path)
+                if verbose:
+                    print("ogs5py " + self.get_file_type() +
+                          ": ogs-file is empty: "+path)
                 return
             # add the found keyword
             self.add_main_keyword(mkw)
@@ -562,8 +568,9 @@ class OGSfile(object):
 
         # check if stop was found
         if not stop_found:
-            print("ogs5py " + self.get_file_type() +
-                  ": Given ogs-file doesn't have a #STOP: "+path)
+            if verbose:
+                print("ogs5py " + self.get_file_type() +
+                      ": Given ogs-file doesn't have a #STOP: "+path)
             self.reset()
 
     def save(self, path, **kwargs):
@@ -612,7 +619,8 @@ class OGSfile(object):
                         if ((mkw == "MEDIUM_PROPERTIES_DISTRIBUTED" and
                              skw == "DATA")):
                             print(*con,
-                                  sep="\t", end=lend, file=fout)
+                                  # sep="\t", end=lend, file=fout)
+                                  sep=" ", end="\n", file=fout)
                         else:
                             print(CON_IND, *con,
                                   sep=" ", end=lend, file=fout)
