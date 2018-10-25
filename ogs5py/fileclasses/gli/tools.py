@@ -13,6 +13,7 @@ from ogs5py.tools._types import (PLY_KEY_LIST, PLY_TYPES,
                                  VOL_KEY_LIST, VOL_TYPES,
                                  GLI_KEY_LIST,
                                  EMPTY_GLI, EMPTY_PLY, EMPTY_SRF, EMPTY_VOL)
+from ogs5py.fileclasses.base import uncomment
 
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):
@@ -87,6 +88,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 if verbose:
                     print("found 'POINTS'")
                 pnts = np.empty((0, 3), dtype=float)
+                ids = []  # workaround for bad ordering
                 names = []
                 mds = []
                 line = gli.readline().strip()
@@ -94,6 +96,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                     ln_splt = line.split()
                     # need a list around map in python3 (map gives iterator)
                     pnt = np.array(list(map(float, ln_splt[1:4])))
+                    ids.append(int(ln_splt[0]))
                     pnts = np.vstack((pnts, pnt))
                     if "$NAME" in ln_splt:
                         names.append(ln_splt[ln_splt.index("$NAME")+1])
@@ -105,6 +108,16 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                         # use -inf as standard md, if none is given
                         mds.append(-np.inf)
                     line = gli.readline().strip()
+                # the list of point-ids (should be: 0 1 2 3 ...)
+                ids = np.array(ids, dtype=int)
+                if len(np.unique(ids)) != len(ids):
+                    raise ValueError(
+                        filepath +
+                        ": GLI: point ids are not unique: " + str(ids))
+                # hack to shift the ids acordingly
+                id_shift = np.zeros(np.max(ids)+1, dtype=int)
+                id_shift[ids] = np.arange(ids.shape[0])
+                # save points
                 out["points"] = pnts
                 out["point_names"] = np.array(names, dtype=object)
                 out["point_md"] = np.array(mds, dtype=float)
@@ -120,7 +133,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 # assure, that we are reading one polyline
                 while not any([line.startswith(key) for key in GLI_KEY_LIST]):
                     need_new_line = True
-                    key = line[1:]
+                    key = uncomment(line)[0][1:] if uncomment(line) else ""
                     if key in PLY_KEY_LIST:
                         if key == "POINTS":
                             ply["POINTS"] = []
@@ -131,7 +144,10 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             if line in (GLI_KEY_LIST+["$"+k for
                                                       k in PLY_KEY_LIST]):
                                 need_new_line = False
-                            ply["POINTS"] = np.array(ply["POINTS"], dtype=int)
+                            tmp_pnt = np.array(ply["POINTS"], dtype=int)
+                            # hack to shift point_ids
+                            tmp_pnt = id_shift[tmp_pnt]
+                            ply["POINTS"] = tmp_pnt
                         else:
                             ply_typ = PLY_TYPES[PLY_KEY_LIST.index(key)]
                             ply[key] = ply_typ(gli.readline().split()[0])
@@ -150,7 +166,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 # assure, that we are reading one surface
                 while not any([line.startswith(key) for key in GLI_KEY_LIST]):
                     need_new_line = True
-                    key = line[1:]
+                    key = uncomment(line)[0][1:] if uncomment(line) else ""
                     if key in SRF_KEY_LIST:
                         if key == "POLYLINES":
                             srf["POLYLINES"] = []
@@ -181,7 +197,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 # assure, that we are reading one volume
                 while not any([line.startswith(key) for key in GLI_KEY_LIST]):
                     need_new_line = True
-                    key = line[1:]
+                    key = uncomment(line)[0][1:] if uncomment(line) else ""
                     if key in VOL_KEY_LIST:
                         if key == "SURFACES":
                             vol["SURFACES"] = []
@@ -211,7 +227,8 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
 
             # handle unknown infos
             else:
-                raise ValueError("GLI: file contains unknown infos: " +
+                raise ValueError(filepath +
+                                 ": GLI: file contains unknown infos: " +
                                  line.strip())
 
     return out

@@ -16,6 +16,7 @@ from ogs5py.tools._types import (ELEM_NAMES,
                                  ELEM_DIM,
                                  EMPTY_MSH)
 from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
+from ogs5py.fileclasses.base import uncomment
 
 
 def load_ogs5msh(filepath, verbose=True,
@@ -84,16 +85,17 @@ def load_ogs5msh(filepath, verbose=True,
 
             # if end of file without '#STOP' keyword reached, raise Error
             if not line:
-                print(filepath+": reached end of file... unexpected")
+                # raise EOFError(filepath+": reached end of file.. unexpected")
+                if verbose:
+                    print(filepath+": reached end of file... unexpected")
                 break
-#                raise EOFError(filepath+": reached end of file... unexpected")
 
             # skip blank lines
-            elif not line.strip():
+            elif not uncomment(line):
                 continue
 
             # check for keywords
-            elif line.split()[0] == "#FEM_MSH":
+            elif uncomment(line)[0] == "#FEM_MSH":
                 # increase mesh count since FEM_MSH was found
                 no_msh += 1
                 # creat new empty output-dictionary
@@ -101,37 +103,37 @@ def load_ogs5msh(filepath, verbose=True,
                 if verbose:
                     print("found 'FEM_MSH' number: "+str(no_msh))
 
-            elif line.split()[0] == "$AXISYMMETRY":
+            elif uncomment(line)[0] == "$AXISYMMETRY":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
                     print("read 'AXISYMMETRY'")
                 out[no_msh]["mesh_data"]["AXISYMMETRY"] = True
 
-            elif line.split()[0] == "$CROSS_SECTION":
+            elif uncomment(line)[0] == "$CROSS_SECTION":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
                     print("read 'CROSS_SECTION'")
                 out[no_msh]["mesh_data"]["CROSS_SECTION"] = True
 
-            elif line.split()[0] == "$PCS_TYPE":
+            elif uncomment(line)[0] == "$PCS_TYPE":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
                     print("read 'PCS_TYPE'")
                 line = msh.readline()
-                out[no_msh]["mesh_data"]["PCS_TYPE"] = line.split()[0]
+                out[no_msh]["mesh_data"]["PCS_TYPE"] = uncomment(line)[0]
 
-            elif line.split()[0] == "$GEO_NAME":
+            elif uncomment(line)[0] == "$GEO_NAME":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
                     print("read 'GEO_NAME'")
                 line = msh.readline()
-                out[no_msh]["mesh_data"]["GEO_NAME"] = line.split()[0]
+                out[no_msh]["mesh_data"]["GEO_NAME"] = uncomment(line)[0]
 
-            elif line.split()[0] == "$GEO_TYPE":
+            elif uncomment(line)[0] == "$GEO_TYPE":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
@@ -139,11 +141,11 @@ def load_ogs5msh(filepath, verbose=True,
                 line = msh.readline()
                 # GEO_TYPE contains 2 infos: "geo_type_name" and "geo_name"
                 # geo_name overwrites the "$GEO_NAME" key like in OGS5
-                # out[no_msh]["mesh_data"]["GEO_TYPE"] = line.split()[:2]
-                out[no_msh]["mesh_data"]["GEO_TYPE"] = line.split()[0]
-                out[no_msh]["mesh_data"]["GEO_NAME"] = line.split()[1]
+                # out[no_msh]["mesh_data"]["GEO_TYPE"] = uncomment(line)[:2]
+                out[no_msh]["mesh_data"]["GEO_TYPE"] = uncomment(line)[0]
+                out[no_msh]["mesh_data"]["GEO_NAME"] = uncomment(line)[1]
 
-            elif line.split()[0] == "$LAYER":
+            elif uncomment(line)[0] == "$LAYER":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 if verbose:
@@ -151,7 +153,7 @@ def load_ogs5msh(filepath, verbose=True,
                 line = msh.readline()
                 out[no_msh]["mesh_data"]["LAYER"] = int(line)
 
-            elif line.split()[0] == "$NODES":
+            elif uncomment(line)[0] == "$NODES":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 line = msh.readline()
@@ -165,7 +167,7 @@ def load_ogs5msh(filepath, verbose=True,
                                 count=no_nodes*4,
                                 sep=" ").reshape((no_nodes, 4))[:, 1:]
 
-            elif line.split()[0] == "$ELEMENTS":
+            elif uncomment(line)[0] == "$ELEMENTS":
                 if no_msh == -1:
                     raise ValueError("no 'FEM_MSH' found")
                 line = msh.readline()
@@ -222,7 +224,7 @@ def load_ogs5msh(filepath, verbose=True,
                 for __ in range(no_elements):
                     msh.readline()
 
-            elif line.split()[0] == "#STOP":
+            elif uncomment(line)[0] == "#STOP":
                 if verbose:
                     print("found '#STOP'")
                 # stop reading the file
@@ -302,10 +304,11 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             if verbose:
                 print("got right header:")
                 print(head)
-            # first line contains 3 numbers: 0 no_nodes no_elements
+            # first line should contain 3 numbers: 0 no_nodes no_elements
             line = msh.readline()
-            no_nodes = int(line.split()[1])
-            no_elements = int(line.split()[2])
+            no_nodes = int(uncomment(line)[1])
+            no_elements = int(uncomment(line)[2])
+
             # read NODES
             if verbose:
                 print("read 'NODES'")
@@ -316,6 +319,7 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
                 count=no_nodes*4,
                 sep=" ",
             ).reshape((no_nodes, 4))[:, 1:]
+
             # read ELEMENTS
             if verbose:
                 print("read 'ELEMENTS'")
@@ -472,83 +476,6 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
         if verbose:
             print("writing finished: STOP")
         msh.write("#STOP")
-
-
-def load_media_prop_dist(filepath, verbose=True):
-    '''
-    load a given OGS5 '#MEDIUM_PROPERTIES_DISTRIBUTED' file
-
-    Parameters
-    ----------
-    filepath : string
-        path to the OGS5 '#MEDIUM_PROPERTIES_DISTRIBUTED' flie
-    verbose : bool, optional
-        Print information of the reading process. Default: True
-
-    Returns
-    -------
-    out : dict
-        dictionary contains the distributed properties stored in the given file
-            key : string
-                information of the key-value (string)
-            DATA : float
-                Array with all properties
-    '''
-
-    # initilize the output
-    out = {}
-
-    with open(filepath, "r") as mpd:
-        # looping variable for reading
-        reading = True
-        found_start = False
-        while reading:
-            # read the next line
-            line = mpd.readline()
-
-            # if end of file without '$DATA' keyword reached, raise Error
-            if not line:
-                raise EOFError("reached end of file... unexpected")
-
-            # skip blank lines
-            elif not line.strip():
-                continue
-
-            # check for header
-            elif line.split()[0] == "#MEDIUM_PROPERTIES_DISTRIBUTED":
-                if found_start:
-                    raise ValueError("corrupted file")
-                else:
-                    found_start = True
-                    if verbose:
-                        print("found '#MEDIUM_PROPERTIES_DISTRIBUTED'")
-
-            # check for keywords
-            elif line.split()[0][0] == "$":
-                if not found_start:
-                    raise ValueError("corrupted file")
-                key = line.split()[0][1:]
-                if verbose:
-                    print("read '"+key+"'")
-                # the important information is given by "DATA"
-                if key == "DATA":
-                    data = np.fromfile(mpd, sep=" ")
-                    # get the IDs separatly
-                    data_ids = data.reshape((-1, 2))[:, 0]
-                    data_ids = data_ids.astype(int)
-                    # reorder the values according to the IDs
-                    # (if they are not sorted (possible?!))
-                    data_val = data.reshape((-1, 2))[:, 1]
-                    data_val = data_val[data_ids]
-                    # store the data
-                    out[key] = data_val
-                    # stop reading
-                    reading = False
-                # return first line after keyword as value
-                else:
-                    out[key] = mpd.readline().split()
-
-    return out
 
 
 def import_mesh(filepath, file_format=None,
