@@ -300,7 +300,7 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
     with open(filepath, "r", encoding=encoding) as msh:
 
         head = msh.readline()
-        if head.strip().startswith("#0#0#0#1#0.0#0#"):
+        if head.strip().startswith("#0#0#0#1#"):
             if verbose:
                 print("got right header:")
                 print(head)
