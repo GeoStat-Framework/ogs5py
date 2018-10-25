@@ -139,7 +139,7 @@ def load_ogs5msh(filepath, verbose=True,
                 line = msh.readline()
                 # GEO_TYPE contains 2 infos: "geo_type_name" and "geo_name"
                 # geo_name overwrites the "$GEO_NAME" key like in OGS5
-#                out[no_msh]["mesh_data"]["GEO_TYPE"] = line.split()[:2]
+                # out[no_msh]["mesh_data"]["GEO_TYPE"] = line.split()[:2]
                 out[no_msh]["mesh_data"]["GEO_TYPE"] = line.split()[0]
                 out[no_msh]["mesh_data"]["GEO_NAME"] = line.split()[1]
 
@@ -188,7 +188,7 @@ def load_ogs5msh(filepath, verbose=True,
                 pos_ele = 2  # can be shift to right, if "-1" occures
                 check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
                 if not np.all(check_elem):
-                    pos_ele = 3  # skip the "-1" entry
+                    pos_ele = 3  # skip the "-1" entry (What is that?!)
                 check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
                 if not np.all(check_elem):
                     if verbose or True:
@@ -240,10 +240,125 @@ def load_ogs5msh(filepath, verbose=True,
     # if a single mesh is found, return it directly
     if len(out) == 1:
         out = out[0]
+    # if no mesh was found, return an empty one
     elif len(out) == 0:
-        out = dcp(EMPTY_MSH)
-        print(filepath+": no 'FEM_MSH' found.. maybe old format")
-#        raise ValueError("no 'FEM_MSH' found")
+        if verbose:
+            print(filepath+": no 'FEM_MSH' found.. try to read old format")
+        out = load_ogs5msh_old(filepath, verbose, max_node_no, encoding)
+
+    return out
+
+
+def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
+    '''
+    load a given old-style OGS5 mesh file
+
+    Parameters
+    ----------
+    filepath : string
+        path to the '*.msh' OGS5 mesh file to load
+    verbose : bool, optional
+        Print information of the reading process. Default: True
+    max_node_no : int, optional
+        If you know the maximal node number per elements in the mesh file,
+        you can optimise the reading a bit. By default the algorithm will
+        assume hexahedrons as 'largest' elements in the mesh. Default: 8
+    encoding : str or None, optional
+        encoding of the given file. If ``None`` is given, the system
+        standard is used. Default: ``None``
+
+    Returns
+    -------
+    out : dict
+        dictionary contains one '#FEM_MSH' block of the mesh file
+        with the following information
+            mesh_data : dictionary containing information about
+                AXISYMMETRY (bool)
+                CROSS_SECTION (bool)
+                PCS_TYPE (str)
+                GEO_TYPE (str)
+                GEO_NAME (str)
+                LAYER (int)
+            nodes : ndarray
+                Array with all node postions
+            elements : dictionary
+                contains nodelists for elements sorted by element types
+            material_id : dictionary
+                contains material ids for each element sorted by element types
+            element_id : dictionary
+                contains element ids for each element sorted by element types
+    '''
+    import pandas as pd
+    # in python3 open was replaced with io.open
+    from io import open
+
+    # initilize the output
+    out = dcp(EMPTY_MSH)
+
+    with open(filepath, "r", encoding=encoding) as msh:
+
+        head = msh.readline()
+        if head.strip().startswith("#0#0#0#1#0.0#0#"):
+            if verbose:
+                print("got right header:")
+                print(head)
+            # first line contains 3 numbers: 0 no_nodes no_elements
+            line = msh.readline()
+            no_nodes = int(line.split()[1])
+            no_elements = int(line.split()[2])
+            # read NODES
+            if verbose:
+                print("read 'NODES'")
+                print(no_nodes)
+            # read points with numpys fromfile (which is quite fast)
+            out["nodes"] = np.fromfile(
+                msh,
+                count=no_nodes*4,
+                sep=" ",
+            ).reshape((no_nodes, 4))[:, 1:]
+            # read ELEMENTS
+            if verbose:
+                print("read 'ELEMENTS'")
+                print(no_elements)
+            # read the elements with pandas
+            # names=range(max_node_no) to assure rectangular shape by cols
+            tmp = pd.read_csv(
+                msh,
+                engine='c',
+                delim_whitespace=True,
+                nrows=no_elements,
+                names=range(max_node_no+4),  # +4 for the "-1" entry
+            ).values
+            # check if all given element-typs are OGS known
+            pos_ele = 2  # can be shift to right, if "-1" occures
+            check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
+            if not np.all(check_elem):
+                pos_ele = 3  # skip the "-1" entry (What is that?!)
+            check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
+            if not np.all(check_elem):
+                if verbose:
+                    print(filepath+": unsupported cell-types found:")
+                    print(np.unique(tmp[np.invert(check_elem), pos_ele]))
+                    print("...they will be skipped")
+            # read the elements
+            # read the Material-ID as material_id
+            # read the Elements-ID as element_id
+            out["elements"] = {}
+            out["material_id"] = {}
+            out["element_id"] = {}
+            # iterate over all valid given element-types
+            for elem in np.unique(tmp[check_elem, pos_ele]):
+                pos = (tmp[:, pos_ele] == elem)
+                out["elements"][elem] = \
+                    tmp[pos, pos_ele+1:pos_ele+1+NODE_NO[elem]].astype(int)
+                out["material_id"][elem] = \
+                    tmp[pos, 1].astype(int)
+                out["element_id"][elem] = \
+                    tmp[pos, 0].astype(int)
+
+        # handle unknown infos
+        elif verbose:
+            print(filepath+": no 'old' mesh found...")
 
     return out
 

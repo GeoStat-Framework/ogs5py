@@ -43,10 +43,10 @@ SRF_KEY_LIST = ["ID",
 SRF_TYPES = [int, str, list, float, int, int, str]
 VOL_KEY_LIST = ["NAME",
                 "SURFACES",
-                "TYPE",  # can be string
-                "MAT_GROUP",
+                "TYPE",  # can be string (former int)
+                "MAT_GROUP",  # can be string (former int)
                 "LAYER"]
-VOL_TYPES = [str, list, str, int, int]
+VOL_TYPES = [str, list, str, str, int]
 EMPTY_PLY = {}
 for key in PLY_KEY_LIST:
     EMPTY_PLY[key] = None
