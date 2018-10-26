@@ -10,17 +10,27 @@ from copy import deepcopy as dcp
 import os
 import numpy as np
 # import ogs5py.fileclasses.gli.generator as gen
-from ogs5py.tools._types import STRTYPE, EMPTY_GLI
-from ogs5py.fileclasses.gli.checker import (check_gli_dict,
-                                            check_polyline,
-                                            check_surface,
-                                            check_volume)
-from ogs5py.fileclasses.gli.tools import (load_ogs5gli,
-                                          save_ogs5gli)
-from ogs5py.tools.tools import (rotate_points,
-                                shift_points,
-                                unique_rows,
-                                replace)
+from ogs5py.tools._types import (
+    STRTYPE,
+    EMPTY_GLI,
+)
+from ogs5py.fileclasses.gli.checker import (
+    check_gli_dict,
+    check_polyline,
+    check_surface,
+    check_volume,
+)
+from ogs5py.fileclasses.gli.tools import (
+    load_ogs5gli,
+    save_ogs5gli,
+)
+from ogs5py.tools.tools import (
+    is_str_array,
+    rotate_points,
+    shift_points,
+    unique_rows,
+    replace,
+)
 from ogs5py.fileclasses.base import OGSfile
 
 # current working directory
@@ -466,6 +476,8 @@ class GLI(OGSfile):
         '''
         Use a mesh-generator from the generator module
 
+        See: ogs5py.fileclasses.gli.generator
+
         Parameters
         ----------
         generator : str
@@ -602,9 +614,31 @@ class GLI(OGSfile):
         if name in self.POLYLINE_NAMES:
             print("gli.add_polyline: Polyline-name already present!")
             return
+        # add by name
+        if (is_str_array(points) and
+                points.ndim == 1 and
+                points.shape[0] >= 2 and
+                all([str(pnt) in self.POINT_NAMES for pnt in points])):
+            if closed:
+                points = np.hstack((points, points[0]))
+            # get IDs from the given names
+            # see: https://stackoverflow.com/a/32191125/6696397
+            points = np.array(
+                [np.where(self.POINT_NAMES == str(pnt))[0][0]
+                 for pnt in points],
+                dtype=int,
+            )
+            new_ply = {"NAME": name,
+                       "POINTS": points,
+                       "ID": ply_id,
+                       "EPSILON": epsilon,
+                       "TYPE": ply_type,
+                       "MAT_GROUP": mat_group,
+                       "POINT_VECTOR": point_vector}
+        # add by id
         if (np.issubdtype(points.dtype, np.integer) and
                 points.ndim == 1 and
-                points.shape[0] >= 1 and
+                points.shape[0] >= 2 and
                 np.min(points) >= 0 and
                 np.max(points) < self.POINT_NO):
             if closed:
@@ -616,9 +650,10 @@ class GLI(OGSfile):
                        "TYPE": ply_type,
                        "MAT_GROUP": mat_group,
                        "POINT_VECTOR": point_vector}
+        # add by coordinates
         elif (np.issubdtype(points.dtype, np.floating) and
               points.ndim == 2 and
-              points.shape[0] > 1 and
+              points.shape[0] >= 2 and
               points.shape[1] == 3):
             if closed:
                 points = np.vstack((points, points[0]))

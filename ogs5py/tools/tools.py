@@ -14,6 +14,35 @@ from vtk import (vtkStructuredPoints,
                  vtkFieldData)
 from vtk.util.numpy_support import numpy_to_vtk as np2vtk
 
+from ogs5py.tools._types import STRTYPE
+
+
+def is_str_array(array):
+    """
+    A routine to check if an array contains strings
+
+    Parameters
+    ----------
+    array : iterable
+        array to check
+
+    Return
+    ------
+    bool
+    """
+    array = np.asanyarray(array)
+
+    if array.dtype.kind in {'U', 'S'}:
+        return True
+
+    if array.dtype.kind == 'O':
+        for val in array.reshape(-1):
+            if not isinstance(val, STRTYPE):
+                return False
+        return True
+
+    return False
+
 
 def save_vtk_stru_point(path, vtk_dict, verbose=True):
     """
@@ -42,7 +71,6 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
     -----
     All data is assumed to be scalar.
     """
-
     out = vtkStructuredPoints()
     if verbose:
         print("Set 'dimensions', 'origin', 'spacing'")

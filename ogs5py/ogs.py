@@ -594,18 +594,20 @@ class OGS(object):
         # initialize the log-string for the log-file
         log_str = ""
 
-        # subproc = subprocess.Popen(cmd, shell=True)
-        # print the output of OGS to the console (even in ipython)
-        # see: https://stackoverflow.com/a/17698359/6696397
-        subproc = subprocess.Popen(cmd,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE,
-                                   bufsize=1)
         # in python 3 we need to encode the subprocess output
         # since its binary (only if universal_newlines=False)
         encoding = sys.stdout.encoding
         if not encoding:
             encoding = "utf-8"
+        # subproc = subprocess.Popen(cmd, shell=True)
+        # print the output of OGS to the console (even in ipython)
+        # see: https://stackoverflow.com/a/17698359/6696397
+        subproc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+        )
         with subproc.stdout:
             for line in iter(subproc.stdout.readline, b''):
                 line = line.decode(encoding)
