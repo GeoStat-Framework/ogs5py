@@ -62,17 +62,26 @@ tim : Time settings
 
 from __future__ import absolute_import, division, print_function
 
-import subprocess
+import tempfile
 import os
 import glob
 import sys
 from copy import deepcopy as dcp
 from whichcraft import which
 
+from pexpect.popen_spawn import PopenSpawn
+import pexpect
+
 from ogs5py.fileclasses import (BC, CCT, FCT, GEM, GLI, GLIext, IC, KRC, MCP,
                                 MFP, MMP, MPD, MSH, MSP, NUM, OUT, PCS, PCT,
                                 REI, RFD, RFR, ST, TIM)
 from ogs5py.tools._types import OGS_EXT
+
+# pexpect.spawn just runs on unix-like systems
+if sys.platform == 'win32':
+    CmdRun = PopenSpawn
+else:
+    CmdRun = pexpect.spawn
 
 # current working directory
 CWD = os.getcwd()
@@ -524,6 +533,7 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.rfr.append(dcp(ext_file))
+        return True
 
     def run_model(self, ogs_root=None, ogs_name="ogs",
                   print_log=True, save_log=True,
@@ -564,14 +574,14 @@ class OGS(object):
                 print("Please put the ogs executable in the default sys path: "
                       + str(os.defpath.split(os.pathsep)))
                 print("Or provide the path to your executable")
-                return
+                return False
             else:
                 ogs_root = check_ogs
 
         # create the model_root for ogs
         model_root = os.path.join(self.task_root, self.task_id)
         # create the command to call ogs
-        cmd = [ogs_root, model_root]
+        args = [model_root]
         # add optional output directory
         # check if output directory is an absolute path with os.path.isabs
         # otherwise set it in the task_root directory
@@ -586,37 +596,36 @@ class OGS(object):
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
             # append the outputdir to the ogs-command
-            cmd.append("--output-directory")
-            cmd.append(output_dir)
+            args.append("--output-directory")
+            args.append(output_dir)
         else:
             output_dir = self.task_root
 
-        # initialize the log-string for the log-file
-        log_str = ""
+        # create a temporary log file
+        tmp_log = tempfile.NamedTemporaryFile()
 
-        # in python 3 we need to encode the subprocess output
-        # since its binary (only if universal_newlines=False)
-        encoding = sys.stdout.encoding
-        if not encoding:
-            encoding = "utf-8"
-        # subproc = subprocess.Popen(cmd, shell=True)
-        # print the output of OGS to the console (even in ipython)
-        # see: https://stackoverflow.com/a/17698359/6696397
-        subproc = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            bufsize=1,
+        # create a splitted output stream (to file and stdout)
+        out = Output(tmp_log.name, print_log=print_log)
+        # call ogs with pexpect
+        child = CmdRun(
+            command=ogs_root,
+            args=args,
+            timeout=None,
+            logfile=out,
         )
-        with subproc.stdout:
-            for line in iter(subproc.stdout.readline, b''):
-                line = line.decode(encoding)
-                if print_log:
-                    print(line, end="")
-                log_str += line
-        subproc.wait()
+        child.expect(pexpect.EOF)
+        # close the output stream
+        out.close()
 
-        # save log to file
+        # read the temporary log file
+        with open(tmp_log.name, 'r') as tmp:
+            log_file = tmp.read()
+            lines = log_file.splitlines()
+            success = bool(lines) and "Simulation time" in lines[-1]
+        # close the temporary file
+        tmp_log.close()
+
+        # save the log-file if wanted
         if save_log:
             # set standard log_name
             if log_name is None:
@@ -626,15 +635,71 @@ class OGS(object):
                 log = os.path.join(output_dir, log_name)
             else:
                 log = os.path.join(log_path, log_name)
-            # write the log-file
-            with open(log, "w") as log_file:
-                log_file.write(log_str)
+            with open(log, 'w') as tmp:
+                tmp.write(log_file)
 
-        # check for success
-        if "Simulation time" in log_str.splitlines()[-1]:
-            return True
-        # if simulation was not successfull return False
-        return False
+        return success
+
+
+class Output(object):
+    """A class to duplicate an output stream to stdout/err.
+    This works in a manner very similar to the Unix 'tee' command.
+    When the object is closed or deleted, it closes the original file given to
+    it for duplication.
+    """
+    # from https://github.com/ipython/ipython/blob/master/IPython/utils/io.py
+    # Inspired by:
+    # http://mail.python.org/pipermail/python-list/2007-May/442737.html
+
+    def __init__(self, file_or_name, mode="w", channel='stdout',
+                 print_log=True):
+        """Construct a new Output object.
+
+        Parameters
+        ----------
+        file_or_name : filename or open filehandle (writable)
+          File that will be duplicated
+        mode : optional, valid mode for open().
+          If a filename was give, open with this mode.
+        channel : str, one of ['stdout', 'stderr']
+        """
+        if channel not in ['stdout', 'stderr']:
+            raise ValueError('Invalid channel spec %s' % channel)
+
+        if hasattr(file_or_name, 'write') and hasattr(file_or_name, 'seek'):
+            self.file = file_or_name
+        else:
+            self.file = open(file_or_name, mode)
+        self.channel = channel
+        self.ostream = getattr(sys, channel)
+        self._closed = False
+        self.encoding = sys.stdout.encoding
+        if not self.encoding:
+            self.encoding = "utf-8"
+        self.print_log = print_log
+
+    def close(self):
+        """Close the file and restore the channel."""
+        self.flush()
+        self.file.close()
+        self._closed = True
+
+    def write(self, data):
+        """Write data to both channels."""
+        self.file.write(data.decode(self.encoding))
+        if self.print_log:
+            self.ostream.write(data)
+            self.ostream.flush()
+
+    def flush(self):
+        """Flush both channels."""
+        self.file.flush()
+        if self.print_log:
+            self.ostream.flush()
+
+    def __del__(self):
+        if not self._closed:
+            self.close()
 
 
 def search_task_id(task_root):
