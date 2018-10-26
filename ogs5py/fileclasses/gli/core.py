@@ -614,6 +614,21 @@ class GLI(OGSfile):
         if name in self.POLYLINE_NAMES:
             print("gli.add_polyline: Polyline-name already present!")
             return
+        # add by id
+        if (np.issubdtype(points.dtype, np.integer) and
+                points.ndim == 1 and
+                points.shape[0] >= 2 and
+                np.min(points) >= 0 and
+                np.max(points) < self.POINT_NO):
+            if closed:
+                points = np.hstack((points, points[0]))
+            new_ply = {"NAME": name,
+                       "POINTS": points,
+                       "ID": ply_id,
+                       "EPSILON": epsilon,
+                       "TYPE": ply_type,
+                       "MAT_GROUP": mat_group,
+                       "POINT_VECTOR": point_vector}
         # add by name
         if (is_str_array(points) and
                 points.ndim == 1 and
@@ -623,26 +638,12 @@ class GLI(OGSfile):
                 points = np.hstack((points, points[0]))
             # get IDs from the given names
             # see: https://stackoverflow.com/a/32191125/6696397
+            # after the check, if points are IDs...
             points = np.array(
                 [np.where(self.POINT_NAMES == str(pnt))[0][0]
                  for pnt in points],
                 dtype=int,
             )
-            new_ply = {"NAME": name,
-                       "POINTS": points,
-                       "ID": ply_id,
-                       "EPSILON": epsilon,
-                       "TYPE": ply_type,
-                       "MAT_GROUP": mat_group,
-                       "POINT_VECTOR": point_vector}
-        # add by id
-        if (np.issubdtype(points.dtype, np.integer) and
-                points.ndim == 1 and
-                points.shape[0] >= 2 and
-                np.min(points) >= 0 and
-                np.max(points) < self.POINT_NO):
-            if closed:
-                points = np.hstack((points, points[0]))
             new_ply = {"NAME": name,
                        "POINTS": points,
                        "ID": ply_id,
