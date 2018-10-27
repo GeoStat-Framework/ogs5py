@@ -62,10 +62,10 @@ tim : Time settings
 
 from __future__ import absolute_import, division, print_function
 
-import tempfile
 import os
 import glob
 import sys
+import time
 from copy import deepcopy as dcp
 from whichcraft import which
 
@@ -79,8 +79,10 @@ from ogs5py.tools._types import OGS_EXT
 
 # pexpect.spawn just runs on unix-like systems
 if sys.platform == 'win32':
+    OGS_NAME = "ogs.exe"
     CmdRun = PopenSpawn
 else:
+    OGS_NAME = "ogs"
     CmdRun = pexpect.spawn
 
 # current working directory
@@ -535,7 +537,7 @@ class OGS(object):
                         self.rfr.append(dcp(ext_file))
         return True
 
-    def run_model(self, ogs_root=None, ogs_name="ogs",
+    def run_model(self, ogs_root=None, ogs_name=OGS_NAME,
                   print_log=True, save_log=True,
                   log_path=None, log_name=None):
         '''
@@ -560,7 +562,7 @@ class OGS(object):
             (the defined output directory or the task_root directory)
         log_name : str or None, optional
             Name of the log file. Default: None
-            (task_id+"_log.txt")
+            (task_id+time+"_log.txt")
 
         Return
         ------
@@ -581,7 +583,7 @@ class OGS(object):
         # create the model_root for ogs
         model_root = os.path.join(self.task_root, self.task_id)
         # create the command to call ogs
-        args = [model_root]
+        args = [ogs_root, model_root]
         # add optional output directory
         # check if output directory is an absolute path with os.path.isabs
         # otherwise set it in the task_root directory
@@ -601,15 +603,20 @@ class OGS(object):
         else:
             output_dir = self.task_root
 
-        # create a temporary log file
-        tmp_log = tempfile.NamedTemporaryFile()
+        # set standard log_name
+        if log_name is None:
+            log_name = (self.task_id + "_" +
+                        time.strftime("%Y-%m-%d_%H-%M-%S") + "_log.txt")
+        # put the logfile in the defined output-dir
+        if log_path is None:
+            log_path = output_dir
+        log = os.path.join(log_path, log_name)
 
         # create a splitted output stream (to file and stdout)
-        out = Output(tmp_log.name, print_log=print_log)
+        out = Output(log, print_log=print_log)
         # call ogs with pexpect
         child = CmdRun(
-            command=ogs_root,
-            args=args,
+            " ".join(args),
             timeout=None,
             logfile=out,
         )
@@ -617,26 +624,10 @@ class OGS(object):
         # close the output stream
         out.close()
 
-        # read the temporary log file
-        with open(tmp_log.name, 'r') as tmp:
-            log_file = tmp.read()
-            lines = log_file.splitlines()
-            success = bool(lines) and "Simulation time" in lines[-1]
-        # close the temporary file
-        tmp_log.close()
+        success = "Simulation time" in out.last_line
 
-        # save the log-file if wanted
-        if save_log:
-            # set standard log_name
-            if log_name is None:
-                log_name = self.task_id+"_log.txt"
-            # put the logfile in the defined output-dir
-            if log_path is None:
-                log = os.path.join(output_dir, log_name)
-            else:
-                log = os.path.join(log_path, log_name)
-            with open(log, 'w') as tmp:
-                tmp.write(log_file)
+        if not save_log:
+            os.remove(log)
 
         return success
 
@@ -677,6 +668,7 @@ class Output(object):
         if not self.encoding:
             self.encoding = "utf-8"
         self.print_log = print_log
+        self.last_line = ""
 
     def close(self):
         """Close the file and restore the channel."""
@@ -686,7 +678,8 @@ class Output(object):
 
     def write(self, data):
         """Write data to both channels."""
-        self.file.write(data.decode(self.encoding))
+        self.last_line = data.decode(self.encoding)
+        self.file.write(self.last_line)
         if self.print_log:
             self.ostream.write(data)
             self.ostream.flush()
