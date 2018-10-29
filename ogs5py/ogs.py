@@ -46,8 +46,9 @@ pcs : Process settings
     Information of the Process settings for the model.
 pct : Particle Definition for Random walk
     Information of the Particles defined for Randomwalk setting.
-pqc : Phreqqc coupling (not supported yet)
+pqc : Phreqqc coupling
     PHREEQC configuration for the model.
+    (just a line-wise file with no comfort)
 rei : Reaction Interface
     Information of the Reaction Interface for the model.
 rfd : definition of time-curves for variing BCs or STs
@@ -77,9 +78,32 @@ from whichcraft import which
 from pexpect.popen_spawn import PopenSpawn
 import pexpect
 
-from ogs5py.fileclasses import (BC, CCT, FCT, GEM, GLI, GLIext, IC, KRC, MCP,
-                                MFP, MMP, MPD, MSH, MSP, NUM, OUT, PCS, PCT,
-                                REI, RFD, RFR, ST, TIM)
+from ogs5py.fileclasses import (
+    BC,
+    CCT,
+    FCT,
+    GEM,
+    GLI,
+    GLIext,
+    IC,
+    KRC,
+    MCP,
+    MFP,
+    MMP,
+    MPD,
+    MSH,
+    MSP,
+    NUM,
+    OUT,
+    PCS,
+    PCT,
+    PQC,
+    REI,
+    RFD,
+    RFR,
+    ST,
+    TIM,
+)
 from ogs5py.tools._types import OGS_EXT
 
 # pexpect.spawn just runs on unix-like systems
@@ -192,6 +216,7 @@ class OGS(object):
         self.out = OUT(task_root=task_root, task_id=task_id)
         self.pcs = PCS(task_root=task_root, task_id=task_id)
         self.pct = PCT(task_root=task_root, task_id=task_id)
+        self.pqc = PQC(task_root=task_root, task_id=task_id)
         self.rei = REI(task_root=task_root, task_id=task_id)
         self.rfd = RFD(task_root=task_root, task_id=task_id)
         self.st = ST(task_root=task_root, task_id=task_id)

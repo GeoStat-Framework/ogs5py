@@ -22,7 +22,7 @@ MSP - Solid Properties
 NUM - Settings for the numerical solver
 OUT - Output Settings
 PCS - Process settings
-PQC - Phreqqc coupling (not supported)
+PQC - Phreqqc coupling (just a line-wise file with no comfort)
 REI - Reaction Interface
 RFD - definition of time-curves for variing BCs or STs
 ST  - Source Term
@@ -54,6 +54,7 @@ from ogs5py.fileclasses import (
     NUM,
     OUT,
     PCS,
+    PQC,
     REI,
     RFD,
     ST,
@@ -89,6 +90,7 @@ __all__ = [
     "NUM",
     "OUT",
     "PCS",
+    "PQC",
     "REI",
     "RFD",
     "ST",

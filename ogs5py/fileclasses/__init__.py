@@ -22,12 +22,36 @@ from ogs5py.fileclasses.msp import MSP
 from ogs5py.fileclasses.num import NUM
 from ogs5py.fileclasses.out import OUT
 from ogs5py.fileclasses.pcs import PCS
+from ogs5py.fileclasses.pqc import PQC
 from ogs5py.fileclasses.pct import PCT
 from ogs5py.fileclasses.rei import REI
 from ogs5py.fileclasses.rfd import RFD
 from ogs5py.fileclasses.st import ST
 from ogs5py.fileclasses.tim import TIM
 
-__all__ = ["BC", "CCT", "FCT", "GEM", "GLI", "GLIext", "IC", "RFR",
-           "KRC", "MCP", "MFP", "MMP", "MPD", "MSH", "MSP", "NUM", "OUT",
-           "PCS", "PCT", "REI", "RFD", "ST", "TIM"]
+__all__ = [
+    "BC",
+    "CCT",
+    "FCT",
+    "GEM",
+    "GLI",
+    "GLIext",
+    "IC",
+    "RFR",
+    "KRC",
+    "MCP",
+    "MFP",
+    "MMP",
+    "MPD",
+    "MSH",
+    "MSP",
+    "NUM",
+    "OUT",
+    "PCS",
+    "PQC",
+    "PCT",
+    "REI",
+    "RFD",
+    "ST",
+    "TIM",
+]

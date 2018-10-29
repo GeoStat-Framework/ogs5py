@@ -227,7 +227,7 @@ OGS_EXT = [".bc",   # Boundary Condition
            ".out",  # Output Settings
            ".pcs",  # Process settings
            ".pct",  # Particle Definition for RANDOM_WALK
-           # ".pqc",  # Phreqqc coupling (not supported)
+           ".pqc",  # Phreqqc coupling
            ".rei",  # Reaction Interface
            ".rfd",  # definition of time-curves for variing BCs or STs
            ".st",   # Source Term

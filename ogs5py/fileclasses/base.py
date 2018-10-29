@@ -48,6 +48,27 @@ class LineFile(object):
             task_root=os.path.join(CWD, "ogs5model"),
             task_id="model",
     ):
+        '''
+        Initialize an OGS line-wise text file.
+
+        Parameters
+        ----------
+        lines : list of str, optional
+            content of the file as a list of lines
+            Default: None
+        file_name : str, optional
+            name of the file without extension
+            Default: "textfile"
+        file_ext : str, optional
+            extension of the file (with leading dot ".txt")
+            Default: ".txt"
+        task_root : str, optional
+            Path to the destiny folder.
+            Default: cwd+"ogs5model"
+        task_id : str, optional
+            Name for the ogs task. (a place holder)
+            Default: "model"
+        '''
         if lines is not None:
             self.lines = lines
         else:
@@ -56,6 +77,21 @@ class LineFile(object):
         self.file_ext = file_ext
         self.task_root = task_root
         self.task_id = task_id
+
+    @property
+    def is_empty(self):
+        """state if the file is empty"""
+        # check if the list of main keywords is empty
+        if self.check(False):
+            return not bool(self.lines)
+        # if check is not passed, handle it as empty file
+        return True
+
+    def reset(self):
+        '''
+        Delete every content.
+        '''
+        self.lines = []
 
     def check(self, verbose=True):
         '''
@@ -72,7 +108,12 @@ class LineFile(object):
             Validity of the given file.
         '''
         if verbose:
-            "This file is not checked!"
+            print("This file is not checked!")
+        try:
+            iter(self.lines)
+        except TypeError:
+            return False
+        # just check if we can interate over the lines
         return True
 
     def save(self, path):
@@ -103,12 +144,13 @@ class LineFile(object):
         '''
         Write the acutal file.
         '''
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
-        # save the data
-        self.save(f_path)
+        if not self.is_empty:
+            # create the file path
+            if not os.path.exists(self.task_root):
+                os.makedirs(self.task_root)
+            f_path = os.path.join(self.task_root, self.file_name+self.file_ext)
+            # save the data
+            self.save(f_path)
 
     def __repr__(self):
         """
