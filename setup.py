@@ -1,18 +1,27 @@
 #!/usr/bin/env python
 """
-ogs_py
-python api for opengeosys 5
+ogs5py
+
+ogs5py is a python API for OpenGeoSys5 (www.opengeosys.org)
+
+You can download OGS5 from:
+    * www.opengeosys.org/ogs-5
+
+by Sebastian Mueller 2018
 """
+
+from setuptools import setup, find_packages
+from anaflow import __version__ as VERSION
+
 DOCLINES = __doc__.split("\n")
-
-readme = open('LICENSE').read()
-
+README = open('README.md').read()
 CLASSIFIERS = """\
-Development Status :: 5 - alpha
+Development Status :: 3 - Alpha
 Intended Audience :: Developers
 Intended Audience :: End Users/Desktop
 Intended Audience :: Science/Research
-License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
+License :: OSI Approved :: \
+GNU Lesser General Public License v3 or later (LGPLv3+)
 Natural Language :: English
 Operating System :: MacOS
 Operating System :: MacOS :: MacOS X
@@ -28,30 +37,30 @@ Topic :: Software Development
 Topic :: Utilities
 """
 
-MAJOR               = 0
-MINOR               = 1
-MICRO               = 0
-ISRELEASED          = False
-VERSION             = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
-
-from setuptools import setup, find_packages
-
-metadata = dict(
-    name = 'ogs5py',
+setup(
+    name='ogs5py',
     version=VERSION,
-    maintainer = "Falk Hesse, Miao Jing, Sebastian Mueller",
-    maintainer_email = "falk.hesze (at) gmail (dot) com",
-    description = DOCLINES[0],
-    long_description = readme,
-    author = "Falk Hesse, Miao Jing, Sebastian Mueller",
-    author_email = "falk.hesze (at) gmail (dot) com",
-    license = 'LGPL -  see LICENSE',
+    maintainer="Sebastian Mueller",
+    maintainer_email="sebastian.mueller@ufz.de",
+    description=DOCLINES[0],
+    long_description=README,
+    long_description_content_type="text/markdown",
+    author="Sebastian Mueller",
+    author_email="sebastian.mueller@ufz.de",
+    url='https://github.com/MuellerSeb/ogs5py',
+    license='LGPL -  see LICENSE',
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
-    platforms = ["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
+    platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
-    install_requires=["numpy>=1.9",
-                      "whichcraft"],
-    packages=find_packages(),
-    )
-
-setup(**metadata)
+    install_requires=[
+        'numpy >=1.13.0',  # arr != None elementwise
+        'whichcraft',  # search for ogs
+        'pandas>=0.23.0',  # read-routines and formatting
+        'meshio',  # import/export external meshes
+        'vtk',  # for the readers
+        'pexpect',  # handle command calles
+        #        'pygmsh',  # optional for creating gmesh based mashes
+        #        'mayavi',  # optional to view a mesh
+    ],
+    packages=find_packages(exclude=['tests*', 'docs*']),
+)

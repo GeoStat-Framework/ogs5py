@@ -68,6 +68,8 @@ from ogs5py.tools._types import (
 #                            readtec_point,
 #                            readtec_polyline)
 
+__version__ = '0.2.0'
+
 __all__ = [
     "BC",
     "CCT",
