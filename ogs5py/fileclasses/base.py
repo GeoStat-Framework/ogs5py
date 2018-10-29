@@ -78,6 +78,14 @@ class LineFile(object):
         self.task_root = task_root
         self.task_id = task_id
 
+    @classmethod
+    def _get_clsname(cls):
+        return cls.__name__
+
+    def get_file_type(self):
+        """Get the OGS file class name"""
+        return self._get_clsname()
+
     @property
     def is_empty(self):
         """state if the file is empty"""
@@ -130,15 +138,32 @@ class LineFile(object):
                 for line in self.lines:
                     print(line, file=fout)
 
-    def read_file(self, path, encoding=None):
+    def read_file(self, path, encoding=None, verbose=False):
         '''
-        Read a given file line-wise.
+        Read an existing OGS input file
+
+        Parameters
+        ----------
+        path : str
+            path to the existing file that should be read
+        encoding : str or None, optional
+            encoding of the given file. If ``None`` is given, the system
+            standard is used. Default: ``None``
+        verbose : bool, optional
+            Print information of the reading process. Default: False
         '''
         # in python3 open was replaced with io.open
+        # so we can use encoding key word in python2
         from io import open
 
-        with open(path, "r", encoding=encoding) as fin:
-            self.lines = fin.readlines()
+        self.reset()
+        try:
+            with open(path, "r", encoding=encoding) as fin:
+                self.lines = fin.read().splitlines()
+        except IOError:
+            if verbose:
+                print("ogs5py " + self.get_file_type() +
+                      ": could not read lines from: "+path)
 
     def write_file(self):
         '''
