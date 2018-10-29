@@ -9,7 +9,9 @@ from __future__ import print_function, division
 import os
 import shutil
 import itertools
+import collections
 import numpy as np
+import pandas as pd
 
 # current working directory
 CWD = os.getcwd()
@@ -19,6 +21,119 @@ SUB_IND = "  "
 CON_IND = "   "
 # Top Comment for OGSpy
 TOP_COM = "|-----------Written with ogs5py-----------|"
+
+
+class LineFile(object):
+    """
+    OGS class to handle line-wise text files.
+
+    Attributes
+    ----------
+    lines : list of str
+        content of the file as a list of lines
+    file_name : str
+        name of the file without extension
+    file_ext : str
+        extension of the file (with leading dot ".txt")
+    task_root : str
+        Path to the destiny folder.
+    task_id : str
+        Name for the ogs task. (a place holder)
+    """
+    def __init__(
+            self,
+            lines=None,
+            file_name="textfile",
+            file_ext=".txt",
+            task_root=os.path.join(CWD, "ogs5model"),
+            task_id="model",
+    ):
+        if lines is not None:
+            self.lines = lines
+        else:
+            self.lines = []
+        self.file_name = file_name
+        self.file_ext = file_ext
+        self.task_root = task_root
+        self.task_id = task_id
+
+    def check(self, verbose=True):
+        '''
+        Check if the given text-file is valid.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            Print information for the executed checks. Default: True
+
+        Returns
+        -------
+        result : bool
+            Validity of the given file.
+        '''
+        if verbose:
+            "This file is not checked!"
+        return True
+
+    def save(self, path):
+        '''
+        Save the actual line-wise file in the given path.
+
+        Parameters
+        ----------
+        path : str
+            path to where to file should be saved
+        '''
+        if self.lines:
+            with open(path, "w") as fout:
+                for line in self.lines:
+                    print(line, file=fout)
+
+    def read_file(self, path, encoding=None):
+        '''
+        Read a given file line-wise.
+        '''
+        # in python3 open was replaced with io.open
+        from io import open
+
+        with open(path, "r", encoding=encoding) as fin:
+            self.lines = fin.readlines()
+
+    def write_file(self):
+        '''
+        Write the acutal file.
+        '''
+        # create the file path
+        if not os.path.exists(self.task_root):
+            os.makedirs(self.task_root)
+        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
+        # save the data
+        self.save(f_path)
+
+    def __repr__(self):
+        """
+        Return a formatted representation of the file.
+
+        Info
+        ----
+        Type : str
+        """
+        out = ""
+        for line in self.lines[:5]:
+            out += line+"\n"
+        if len(self.lines) > 5:
+            out += "..."
+        return out
+
+    def __str__(self):
+        """
+        Return a formatted representation of the file.
+
+        Info
+        ----
+        Type : str
+        """
+        return self.__repr__()
 
 
 class OGSfile(object):
@@ -31,7 +146,11 @@ class OGSfile(object):
 
     STD = {}
 
-    def __init__(self, task_root=CWD+"/ogs5model", task_id="model"):
+    def __init__(
+            self,
+            task_root=os.path.join(CWD, "ogs5model"),
+            task_id="model",
+    ):
         '''
         Initialize an OGS file.
 
@@ -48,7 +167,7 @@ class OGSfile(object):
         self.task_id = task_id
         self.top_com = TOP_COM
         # placeholder for later derived classes for each file-type
-        self.f_type = ".std"
+        self.file_ext = ".std"
         # list of main keywords indicated by "#"
         self.mainkw = []
         # list of subkeywords sorted by main keywords indicated by "$"
@@ -382,11 +501,12 @@ class OGSfile(object):
         If no sub keyword is present, a blank one ("") will be added
         and the content is then directly connected to the actual main keyword.
         '''
-        # we need a list of lists, where each row is a line
-        # and a line can contain multiple contents
-        content = np.array(content, ndmin=2, dtype=object)
+        # try to convert the content
+        content = format_content(content)
+        # iterate over content
         for con in content:
-            self.add_content(con, main_index, sub_index)
+            # con = [con_e for con_e in con if con_e is not None]
+            self.add_content(con[con != None], main_index, sub_index)
 
     def del_main_keyword(self, main_index=None, del_all=False):
         '''
@@ -576,7 +696,6 @@ class OGSfile(object):
     def save(self, path, **kwargs):
         '''
         Save the actual OGS input file in the given path.
-        Its path is given by "task_root+task_id+f_type".
 
         Parameters
         ----------
@@ -630,14 +749,14 @@ class OGSfile(object):
     def write_file(self):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         # update the content
         self._update_out()
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
             # if no content is present skip this file
@@ -796,3 +915,33 @@ def format_dict(dict_in):
             print("  --> DATA WILL BE LOST")
         dict_out[new_key] = dict_in[key]
     return dict_out
+
+
+def format_content(content):
+    '''
+    format the content to be added to a 2D linewise array
+
+    Parameters
+    ----------
+    content : anything
+        Single object, or list of objects, or list of lists of objects.
+    '''
+    # convert iterators (like zip)
+    if isinstance(content, collections.Iterator):
+        content = list(content)
+    # first try: numpy (bad for varying length lines, good for the rest)
+    conv1 = np.array(content, ndmin=2, dtype=object)
+    if np.all(np.array(conv1.shape, dtype=int) == 1):
+        # some lonely content in this case
+        return conv1
+    # second try: pandas (good for varying lines, bad in keeping rows/cols)
+    # https://github.com/pandas-dev/pandas/issues/11522#issuecomment-154714142
+    # need to convert to list, if for example a tuple
+    conv2 = pd.DataFrame(list(content), dtype=object).values
+    if 1 in conv2.shape:
+        # if data is 1D: take the numpy result, to keep rows/cols
+        out = conv1
+    else:
+        # if data is truly 2D: take the pandas result
+        out = conv2
+    return out
