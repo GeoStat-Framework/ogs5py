@@ -65,7 +65,7 @@ class IC(OGSfile):
 
         '''
         super(IC, self).__init__(**OGS_Config)
-        self.f_type = '.ic'
+        self.file_ext = '.ic'
 
 
 class RFR(object):
@@ -73,7 +73,7 @@ class RFR(object):
     Class for the ogs RESTART file, if the DIS_TYPE in IC is set to RESTART
     """
     def __init__(self, data=None, line1_4=None, file_name=None, file_ext=None,
-                 task_root=CWD, task_id="ogs"):
+                 task_root=os.path.join(CWD, "ogs5model"), task_id="model"):
         '''
         Input
         -----
@@ -91,7 +91,7 @@ class RFR(object):
         self.task_id = file_name
         if file_ext is None:
             file_ext = ".rfr"
-        self.f_type = file_ext
+        self.file_ext = file_ext
         if data:
             self.data = np.array(data)
         else:
@@ -137,7 +137,7 @@ class RFR(object):
     def read_file(self, path, encoding=None):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         # in python3 open was replaced with io.open
         from io import open
@@ -153,12 +153,12 @@ class RFR(object):
     def write_file(self):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
         # save the data
         self.save(f_path)
 

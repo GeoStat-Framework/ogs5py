@@ -57,4 +57,4 @@ class FCT(OGSfile):
 
         '''
         super(FCT, self).__init__(**OGS_Config)
-        self.f_type = '.fct'
+        self.file_ext = '.fct'

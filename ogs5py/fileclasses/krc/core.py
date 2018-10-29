@@ -201,4 +201,4 @@ class KRC(OGSfile):
 
         '''
         super(KRC, self).__init__(**OGS_Config)
-        self.f_type = '.krc'
+        self.file_ext = '.krc'

@@ -83,4 +83,4 @@ class REI(OGSfile):
 
         '''
         super(REI, self).__init__(**OGS_Config)
-        self.f_type = '.rei'
+        self.file_ext = '.rei'

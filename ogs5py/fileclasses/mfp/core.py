@@ -87,4 +87,4 @@ class MFP(OGSfile):
 
         '''
         super(MFP, self).__init__(**OGS_Config)
-        self.f_type = '.mfp'
+        self.file_ext = '.mfp'

@@ -28,7 +28,7 @@ class PCT(object):
         self.s_flag = s_flag
         self.task_root = task_root
         self.task_id = task_id
-        self.f_type = ".pct"
+        self.file_ext = ".pct"
         if data:
             self.data = np.array(data)
         else:
@@ -93,7 +93,7 @@ class PCT(object):
     def read_file(self, path, **kwargs):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         with open(path, "r") as fin:
                 self.s_flag = int(fin.readline().split(";")[0].split()[0])
@@ -103,12 +103,12 @@ class PCT(object):
     def write_file(self):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
             # if no content is present skip this file

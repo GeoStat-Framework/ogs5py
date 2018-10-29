@@ -48,4 +48,4 @@ class RFD(OGSfile):
 
         '''
         super(RFD, self).__init__(**OGS_Config)
-        self.f_type = '.rfd'
+        self.file_ext = '.rfd'

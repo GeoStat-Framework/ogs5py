@@ -86,4 +86,4 @@ class OUT(OGSfile):
 
         '''
         super(OUT, self).__init__(**OGS_Config)
-        self.f_type = '.out'
+        self.file_ext = '.out'

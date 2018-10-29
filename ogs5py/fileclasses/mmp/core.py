@@ -140,4 +140,4 @@ class MMP(OGSfile):
 
         '''
         super(MMP, self).__init__(**OGS_Config)
-        self.f_type = '.mmp'
+        self.file_ext = '.mmp'

@@ -52,7 +52,7 @@ class GLI(OGSfile):
             OGS configuration
         '''
         super(GLI, self).__init__(**OGS_Config)
-        self.f_type = '.gli'
+        self.file_ext = '.gli'
 
         if gli_dict is None:
             self.__dict = dcp(EMPTY_GLI)
@@ -416,12 +416,12 @@ class GLI(OGSfile):
 #    def write_file(self):
 #        '''
 #        Write the actual OGS input file to the given folder.
-#        Its path is given by "task_root+task_id+f_type".
+#        Its path is given by "task_root+task_id+file_ext".
 #        '''
 #        # create the file path
 #        if not os.path.exists(self.task_root):
 #            os.makedirs(self.task_root)
-#        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+#        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
 #        # save the data
 #        self.save(f_path, verbose=False)
 
@@ -901,7 +901,7 @@ class GLIext(object):
     Class for an external definition for the ogs GEOMETRY file.
     """
     def __init__(self, typ, data=None, file_name=None, file_ext=None,
-                 task_root=CWD, task_id="ogs"):
+                 task_root=os.path.join(CWD, "ogs5model"), task_id="model"):
         '''
         Input
         -----
@@ -918,7 +918,7 @@ class GLIext(object):
                 file_ext = ".tin"
             else:
                 file_ext = ".ply"
-        self.f_type = file_ext
+        self.file_ext = file_ext
         if data:
             self.data = np.array(data)
         else:
@@ -1000,11 +1000,11 @@ class GLIext(object):
     def write_file(self):
         '''
         Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+f_type".
+        Its path is given by "task_root+task_id+file_ext".
         '''
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
         # save the data
         self.save(f_path)

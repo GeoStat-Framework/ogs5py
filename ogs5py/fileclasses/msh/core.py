@@ -67,7 +67,7 @@ class MSHsgl(OGSfile):
             Name for the ogs task. Default: "ogs"
         '''
         super(MSHsgl, self).__init__(**OGS_Config)
-        self.f_type = '.msh'
+        self.file_ext = '.msh'
 
         if mesh_dict is None:
             self.__dict = EMPTY_MSH
@@ -655,12 +655,12 @@ class MSHsgl(OGSfile):
 #    def write_file(self):
 #        '''
 #        Write the actual OGS input file to the given folder.
-#        Its path is given by "task_root+task_id+f_type".
+#        Its path is given by "task_root+task_id+file_ext".
 #        '''
 #        # create the file path
 #        if not os.path.exists(self.task_root):
 #            os.makedirs(self.task_root)
-#        f_path = os.path.join(self.task_root, self.task_id+self.f_type)
+#        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
 #        # save the data
 #        self.save(f_path, verbose=False)
 

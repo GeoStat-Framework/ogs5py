@@ -81,4 +81,4 @@ class BC(OGSfile):
 
         '''
         super(BC, self).__init__(**OGS_Config)
-        self.f_type = '.bc'
+        self.file_ext = '.bc'

@@ -77,4 +77,4 @@ class GEM(OGSfile):
 
         '''
         super(GEM, self).__init__(**OGS_Config)
-        self.f_type = '.gem'
+        self.file_ext = '.gem'

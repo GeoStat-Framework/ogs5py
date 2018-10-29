@@ -93,4 +93,4 @@ class NUM(OGSfile):
 
         '''
         super(NUM, self).__init__(**OGS_Config)
-        self.f_type = '.num'
+        self.file_ext = '.num'

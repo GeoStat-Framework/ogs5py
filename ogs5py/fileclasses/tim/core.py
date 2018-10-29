@@ -71,4 +71,4 @@ class TIM(OGSfile):
 
         '''
         super(TIM, self).__init__(**OGS_Config)
-        self.f_type = '.tim'
+        self.file_ext = '.tim'

@@ -86,4 +86,4 @@ class MSP(OGSfile):
         '''
         super(MSP, self).__init__(**OGS_Config)
 
-        self.f_type = '.msp'
+        self.file_ext = '.msp'

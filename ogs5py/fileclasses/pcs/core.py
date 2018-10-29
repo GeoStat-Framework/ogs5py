@@ -110,4 +110,4 @@ class PCS(OGSfile):
 
         '''
         super(PCS, self).__init__(**OGS_Config)
-        self.f_type = '.pcs'
+        self.file_ext = '.pcs'

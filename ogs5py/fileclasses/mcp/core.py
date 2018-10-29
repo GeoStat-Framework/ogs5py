@@ -89,4 +89,4 @@ class MCP(OGSfile):
 
         '''
         super(MCP, self).__init__(**OGS_Config)
-        self.f_type = '.mcp'
+        self.file_ext = '.mcp'

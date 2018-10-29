@@ -49,4 +49,4 @@ class CCT(OGSfile):
 
         '''
         super(CCT, self).__init__(**OGS_Config)
-        self.f_type = '.cct'
+        self.file_ext = '.cct'

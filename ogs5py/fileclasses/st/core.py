@@ -81,4 +81,4 @@ class ST(OGSfile):
 
         '''
         super(ST, self).__init__(**OGS_Config)
-        self.f_type = '.st'
+        self.file_ext = '.st'
