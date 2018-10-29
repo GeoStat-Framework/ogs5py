@@ -34,8 +34,6 @@ mfp : Fluid Properties
     Information of the Fluid Properties for the model.
 mmp : Medium Properties
     Information of the Medium Properties for the model.
-mpd : Distributed Properties (list of files)
-    Information of the Distributed Properties for the model.
 msh : Mesh
     Information of the Mesh for the model.
 msp : Solid Properties
@@ -49,7 +47,7 @@ pcs : Process settings
 pct : Particle Definition for Random walk
     Information of the Particles defined for Randomwalk setting.
 pqc : Phreqqc coupling (not supported yet)
-    Information of the Boundary Conditions for the model.
+    PHREEQC configuration for the model.
 rei : Reaction Interface
     Information of the Reaction Interface for the model.
 rfd : definition of time-curves for variing BCs or STs
@@ -58,6 +56,13 @@ st  : Source Term
     Information of the Source Term for the model.
 tim : Time settings
     Information of the Time settings for the model.
+
+mpd : Distributed Properties (list of files)
+    Information of the Distributed Properties for the model.
+gli_ext : list for external Geometry definition
+    External definition of surfaces (TIN) or polylines (POINT_VECTOR)
+rfr : list of restart files
+    RESTART files as defined in the INITIAL_CONDITION
 """
 
 from __future__ import absolute_import, division, print_function
@@ -539,7 +544,8 @@ class OGS(object):
 
     def run_model(self, ogs_root=None, ogs_name=OGS_NAME,
                   print_log=True, save_log=True,
-                  log_path=None, log_name=None):
+                  log_path=None, log_name=None,
+                  timeout=None):
         '''
         Run the defined OGS5 model.
 
@@ -563,6 +569,8 @@ class OGS(object):
         log_name : str or None, optional
             Name of the log file. Default: None
             (task_id+time+"_log.txt")
+        timeout : int or None, optional
+            Time to wait for OGS5 to finish in seconds. Default: None
 
         Return
         ------
@@ -617,9 +625,10 @@ class OGS(object):
         # call ogs with pexpect
         child = CmdRun(
             " ".join(args),
-            timeout=None,
+            timeout=timeout,
             logfile=out,
         )
+        # wait for ogs to finish
         child.expect(pexpect.EOF)
         # close the output stream
         out.close()
@@ -633,36 +642,21 @@ class OGS(object):
 
 
 class Output(object):
-    """A class to duplicate an output stream to stdout/err.
-    This works in a manner very similar to the Unix 'tee' command.
-    When the object is closed or deleted, it closes the original file given to
-    it for duplication.
-    """
-    # from https://github.com/ipython/ipython/blob/master/IPython/utils/io.py
-    # Inspired by:
-    # http://mail.python.org/pipermail/python-list/2007-May/442737.html
-
-    def __init__(self, file_or_name, mode="w", channel='stdout',
-                 print_log=True):
+    """A class to duplicate an output stream to stdout."""
+    def __init__(self, file_or_name, print_log=True):
         """Construct a new Output object.
 
         Parameters
         ----------
         file_or_name : filename or open filehandle (writable)
-          File that will be duplicated
-        mode : optional, valid mode for open().
-          If a filename was give, open with this mode.
-        channel : str, one of ['stdout', 'stderr']
+            File that will be duplicated
+        print_log : bool, optional
+            State if log should be printed. Default: True
         """
-        if channel not in ['stdout', 'stderr']:
-            raise ValueError('Invalid channel spec %s' % channel)
-
         if hasattr(file_or_name, 'write') and hasattr(file_or_name, 'seek'):
             self.file = file_or_name
         else:
-            self.file = open(file_or_name, mode)
-        self.channel = channel
-        self.ostream = getattr(sys, channel)
+            self.file = open(file_or_name, "w")
         self._closed = False
         self.encoding = sys.stdout.encoding
         if not self.encoding:
@@ -681,14 +675,14 @@ class Output(object):
         self.last_line = data.decode(self.encoding)
         self.file.write(self.last_line)
         if self.print_log:
-            self.ostream.write(data)
-            self.ostream.flush()
+            sys.stdout.write(data)
+            sys.stdout.flush()
 
     def flush(self):
         """Flush both channels."""
         self.file.flush()
         if self.print_log:
-            self.ostream.flush()
+            sys.stdout.flush()
 
     def __del__(self):
         if not self._closed:
