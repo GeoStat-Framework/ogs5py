@@ -8,10 +8,12 @@ You can download OGS5 from:
     * www.opengeosys.org/ogs-5
 
 by Sebastian Mueller 2018
+
+(inspired by Falk Hesse and Miao Jing)
 """
 
 from setuptools import setup, find_packages
-from anaflow import __version__ as VERSION
+from ogs5py import __version__ as VERSION
 
 DOCLINES = __doc__.split("\n")
 README = open('README.md').read()

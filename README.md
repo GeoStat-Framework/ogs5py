@@ -61,36 +61,36 @@ Example
     for ply in ogs.gli.POLYLINE_NAMES:
         ogs.bc.add_block(PCS_TYPE=pcs_type_flow,
                          PRIMARY_VARIABLE=var_name_flow,
-                         GEO_TYPE=[['POLYLINE', ply]],
-                         DIS_TYPE=[['CONSTANT', 0.0]])
+                         GEO_TYPE=['POLYLINE', ply],
+                         DIS_TYPE=['CONSTANT', 0.0])
     # set pumping condition at the pumpingwell
     ogs.st.add_block(PCS_TYPE=pcs_type_flow,
                      PRIMARY_VARIABLE=var_name_flow,
-                     GEO_TYPE=[['POINT', pwell]],
-                     DIS_TYPE=[['CONSTANT_NEUMANN', -1.0e-04]])
+                     GEO_TYPE=['POINT', pwell],
+                     DIS_TYPE=['CONSTANT_NEUMANN', -1.0e-04])
     # set the initial condition
     ogs.ic.add_block(PCS_TYPE=pcs_type_flow,
                      PRIMARY_VARIABLE=var_name_flow,
                      GEO_TYPE='DOMAIN',
-                     DIS_TYPE=[['CONSTANT', 0.0]])
+                     DIS_TYPE=['CONSTANT', 0.0])
     # set the fluid properties
     ogs.mfp.add_block(FLUID_TYPE='LIQUID',
-                      DENSITY=[[1, 1.0e+03]],
-                      VISCOSITY=[[1, 1.0e-03]])
+                      DENSITY=[1, 1.0e+03],
+                      VISCOSITY=[1, 1.0e-03])
     # permeability, storage and porosity
     ogs.mmp.add_block(GEOMETRY_DIMENSION=dim_no,
-                      STORAGE=[[1, 1.0e-04]],
-                      PERMEABILITY_TENSOR=[['ISOTROPIC', 1.0e-4]],
+                      STORAGE=[1, 1.0e-04],
+                      PERMEABILITY_TENSOR=['ISOTROPIC', 1.0e-4],
                       POROSITY='0.2')
     # set the parameters for the solver
     ogs.num.add_block(PCS_TYPE=pcs_type_flow,
-                      LINEAR_SOLVER=[[2, 5, 1.0e-06, 1000, 1.0, 1, 4]],
+                      LINEAR_SOLVER=[2, 5, 1.0e-06, 1000, 1.0, 1, 4],
                       ELE_GAUSS_POINTS=3)
     # set the outputformat for the whole domain (just for checking)
     ogs.out.add_block(NOD_VALUES=var_name_flow,
                       GEO_TYPE='DOMAIN',
                       DAT_TYPE='PVD',
-                      TIM_TYPE=[['STEPS', 1]])
+                      TIM_TYPE=['STEPS', 1])
     # set the process type
     ogs.pcs.add_block(PCS_TYPE=pcs_type_flow,
                       NUM_TYPE='NEW')
@@ -116,7 +116,7 @@ Just download the code an run the following command from the
 source code directory:
 
     pip install -U .
-    
+
 Requirements
 ------------
 The ogs5 executable needs to be in your sys-path. Otherwise you need to specify the path to the executable within the run command:
@@ -124,3 +124,5 @@ The ogs5 executable needs to be in your sys-path. Otherwise you need to specify 
     ogs.run_model(ogs_root="path/to/ogs")
 
 Created April 2018, Copyright Sebastian Mueller 2018
+
+(inspired by Falk Hesse and Miao Jing)
