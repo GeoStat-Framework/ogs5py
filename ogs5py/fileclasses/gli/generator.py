@@ -1,13 +1,15 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Different generators from ogs5py-mesh
+Different generators from ogs5py GLI files
 
 @author: Sebastian Mueller
 """
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
+
+from ogs5py import GLI as gli
 
 
 def rectengular(dim=3,
@@ -34,8 +36,6 @@ def rectengular(dim=3,
     -------
     result : gli
     '''
-    from .core import GLI as gli
-
     ori = np.array(ori)
     if ori.shape[0] == 2:
         ori = np.hstack((ori, 0.0))
@@ -125,8 +125,6 @@ def radial(dim=3,
     -------
     result : gli
     '''
-    from .core import GLI as gli
-
     out = gli()
 
     if dim == 2:
