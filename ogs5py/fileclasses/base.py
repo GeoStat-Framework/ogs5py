@@ -11,7 +11,9 @@ import shutil
 import itertools
 import collections
 import numpy as np
-import pandas as pd
+# import pandas as pd
+
+from ogs5py.tools._types import STRTYPE
 
 # current working directory
 CWD = os.getcwd()
@@ -573,7 +575,8 @@ class OGSfile(object):
         # iterate over content
         for con in content:
             # con = [con_e for con_e in con if con_e is not None]
-            self.add_content(con[con != None], main_index, sub_index)
+            # self.add_content(con[con != None], main_index, sub_index)
+            self.add_content(con, main_index, sub_index)
 
     def del_main_keyword(self, main_index=None, del_all=False):
         '''
@@ -993,22 +996,33 @@ def format_content(content):
     content : anything
         Single object, or list of objects, or list of lists of objects.
     '''
+    # strings could be detected as iterable, so check this first
+    if isinstance(content, STRTYPE):
+        return [[content]]
     # convert iterators (like zip)
     if isinstance(content, collections.Iterator):
         content = list(content)
-    # first try: numpy (bad for varying length lines, good for the rest)
-    conv1 = np.array(content, ndmin=2, dtype=object)
-    if np.all(np.array(conv1.shape, dtype=int) == 1):
-        # some lonely content in this case
-        return conv1
-    # second try: pandas (good for varying lines, bad in keeping rows/cols)
-    # https://github.com/pandas-dev/pandas/issues/11522#issuecomment-154714142
-    # need to convert to list, if for example a tuple
-    conv2 = pd.DataFrame(list(content), dtype=object).values
-    if 1 in conv2.shape:
-        # if data is 1D: take the numpy result, to keep rows/cols
-        out = conv1
+    # check for a single content thats not a string
+    try:
+        iter(content)
+    except TypeError:
+        return [[content]]
+    # check if any list in in the given list
+    # if so, we handle each entry as a line
+    for con in content:
+        found_list = False
+        # check for a list
+        try:
+            iter(con)
+        except TypeError:
+            pass
+        else:
+            if not isinstance(con, STRTYPE):
+                found_list = True
+                break
+    # if a list is found, we take the content as multiple lines
+    if found_list:
+        return content
+    # else we handle the content as single data
     else:
-        # if data is truly 2D: take the pandas result
-        out = conv2
-    return out
+        return [content]
