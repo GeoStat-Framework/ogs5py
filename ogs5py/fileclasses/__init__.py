@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 from ogs5py.fileclasses.bc import BC
 from ogs5py.fileclasses.cct import CCT
+from ogs5py.fileclasses.ddc import DDC
 from ogs5py.fileclasses.fct import FCT
 from ogs5py.fileclasses.gem import GEM
 from ogs5py.fileclasses.gli import GLI
@@ -22,8 +23,8 @@ from ogs5py.fileclasses.msp import MSP
 from ogs5py.fileclasses.num import NUM
 from ogs5py.fileclasses.out import OUT
 from ogs5py.fileclasses.pcs import PCS
-from ogs5py.fileclasses.pqc import PQC
 from ogs5py.fileclasses.pct import PCT
+from ogs5py.fileclasses.pqc import PQC
 from ogs5py.fileclasses.rei import REI
 from ogs5py.fileclasses.rfd import RFD
 from ogs5py.fileclasses.st import ST
@@ -32,6 +33,7 @@ from ogs5py.fileclasses.tim import TIM
 __all__ = [
     "BC",
     "CCT",
+    "DDC",
     "FCT",
     "GEM",
     "GLI",
@@ -48,8 +50,8 @@ __all__ = [
     "NUM",
     "OUT",
     "PCS",
-    "PQC",
     "PCT",
+    "PQC",
     "REI",
     "RFD",
     "ST",
