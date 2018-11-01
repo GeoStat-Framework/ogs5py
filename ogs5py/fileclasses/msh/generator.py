@@ -9,10 +9,17 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
-from ogs5py.fileclasses.msh.tools import (convert_meshio, combine,
-                                          gen_std_elem_id, gen_std_mat_id)
-from ogs5py.fileclasses.msh.gmsh import (gmsh_grid_adapt2D, gmsh_grid_adapt3D,
-                                         gmsh_block_adapt3D, gmsh_code)
+from ogs5py.fileclasses.msh.tools import (
+    convert_meshio, combine,
+    gen_std_elem_id,
+    gen_std_mat_id,
+)
+from ogs5py.fileclasses.msh.gmsh import (
+    gmsh_grid_adapt2D,
+    gmsh_grid_adapt3D,
+    gmsh_block_adapt3D,
+    gmsh_code,
+)
 
 
 def rectengular(dim=3,

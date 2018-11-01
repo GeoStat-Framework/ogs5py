@@ -9,13 +9,18 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 import meshio as mio
-# from ._types import elem_names, node_no, meshio_names, elem_dim
-from ogs5py.tools._types import (ELEM_NAMES,
-                                 NODE_NO,
-                                 MESHIO_NAMES,
-                                 ELEM_DIM,
-                                 EMPTY_MSH)
-from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
+from ogs5py.tools._types import (
+    ELEM_NAMES,
+    NODE_NO,
+    MESHIO_NAMES,
+    ELEM_DIM,
+    EMPTY_MSH,
+)
+from ogs5py.tools.tools import (
+    unique_rows,
+    replace,
+    rotation_matrix,
+)
 from ogs5py.fileclasses.base import uncomment
 
 
@@ -274,13 +279,8 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
     out : dict
         dictionary contains one '#FEM_MSH' block of the mesh file
         with the following information
-            mesh_data : dictionary containing information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
+            mesh_data : dict
+                empty for old mesh type
             nodes : ndarray
                 Array with all node postions
             elements : dictionary

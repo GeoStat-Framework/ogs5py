@@ -57,7 +57,7 @@ def show_mesh(mesh, show_element_id=True):
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
         print("..if you are running an IPython console" +
-              ", don't run it under qt5. Mayavi still ueses qt4.")
+              ", don't run it under qt5. Mayavi still uses qt4.")
         return
 
     # close all mayavi scenes

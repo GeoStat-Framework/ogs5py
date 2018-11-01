@@ -8,11 +8,19 @@ tools for the ogs5py-mesh package
 from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
-from ogs5py.tools._types import (PLY_KEY_LIST, PLY_TYPES,
-                                 SRF_KEY_LIST, SRF_TYPES,
-                                 VOL_KEY_LIST, VOL_TYPES,
-                                 GLI_KEY_LIST,
-                                 EMPTY_GLI, EMPTY_PLY, EMPTY_SRF, EMPTY_VOL)
+from ogs5py.tools._types import (
+    PLY_KEY_LIST,
+    PLY_TYPES,
+    SRF_KEY_LIST,
+    SRF_TYPES,
+    VOL_KEY_LIST,
+    VOL_TYPES,
+    GLI_KEY_LIST,
+    EMPTY_GLI,
+    EMPTY_PLY,
+    EMPTY_SRF,
+    EMPTY_VOL,
+)
 from ogs5py.fileclasses.base import uncomment
 
 
