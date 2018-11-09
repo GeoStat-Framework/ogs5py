@@ -716,7 +716,7 @@ def remove_dim(mesh, remove):
         mesh["element_id"] = gen_std_elem_id(mesh["elements"])
 
 
-def combine(mesh_1, mesh_2, decimals=3):
+def combine(mesh_1, mesh_2, decimals=4, fast=False):
     '''
     Combine mesh_1 and mesh_2 to one single mesh. The node list will be
     updated to eliminate duplicates. Element intersections are not checked.
@@ -746,6 +746,10 @@ def combine(mesh_1, mesh_2, decimals=3):
         Number of decimal places to round the nodes to (default: 3).
         This will not round the output, it is just for comparison of the
         node vectors.
+    fast : bool, optional
+        If fast is True, the vector comparison is executed by a
+        decimal comparison. If fast is False, all pairwise distances
+        are calculated. Default: False
 
     Returns
     -------
@@ -763,10 +767,17 @@ def combine(mesh_1, mesh_2, decimals=3):
             element_id : dictionary
                 contains element ids for each element sorted by element types
     '''
+    # hack to prevent numerical errors from decimal rounding (random shift)
+    shift = np.random.rand(3)
+    shift_mesh(mesh_1, shift)
+    shift_mesh(mesh_2, shift)
     # combine the node lists and make them unique
-    nodes, __, ixr = unique_rows(np.vstack((mesh_1["nodes"],
-                                            mesh_2["nodes"])),
-                                 decimals=decimals)
+    nodes, __, ixr = unique_rows(
+        np.vstack((mesh_1["nodes"],
+                   mesh_2["nodes"])),
+        decimals=decimals,
+        fast=fast,
+    )
     node_id_repl = range(len(ixr))
     node_offset = mesh_1["nodes"].shape[0]
 
@@ -803,6 +814,11 @@ def combine(mesh_1, mesh_2, decimals=3):
            "elements": elements,
            "material_id": material_id,
            "element_id": element_id}
+
+    # back shifting of the meshes
+    shift_mesh(out, -shift)
+    shift_mesh(mesh_1, -shift)
+    shift_mesh(mesh_2, -shift)
 
     return out
 

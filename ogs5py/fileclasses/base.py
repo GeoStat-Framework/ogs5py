@@ -788,6 +788,8 @@ class OGSfile(object):
         else:
             lend = "\n"
 
+        lend = "\n"
+
         # open the file
         with open(path, "w") as fout:
             # print top comment
@@ -808,8 +810,8 @@ class OGSfile(object):
                         if ((mkw == "MEDIUM_PROPERTIES_DISTRIBUTED" and
                              skw == "DATA")):
                             print(*con,
-                                  # sep="\t", end=lend, file=fout)
-                                  sep=" ", end="\n", file=fout)
+                                  # sep="\t", end="\n", file=fout)
+                                  sep=" ", end=lend, file=fout)
                         else:
                             print(CON_IND, *con,
                                   sep=" ", end=lend, file=fout)

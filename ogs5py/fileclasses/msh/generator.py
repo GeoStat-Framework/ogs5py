@@ -22,10 +22,12 @@ from ogs5py.fileclasses.msh.gmsh import (
 )
 
 
-def rectengular(dim=3,
-                mesh_origin=(0., 0., 0.),
-                element_no=(10, 10, 10),
-                element_size=(1., 1., 1.)):
+def rectengular(
+    dim=3,
+    mesh_origin=(0., 0., 0.),
+    element_no=(10, 10, 10),
+    element_size=(1., 1., 1.),
+):
     '''
     generate a rectengular grid in 2D or 3D
 
@@ -127,11 +129,13 @@ def rectengular(dim=3,
     return out
 
 
-def radial(dim=3,
-           mesh_origin=(0., 0., 0.),
-           angles=16,
-           rad=np.arange(11),
-           z_arr=-np.arange(2)):
+def radial(
+    dim=3,
+    mesh_origin=(0., 0., 0.),
+    angles=16,
+    rad=np.arange(11),
+    z_arr=-np.arange(2),
+):
     '''
     generate a radial grid in 2D or 3D
 
@@ -287,16 +291,18 @@ def radial(dim=3,
     return out
 
 
-def grid_adapter2D(out_dim=(100., 100.),
-                   in_dim=(50., 50.),
-                   out_res=(10., 10.),
-                   in_res=(1., 1.),
-                   out_pos=(0., 0.),
-                   in_pos=(25., 25.),
-                   z_pos=0.,
-                   in_mat=0,
-                   out_mat=0,
-                   fill=False):
+def grid_adapter2D(
+    out_dim=(100., 100.),
+    in_dim=(50., 50.),
+    out_res=(10., 10.),
+    in_res=(1., 1.),
+    out_pos=(0., 0.),
+    in_pos=(25., 25.),
+    z_pos=0.,
+    in_mat=0,
+    out_mat=0,
+    fill=False,
+):
     '''
     generate a grid adapter in 2D from an outer grid resolution
     to an inner grid resolution with gmsh.
@@ -369,17 +375,19 @@ def grid_adapter2D(out_dim=(100., 100.),
     return out
 
 
-def grid_adapter3D(out_dim=(100., 100.),
-                   in_dim=(50., 50.),
-                   z_dim=-10.,
-                   out_res=(10., 10., 10.),
-                   in_res=(5., 5., 5.),
-                   out_pos=(0., 0.),
-                   in_pos=(25., 25.),
-                   z_pos=0.,
-                   in_mat=0,
-                   out_mat=0,
-                   fill=False):
+def grid_adapter3D(
+    out_dim=(100., 100.),
+    in_dim=(50., 50.),
+    z_dim=-10.,
+    out_res=(10., 10., 10.),
+    in_res=(5., 5., 5.),
+    out_pos=(0., 0.),
+    in_pos=(25., 25.),
+    z_pos=0.,
+    in_mat=0,
+    out_mat=0,
+    fill=False,
+):
     '''
     generate a grid adapter in 3D from an outer grid resolution
     to an inner grid resolution with gmsh.
@@ -451,9 +459,11 @@ def grid_adapter3D(out_dim=(100., 100.),
     return out
 
 
-def block_adapter3D(xy_dim=10.,
-                    z_dim=5.,
-                    in_res=1.):
+def block_adapter3D(
+    xy_dim=10.,
+    z_dim=5.,
+    in_res=1.,
+):
     '''
     generate a block adapter that has a given resolution at the
     southern side with gmsh.

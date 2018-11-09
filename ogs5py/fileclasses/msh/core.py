@@ -750,6 +750,10 @@ class MSHsgl(OGSfile):
             Number of decimal places to round the nodes to (default: 3).
             This will not round the output, it is just for comparison of the
             node vectors.
+        fast : bool, optional
+            If fast is True, the vector comparison is executed by a
+            decimal comparison. If fast is False, all pairwise distances
+            are calculated. Default: False
         '''
         if isinstance(ext_mesh, MSH):
             tmp_mesh = ext_mesh()
@@ -765,7 +769,7 @@ class MSHsgl(OGSfile):
                     print("Could not interpret the mesh that should be added")
                     return
 
-        if check_mesh_dict(tmp_mesh):
+        if check_mesh_dict(tmp_mesh, verbose=False):
             self._dict = combine(self._dict, tmp_mesh, **kwargs)
         else:
             print("given mesh to add is not valid")

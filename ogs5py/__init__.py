@@ -38,6 +38,7 @@ from ogs5py.ogs import (
 from ogs5py.fileclasses import (
     BC,
     CCT,
+    DDC,
     FCT,
     GEM,
     GLI,
@@ -54,6 +55,7 @@ from ogs5py.fileclasses import (
     NUM,
     OUT,
     PCS,
+    PCT,
     PQC,
     REI,
     RFD,
@@ -61,6 +63,7 @@ from ogs5py.fileclasses import (
     TIM,
 )
 from ogs5py.tools._types import (
+    OGS_EXT,
     PCS_TYP,
     PRIM_VAR_BY_PCS,
 )
@@ -69,11 +72,12 @@ from ogs5py.tools._types import (
 #                            readtec_point,
 #                            readtec_polyline)
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 __all__ = [
     "BC",
     "CCT",
+    "DDC",
     "FCT",
     "GEM",
     "GLI",
@@ -90,6 +94,7 @@ __all__ = [
     "NUM",
     "OUT",
     "PCS",
+    "PCT",
     "PQC",
     "REI",
     "RFD",
@@ -101,6 +106,7 @@ __all__ += [
     "search_task_id",
 ]
 __all__ += [
+    "OGS_EXT",
     "PCS_TYP",
     "PRIM_VAR_BY_PCS",
 ]

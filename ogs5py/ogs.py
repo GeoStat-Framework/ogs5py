@@ -81,6 +81,7 @@ import pexpect
 from ogs5py.fileclasses import (
     BC,
     CCT,
+    DDC,
     FCT,
     GEM,
     GLI,
@@ -202,6 +203,7 @@ class OGS(object):
 
         self.bc = BC(task_root=task_root, task_id=task_id)
         self.cct = CCT(task_root=task_root, task_id=task_id)
+        self.ddc = DDC(task_root=task_root, task_id=task_id)
         self.fct = FCT(task_root=task_root, task_id=task_id)
         self.gem = GEM(task_root=task_root, task_id=task_id)
         self.gli = GLI(task_root=task_root, task_id=task_id)

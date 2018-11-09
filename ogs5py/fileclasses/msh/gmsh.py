@@ -203,7 +203,8 @@ def gmsh_grid_adapt3D(out_dim=(100., 100.),
         "Recombine Surface{47};",
         # "// define the volume",
         "Surface Loop(48) = {39, 28, 33, 35, 37, 31, 47, 41, 43, 45};",
-        "Volume(49) = {48};"]
+        "Volume(49) = {48};",
+    ]
     geo.add_raw_code(code)
     return geo
 
@@ -274,6 +275,7 @@ def gmsh_grid_adapt2D(out_dim=(100., 100.),
         "Transfinite Line{2, 4} = outy/griouty + 1;",
         # "// make the inner sides rectengular",
         "Transfinite Line{13, 15} = inx/grix + 1;",
-        "Transfinite Line{14, 16} = iny/griy + 1;"]
+        "Transfinite Line{14, 16} = iny/griy + 1;",
+    ]
     geo.add_raw_code(code)
     return geo
