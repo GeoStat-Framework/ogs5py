@@ -63,3 +63,7 @@ class MPD(OGSfile):
     def top_com(self):
         '''top comment is 'None' for the MPD file'''
         return None
+
+    @top_com.setter
+    def top_com(self, val):
+        pass
