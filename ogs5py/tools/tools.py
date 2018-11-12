@@ -110,7 +110,9 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
         for sgl_data in vtk_dict["cell_data"]:
             if verbose:
                 print("  Set '" + sgl_data + "'")
-            arr = np2vtk(ascont(vtk_dict["cell_data"][sgl_data].reshape(-1, order="F")))
+            arr = np2vtk(
+                ascont(vtk_dict["cell_data"][sgl_data].reshape(-1, order="F"))
+            )
             arr.SetName(sgl_data)
             data.AddArray(arr)
 
@@ -123,7 +125,10 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
 
 
 def rotate_points(
-    points, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+    points,
+    angle,
+    rotation_axis=(0.0, 0.0, 1.0),
+    rotation_point=(0.0, 0.0, 0.0),
 ):
     """
     Rotate points around a given rotation point and axis with a given angle.
@@ -316,7 +321,9 @@ def rotation_matrix(vector, angle):
     mat = np.cross(np.eye(3), vector)
     cosa = np.cos(angle)
     sina = np.sin(angle)
-    return cosa * np.eye(3) + sina * mat + (1 - cosa) * np.outer(vector, vector)
+    return (
+        cosa * np.eye(3) + sina * mat + (1 - cosa) * np.outer(vector, vector)
+    )
 
 
 def replace(arr, inval, outval):

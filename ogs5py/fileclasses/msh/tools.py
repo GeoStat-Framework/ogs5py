@@ -9,7 +9,13 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 import meshio as mio
-from ogs5py.tools._types import ELEM_NAMES, NODE_NO, MESHIO_NAMES, ELEM_DIM, EMPTY_MSH
+from ogs5py.tools._types import (
+    ELEM_NAMES,
+    NODE_NO,
+    MESHIO_NAMES,
+    ELEM_DIM,
+    EMPTY_MSH,
+)
 from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
 from ogs5py.fileclasses.base import uncomment
 
@@ -230,7 +236,9 @@ def load_ogs5msh(
                     if verbose:
                         print("file contains unknown infos: " + line.strip())
                 else:
-                    raise ValueError("file contains unknown infos: " + line.strip())
+                    raise ValueError(
+                        "file contains unknown infos: " + line.strip()
+                    )
 
     # if a single mesh is found, return it directly
     if len(out) == 1:
@@ -303,9 +311,9 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
                 print("read 'NODES'")
                 print(no_nodes)
             # read points with numpys fromfile (which is quite fast)
-            out["nodes"] = np.fromfile(msh, count=no_nodes * 4, sep=" ").reshape(
-                (no_nodes, 4)
-            )[:, 1:]
+            out["nodes"] = np.fromfile(
+                msh, count=no_nodes * 4, sep=" "
+            ).reshape((no_nodes, 4))[:, 1:]
 
             # read ELEMENTS
             if verbose:
@@ -405,7 +413,10 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
             for key in mesh_i["mesh_data"]:
                 if verbose:
                     print("write " + key)
-                if key in ["AXISYMMETRY", "CROSS_SECTION"] and mesh_i["mesh_data"][key]:
+                if (
+                    key in ["AXISYMMETRY", "CROSS_SECTION"]
+                    and mesh_i["mesh_data"][key]
+                ):
                     msh.write("$" + key + "\n")
                 elif key == "GEO_TYPE":
                     msh.write("$" + key + "\n")
@@ -421,7 +432,9 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
             msh.write("$NODES\n")
             no_nodes = mesh_i["nodes"].shape[0]
             msh.write(str(no_nodes) + "\n")
-            data = pd.DataFrame(index=np.arange(no_nodes), columns=np.arange(4))
+            data = pd.DataFrame(
+                index=np.arange(no_nodes), columns=np.arange(4)
+            )
             data[0] = np.arange(no_nodes)
             data[np.arange(1, 4)] = mesh_i["nodes"]
             data.to_csv(msh, header=None, index=None, sep=" ", mode="a")
@@ -431,18 +444,25 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
             msh.write("$ELEMENTS\n")
             no_el = no_of_elements(mesh_i)
             msh.write(str(no_el) + "\n")
-            data = pd.DataFrame(index=np.arange(no_el), columns=np.arange(8 + 3))
+            data = pd.DataFrame(
+                index=np.arange(no_el), columns=np.arange(8 + 3)
+            )
             # initialize the offset for each element-type
             o_s = 0
             for elem in ELEM_NAMES:
                 if elem not in mesh_i["elements"]:
                     continue
                 no_el = mesh_i["elements"][elem].shape[0]
-                data.loc[np.arange(o_s, o_s + no_el), 0] = mesh_i["element_id"][elem]
-                data.loc[np.arange(o_s, o_s + no_el), 1] = mesh_i["material_id"][elem]
+                data.loc[np.arange(o_s, o_s + no_el), 0] = mesh_i[
+                    "element_id"
+                ][elem]
+                data.loc[np.arange(o_s, o_s + no_el), 1] = mesh_i[
+                    "material_id"
+                ][elem]
                 data.loc[np.arange(o_s, o_s + no_el), 2] = elem
                 data.loc[
-                    np.arange(o_s, o_s + no_el), np.arange(3, 3 + NODE_NO[elem])
+                    np.arange(o_s, o_s + no_el),
+                    np.arange(3, 3 + NODE_NO[elem]),
                 ] = mesh_i["elements"][elem]
                 o_s += no_el
             # sort the elements by their ID
@@ -458,7 +478,9 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
         msh.write("#STOP")
 
 
-def import_mesh(filepath, file_format=None, ignore_unknown=False, import_dim=(1, 2, 3)):
+def import_mesh(
+    filepath, file_format=None, ignore_unknown=False, import_dim=(1, 2, 3)
+):
     """
     import an external unstructured mesh from diffrent file-formats
 
@@ -504,7 +526,11 @@ def import_mesh(filepath, file_format=None, ignore_unknown=False, import_dim=(1,
 
 
 def export_mesh(
-    filepath, mesh, file_format=None, export_material_id=True, add_data_by_id=None
+    filepath,
+    mesh,
+    file_format=None,
+    export_material_id=True,
+    add_data_by_id=None,
 ):
     """
     import an external unstructured mesh from diffrent file-formats
@@ -758,7 +784,9 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
     shift_mesh(mesh_2, shift)
     # combine the node lists and make them unique
     nodes, __, ixr = unique_rows(
-        np.vstack((mesh_1["nodes"], mesh_2["nodes"])), decimals=decimals, fast=fast
+        np.vstack((mesh_1["nodes"], mesh_2["nodes"])),
+        decimals=decimals,
+        fast=fast,
     )
     node_id_repl = range(len(ixr))
     node_offset = mesh_1["nodes"].shape[0]
@@ -784,14 +812,20 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
             element_id[elem] = mesh_2["element_id"][elem] + offset
         else:
             tmp = np.vstack(
-                (mesh_1["elements"][elem], mesh_2["elements"][elem] + node_offset)
+                (
+                    mesh_1["elements"][elem],
+                    mesh_2["elements"][elem] + node_offset,
+                )
             )
             elements[elem] = replace(tmp, node_id_repl, ixr)
             material_id[elem] = np.hstack(
                 (mesh_1["material_id"][elem], mesh_2["material_id"][elem])
             )
             element_id[elem] = np.hstack(
-                (mesh_1["element_id"][elem], mesh_2["element_id"][elem] + offset)
+                (
+                    mesh_1["element_id"][elem],
+                    mesh_2["element_id"][elem] + offset,
+                )
             )
     # create the ouput dict
     out = {
@@ -1058,7 +1092,9 @@ def gen_std_mat_id(elements, mat_id=0):
     """
     material_id = {}
     for elem in elements:
-        material_id[elem] = int(mat_id) * np.ones(elements[elem].shape[0], dtype=int)
+        material_id[elem] = int(mat_id) * np.ones(
+            elements[elem].shape[0], dtype=int
+        )
     return material_id
 
 

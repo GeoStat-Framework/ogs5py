@@ -27,9 +27,25 @@ EMPTY_GLI = {
     "volumes": [],
 }
 GLI_KEY_LIST = ["#POINTS", "#POLYLINE", "#SURFACE", "#VOLUME", "#STOP"]
-PLY_KEY_LIST = ["ID", "NAME", "POINTS", "EPSILON", "TYPE", "MAT_GROUP", "POINT_VECTOR"]
+PLY_KEY_LIST = [
+    "ID",
+    "NAME",
+    "POINTS",
+    "EPSILON",
+    "TYPE",
+    "MAT_GROUP",
+    "POINT_VECTOR",
+]
 PLY_TYPES = [int, str, list, float, int, int, str]
-SRF_KEY_LIST = ["ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"]
+SRF_KEY_LIST = [
+    "ID",
+    "NAME",
+    "POLYLINES",
+    "EPSILON",
+    "TYPE",
+    "MAT_GROUP",
+    "TIN",
+]
 SRF_TYPES = [int, str, list, float, int, int, str]
 VOL_KEY_LIST = [
     "NAME",
@@ -49,8 +65,23 @@ EMPTY_VOL = {}
 for key in VOL_KEY_LIST:
     EMPTY_VOL[key] = None
 # keys for the gli-dict
-GLI_KEYS = {"points", "point_names", "point_md", "polylines", "surfaces", "volumes"}
-PLY_KEYS = {"ID", "NAME", "POINTS", "EPSILON", "TYPE", "MAT_GROUP", "POINT_VECTOR"}
+GLI_KEYS = {
+    "points",
+    "point_names",
+    "point_md",
+    "polylines",
+    "surfaces",
+    "volumes",
+}
+PLY_KEYS = {
+    "ID",
+    "NAME",
+    "POINTS",
+    "EPSILON",
+    "TYPE",
+    "MAT_GROUP",
+    "POINT_VECTOR",
+}
 SRF_KEYS = {"ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"}
 VOL_KEYS = {"NAME", "SURFACES", "TYPE", "MAT_GROUP", "LAYER"}
 # all names for element types in ogs 5
@@ -79,7 +110,15 @@ EMPTY_MSH = {
     "material_id": {},
 }
 # coresponding names for types in meshio
-MESHIO_NAMES = ["line", "triangle", "quad", "tetra", "pyramid", "wedge", "hexahedron"]
+MESHIO_NAMES = [
+    "line",
+    "triangle",
+    "quad",
+    "tetra",
+    "pyramid",
+    "wedge",
+    "hexahedron",
+]
 # number encoding for element types (obsolete)
 ELEM_TYP = {
     0: "line",

@@ -76,7 +76,11 @@ class MFP(OGSfile):
         ]
     ]
 
-    STD = {"FLUID_TYPE": "LIQUID", "DENSITY": [1, 1.0e03], "VISCOSITY": [1, 1.0e-03]}
+    STD = {
+        "FLUID_TYPE": "LIQUID",
+        "DENSITY": [1, 1.0e03],
+        "VISCOSITY": [1, 1.0e-03],
+    }
 
     def __init__(self, **OGS_Config):
         """

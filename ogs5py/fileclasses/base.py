@@ -181,7 +181,9 @@ class LineFile(object):
             # create the file path
             if not os.path.exists(self.task_root):
                 os.makedirs(self.task_root)
-            f_path = os.path.join(self.task_root, self.file_name + self.file_ext)
+            f_path = os.path.join(
+                self.task_root, self.file_name + self.file_ext
+            )
             # save the data
             self.save(f_path)
 
@@ -221,7 +223,9 @@ class OGSfile(object):
 
     STD = {}
 
-    def __init__(self, task_root=os.path.join(CWD, "ogs5model"), task_id="model"):
+    def __init__(
+        self, task_root=os.path.join(CWD, "ogs5model"), task_id="model"
+    ):
         """
         Initialize an OGS file.
 
@@ -499,7 +503,9 @@ class OGSfile(object):
         self.subkw[main_index].insert(sub_index, key)
         self.cont[main_index].insert(sub_index, [])
 
-    def add_content(self, content, main_index=None, sub_index=None, line_index=None):
+    def add_content(
+        self, content, main_index=None, sub_index=None, line_index=None
+    ):
         """
         Add single-line content to the actual file
 
@@ -637,12 +643,16 @@ class OGSfile(object):
                 self.subkw[main_index] = []
                 self.cont[main_index] = []
             elif (
-                -len(self.subkw[main_index]) <= sub_index < len(self.subkw[main_index])
+                -len(self.subkw[main_index])
+                <= sub_index
+                < len(self.subkw[main_index])
             ):
                 del self.subkw[main_index][sub_index]
                 del self.cont[main_index][sub_index]
 
-    def del_content(self, main_index=-1, sub_index=-1, line_index=-1, del_all=False):
+    def del_content(
+        self, main_index=-1, sub_index=-1, line_index=-1, del_all=False
+    ):
         """
         Delete content by its position
 
@@ -662,7 +672,11 @@ class OGSfile(object):
             State, if all content shall be deleted. Default: False
         """
         if -len(self.mainkw) <= main_index < len(self.mainkw):
-            if -len(self.subkw[main_index]) <= sub_index < len(self.subkw[main_index]):
+            if (
+                -len(self.subkw[main_index])
+                <= sub_index
+                < len(self.subkw[main_index])
+            ):
                 if del_all:
                     if self.subkw[main_index][sub_index]:
                         self.cont[main_index][sub_index] = []
@@ -816,7 +830,10 @@ class OGSfile(object):
         if update:
             self._update_out()
         # bug in OGS5 ... mpd files need Windows line-ending
-        if not self.is_empty and self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED":
+        if (
+            not self.is_empty
+            and self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED"
+        ):
             lend = "\r\n"
         else:
             lend = "\n"
@@ -840,7 +857,10 @@ class OGSfile(object):
                     for con in self.cont[i][j]:
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation
-                        if mkw == "MEDIUM_PROPERTIES_DISTRIBUTED" and skw == "DATA":
+                        if (
+                            mkw == "MEDIUM_PROPERTIES_DISTRIBUTED"
+                            and skw == "DATA"
+                        ):
                             print(
                                 *con,
                                 # sep="\t", end="\n", file=fout)

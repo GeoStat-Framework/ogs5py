@@ -139,7 +139,9 @@ class PCT(object):
             self.copy_file = "link" if symlink else "copy"
             self.copy_path = path
         else:
-            print("ogs5py.PCT: Given copy-path is not a readable file: " + path)
+            print(
+                "ogs5py.PCT: Given copy-path is not a readable file: " + path
+            )
 
     def del_copy_link(self):
         """

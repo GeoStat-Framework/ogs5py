@@ -12,7 +12,9 @@ import numpy as np
 from ogs5py import GLI as gli
 
 
-def rectengular(dim=3, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"):
+def rectengular(
+    dim=3, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"
+):
     """
     generate a rectengular boundary for a grid in 2D or 3D as gli.
 
@@ -56,10 +58,14 @@ def rectengular(dim=3, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="bound
         directions = ["0", "1", "2", "3"]
         pnt.append(np.array([ori, ori + size_x, ori + size_xz, ori + size_z]))
         pnt.append(
-            np.array([ori + size_x, ori + size_xy, ori + size_xyz, ori + size_xz])
+            np.array(
+                [ori + size_x, ori + size_xy, ori + size_xyz, ori + size_xz]
+            )
         )
         pnt.append(
-            np.array([ori + size_xy, ori + size_y, ori + size_yz, ori + size_xyz])
+            np.array(
+                [ori + size_xy, ori + size_y, ori + size_yz, ori + size_xyz]
+            )
         )
         pnt.append(np.array([ori + size_y, ori, ori + size_z, ori + size_yz]))
         ply_names = [name + "_ply_" + direction for direction in directions]
@@ -172,14 +178,25 @@ def radial(
             pnt_top_in[:, 2] += z_size
 
         for i in range(angles):
-            pnt = np.array([pnt_top[i], pnt_top[i + 1], pnt_bot[i + 1], pnt_bot[i]])
+            pnt = np.array(
+                [pnt_top[i], pnt_top[i + 1], pnt_bot[i + 1], pnt_bot[i]]
+            )
             out.add_polyline(name_out + "_ply_" + str(i), pnt, closed=True)
-            out.add_surface(name_out + "_" + str(i), [name_out + "_ply_" + str(i)])
+            out.add_surface(
+                name_out + "_" + str(i), [name_out + "_ply_" + str(i)]
+            )
             if rad_in is not None:
                 pnt = np.array(
-                    [pnt_top_in[i], pnt_top_in[i + 1], pnt_bot_in[i + 1], pnt_bot_in[i]]
+                    [
+                        pnt_top_in[i],
+                        pnt_top_in[i + 1],
+                        pnt_bot_in[i + 1],
+                        pnt_bot_in[i],
+                    ]
                 )
                 out.add_polyline(name_in + "_ply_" + str(i), pnt, closed=True)
-                out.add_surface(name_in + "_" + str(i), [name_in + "_ply_" + str(i)])
+                out.add_surface(
+                    name_in + "_" + str(i), [name_in + "_ply_" + str(i)]
+                )
 
     return out()

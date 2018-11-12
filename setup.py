@@ -16,7 +16,7 @@ from setuptools import setup, find_packages
 from ogs5py import __version__ as VERSION
 
 DOCLINES = __doc__.split("\n")
-README = open('README.md').read()
+README = open("README.md").read()
 CLASSIFIERS = """\
 Development Status :: 3 - Alpha
 Intended Audience :: Developers
@@ -40,7 +40,7 @@ Topic :: Utilities
 """
 
 setup(
-    name='ogs5py',
+    name="ogs5py",
     version=VERSION,
     maintainer="Sebastian Mueller",
     maintainer_email="sebastian.mueller@ufz.de",
@@ -49,20 +49,20 @@ setup(
     long_description_content_type="text/markdown",
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
-    url='https://github.com/MuellerSeb/ogs5py',
-    license='LGPL -  see LICENSE',
-    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
+    url="https://github.com/MuellerSeb/ogs5py",
+    license="LGPL -  see LICENSE",
+    classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
     install_requires=[
-        'numpy >=1.9.0',  # arr != None elementwise since 1.13
-        'whichcraft',  # search for ogs
-        'pandas>=0.23.0',  # read-routines and formatting
-        'meshio',  # import/export external meshes
-        'vtk',  # for the readers
-        'pexpect',  # handle command calles
+        "numpy >=1.9.0",  # arr != None elementwise since 1.13
+        "whichcraft",  # search for ogs
+        "pandas>=0.23.0",  # read-routines and formatting
+        "meshio",  # import/export external meshes
+        "vtk",  # for the readers
+        "pexpect",  # handle command calles
         #        'pygmsh',  # optional for creating gmesh based mashes
         #        'mayavi',  # optional to view a mesh
     ],
-    packages=find_packages(exclude=['tests*', 'docs*']),
+    packages=find_packages(exclude=["tests*", "docs*"]),
 )

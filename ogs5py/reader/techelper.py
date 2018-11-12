@@ -108,7 +108,11 @@ def split_pnt_path(
 
     if pnt_name is not None:
         midtrm_pat = re.compile(
-            "^" + re.escape(id_name) + "_time_" + re.escape(pnt_name) + "+[\._]"
+            "^"
+            + re.escape(id_name)
+            + "_time_"
+            + re.escape(pnt_name)
+            + "+[\._]"
         )
         midtrm_match = midtrm_pat.search(name)
         if midtrm_match is None:
@@ -140,20 +144,26 @@ def split_pnt_path(
             for pcs_sgl in PCS_TYP[1:]:
                 # create a pattern to search the actual pcs_type
                 midtrm_pat = re.compile(
-                    "^" + re.escape(id_name) + "_time_[^_]+.*_" + re.escape(pcs_sgl)
+                    "^"
+                    + re.escape(id_name)
+                    + "_time_[^_]+.*_"
+                    + re.escape(pcs_sgl)
                 )
                 midtrm_match = midtrm_pat.search(name)
                 # if found retrive the PCS name
                 if midtrm_match is not None:
                     pcs_found = True
                     PCS = name[
-                        midtrm_match.span()[1] - len(pcs_sgl) : suffix_match.span()[0]
+                        midtrm_match.span()[1]
+                        - len(pcs_sgl) : suffix_match.span()[0]
                     ]
                     # cut off extra suffix from PCS
                     extra = PCS[len(pcs_sgl) :]
                     PCS = PCS[: len(pcs_sgl)]
                     # retrive the pnt name from the file-path
-                    PCS_pat = re.compile("_" + re.escape(PCS + extra) + "\.tec$")
+                    PCS_pat = re.compile(
+                        "_" + re.escape(PCS + extra) + "\.tec$"
+                    )
                     PCS_match = PCS_pat.search(name)
                     pnt = name[prefix_match.span()[1] : PCS_match.span()[0]]
                     break
@@ -168,7 +178,9 @@ def split_pnt_path(
                     midtrm_match = midtrm_pat.search(name)
                     if midtrm_match is None:
                         return 4 * (None,)
-                    pnt = name[prefix_match.span()[1] : midtrm_match.span()[1] - 1]
+                    pnt = name[
+                        prefix_match.span()[1] : midtrm_match.span()[1] - 1
+                    ]
                     PCS = name[midtrm_match.span()[1] : suffix_match.span()[0]]
                     extra = ""
                 else:
@@ -383,7 +395,10 @@ class inspect_tecplot(object):
             self.skip = [self.start[0]]
             for i in range(1, self.zone_ct):
                 self.skip.append(
-                    self.start[i] - self.start[i - 1] - self.zone_lines[i - 1] + 1
+                    self.start[i]
+                    - self.start[i - 1]
+                    - self.zone_lines[i - 1]
+                    + 1
                 )
 
     def get_zone_table_data(self):
@@ -398,7 +413,9 @@ class inspect_tecplot(object):
                 for _ in range(self.skip[i]):
                     f.readline()
                 # read matrix with np.fromfile (fastest numpy file reader)
-                data = np.fromfile(f, dtype=float, count=self.zone_length[i], sep=" ")
+                data = np.fromfile(
+                    f, dtype=float, count=self.zone_length[i], sep=" "
+                )
                 # reshape matrix acording to the number of variables
                 zone_data.append(data.reshape((-1, self.var_ct)))
 
@@ -461,11 +478,15 @@ def readtec_multi_table(infile):
     info = inspect_tecplot(infile)
     zone_data = info.get_zone_table_data()
     # get the time-steps from the zone_names (e.g. ZONE T="TIME=0.0")
-    time = np.array([float(info.zone_names[i][5:]) for i in range(info.zone_ct)])
+    time = np.array(
+        [float(info.zone_names[i][5:]) for i in range(info.zone_ct)]
+    )
     # sort values by Variable names
     out = {"TIME": time}
     for i, name in enumerate(info.var_names):
-        out[name] = np.vstack([zone_data[n][:, i].T for n in range(info.zone_ct)])
+        out[name] = np.vstack(
+            [zone_data[n][:, i].T for n in range(info.zone_ct)]
+        )
 
     return out
 
@@ -482,7 +503,9 @@ def readtec_block(infile):
     # get the time-steps from the zone_names (e.g. ZONE T="TIME=0.0")
     # if that doesn't work, just give the zone-names as "time"
     try:
-        time = np.array([float(info.block_names[i][:-1]) for i in range(info.block_ct)])
+        time = np.array(
+            [float(info.block_names[i][:-1]) for i in range(info.block_ct)]
+        )
     except Exception:
         time = info.block_names
     # separate the time-variable and store blocks in DATA

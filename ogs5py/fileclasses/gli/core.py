@@ -131,7 +131,9 @@ class GLI(OGSfile):
     @POINT_NAMES.deleter
     def POINT_NAMES(self):
         if self.POINTS is not None:
-            self.__dict["point_names"] = np.array(self.POINT_NO * [""], dtype=object)
+            self.__dict["point_names"] = np.array(
+                self.POINT_NO * [""], dtype=object
+            )
         else:
             self.__dict["point_names"] = None
 
@@ -157,7 +159,9 @@ class GLI(OGSfile):
     @POINT_MD.deleter
     def POINT_MD(self):
         if self.POINTS is not None:
-            self.__dict["point_md"] = -np.inf * np.ones(self.POINT_NO, dtype=float)
+            self.__dict["point_md"] = -np.inf * np.ones(
+                self.POINT_NO, dtype=float
+            )
         else:
             self.__dict["point_md"] = None
 
@@ -317,7 +321,9 @@ class GLI(OGSfile):
         verbose : bool, optional
             Print information of the reading process. Default: True
         """
-        tmp = load_ogs5gli(filepath, verbose=verbose, encoding=encoding, **kwargs)
+        tmp = load_ogs5gli(
+            filepath, verbose=verbose, encoding=encoding, **kwargs
+        )
         if check_gli_dict(tmp, verbose=verbose):
             self.__dict = tmp
         else:
@@ -435,7 +441,10 @@ class GLI(OGSfile):
         return check_gli_dict(self.__dict, verbose=verbose)
 
     def rotate(
-        self, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+        self,
+        angle,
+        rotation_axis=(0.0, 0.0, 1.0),
+        rotation_point=(0.0, 0.0, 0.0),
     ):
         """
         Rotate points around a given rotation point and axis
@@ -450,7 +459,9 @@ class GLI(OGSfile):
         rotation_point : array_like, optional
             Vector of the ratation base point. Default:(0,0,0)
         """
-        self.POINTS = rotate_points(self.POINTS, angle, rotation_axis, rotation_point)
+        self.POINTS = rotate_points(
+            self.POINTS, angle, rotation_axis, rotation_point
+        )
 
     def shift(self, vector):
         """
@@ -649,7 +660,10 @@ class GLI(OGSfile):
             # see: https://stackoverflow.com/a/32191125/6696397
             # after the check, if points are IDs...
             points = np.array(
-                [np.where(self.POINT_NAMES == str(pnt))[0][0] for pnt in points],
+                [
+                    np.where(self.POINT_NAMES == str(pnt))[0][0]
+                    for pnt in points
+                ],
                 dtype=int,
             )
             new_ply = {
@@ -739,7 +753,9 @@ class GLI(OGSfile):
         else:
             self.__dict["surfaces"].append(new_srf)
 
-    def add_volume(self, name, surfaces, vol_type=None, mat_group=None, layer=None):
+    def add_volume(
+        self, name, surfaces, vol_type=None, mat_group=None, layer=None
+    ):
         """
         Add a new volume.
 

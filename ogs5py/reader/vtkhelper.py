@@ -129,7 +129,9 @@ def _stru_point_read(obj):
     dim = output["dimensions"]
     for arr in output["cell_data"]:
         output["cell_data"][arr] = np.squeeze(
-            np.reshape(output["cell_data"][arr], np.maximum(dim - 1, 1), order="F")
+            np.reshape(
+                output["cell_data"][arr], np.maximum(dim - 1, 1), order="F"
+            )
         )
     for arr in output["point_data"]:
         output["point_data"][arr] = np.reshape(

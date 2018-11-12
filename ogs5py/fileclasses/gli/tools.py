@@ -120,7 +120,9 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 ids = np.array(ids, dtype=int)
                 if len(np.unique(ids)) != len(ids):
                     raise ValueError(
-                        filepath + ": GLI: point ids are not unique: " + str(ids)
+                        filepath
+                        + ": GLI: point ids are not unique: "
+                        + str(ids)
                     )
                 # hack to shift the ids acordingly
                 id_shift = np.zeros(np.max(ids) + 1, dtype=int)
@@ -149,7 +151,9 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             while line and line.split()[0].isdigit():
                                 ply["POINTS"].append(int(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST + ["$" + k for k in PLY_KEY_LIST]):
+                            if line in (
+                                GLI_KEY_LIST + ["$" + k for k in PLY_KEY_LIST]
+                            ):
                                 need_new_line = False
                             tmp_pnt = np.array(ply["POINTS"], dtype=int)
                             # hack to shift point_ids
@@ -183,7 +187,9 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             ):
                                 srf["POLYLINES"].append(str(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST + ["$" + k for k in SRF_KEY_LIST]):
+                            if line in (
+                                GLI_KEY_LIST + ["$" + k for k in SRF_KEY_LIST]
+                            ):
                                 need_new_line = False
                         else:
                             srf_typ = SRF_TYPES[SRF_KEY_LIST.index(key)]
@@ -213,7 +219,9 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             ):
                                 vol["SURFACES"].append(str(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST + ["$" + k for k in VOL_KEY_LIST]):
+                            if line in (
+                                GLI_KEY_LIST + ["$" + k for k in VOL_KEY_LIST]
+                            ):
                                 need_new_line = False
                         else:
                             vol_typ = VOL_TYPES[VOL_KEY_LIST.index(key)]
@@ -233,7 +241,9 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
             # handle unknown infos
             else:
                 raise ValueError(
-                    filepath + ": GLI: file contains unknown infos: " + line.strip()
+                    filepath
+                    + ": GLI: file contains unknown infos: "
+                    + line.strip()
                 )
 
     return out

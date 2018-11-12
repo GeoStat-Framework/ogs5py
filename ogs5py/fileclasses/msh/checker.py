@@ -120,7 +120,9 @@ def check_mesh_dict(mesh, verbose=True):
             print(" needs: " + " ".join(MESH_KEYS))
             print(" found: " + " ".join(map(str, in_mesh_keys)))
             print(" missing: " + " ".join(map(str, MESH_KEYS - in_mesh_keys)))
-            print(" corrupted: " + " ".join(map(str, in_mesh_keys - MESH_KEYS)))
+            print(
+                " corrupted: " + " ".join(map(str, in_mesh_keys - MESH_KEYS))
+            )
         return False
     # check if mesh_data is dict
     if not isinstance(mesh["mesh_data"], dict):
@@ -259,7 +261,9 @@ def check_mesh_dict(mesh, verbose=True):
     else:
         if verbose:
             print(" mesh['material_id'] keys are not valid!")
-            print(" need to match 'elements' keys: " + " ".join(in_element_keys))
+            print(
+                " need to match 'elements' keys: " + " ".join(in_element_keys)
+            )
             print(" found: " + " ".join(map(str, in_material_keys)))
             missing = in_element_keys - in_material_keys
             corrupt = in_material_keys - in_element_keys
@@ -274,7 +278,9 @@ def check_mesh_dict(mesh, verbose=True):
     else:
         if verbose:
             print(" mesh['element_id'] keys are not valid!")
-            print(" need to match 'elements' keys: " + " ".join(in_element_keys))
+            print(
+                " need to match 'elements' keys: " + " ".join(in_element_keys)
+            )
             print(" found: " + " ".join(map(str, in_elementid_keys)))
             missing = in_element_keys - in_elementid_keys
             corrupt = in_elementid_keys - in_element_keys
@@ -337,7 +343,8 @@ def check_mesh_dict(mesh, verbose=True):
             isinstance(mesh["material_id"][elem], np.ndarray)
             and np.issubdtype(mesh["material_id"][elem].dtype, np.integer)
             and mesh["material_id"][elem].ndim == 1
-            and mesh["material_id"][elem].shape[0] == mesh["elements"][elem].shape[0]
+            and mesh["material_id"][elem].shape[0]
+            == mesh["elements"][elem].shape[0]
             and np.min(mesh["material_id"][elem]) >= -1
         ):
             if verbose:
@@ -351,7 +358,8 @@ def check_mesh_dict(mesh, verbose=True):
             isinstance(mesh["element_id"][elem], np.ndarray)
             and np.issubdtype(mesh["element_id"][elem].dtype, np.integer)
             and mesh["element_id"][elem].ndim == 1
-            and mesh["element_id"][elem].shape[0] == mesh["elements"][elem].shape[0]
+            and mesh["element_id"][elem].shape[0]
+            == mesh["elements"][elem].shape[0]
         ):
             if verbose:
                 print(" mesh['element_id']['" + elem + "'] valid")
@@ -360,11 +368,17 @@ def check_mesh_dict(mesh, verbose=True):
                 print(" mesh['element_id']['" + elem + "'] not valid")
             return False
         # stack material_id and element_id for checking
-        material_id_stack = np.hstack((material_id_stack, mesh["material_id"][elem]))
-        element_id_stack = np.hstack((element_id_stack, mesh["element_id"][elem]))
+        material_id_stack = np.hstack(
+            (material_id_stack, mesh["material_id"][elem])
+        )
+        element_id_stack = np.hstack(
+            (element_id_stack, mesh["element_id"][elem])
+        )
     # check ranges of material_id and element_id
     if len(material_id_stack) > 0:
-        if set(material_id_stack) == set(np.arange(np.max(material_id_stack) + 1)):
+        if set(material_id_stack) == set(
+            np.arange(np.max(material_id_stack) + 1)
+        ):
             if verbose:
                 print(" mesh['material_id'] has valid range")
         else:

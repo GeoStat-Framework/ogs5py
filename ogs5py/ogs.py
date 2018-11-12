@@ -183,7 +183,9 @@ class OGS(object):
 
     """
 
-    def __init__(self, task_root=CWD + "/ogs5model", task_id="model", output_dir=None):
+    def __init__(
+        self, task_root=CWD + "/ogs5model", task_id="model", output_dir=None
+    ):
         """
         Initialize an OGS file.
 
@@ -455,7 +457,10 @@ class OGS(object):
         found_ids = search_task_id(task_root)
         if not found_ids:
             if verbose:
-                print("ogs5py.OGS.laod_model - nothing was found at: " + task_root)
+                print(
+                    "ogs5py.OGS.laod_model - nothing was found at: "
+                    + task_root
+                )
             return False
         # take the first found task_id
         if task_id is None:
@@ -464,7 +469,10 @@ class OGS(object):
         # check if the given task_id is found
         elif task_id not in found_ids:
             if verbose:
-                print("ogs5py.OGS.laod_model - didn't find given task_id: " + task_root)
+                print(
+                    "ogs5py.OGS.laod_model - didn't find given task_id: "
+                    + task_root
+                )
                 print(found_ids)
             return False
         # overwrite the task_root
@@ -492,7 +500,9 @@ class OGS(object):
             if os.path.basename(fil) in skip_files or fil in skip_files:
                 continue
             # workaround to get access to class-members by name
-            getattr(self, ext[1:]).read_file(fil, encoding=encoding, verbose=verbose)
+            getattr(self, ext[1:]).read_file(
+                fil, encoding=encoding, verbose=verbose
+            )
 
             # append GEOMETRY defnitions
             if ext == ".gli":
@@ -532,24 +542,32 @@ class OGS(object):
                 for i in range(len(self.mmp.mainkw)):
                     # external PERMEABILITY_DISTRIBUTION
                     if "PERMEABILITY_DISTRIBUTION" in self.mmp.subkw[i]:
-                        index = self.mmp.subkw[i].index("PERMEABILITY_DISTRIBUTION")
+                        index = self.mmp.subkw[i].index(
+                            "PERMEABILITY_DISTRIBUTION"
+                        )
                         ext_name = self.mmp.cont[i][index][0][0]
                         raw_file_name = os.path.basename(ext_name)
                         f_name, f_ext = os.path.splitext(raw_file_name)
                         ext_file = MPD(
-                            file_name=f_name, file_ext=f_ext, task_root=self.task_root
+                            file_name=f_name,
+                            file_ext=f_ext,
+                            task_root=self.task_root,
                         )
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.mpd.append(dcp(ext_file))
                     # external POROSITY_DISTRIBUTION
                     if "POROSITY_DISTRIBUTION" in self.mmp.subkw[i]:
-                        index = self.mmp.subkw[i].index("POROSITY_DISTRIBUTION")
+                        index = self.mmp.subkw[i].index(
+                            "POROSITY_DISTRIBUTION"
+                        )
                         ext_name = self.mmp.cont[i][index][0][0]
                         raw_file_name = os.path.basename(ext_name)
                         f_name, f_ext = os.path.splitext(raw_file_name)
                         ext_file = MPD(
-                            file_name=f_name, file_ext=f_ext, task_root=self.task_root
+                            file_name=f_name,
+                            file_ext=f_ext,
+                            task_root=self.task_root,
                         )
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
@@ -566,7 +584,9 @@ class OGS(object):
                         raw_file_name = os.path.basename(ext_name)
                         f_name, f_ext = os.path.splitext(raw_file_name)
                         ext_file = RFR(
-                            file_name=f_name, file_ext=f_ext, task_root=self.task_root
+                            file_name=f_name,
+                            file_ext=f_ext,
+                            task_root=self.task_root,
                         )
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
@@ -653,7 +673,10 @@ class OGS(object):
         # set standard log_name
         if log_name is None:
             log_name = (
-                self.task_id + "_" + time.strftime("%Y-%m-%d_%H-%M-%S") + "_log.txt"
+                self.task_id
+                + "_"
+                + time.strftime("%Y-%m-%d_%H-%M-%S")
+                + "_log.txt"
             )
         # put the logfile in the defined output-dir
         if log_path is None:

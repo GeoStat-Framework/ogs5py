@@ -90,12 +90,16 @@ def rectengular(
     element_arr = np.zeros((element_no, node_per_elem), dtype=int)
 
     node_arr[:, 0] = (
-        dx * ((np.arange(node_no) % ((x_no + 1) * (y_no + 1))) % (x_no + 1)) + x0
+        dx * ((np.arange(node_no) % ((x_no + 1) * (y_no + 1))) % (x_no + 1))
+        + x0
     )
     node_arr[:, 1] = (
-        dy * ((np.arange(node_no) % ((x_no + 1) * (y_no + 1))) // (x_no + 1)) + y0
+        dy * ((np.arange(node_no) % ((x_no + 1) * (y_no + 1))) // (x_no + 1))
+        + y0
     )
-    node_arr[:, 2] = dz * (np.arange(node_no) // ((x_no + 1) * (y_no + 1))) + z0
+    node_arr[:, 2] = (
+        dz * (np.arange(node_no) // ((x_no + 1) * (y_no + 1))) + z0
+    )
 
     if dim == 2:
         element_arr[:, 0] = np.arange(element_no)
@@ -176,7 +180,9 @@ def radial(
     """
 
     if z_arr is not None and dim > 2:
-        assert (all(z_arr[i] > z_arr[i + 1] for i in range(len(z_arr) - 1))) or (
+        assert (
+            all(z_arr[i] > z_arr[i + 1] for i in range(len(z_arr) - 1))
+        ) or (
             all(z_arr[i] < z_arr[i + 1] for i in range(len(z_arr) - 1))
         ), "The z-array needs to be sorted"
         # flip the z_array if it is sorted downwards
@@ -373,7 +379,9 @@ def grid_adapter2D(
     """
     import pygmsh as pg
 
-    geo = gmsh_grid_adapt2D(out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos)
+    geo = gmsh_grid_adapt2D(
+        out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos
+    )
     points, cells, __, __, __ = pg.generate_mesh(
         geo,
         #        num_lloyd_steps=0,

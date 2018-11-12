@@ -37,7 +37,15 @@ class FCT(OGSfile):
     MKEYS = ["FUNCTION"]
     # sorted
     SKEYS = [
-        ["TYPE", "GEO_TYPE", "DIS_TYPE", "VARIABLES", "DIMENSION", "MATRIX", "DATA"]
+        [
+            "TYPE",
+            "GEO_TYPE",
+            "DIS_TYPE",
+            "VARIABLES",
+            "DIMENSION",
+            "MATRIX",
+            "DATA",
+        ]
     ]
 
     STD = {}

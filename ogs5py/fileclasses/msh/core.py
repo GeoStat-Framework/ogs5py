@@ -604,7 +604,9 @@ class MSHsgl(OGSfile):
         verbose : bool, optional
             Print information of the reading process. Default: True
         """
-        self.load(path, verbose=verbose, ignore_unknown=True, encoding=encoding)
+        self.load(
+            path, verbose=verbose, ignore_unknown=True, encoding=encoding
+        )
 
     def set_dict(self, mesh_dict):
         """
@@ -792,7 +794,10 @@ class MSHsgl(OGSfile):
         return check_mesh_list(self._meshlist, verbose=verbose)
 
     def rotate(
-        self, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+        self,
+        angle,
+        rotation_axis=(0.0, 0.0, 1.0),
+        rotation_point=(0.0, 0.0, 0.0),
     ):
         """
         Rotate a given mesh around a given rotation axis with a given angle.

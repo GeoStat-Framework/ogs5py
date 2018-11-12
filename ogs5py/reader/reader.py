@@ -43,7 +43,9 @@ def readvtk_single(infile):
         if xml_type in XMLreader_dict:
             reader = XMLreader_dict[xml_type]
         else:
-            print(infile + ": XML file not valid (Type '" + str(xml_type) + "')")
+            print(
+                infile + ": XML file not valid (Type '" + str(xml_type) + "')"
+            )
             if xml_type == "Collection":
                 print("...try the 'readpvd' function")
             return {}
@@ -141,9 +143,13 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
     # get a list of all output files "{id}0000.vtk" ... "{id}999[...]9.vtk"
     # if pcs is RWPT the name-sheme is different
     if pcs == "_RWPT":
-        infiles = glob.glob(task_root + task_id + pcs + "_[0-9]*.particles.vtk")
+        infiles = glob.glob(
+            task_root + task_id + pcs + "_[0-9]*.particles.vtk"
+        )
     else:
-        infiles = glob.glob(task_root + task_id + pcs + "[0-9][0-9][0-9]*[0-9].vtk")
+        infiles = glob.glob(
+            task_root + task_id + pcs + "[0-9][0-9][0-9]*[0-9].vtk"
+        )
 
     # sort input files by name, since they are sorted by timesteps
     infiles.sort()
@@ -163,8 +169,7 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
             if out["header"] and "=" in out["header"]:
                 # ndmin = 1 to match the standard format
                 out["field_data"]["TIME"] = np.array(
-                    float(out["header"].split("=")[1]), 
-                    ndmin=1,
+                    float(out["header"].split("=")[1]), ndmin=1
                 )
         if "field_data" in out and "TIME" in out["field_data"]:
             time.append(out["field_data"]["TIME"])
@@ -395,11 +400,7 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 
 def readtec_polyline(
-    task_root=".",
-    task_id=None,
-    pcs="ALL",
-    single_file=None,
-    trim=True,
+    task_root=".", task_id=None, pcs="ALL", single_file=None, trim=True
 ):
     """
     collect TECPLOT polyline output from OGS5

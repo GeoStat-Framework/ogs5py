@@ -107,7 +107,12 @@ class KRC(OGSfile):
         https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L3185
     """
 
-    MKEYS = ["MICROBE_PROPERTIES", "REACTION", "BLOB_PROPERTIES", "KINREACTIONDATA"]
+    MKEYS = [
+        "MICROBE_PROPERTIES",
+        "REACTION",
+        "BLOB_PROPERTIES",
+        "KINREACTIONDATA",
+    ]
     # these are not sorted at the moment
     SKEYS = [
         [  # MICROBE_PROPERTIES
