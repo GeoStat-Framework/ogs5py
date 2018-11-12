@@ -69,6 +69,7 @@ rfr : list of restart files
 from __future__ import absolute_import, division, print_function
 
 import os
+import shutil
 import glob
 import sys
 import time
@@ -240,6 +241,9 @@ class OGS(object):
         # create a list for RESTART files in the INITIAL_CONDITION
         self.rfr = []
 
+        # create a list of arbitrary files to be copied (names will be same)
+        self.copy_files = []
+
         # store the Top Comment
         self._top_com = TOP_COM
 
@@ -292,6 +296,35 @@ class OGS(object):
             getattr(self, ext[1:]).task_id = value
         # the mpd file is not connected to the task_id since its name
         # is explicitly given in the MMP file
+
+    def add_copy_file(self, path):
+        """
+        Method to add an arbitrary file that should be copied.
+
+        The base-name of the file will be keept and it will be copied to
+        the task-root when the "write" routine is called.
+        """
+        if os.path.isfile(path):
+            self.copy_files.append(os.path.abspath(path))
+        else:
+            print("OGS.add_copy_file: given file is not valid: " + str(path))
+
+    def del_copy_file(self, index=None):
+        """
+        Method to delete a copy-file.
+
+        Parameters
+        ----------
+        index : int or None, optional
+            The index of the copy-file that should be deleted. If None, all
+            copy-files are deleted. Default: None
+        """
+        if index is None:
+            self.copy_files = []
+        elif -len(self.copy_files) <= index < len(self.copy_files):
+            del self.copy_files[index]
+        else:
+            print("OGS.del_copy_file: given index is not valid.")
 
     def add_mpd(self, mpd_file):
         """
@@ -395,6 +428,10 @@ class OGS(object):
         for rfr_file in self.rfr:
             rfr_file.write_file()
 
+        for copy_file in self.copy_files:
+            base = os.path.basename(copy_file)
+            shutil.copyfile(copy_file, os.path.join(self.task_root, base))
+
     def reset(self):
         """
         Delete every content.
@@ -405,6 +442,7 @@ class OGS(object):
         self.mpd = []
         self.gli_ext = []
         self.rfr = []
+        self.copy_files = []
 
     def load_model(
         self,
