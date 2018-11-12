@@ -9,14 +9,8 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 from ogs5py.fileclasses.msh import generator as gen
-from ogs5py.tools._types import (
-    ELEM_NAMES,
-    EMPTY_MSH,
-)
-from ogs5py.fileclasses.msh.checker import (
-    check_mesh_list,
-    check_mesh_dict,
-)
+from ogs5py.tools._types import ELEM_NAMES, EMPTY_MSH
+from ogs5py.fileclasses.msh.checker import check_mesh_list, check_mesh_dict
 from ogs5py.fileclasses.msh.tools import (
     load_ogs5msh,
     save_ogs5msh,
@@ -46,7 +40,7 @@ class MSHsgl(OGSfile):
     """
 
     def __init__(self, mesh_dict=None, **OGS_Config):
-        '''
+        """
         Parameters
         ----------
         mesh_dict : dict or None, optional
@@ -73,17 +67,19 @@ class MSHsgl(OGSfile):
             Path to the destiny folder. Default is the current working dir
         task_id : string, optional
             Name for the ogs task. Default: "ogs"
-        '''
+        """
         super(MSHsgl, self).__init__(**OGS_Config)
-        self.file_ext = '.msh'
+        self.file_ext = ".msh"
 
         if mesh_dict is None:
             self.__dict = EMPTY_MSH
         else:
             if isinstance(mesh_dict, list):
-                raise ValueError("The given mesh may contains a multi-layer " +
-                                 "mesh. Try loading within " +
-                                 "the multimesh class.")
+                raise ValueError(
+                    "The given mesh may contains a multi-layer "
+                    + "mesh. Try loading within "
+                    + "the multimesh class."
+                )
             else:
                 if check_mesh_dict(mesh_dict):
                     self.__dict = mesh_dict
@@ -542,14 +538,14 @@ class MSHsgl(OGSfile):
     # Class methods
     #######################
     def reset(self):
-        '''
+        """
         Delete every content.
-        '''
+        """
         self._block = 0
         self._meshlist = [EMPTY_MSH]
 
     def load(self, filepath, **kwargs):
-        '''
+        """
         Load an OGS5 mesh from file.
         kwargs will be forwarded to "tools.load_ogs5msh"
 
@@ -573,12 +569,15 @@ class MSHsgl(OGSfile):
         -----
         The $AREA keyword within the Nodes definition is NOT supported
         and will violate the read data if present.
-        '''
-#        kwargs["verbose"] = True
+        """
+        #        kwargs["verbose"] = True
         tmp = load_ogs5msh(filepath, **kwargs)
         if isinstance(tmp, list) and not isinstance(self, MSH):
-            print(filepath+" may contains a multi-layer mesh." +
-                  "Try loading within the multimesh class.")
+            print(
+                filepath
+                + " may contains a multi-layer mesh."
+                + "Try loading within the multimesh class."
+            )
         elif not isinstance(tmp, list):
             tmp = [tmp]
         if "verbose" in kwargs:
@@ -592,7 +591,7 @@ class MSHsgl(OGSfile):
             print("given mesh is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
-        '''
+        """
         Load an OGS5 mesh from file.
 
         Parameters
@@ -604,12 +603,11 @@ class MSHsgl(OGSfile):
             standard is used. Default: ``None``
         verbose : bool, optional
             Print information of the reading process. Default: True
-        '''
-        self.load(path, verbose=verbose,
-                  ignore_unknown=True, encoding=encoding)
+        """
+        self.load(path, verbose=verbose, ignore_unknown=True, encoding=encoding)
 
     def set_dict(self, mesh_dict):
-        '''
+        """
         Set an mesh as returned by tools methods or generators.
         Mesh will be checked for validity.
 
@@ -632,14 +630,14 @@ class MSHsgl(OGSfile):
                     contains arrays of nodelists sorted by element type
                 material_id : dictionary
                     contains material ids sorted by element type
-        '''
+        """
         if check_mesh_dict(mesh_dict):
             self._dict = mesh_dict
         else:
             print("given mesh is not valid")
 
     def save(self, path, **kwargs):
-        '''
+        """
         Save the mesh to an OGS5 mesh file.
         kwargs will be forwarded to "tools.save_ogs5msh"
 
@@ -649,7 +647,7 @@ class MSHsgl(OGSfile):
             path to the '*.msh' OGS5 mesh file to save
         verbose : bool, optional
             Print information of the writing process. Default: True
-        '''
+        """
         # no top-comment allowed in MSH file
         if "verbose" in kwargs:
             verbose = kwargs["verbose"]
@@ -660,20 +658,20 @@ class MSHsgl(OGSfile):
         else:
             print("the mesh could not be saved since it is not valid")
 
-#    def write_file(self):
-#        '''
-#        Write the actual OGS input file to the given folder.
-#        Its path is given by "task_root+task_id+file_ext".
-#        '''
-#        # create the file path
-#        if not os.path.exists(self.task_root):
-#            os.makedirs(self.task_root)
-#        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
-#        # save the data
-#        self.save(f_path, verbose=False)
+    #    def write_file(self):
+    #        '''
+    #        Write the actual OGS input file to the given folder.
+    #        Its path is given by "task_root+task_id+file_ext".
+    #        '''
+    #        # create the file path
+    #        if not os.path.exists(self.task_root):
+    #            os.makedirs(self.task_root)
+    #        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
+    #        # save the data
+    #        self.save(f_path, verbose=False)
 
     def import_mesh(self, filepath, **kwargs):
-        '''
+        """
         import an external unstructured mesh from diffrent file-formats
         kwargs will be forwarded to "tools.import_mesh"
 
@@ -697,7 +695,7 @@ class MSHsgl(OGSfile):
         and converts the output (see here: https://github.com/nschloe/meshio)
         If there is any "vertex" (0D element) in the element data,
         it will be removed.
-        '''
+        """
         tmp = import_mesh(filepath, **kwargs)
         if check_mesh_dict(tmp):
             self._meshlist = [tmp]
@@ -705,7 +703,7 @@ class MSHsgl(OGSfile):
             print("given mesh is not valid")
 
     def export_mesh(self, filepath, verbose=False, **kwargs):
-        '''
+        """
         export the mesh to an unstructured mesh in diffrent file-formats
         kwargs will be forwarded to "tools.export_mesh"
 
@@ -729,14 +727,14 @@ class MSHsgl(OGSfile):
         -----
         This routine calls the 'write' function from the meshio package
         and converts the input (see here: https://github.com/nschloe/meshio)
-        '''
+        """
         if self.check(verbose=verbose):
             export_mesh(filepath, self._dict, **kwargs)
         else:
             print("the mesh could not be exported since it is not valid")
 
     def combine_mesh(self, ext_mesh, **kwargs):
-        '''
+        """
         Combine this mesh with an external mesh. The node list will be
         updated to eliminate duplicates.
         Element intersections are not checked.
@@ -754,7 +752,7 @@ class MSHsgl(OGSfile):
             If fast is True, the vector comparison is executed by a
             decimal comparison. If fast is False, all pairwise distances
             are calculated. Default: False
-        '''
+        """
         if isinstance(ext_mesh, MSH):
             tmp_mesh = ext_mesh()
         elif isinstance(ext_mesh, dict):
@@ -775,7 +773,7 @@ class MSHsgl(OGSfile):
             print("given mesh to add is not valid")
 
     def check(self, verbose=True):
-        '''
+        """
         Check if the mesh is valid in the sence, that the
         contained data is consistent.
         Checks for correct element definitions or Node duplicates
@@ -790,13 +788,13 @@ class MSHsgl(OGSfile):
         -------
         result : bool
             Validity of the given mesh.
-        '''
+        """
         return check_mesh_list(self._meshlist, verbose=verbose)
 
-    def rotate(self, angle,
-               rotation_axis=(0., 0., 1.),
-               rotation_point=(0., 0., 0.)):
-        '''
+    def rotate(
+        self, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+    ):
+        """
         Rotate a given mesh around a given rotation axis with a given angle.
 
         Parameters
@@ -812,11 +810,11 @@ class MSHsgl(OGSfile):
             Array containing the vector for ratation axis. Default: (0,0,1)
         rotation_point : array_like, optional
             Vector of the ratation base point. Default:(0,0,0)
-        '''
+        """
         rotate_mesh(self._dict, angle, rotation_axis, rotation_point)
 
     def shift(self, vector):
-        '''
+        """
         Shift a given mesh with a given vector.
 
         Parameters
@@ -828,11 +826,11 @@ class MSHsgl(OGSfile):
                     Array with all node postions.
         vector : ndarray
             array containing the shifting vector
-        '''
+        """
         shift_mesh(self._dict, vector)
 
     def transform(self, xyz_func, **kwargs):
-        '''
+        """
         Transform a given mesh with a given function "xyz_func".
         kwargs will be forwarded to "xyz_func".
 
@@ -846,22 +844,22 @@ class MSHsgl(OGSfile):
         xyz_func : function
             the function transforming the points:
             ``x_new, y_new, z_new = f(x_old, y_old, z_old, **kwargs)``
-        '''
+        """
         transform_mesh(self._dict, xyz_func, **kwargs)
 
     def remove_dim(self, remove):
-        '''
+        """
         Remove elements by given dimensions from a mesh.
 
         Parameters
         ----------
         remove : iterable of int or single int
             State which elements should be removed by dimensionality (1, 2, 3).
-        '''
+        """
         remove_dim(self._dict, remove=remove)
 
     def generate(self, generator="rectengular", **kwargs):
-        '''
+        """
         Use a mesh-generator from the generator module
 
         Parameters
@@ -872,11 +870,11 @@ class MSHsgl(OGSfile):
         Info
         ----
         kwargs will be forwarded to the generator
-        '''
+        """
         self._dict = getattr(gen, generator)(**kwargs)
 
     def show(self, show_element_id=True):
-        '''
+        """
         Display the mesh colored by its material ID.
 
         Parameters
@@ -889,8 +887,9 @@ class MSHsgl(OGSfile):
         -----
         This routine needs "mayavi" to display the mesh.
         (see here: https://github.com/enthought/mayavi)
-        '''
+        """
         from ogs5py.fileclasses.msh.viewer import show_mesh
+
         show_mesh(self._dict, show_element_id=show_element_id)
 
     #######################
@@ -921,21 +920,21 @@ class MSHsgl(OGSfile):
             out += " $CROSS_SECTION\n"
         if self.PCS_TYPE is not None:
             out += " $PCS_TYPE\n"
-            out += "  "+self.PCS_TYPE+"\n"
+            out += "  " + self.PCS_TYPE + "\n"
         if self.GEO_NAME is not None:
             out += " $GEO_NAME\n"
-            out += "  "+self.GEO_NAME+"\n"
+            out += "  " + self.GEO_NAME + "\n"
         if self.GEO_TYPE is not None:
             out += " $GEO_TYPE\n"
-            out += "  "+self.GEO_TYPE+" "+self.GEO_NAME+"\n"
+            out += "  " + self.GEO_TYPE + " " + self.GEO_NAME + "\n"
         if self.LAYER is not None:
             out += " $LAYER\n"
-            out += "  "+str(self.LAYER)+"\n"
+            out += "  " + str(self.LAYER) + "\n"
         out += " $NODES\n"
         if self.NODES is None:
             out += "  None\n"
         else:
-            out += "  "+str(self.NODES.shape[0])+"\n"
+            out += "  " + str(self.NODES.shape[0]) + "\n"
             out += "   ...\n"
         out += " $ELEMENTS\n"
         if self.ELEMENTS is None:
@@ -944,7 +943,7 @@ class MSHsgl(OGSfile):
             elem_no = 0
             for elem in self.ELEMENTS:
                 elem_no += self.ELEMENTS[elem].shape[0]
-            out += "  "+str(elem_no)+"\n"
+            out += "  " + str(elem_no) + "\n"
             out += "   ...\n"
         out += "#STOP\n"
         return out
@@ -972,7 +971,7 @@ class MSH(MSHsgl):
     """
 
     def __init__(self, mesh_list=None, **OGS_Config):
-        '''
+        """
         Parameters
         ----------
         mesh_list : list of dict or None, optional
@@ -998,7 +997,7 @@ class MSH(MSHsgl):
         task_id : string, optional
             Name for the ogs task. Default: "ogs"
 
-        '''
+        """
         super(MSH, self).__init__(None, **OGS_Config)
 
         if mesh_list is None:
@@ -1090,27 +1089,27 @@ class MSH(MSHsgl):
                 out += " $CROSS_SECTION\n"
             if self.PCS_TYPE is not None:
                 out += " $PCS_TYPE\n"
-                out += "  "+self.PCS_TYPE+"\n"
+                out += "  " + self.PCS_TYPE + "\n"
             if self.GEO_NAME is not None:
                 out += " $GEO_NAME\n"
-                out += "  "+self.GEO_NAME+"\n"
+                out += "  " + self.GEO_NAME + "\n"
             if self.GEO_TYPE is not None:
                 out += " $GEO_TYPE\n"
-                out += "  "+self.GEO_TYPE+" "+self.GEO_NAME+"\n"
+                out += "  " + self.GEO_TYPE + " " + self.GEO_NAME + "\n"
             if self.LAYER is not None:
                 out += " $LAYER\n"
-                out += "  "+str(self.LAYER)+"\n"
+                out += "  " + str(self.LAYER) + "\n"
             out += " $NODES\n"
             if self.NODES is None:
                 out += "  None\n"
             else:
-                out += "  "+str(self.NODES.shape[0])+"\n"
+                out += "  " + str(self.NODES.shape[0]) + "\n"
                 out += "   ...\n"
             out += " $ELEMENTS\n"
             if self.ELEMENTS is None:
                 out += "  None\n"
             else:
-                out += "  "+str(self.ELEMENT_NO)+"\n"
+                out += "  " + str(self.ELEMENT_NO) + "\n"
                 out += "   ...\n"
         if self._meshlist:
             out += "#STOP\n"

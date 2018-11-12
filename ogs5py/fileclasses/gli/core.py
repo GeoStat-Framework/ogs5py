@@ -9,21 +9,16 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import os
 import numpy as np
+
 # import ogs5py.fileclasses.gli.generator as gen
-from ogs5py.tools._types import (
-    STRTYPE,
-    EMPTY_GLI,
-)
+from ogs5py.tools._types import STRTYPE, EMPTY_GLI
 from ogs5py.fileclasses.gli.checker import (
     check_gli_dict,
     check_polyline,
     check_surface,
     check_volume,
 )
-from ogs5py.fileclasses.gli.tools import (
-    load_ogs5gli,
-    save_ogs5gli,
-)
+from ogs5py.fileclasses.gli.tools import load_ogs5gli, save_ogs5gli
 from ogs5py.tools.tools import (
     is_str_array,
     rotate_points,
@@ -43,16 +38,16 @@ class GLI(OGSfile):
     """
 
     def __init__(self, gli_dict=None, **OGS_Config):
-        '''
+        """
         Input
         -----
         gli_dict : dict, optional
             Dictionary containing an gli file representation.
         OGS_Config : dict, optional
             OGS configuration
-        '''
+        """
         super(GLI, self).__init__(**OGS_Config)
-        self.file_ext = '.gli'
+        self.file_ext = ".gli"
 
         if gli_dict is None:
             self.__dict = dcp(EMPTY_GLI)
@@ -62,7 +57,7 @@ class GLI(OGSfile):
             print("given gli_dict is not valid.. will set default")
             self.__dict = dcp(EMPTY_GLI)
 
-#        self.mainkw = [""]
+    #        self.mainkw = [""]
 
     # Pretend that there is a main keyword in the standard BASE-FORMAT
     @property
@@ -136,8 +131,7 @@ class GLI(OGSfile):
     @POINT_NAMES.deleter
     def POINT_NAMES(self):
         if self.POINTS is not None:
-            self.__dict["point_names"] = np.array(self.POINT_NO*[""],
-                                                  dtype=object)
+            self.__dict["point_names"] = np.array(self.POINT_NO * [""], dtype=object)
         else:
             self.__dict["point_names"] = None
 
@@ -163,8 +157,7 @@ class GLI(OGSfile):
     @POINT_MD.deleter
     def POINT_MD(self):
         if self.POINTS is not None:
-            self.__dict["point_md"] = -np.inf*np.ones(self.POINT_NO,
-                                                      dtype=float)
+            self.__dict["point_md"] = -np.inf * np.ones(self.POINT_NO, dtype=float)
         else:
             self.__dict["point_md"] = None
 
@@ -307,13 +300,13 @@ class GLI(OGSfile):
     # Class methods
     #######################
     def reset(self):
-        '''
+        """
         Delete every content.
-        '''
+        """
         self.__dict = EMPTY_GLI
 
     def load(self, filepath, verbose=False, encoding=None, **kwargs):
-        '''
+        """
         Load an OGS5 gli from file.
         kwargs will be forwarded to "tools.load_ogs5gli"
 
@@ -323,16 +316,15 @@ class GLI(OGSfile):
             path to the '*.msh' OGS5 mesh file to load
         verbose : bool, optional
             Print information of the reading process. Default: True
-        '''
-        tmp = load_ogs5gli(filepath, verbose=verbose,
-                           encoding=encoding, **kwargs)
+        """
+        tmp = load_ogs5gli(filepath, verbose=verbose, encoding=encoding, **kwargs)
         if check_gli_dict(tmp, verbose=verbose):
             self.__dict = tmp
         else:
             print("GLI.load: given gli is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
-        '''
+        """
         Load an OGS5 gli from file.
 
         Parameters
@@ -344,11 +336,11 @@ class GLI(OGSfile):
             standard is used. Default: ``None``
         verbose : bool, optional
             Print information of the reading process. Default: False
-        '''
+        """
         self.load(path, verbose=verbose, encoding=encoding)
 
     def set_dict(self, gli_dict):
-        '''
+        """
         Set a gli dict as returned by tools methods or generators.
         Gli will be checked for validity.
 
@@ -386,14 +378,14 @@ class GLI(OGSfile):
                     "TYPE" (int or None)
                     "MAT_GROUP" (int or None)
                     "LAYER" (int or None)
-        '''
+        """
         if check_gli_dict(gli_dict):
             self.__dict = gli_dict
         else:
             print("given gli_dict is not valid")
 
     def save(self, path, **kwargs):
-        '''
+        """
         Save the gli to an OGS5 gli file.
         kwargs will be forwarded to "tools.save_ogs5gli"
 
@@ -403,7 +395,7 @@ class GLI(OGSfile):
             path to the '*.gli' OGS5 gli file to save
         verbose : bool, optional
             Print information of the writing process. Default: True
-        '''
+        """
         if "verbose" in kwargs:
             verbose = kwargs["verbose"]
         else:
@@ -413,20 +405,20 @@ class GLI(OGSfile):
         else:
             print("the mesh could not be saved since it is not valid")
 
-#    def write_file(self):
-#        '''
-#        Write the actual OGS input file to the given folder.
-#        Its path is given by "task_root+task_id+file_ext".
-#        '''
-#        # create the file path
-#        if not os.path.exists(self.task_root):
-#            os.makedirs(self.task_root)
-#        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
-#        # save the data
-#        self.save(f_path, verbose=False)
+    #    def write_file(self):
+    #        '''
+    #        Write the actual OGS input file to the given folder.
+    #        Its path is given by "task_root+task_id+file_ext".
+    #        '''
+    #        # create the file path
+    #        if not os.path.exists(self.task_root):
+    #            os.makedirs(self.task_root)
+    #        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
+    #        # save the data
+    #        self.save(f_path, verbose=False)
 
     def check(self, verbose=True):
-        '''
+        """
         Check if the gli is valid in the sence, that the
         contained data is consistent.
 
@@ -439,13 +431,13 @@ class GLI(OGSfile):
         -------
         result : bool
             Validity of the given gli.
-        '''
+        """
         return check_gli_dict(self.__dict, verbose=verbose)
 
-    def rotate(self, angle,
-               rotation_axis=(0., 0., 1.),
-               rotation_point=(0., 0., 0.)):
-        '''
+    def rotate(
+        self, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+    ):
+        """
         Rotate points around a given rotation point and axis
         with a given angle.
 
@@ -457,23 +449,22 @@ class GLI(OGSfile):
             Array containing the vector for ratation axis. Default: (0,0,1)
         rotation_point : array_like, optional
             Vector of the ratation base point. Default:(0,0,0)
-        '''
-        self.POINTS = rotate_points(self.POINTS, angle,
-                                    rotation_axis, rotation_point)
+        """
+        self.POINTS = rotate_points(self.POINTS, angle, rotation_axis, rotation_point)
 
     def shift(self, vector):
-        '''
+        """
         Shift points with a given vector.
 
         Parameters
         ----------
         vector : ndarray
             array containing the shifting vector
-        '''
+        """
         self.POINTS = shift_points(self.POINTS, vector)
 
     def generate(self, generator="rectengular", **kwargs):
-        '''
+        """
         Use a mesh-generator from the generator module
 
         See: ogs5py.fileclasses.gli.generator
@@ -486,12 +477,13 @@ class GLI(OGSfile):
         Info
         ----
         kwargs will be forwarded to the generator
-        '''
+        """
         from ogs5py.fileclasses.gli import generator as gen
+
         self.__dict = getattr(gen, generator)(**kwargs)
 
     def add_points(self, points, names=None, md=None, decimals=4):
-        '''
+        """
         Add a list of points (ndarray with shape (n,3)) and keep the
         pointlist unique. If a named point is added, that was already present,
         it will be renamed with the new name. Same for md.
@@ -520,7 +512,7 @@ class GLI(OGSfile):
         -------
         new_pos : ndarray
             array with the IDs of the added points in the pointlist of the gli.
-        '''
+        """
         # check if given points are unique
         points = np.array(points, dtype=float, ndmin=2)
         if names is not None:
@@ -547,23 +539,25 @@ class GLI(OGSfile):
             self.POINT_MD = np.empty(0, dtype=float)
         new_points = np.vstack((self.POINTS, points))
         new_points, __, ixr = unique_rows(new_points, decimals=decimals)
-        old_pos = ixr[:self.POINT_NO]
-        new_pos = ixr[self.POINT_NO:]
+        old_pos = ixr[: self.POINT_NO]
+        new_pos = ixr[self.POINT_NO :]
         # set the new names
-        new_names = np.array(new_points.shape[0]*[""], dtype=object)
+        new_names = np.array(new_points.shape[0] * [""], dtype=object)
         new_names[old_pos] = self.POINT_NAMES
         if names is not None:
             new_names[new_pos] = names
         # set the new MDs
-        new_md = -np.inf*np.ones(new_points.shape[0], dtype=float)
+        new_md = -np.inf * np.ones(new_points.shape[0], dtype=float)
         new_md[old_pos] = self.POINT_MD
         if md is not None:
             new_md[new_pos] = md
         # reset the point IDs within the polylines
         for ply_i in range(self.POLYLINE_NO):
-            self.__dict["polylines"][ply_i]["POINTS"] = \
-                replace(self.__dict["polylines"][ply_i]["POINTS"],
-                        np.arange(self.POINT_NO), old_pos)
+            self.__dict["polylines"][ply_i]["POINTS"] = replace(
+                self.__dict["polylines"][ply_i]["POINTS"],
+                np.arange(self.POINT_NO),
+                old_pos,
+            )
         # set the new points
         self.POINTS = new_points
         self.POINT_NAMES = new_names
@@ -571,10 +565,19 @@ class GLI(OGSfile):
         # return the new positions of the added points
         return new_pos
 
-    def add_polyline(self, name, points, ply_id=None, epsilon=None,
-                     ply_type=None, mat_group=None, point_vector=None,
-                     closed=False, decimals=4):
-        '''
+    def add_polyline(
+        self,
+        name,
+        points,
+        ply_id=None,
+        epsilon=None,
+        ply_type=None,
+        mat_group=None,
+        point_vector=None,
+        closed=False,
+        decimals=4,
+    ):
+        """
         Add a polyline to the gli.
 
         Parameters
@@ -607,7 +610,7 @@ class GLI(OGSfile):
             to the left of the decimal point.
             This will not round the new points, it's just for comparison of the
             already present points to guarante uniqueness.
-        '''
+        """
         points = np.asanyarray(points)
         name = str(name)
         safe_dict = self()
@@ -615,59 +618,70 @@ class GLI(OGSfile):
             print("gli.add_polyline: Polyline-name already present!")
             return
         # add by id
-        if (np.issubdtype(points.dtype, np.integer) and
-                points.ndim == 1 and
-                points.shape[0] >= 2 and
-                np.min(points) >= 0 and
-                np.max(points) < self.POINT_NO):
+        if (
+            np.issubdtype(points.dtype, np.integer)
+            and points.ndim == 1
+            and points.shape[0] >= 2
+            and np.min(points) >= 0
+            and np.max(points) < self.POINT_NO
+        ):
             if closed:
                 points = np.hstack((points, points[0]))
-            new_ply = {"NAME": name,
-                       "POINTS": points,
-                       "ID": ply_id,
-                       "EPSILON": epsilon,
-                       "TYPE": ply_type,
-                       "MAT_GROUP": mat_group,
-                       "POINT_VECTOR": point_vector}
+            new_ply = {
+                "NAME": name,
+                "POINTS": points,
+                "ID": ply_id,
+                "EPSILON": epsilon,
+                "TYPE": ply_type,
+                "MAT_GROUP": mat_group,
+                "POINT_VECTOR": point_vector,
+            }
         # add by name
-        if (is_str_array(points) and
-                points.ndim == 1 and
-                points.shape[0] >= 2 and
-                all([str(pnt) in self.POINT_NAMES for pnt in points])):
+        if (
+            is_str_array(points)
+            and points.ndim == 1
+            and points.shape[0] >= 2
+            and all([str(pnt) in self.POINT_NAMES for pnt in points])
+        ):
             if closed:
                 points = np.hstack((points, points[0]))
             # get IDs from the given names
             # see: https://stackoverflow.com/a/32191125/6696397
             # after the check, if points are IDs...
             points = np.array(
-                [np.where(self.POINT_NAMES == str(pnt))[0][0]
-                 for pnt in points],
+                [np.where(self.POINT_NAMES == str(pnt))[0][0] for pnt in points],
                 dtype=int,
             )
-            new_ply = {"NAME": name,
-                       "POINTS": points,
-                       "ID": ply_id,
-                       "EPSILON": epsilon,
-                       "TYPE": ply_type,
-                       "MAT_GROUP": mat_group,
-                       "POINT_VECTOR": point_vector}
+            new_ply = {
+                "NAME": name,
+                "POINTS": points,
+                "ID": ply_id,
+                "EPSILON": epsilon,
+                "TYPE": ply_type,
+                "MAT_GROUP": mat_group,
+                "POINT_VECTOR": point_vector,
+            }
         # add by coordinates
-        elif (np.issubdtype(points.dtype, np.floating) and
-              points.ndim == 2 and
-              points.shape[0] >= 2 and
-              points.shape[1] == 3):
+        elif (
+            np.issubdtype(points.dtype, np.floating)
+            and points.ndim == 2
+            and points.shape[0] >= 2
+            and points.shape[1] == 3
+        ):
             if closed:
                 points = np.vstack((points, points[0]))
             unique_pnt, __, ixr = unique_rows(points, decimals=decimals)
             new_pos = self.add_points(unique_pnt, decimals=decimals)
             new_points = replace(ixr, np.arange(unique_pnt.shape[0]), new_pos)
-            new_ply = {"NAME": name,
-                       "POINTS": new_points,
-                       "ID": ply_id,
-                       "EPSILON": epsilon,
-                       "TYPE": ply_type,
-                       "MAT_GROUP": mat_group,
-                       "POINT_VECTOR": point_vector}
+            new_ply = {
+                "NAME": name,
+                "POINTS": new_points,
+                "ID": ply_id,
+                "EPSILON": epsilon,
+                "TYPE": ply_type,
+                "MAT_GROUP": mat_group,
+                "POINT_VECTOR": point_vector,
+            }
         else:
             print("gli.add_polyline: Polyline-points not valid!")
             return
@@ -677,9 +691,17 @@ class GLI(OGSfile):
             print("gli.add_polyline: Polyline not valid!")
             self.__dict = safe_dict
 
-    def add_surface(self, name, polylines, srf_id=None, epsilon=None,
-                    srf_type=0, mat_group=None, tin=None):
-        '''
+    def add_surface(
+        self,
+        name,
+        polylines,
+        srf_id=None,
+        epsilon=None,
+        srf_type=0,
+        mat_group=None,
+        tin=None,
+    ):
+        """
         Add a new surface.
 
         Parameters
@@ -698,26 +720,27 @@ class GLI(OGSfile):
             Default: None
         tin : str or None, optional
             Default: None
-        '''
+        """
         name = str(name)
         if name in self.SURFACE_NAMES:
             print("gli.add_surface: Surface-name already present!")
             return
-        new_srf = {"NAME": name,
-                   "POLYLINES": polylines,
-                   "ID": srf_id,
-                   "EPSILON": epsilon,
-                   "TYPE": srf_type,
-                   "MAT_GROUP": mat_group,
-                   "TIN": tin}
+        new_srf = {
+            "NAME": name,
+            "POLYLINES": polylines,
+            "ID": srf_id,
+            "EPSILON": epsilon,
+            "TYPE": srf_type,
+            "MAT_GROUP": mat_group,
+            "TIN": tin,
+        }
         if not check_surface(new_srf, self.POLYLINE_NAMES, verbose=False):
             print("gli.add_surface: Surface not valid!")
         else:
             self.__dict["surfaces"].append(new_srf)
 
-    def add_volume(self, name, surfaces,
-                   vol_type=None, mat_group=None, layer=None):
-        '''
+    def add_volume(self, name, surfaces, vol_type=None, mat_group=None, layer=None):
+        """
         Add a new volume.
 
         Parameters
@@ -732,23 +755,25 @@ class GLI(OGSfile):
             Default: None
         layer : int or None, optional
             Default: None
-        '''
+        """
         name = str(name)
         if name in self.VOLUME_NAMES:
             print("gli.add_volume: Volume-name already present!")
             return
-        new_vol = {"NAME": name,
-                   "SURFACES": surfaces,
-                   "TYPE": vol_type,
-                   "MAT_GROUP": mat_group,
-                   "LAYER": layer}
+        new_vol = {
+            "NAME": name,
+            "SURFACES": surfaces,
+            "TYPE": vol_type,
+            "MAT_GROUP": mat_group,
+            "LAYER": layer,
+        }
         if not check_volume(new_vol, self.SURFACE_NAMES, verbose=False):
             print("gli.add_volume: Volume not valid!")
         else:
             self.__dict["volumes"].append(new_vol)
 
     def remove_point(self, id_or_name):
-        '''
+        """
         Remove a point by its name or ID. If Points are removed, that define
         polylines, they will be removed. Same for surfaces and volumes.
 
@@ -756,7 +781,7 @@ class GLI(OGSfile):
         ----------
         id_or_name : int or str or list of int or list of str
             Points to be removed. Unknown names or IDs are ignored.
-        '''
+        """
         if not isinstance(id_or_name, (list, tuple, set)):
             id_or_name = [id_or_name]
 
@@ -794,7 +819,7 @@ class GLI(OGSfile):
         self.POINT_MD = np.delete(self.POINT_MD, index_list, 0)
 
     def remove_polyline(self, names):
-        '''
+        """
         Remove a polyline by its name. If Polylines are removed, that define
         surfaces, they will be removed. Same for volumes.
 
@@ -802,7 +827,7 @@ class GLI(OGSfile):
         ----------
         names : str or list of str
             Polylines to be removed. Unknown names are ignored.
-        '''
+        """
         if not isinstance(names, (list, tuple, set)):
             names = [names]
         for ply_name in names:
@@ -817,7 +842,7 @@ class GLI(OGSfile):
             del self.POLYLINES[self.POLYLINE_NAMES.index(ply_name)]
 
     def remove_surface(self, names):
-        '''
+        """
         Remove a surface by its name. If Surfaces are removed, that define
         Volumes, they will be removed.
 
@@ -825,7 +850,7 @@ class GLI(OGSfile):
         ----------
         names : str or list of str
             Surfaces to be removed. Unknown names are ignored.
-        '''
+        """
         if not isinstance(names, (list, tuple, set)):
             names = [names]
         for srf_name in names:
@@ -840,14 +865,14 @@ class GLI(OGSfile):
             del self.SURFACES[self.SURFACE_NAMES.index(srf_name)]
 
     def remove_volume(self, names):
-        '''
+        """
         Remove a volume by its name.
 
         Parameters
         ----------
         names : str or list of str
             Volumes to be removed. Unknown names are ignored.
-        '''
+        """
         if not isinstance(names, (list, tuple, set)):
             names = [names]
         for vol_name in names:
@@ -856,7 +881,7 @@ class GLI(OGSfile):
             del self.VOLUMES[self.VOLUME_NAMES.index(vol_name)]
 
     def pnt_coord(self, pnt_name=None, pnt_id=None):
-        '''
+        """
         Get Point coordinates either by name or ID.
 
         Parameters
@@ -865,7 +890,7 @@ class GLI(OGSfile):
             Point name.
         pnt_id : int
             Point ID.
-        '''
+        """
         # standard output is None, if pnt_name not present,
         # pnt_id out of range or both are given (ununique)
         out = None
@@ -900,12 +925,20 @@ class GLIext(object):
     """
     Class for an external definition for the ogs GEOMETRY file.
     """
-    def __init__(self, typ, data=None, file_name=None, file_ext=None,
-                 task_root=os.path.join(CWD, "ogs5model"), task_id="model"):
-        '''
+
+    def __init__(
+        self,
+        typ,
+        data=None,
+        file_name=None,
+        file_ext=None,
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
+    ):
+        """
         Input
         -----
-        '''
+        """
         if typ not in ["TIN", "POINT_VECTOR"]:
             raise ValueError("typ needs to be either 'TIN' or 'POINT_VECTOR'")
         self.typ = typ
@@ -930,7 +963,7 @@ class GLIext(object):
             raise ValueError("Gli external: data not valid")
 
     def check(self, verbose=True):
-        '''
+        """
         Check if the external geometry definition is valid in the sence,
         that the contained data is consistent.
 
@@ -943,18 +976,22 @@ class GLIext(object):
         -------
         result : bool
             Validity of the given gli.
-        '''
+        """
         if self.data.ndim == 2:
             if self.typ not in ["TIN", "POINT_VECTOR"]:
                 print("Gli external: Wrong typ given")
                 return False
             elif self.typ == "TIN" and self.data.shape[1] != 10:
-                print("Gli external: For 'TIN' the data must contain " +
-                      "id + 9 Values per line")
+                print(
+                    "Gli external: For 'TIN' the data must contain "
+                    + "id + 9 Values per line"
+                )
                 return False
             elif self.typ == "POINT_VECTOR" and self.data.shape[1] != 3:
-                print("Gli external: For 'POINT_VECTOR' the data must " +
-                      "contain 3 Values per line")
+                print(
+                    "Gli external: For 'POINT_VECTOR' the data must "
+                    + "contain 3 Values per line"
+                )
                 return False
         else:
             if verbose:
@@ -963,25 +1000,25 @@ class GLIext(object):
         return True
 
     def save(self, path):
-        '''
+        """
         Save the actual GLI external file in the given path.
 
         Parameters
         ----------
         path : str
             path to where to file should be saved
-        '''
+        """
         np.savetxt(path, self.data)
 
     def read_file(self, path, **kwargs):
-        '''
+        """
         Read a given GLI_EXT input file.
 
         Parameters
         ----------
         path : str
             path to the file
-        '''
+        """
         if "verbose" in kwargs:
             verbose = kwargs["verbose"]
         else:
@@ -998,13 +1035,13 @@ class GLIext(object):
             print("Gli external: File data not valid")
 
     def write_file(self):
-        '''
+        """
         Write the actual OGS input file to the given folder.
         Its path is given by "task_root+task_id+file_ext".
-        '''
+        """
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
+        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
         # save the data
         self.save(f_path)

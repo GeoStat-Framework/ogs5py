@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs FLUID PROPERTY file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -51,40 +51,40 @@ class MFP(OGSfile):
 
     MKEYS = ["FLUID_PROPERTIES"]
     # sorted
-    SKEYS = [[
-        "FLUID_TYPE",
-        "COMPONENTS",
-        "FLUID_NAME",
-        "EOS_TYPE",
-        "COMPRESSIBILITY",
-        "JTC",
-        "DAT_TYPE",
-        "NON_GRAVITY",
-        "DRHO_DT_UNSATURATED",
-        "DENSITY",
-        "TEMPERATURE",
-        "VISCOSITY",
-        "SPECIFIC_HEAT_CAPACITY",
-        "HEAT_CONDUCTIVITY",
-        "PHASE_DIFFUSION",
-        "DIFFUSION",
-        "DECAY",
-        "ISOTHERM",
-        "GRAVITY",
-        "SPECIFIC_HEAT_SOURCE",
-    ]]
+    SKEYS = [
+        [
+            "FLUID_TYPE",
+            "COMPONENTS",
+            "FLUID_NAME",
+            "EOS_TYPE",
+            "COMPRESSIBILITY",
+            "JTC",
+            "DAT_TYPE",
+            "NON_GRAVITY",
+            "DRHO_DT_UNSATURATED",
+            "DENSITY",
+            "TEMPERATURE",
+            "VISCOSITY",
+            "SPECIFIC_HEAT_CAPACITY",
+            "HEAT_CONDUCTIVITY",
+            "PHASE_DIFFUSION",
+            "DIFFUSION",
+            "DECAY",
+            "ISOTHERM",
+            "GRAVITY",
+            "SPECIFIC_HEAT_SOURCE",
+        ]
+    ]
 
-    STD = {"FLUID_TYPE": "LIQUID",
-           "DENSITY": [1, 1.0e+03],
-           "VISCOSITY": [1, 1.0e-03]}
+    STD = {"FLUID_TYPE": "LIQUID", "DENSITY": [1, 1.0e03], "VISCOSITY": [1, 1.0e-03]}
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(MFP, self).__init__(**OGS_Config)
-        self.file_ext = '.mfp'
+        self.file_ext = ".mfp"

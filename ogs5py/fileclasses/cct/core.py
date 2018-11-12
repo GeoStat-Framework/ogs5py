@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs COMMUNICATION TABLE file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -32,21 +32,17 @@ class CCT(OGSfile):
 
     MKEYS = ["COMMUNICATION_TABLE"]
     # sorted
-    SKEYS = [[
-        "MYRANK",
-        "NNEIGHBORS",
-        "NEIGHBOR",
-    ]]
+    SKEYS = [["MYRANK", "NNEIGHBORS", "NEIGHBOR"]]
 
     STD = {}
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(CCT, self).__init__(**OGS_Config)
-        self.file_ext = '.cct'
+        self.file_ext = ".cct"

@@ -1,4 +1,4 @@
-'''
+"""
 ogs5py Python Package
 
 Get help on each function by typing
@@ -27,14 +27,11 @@ REI - Reaction Interface
 RFD - definition of time-curves for variing BCs or STs
 ST  - Source Term
 TIM - Time settings
-'''
+"""
 
 from __future__ import absolute_import
 
-from ogs5py.ogs import (
-    OGS,
-    search_task_id,
-)
+from ogs5py.ogs import OGS, search_task_id
 from ogs5py.fileclasses import (
     BC,
     CCT,
@@ -62,17 +59,14 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
-from ogs5py.tools._types import (
-    OGS_EXT,
-    PCS_TYP,
-    PRIM_VAR_BY_PCS,
-)
+from ogs5py.tools._types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
+
 # from ogs5py.reader import (readvtk,
 #                            readpvd,
 #                            readtec_point,
 #                            readtec_polyline)
 
-__version__ = '0.3.0'
+__version__ = "0.3.0"
 
 __all__ = [
     "BC",
@@ -101,13 +95,6 @@ __all__ = [
     "ST",
     "TIM",
 ]
-__all__ += [
-    "OGS",
-    "search_task_id",
-]
-__all__ += [
-    "OGS_EXT",
-    "PCS_TYP",
-    "PRIM_VAR_BY_PCS",
-]
+__all__ += ["OGS", "search_task_id"]
+__all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]

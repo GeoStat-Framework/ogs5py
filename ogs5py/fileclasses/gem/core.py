@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -46,35 +46,37 @@ class GEM(OGSfile):
 
     MKEYS = ["GEM_PROPERTIES"]
     # sorted
-    SKEYS = [[
-        "GEM_INIT_FILE",
-        "GEM_THREADS",
-        "TRANSPORT_B",
-        "FLAG_POROSITY_CHANGE",
-        "MIN_POROSITY",
-        "MAX_POROSITY",
-        "FLAG_COUPLING_HYDROLOGY",
-        "ITERATIVE_SCHEME",
-        "CALCULATE_BOUNDARY_NODES",
-        "TEMPERATURE_GEM",
-        "PRESSURE_GEM",
-        "MAX_FAILED_NODES",
-        "MY_SMART_GEMS",
-        "FLAG_DISABLE_GEM",
-        "KINETIC_GEM",
-        #        "DISABLE_GEMS",
-        #        "GEM_CALCULATE_BOUNDARY_NODES",
-    ]]
+    SKEYS = [
+        [
+            "GEM_INIT_FILE",
+            "GEM_THREADS",
+            "TRANSPORT_B",
+            "FLAG_POROSITY_CHANGE",
+            "MIN_POROSITY",
+            "MAX_POROSITY",
+            "FLAG_COUPLING_HYDROLOGY",
+            "ITERATIVE_SCHEME",
+            "CALCULATE_BOUNDARY_NODES",
+            "TEMPERATURE_GEM",
+            "PRESSURE_GEM",
+            "MAX_FAILED_NODES",
+            "MY_SMART_GEMS",
+            "FLAG_DISABLE_GEM",
+            "KINETIC_GEM",
+            #        "DISABLE_GEMS",
+            #        "GEM_CALCULATE_BOUNDARY_NODES",
+        ]
+    ]
 
     STD = {}
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(GEM, self).__init__(**OGS_Config)
-        self.file_ext = '.gem'
+        self.file_ext = ".gem"

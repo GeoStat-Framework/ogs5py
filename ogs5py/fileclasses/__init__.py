@@ -1,7 +1,7 @@
-'''
+"""
 OGS Python Package
 File classes
-'''
+"""
 from __future__ import absolute_import
 
 from ogs5py.fileclasses.bc import BC

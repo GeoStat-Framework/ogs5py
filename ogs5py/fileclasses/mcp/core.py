@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs COMPONENT_PROPERTIES file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -52,41 +52,43 @@ class MCP(OGSfile):
 
     MKEYS = ["COMPONENT_PROPERTIES"]
     # sorted
-    SKEYS = [[
-        "NAME",
-        "FORMULA",
-        "MOBILE",
-        "TRANSPORT_PHASE",
-        "FLUID_PHASE",
-        "MOL_MASS",
-        "CRITICAL_PRESSURE",
-        "CRITICAL_TEMPERATURE",
-        "ACENTRIC_FACTOR",
-        "FLUID_ID",
-        "MOLAR_VOLUME",
-        "VOLUME_DIFFUSION",
-        "MINERAL_DENSITY",
-        "DIFFUSION",
-        "DECAY",
-        "ISOTHERM",
-        "BUBBLE_VELOCITY",
-        "MOLAR_DENSITY",
-        "MOLAR_WEIGHT",
-        "MAXIMUM_AQUEOUS_SOLUBILITY",
-        "OutputMassOfComponentInModel",
-        "VALENCE",
-        "A_ZERO",
-    ]]
+    SKEYS = [
+        [
+            "NAME",
+            "FORMULA",
+            "MOBILE",
+            "TRANSPORT_PHASE",
+            "FLUID_PHASE",
+            "MOL_MASS",
+            "CRITICAL_PRESSURE",
+            "CRITICAL_TEMPERATURE",
+            "ACENTRIC_FACTOR",
+            "FLUID_ID",
+            "MOLAR_VOLUME",
+            "VOLUME_DIFFUSION",
+            "MINERAL_DENSITY",
+            "DIFFUSION",
+            "DECAY",
+            "ISOTHERM",
+            "BUBBLE_VELOCITY",
+            "MOLAR_DENSITY",
+            "MOLAR_WEIGHT",
+            "MAXIMUM_AQUEOUS_SOLUBILITY",
+            "OutputMassOfComponentInModel",
+            "VALENCE",
+            "A_ZERO",
+        ]
+    ]
 
     STD = {}
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(MCP, self).__init__(**OGS_Config)
-        self.file_ext = '.mcp'
+        self.file_ext = ".mcp"

@@ -26,32 +26,10 @@ EMPTY_GLI = {
     "surfaces": [],
     "volumes": [],
 }
-GLI_KEY_LIST = [
-    "#POINTS",
-    "#POLYLINE",
-    "#SURFACE",
-    "#VOLUME",
-    "#STOP",
-]
-PLY_KEY_LIST = [
-    "ID",
-    "NAME",
-    "POINTS",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "POINT_VECTOR",
-]
+GLI_KEY_LIST = ["#POINTS", "#POLYLINE", "#SURFACE", "#VOLUME", "#STOP"]
+PLY_KEY_LIST = ["ID", "NAME", "POINTS", "EPSILON", "TYPE", "MAT_GROUP", "POINT_VECTOR"]
 PLY_TYPES = [int, str, list, float, int, int, str]
-SRF_KEY_LIST = [
-    "ID",
-    "NAME",
-    "POLYLINES",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "TIN",
-]
+SRF_KEY_LIST = ["ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"]
 SRF_TYPES = [int, str, list, float, int, int, str]
 VOL_KEY_LIST = [
     "NAME",
@@ -71,39 +49,10 @@ EMPTY_VOL = {}
 for key in VOL_KEY_LIST:
     EMPTY_VOL[key] = None
 # keys for the gli-dict
-GLI_KEYS = {
-    "points",
-    "point_names",
-    "point_md",
-    "polylines",
-    "surfaces",
-    "volumes",
-}
-PLY_KEYS = {
-    "ID",
-    "NAME",
-    "POINTS",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "POINT_VECTOR",
-}
-SRF_KEYS = {
-    "ID",
-    "NAME",
-    "POLYLINES",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "TIN",
-}
-VOL_KEYS = {
-    "NAME",
-    "SURFACES",
-    "TYPE",
-    "MAT_GROUP",
-    "LAYER",
-}
+GLI_KEYS = {"points", "point_names", "point_md", "polylines", "surfaces", "volumes"}
+PLY_KEYS = {"ID", "NAME", "POINTS", "EPSILON", "TYPE", "MAT_GROUP", "POINT_VECTOR"}
+SRF_KEYS = {"ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"}
+VOL_KEYS = {"NAME", "SURFACES", "TYPE", "MAT_GROUP", "LAYER"}
 # all names for element types in ogs 5
 ELEM_NAMES = ["line", "tri", "quad", "tet", "pyra", "pris", "hex"]
 # names sorted by dimensionality
@@ -112,13 +61,7 @@ ELEM_2D = ["tri", "quad"]
 ELEM_3D = ["tet", "pyra", "pris", "hex"]
 ELEM_DIM = [ELEM_1D, ELEM_2D, ELEM_3D]
 # keys for the mesh-dict
-MESH_KEYS = {
-    "mesh_data",
-    "nodes",
-    "elements",
-    "material_id",
-    "element_id",
-}
+MESH_KEYS = {"mesh_data", "nodes", "elements", "material_id", "element_id"}
 MESH_DATA_KEYS = {
     "AXISYMMETRY",
     "CROSS_SECTION",
@@ -136,15 +79,7 @@ EMPTY_MSH = {
     "material_id": {},
 }
 # coresponding names for types in meshio
-MESHIO_NAMES = [
-    'line',
-    'triangle',
-    'quad',
-    'tetra',
-    'pyramid',
-    'wedge',
-    'hexahedron',
-]
+MESHIO_NAMES = ["line", "triangle", "quad", "tetra", "pyramid", "wedge", "hexahedron"]
 # number encoding for element types (obsolete)
 ELEM_TYP = {
     0: "line",
@@ -163,16 +98,8 @@ ELEM_TYP = {
     "hex": 6,
 }
 # number encoding sorted by dimensionality
-ELEM_TYP1D = {
-    0: "line",
-    "line": 0,
-}
-ELEM_TYP2D = {
-    1: "tri",
-    2: "quad",
-    "tri": 1,
-    "quad": 2,
-}
+ELEM_TYP1D = {0: "line", "line": 0}
+ELEM_TYP2D = {1: "tri", 2: "quad", "tri": 1, "quad": 2}
 ELEM_TYP3D = {
     3: "tet",
     4: "pyra",
@@ -185,13 +112,13 @@ ELEM_TYP3D = {
 }
 # coresponding vtk-types by their number encoding
 VTK_TYP = {
-    3: "line",   # vtk.VTK_LINE == 3
-    5: "tri",    # vtk.VTK_TRIANGLE == 5
-    9: "quad",   # vtk.VTK_QUAD == 9
-    10: "tet",   # vtk.VTK_TETRA == 10
+    3: "line",  # vtk.VTK_LINE == 3
+    5: "tri",  # vtk.VTK_TRIANGLE == 5
+    9: "quad",  # vtk.VTK_QUAD == 9
+    10: "tet",  # vtk.VTK_TETRA == 10
     14: "pyra",  # vtk.VTK_PYRAMID == 14
     13: "pris",  # vtk.VTK_WEDGE == 13
-    12: "hex",   # vtk.VTK_HEXAHEDRON == 12
+    12: "hex",  # vtk.VTK_HEXAHEDRON == 12
     "line": 3,
     "tri": 5,
     "quad": 9,
@@ -219,23 +146,23 @@ NODE_NO = {
 }
 # all pcs types supported by OGS5
 PCS_TYP = [
-    "",                  # special case for no specified pcs in "*.out"
-    "NO_PCS",            # ...used in Benchmarks
+    "",  # special case for no specified pcs in "*.out"
+    "NO_PCS",  # ...used in Benchmarks
     "GROUNDWATER_FLOW",  # HEAD
-    "LIQUID_FLOW",       # PRESSURE1
-    "RICHARDS_FLOW",     # PRESSURE1
-    "AIR_FLOW",          # PRESSURE1 TEMPERATURE1
+    "LIQUID_FLOW",  # PRESSURE1
+    "RICHARDS_FLOW",  # PRESSURE1
+    "AIR_FLOW",  # PRESSURE1 TEMPERATURE1
     "MULTI_PHASE_FLOW",  # PRESSURE1, PRESSURE2
-    "PS_GLOBAL",         # PRESSURE1, SATURATION2
-    "HEAT_TRANSPORT",    # TEMPERATURE1
-    "DEFORMATION",       # DISPLACEMENT_X1, -_Y1, -_Z1
-    "MASS_TRANSPORT",    # varying (#COMP_PROP*.mcp 7 CONCENTRATION)
-    "OVERLAND_FLOW",     # HEAD
-    "FLUID_MOMENTUM",    # VELOCITY1_X, VELOCITY1_Y, VELOCITY1_Z
-    "RANDOM_WALK",       # with particles in *.pct file
+    "PS_GLOBAL",  # PRESSURE1, SATURATION2
+    "HEAT_TRANSPORT",  # TEMPERATURE1
+    "DEFORMATION",  # DISPLACEMENT_X1, -_Y1, -_Z1
+    "MASS_TRANSPORT",  # varying (#COMP_PROP*.mcp 7 CONCENTRATION)
+    "OVERLAND_FLOW",  # HEAD
+    "FLUID_MOMENTUM",  # VELOCITY1_X, VELOCITY1_Y, VELOCITY1_Z
+    "RANDOM_WALK",  # with particles in *.pct file
 ]
 # file extensions by pcs type (and the unspecified case "")
-PCS_EXT = [""]+["_"+pcs for pcs in PCS_TYP[1:]]
+PCS_EXT = [""] + ["_" + pcs for pcs in PCS_TYP[1:]]
 # all PRIMARY_VARIABLE types supported by OGS5 (sorted by PCS_TYP)
 PRIM_VAR = [
     [""],
@@ -248,23 +175,23 @@ PRIM_VAR = [
     ["PRESSURE1, SATURATION2"],
     ["TEMPERATURE1"],
     ["DISPLACEMENT_X1", "DISPLACEMENT_Y1", "DISPLACEMENT_Z1"],
-    [""],    # varying (#COMP_PROP*.mcp 7 CONCENTRATION)
+    [""],  # varying (#COMP_PROP*.mcp 7 CONCENTRATION)
     ["HEAD"],
     ["VELOCITY1_X", "VELOCITY1_Y", "VELOCITY1_Z"],
-    [""],    # with particles in *.pct file
+    [""],  # with particles in *.pct file
 ]
 PRIM_VAR_BY_PCS = {}
 for i, pcs in enumerate(PCS_TYP):
     PRIM_VAR_BY_PCS[pcs] = PRIM_VAR[i]
 # file extensions of ogs5 input files (without mpd, gli_ext, rfr files)
 OGS_EXT = [
-    ".bc",   # Boundary Condition
+    ".bc",  # Boundary Condition
     ".cct",  # Communication Table
     ".ddc",  # MPI domain decomposition
     ".fct",  # Function
     ".gem",  # geochemical thermodynamic modeling coupling
     ".gli",  # Geometry
-    ".ic",   # Initial Condition
+    ".ic",  # Initial Condition
     ".krc",  # Kinetric Reaction
     ".mcp",  # reactive components for modelling chemical processes
     ".mfp",  # Fluid Properties
@@ -278,6 +205,6 @@ OGS_EXT = [
     ".pqc",  # Phreqqc coupling
     ".rei",  # Reaction Interface
     ".rfd",  # definition of time-curves for variing BCs or STs
-    ".st",   # Source Term
+    ".st",  # Source Term
     ".tim",  # Time settings
 ]

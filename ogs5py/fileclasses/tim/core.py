@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs TIME_STEPPING file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -43,32 +43,36 @@ class TIM(OGSfile):
 
     MKEYS = ["TIME_STEPPING"]
     # sorted
-    SKEYS = [[
-        "PCS_TYPE",
-        "TIME_START",
-        "TIME_END",
-        "TIME_UNIT",
-        "INDEPENDENT",
-        #        "TIME_FIXED_POINTS",
-        "TIME_STEPS",
-        "TIME_SPLITS",
-        "CRITICAL_TIME",
-        "TIME_CONTROL",
-        #        "SUBSTEPS",
-    ]]
+    SKEYS = [
+        [
+            "PCS_TYPE",
+            "TIME_START",
+            "TIME_END",
+            "TIME_UNIT",
+            "INDEPENDENT",
+            #        "TIME_FIXED_POINTS",
+            "TIME_STEPS",
+            "TIME_SPLITS",
+            "CRITICAL_TIME",
+            "TIME_CONTROL",
+            #        "SUBSTEPS",
+        ]
+    ]
 
-    STD = {"PCS_TYPE": "GROUNDWATER_FLOW",
-           "TIME_START": 0,
-           "TIME_END": 1000,
-           "TIME_STEPS": [10, 100]}
+    STD = {
+        "PCS_TYPE": "GROUNDWATER_FLOW",
+        "TIME_START": 0,
+        "TIME_END": 1000,
+        "TIME_STEPS": [10, 100],
+    }
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(TIM, self).__init__(**OGS_Config)
-        self.file_ext = '.tim'
+        self.file_ext = ".tim"

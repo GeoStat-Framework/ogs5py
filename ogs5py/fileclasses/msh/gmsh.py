@@ -1,13 +1,13 @@
-'''
+"""
 Simple interface to pygmsh.
-'''
+"""
 from __future__ import division, print_function, absolute_import
 
 
 def gmsh_code(path_or_code):
-    '''
+    """
     Generate mesh with gmsh.
-    '''
+    """
     try:
         from pygmsh import Geometry
     except ImportError:
@@ -27,49 +27,51 @@ def gmsh_code(path_or_code):
     return geo
 
 
-def gmsh_block_adapt3D(xy_dim=10.,
-                       z_dim=5.,
-                       in_res=1.):
-    '''
+def gmsh_block_adapt3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
+    """
     Generate the mesh adapter.
-    '''
+    """
     try:
         from pygmsh import Geometry
     except ImportError:
         from pygmsh.built_in import Geometry
 
     geo = Geometry()
-    code = ["xydim = {};".format(xy_dim),
-            "zdim = {};".format(z_dim),
-            "innerres = {};".format(in_res),
-            "Point(1) = {0,      0,      0, innerres};",
-            "Point(2) = {xydim,  0,      0, innerres};",
-            "Point(3) = {xydim,  xydim,  0, xydim};",
-            "Point(4) = {0,      xydim,  0, xydim};",
-            "Line(1) = {1, 2};",
-            "Line(2) = {2, 3};",
-            "Line(3) = {3, 4};",
-            "Line(4) = {4, 1};",
-            "Transfinite Line{1} = xydim/innerres + 1;",
-            "Transfinite Line{2, 3, 4} = 2;",
-            "Line Loop(1) = {4, 1, 2, 3};",
-            "Plane Surface(1) = {1};",
-            "Extrude{0,0,zdim}{Surface{1};Layers{1};Recombine;};"]
+    code = [
+        "xydim = {};".format(xy_dim),
+        "zdim = {};".format(z_dim),
+        "innerres = {};".format(in_res),
+        "Point(1) = {0,      0,      0, innerres};",
+        "Point(2) = {xydim,  0,      0, innerres};",
+        "Point(3) = {xydim,  xydim,  0, xydim};",
+        "Point(4) = {0,      xydim,  0, xydim};",
+        "Line(1) = {1, 2};",
+        "Line(2) = {2, 3};",
+        "Line(3) = {3, 4};",
+        "Line(4) = {4, 1};",
+        "Transfinite Line{1} = xydim/innerres + 1;",
+        "Transfinite Line{2, 3, 4} = 2;",
+        "Line Loop(1) = {4, 1, 2, 3};",
+        "Plane Surface(1) = {1};",
+        "Extrude{0,0,zdim}{Surface{1};Layers{1};Recombine;};",
+    ]
     geo.add_raw_code(code)
     return geo
 
 
-def gmsh_grid_adapt3D(out_dim=(100., 100.),
-                      in_dim=(50., 50.),
-                      z_dim=-10.,
-                      out_res=(10., 10., 10.),
-                      in_res=(5., 5., 5.),
-                      out_pos=(0., 0.),
-                      in_pos=(25., 25.),
-                      z_pos=0.):
-    '''
+def gmsh_grid_adapt3D(
+    out_dim=(100.0, 100.0),
+    in_dim=(50.0, 50.0),
+    z_dim=-10.0,
+    out_res=(10.0, 10.0, 10.0),
+    in_res=(5.0, 5.0, 5.0),
+    out_pos=(0.0, 0.0),
+    in_pos=(25.0, 25.0),
+    z_pos=0.0,
+):
+    """
     Generate the mesh adapter.
-    '''
+    """
     try:
         from pygmsh import Geometry
     except ImportError:
@@ -209,16 +211,18 @@ def gmsh_grid_adapt3D(out_dim=(100., 100.),
     return geo
 
 
-def gmsh_grid_adapt2D(out_dim=(100., 100.),
-                      in_dim=(50., 50.),
-                      out_res=(10., 10.),
-                      in_res=(5., 5.),
-                      out_pos=(0., 0.),
-                      in_pos=(25., 25.),
-                      z_pos=0.):
-    '''
+def gmsh_grid_adapt2D(
+    out_dim=(100.0, 100.0),
+    in_dim=(50.0, 50.0),
+    out_res=(10.0, 10.0),
+    in_res=(5.0, 5.0),
+    out_pos=(0.0, 0.0),
+    in_pos=(25.0, 25.0),
+    z_pos=0.0,
+):
+    """
     Generate the 2D mesh adapter.
-    '''
+    """
     try:
         from pygmsh import Geometry
     except ImportError:

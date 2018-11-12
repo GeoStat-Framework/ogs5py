@@ -11,6 +11,7 @@ import shutil
 import itertools
 import collections
 import numpy as np
+
 # import pandas as pd
 
 from ogs5py.tools._types import STRTYPE
@@ -42,15 +43,16 @@ class LineFile(object):
     task_id : str
         Name for the ogs task. (a place holder)
     """
+
     def __init__(
-            self,
-            lines=None,
-            file_name="textfile",
-            file_ext=".txt",
-            task_root=os.path.join(CWD, "ogs5model"),
-            task_id="model",
+        self,
+        lines=None,
+        file_name="textfile",
+        file_ext=".txt",
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
     ):
-        '''
+        """
         Initialize an OGS line-wise text file.
 
         Parameters
@@ -70,7 +72,7 @@ class LineFile(object):
         task_id : str, optional
             Name for the ogs task. (a place holder)
             Default: "model"
-        '''
+        """
         if lines is not None:
             self.lines = lines
         else:
@@ -98,13 +100,13 @@ class LineFile(object):
         return True
 
     def reset(self):
-        '''
+        """
         Delete every content.
-        '''
+        """
         self.lines = []
 
     def check(self, verbose=True):
-        '''
+        """
         Check if the given text-file is valid.
 
         Parameters
@@ -116,7 +118,7 @@ class LineFile(object):
         -------
         result : bool
             Validity of the given file.
-        '''
+        """
         if verbose:
             print("This file is not checked!")
         try:
@@ -127,21 +129,21 @@ class LineFile(object):
         return True
 
     def save(self, path):
-        '''
+        """
         Save the actual line-wise file in the given path.
 
         Parameters
         ----------
         path : str
             path to where to file should be saved
-        '''
+        """
         if self.lines:
             with open(path, "w") as fout:
                 for line in self.lines:
                     print(line, file=fout)
 
     def read_file(self, path, encoding=None, verbose=False):
-        '''
+        """
         Read an existing OGS input file
 
         Parameters
@@ -153,7 +155,7 @@ class LineFile(object):
             standard is used. Default: ``None``
         verbose : bool, optional
             Print information of the reading process. Default: False
-        '''
+        """
         # in python3 open was replaced with io.open
         # so we can use encoding key word in python2
         from io import open
@@ -164,18 +166,22 @@ class LineFile(object):
                 self.lines = fin.read().splitlines()
         except IOError:
             if verbose:
-                print("ogs5py " + self.get_file_type() +
-                      ": could not read lines from: "+path)
+                print(
+                    "ogs5py "
+                    + self.get_file_type()
+                    + ": could not read lines from: "
+                    + path
+                )
 
     def write_file(self):
-        '''
+        """
         Write the acutal file.
-        '''
+        """
         if not self.is_empty:
             # create the file path
             if not os.path.exists(self.task_root):
                 os.makedirs(self.task_root)
-            f_path = os.path.join(self.task_root, self.file_name+self.file_ext)
+            f_path = os.path.join(self.task_root, self.file_name + self.file_ext)
             # save the data
             self.save(f_path)
 
@@ -189,7 +195,7 @@ class LineFile(object):
         """
         out = ""
         for line in self.lines[:5]:
-            out += line+"\n"
+            out += line + "\n"
         if len(self.lines) > 5:
             out += "..."
         return out
@@ -215,12 +221,8 @@ class OGSfile(object):
 
     STD = {}
 
-    def __init__(
-            self,
-            task_root=os.path.join(CWD, "ogs5model"),
-            task_id="model",
-    ):
-        '''
+    def __init__(self, task_root=os.path.join(CWD, "ogs5model"), task_id="model"):
+        """
         Initialize an OGS file.
 
         Parameters
@@ -229,8 +231,8 @@ class OGSfile(object):
             Path to the destiny folder. Default is the current working dir
         task_id : string, optional
             Name for the ogs task. Default: "ogs"
-        '''
-#        self._add_doc()
+        """
+        #        self._add_doc()
 
         self.task_root = task_root
         self.task_id = task_id
@@ -262,12 +264,12 @@ class OGSfile(object):
         out = ""
         tab = "    "
         for i, mkw in enumerate(self.MKEYS):
-            out += min(i, 1)*tab+"- "+mkw+"\n"
+            out += min(i, 1) * tab + "- " + mkw + "\n"
             for skw in self.SKEYS[i]:
                 if skw:
-                    out += 2*tab+"- "+skw+"\n"
+                    out += 2 * tab + "- " + skw + "\n"
                 else:
-                    out += 2*tab+"- no sub keyword\n"
+                    out += 2 * tab + "- no sub keyword\n"
         self.__doc__.format(out)
 
     @property
@@ -281,14 +283,14 @@ class OGSfile(object):
         return len(self.mainkw)
 
     def reset(self):
-        '''
+        """
         Delete every content.
-        '''
+        """
         self.del_main_keyword(del_all=True)
         self._update_in()
 
     def update_block(self, index=None, main_key=None, **block):
-        '''
+        """
         Update a Block from the actual file.
 
         Parameters
@@ -306,7 +308,7 @@ class OGSfile(object):
             If a block should contain content directly connected to a main
             keyword, use this main keyword as input-keyword and the content as
             value: ``SUBKEY=content``
-        '''
+        """
         # get the block
         upd_block = self.get_block(index, as_dict=True)
         # change the main key if wanted
@@ -320,7 +322,7 @@ class OGSfile(object):
         self.add_block(index=index, **upd_block)
 
     def get_block(self, index=None, as_dict=True):
-        '''
+        """
         Get a Block from the actual file.
 
         Parameters
@@ -333,7 +335,7 @@ class OGSfile(object):
             can be used as key-word-arguments for `add_block`. If False,
             you get the main-key, a list of sub-keys and a list of content.
             Default: True
-        '''
+        """
         # set the main keyword index
         if index is None:
             index = len(self.mainkw) - 1
@@ -343,8 +345,12 @@ class OGSfile(object):
             sub_key = self.subkw[index]
             cont = self.cont[index]
         else:
-            print("ogs5py " + self.get_file_type() +
-                  ": get_block index out of bounds - "+str(index))
+            print(
+                "ogs5py "
+                + self.get_file_type()
+                + ": get_block index out of bounds - "
+                + str(index)
+            )
             if as_dict:
                 return {}
             return None, [], []
@@ -358,7 +364,7 @@ class OGSfile(object):
         return main_key, sub_key, cont
 
     def add_block(self, index=None, main_key=None, **block):
-        '''
+        """
         Add a new Block to the actual file.
 
         Keywords are the sub keywords of the actual file type:
@@ -387,7 +393,7 @@ class OGSfile(object):
             If a block should contain content directly connected to a main
             keyword, use this main keyword as input-keyword and the content as
             value: ``SUBKEY=content``
-        '''
+        """
         if main_key is None:
             # workaround for main keywords with directly connected content
             main_block = set(block) & set(self.MKEYS)
@@ -409,8 +415,13 @@ class OGSfile(object):
 
         # if KEY is unknown do nothing
         if main_key not in self.MKEYS:
-            print("ogs5py " + self.get_file_type() +
-                  ": add_block - unknown main key '"+main_key+"'")
+            print(
+                "ogs5py "
+                + self.get_file_type()
+                + ": add_block - unknown main key '"
+                + main_key
+                + "'"
+            )
             return
 
         # get the index of the main keyword
@@ -435,7 +446,7 @@ class OGSfile(object):
                 self.add_multi_content(block[skw], main_index=index)
 
     def add_main_keyword(self, key, main_index=None):
-        '''
+        """
         Add a new main keyword (#key) to the actual file
 
         Parameters
@@ -445,7 +456,7 @@ class OGSfile(object):
         main_index : int, optional
             position, where the new main keyword should be added between the
             existing ones. As default, it is placed at the end.
-        '''
+        """
         if main_index is None:
             main_index = len(self.mainkw)
         self.mainkw.insert(main_index, key)
@@ -453,7 +464,7 @@ class OGSfile(object):
         self.cont.insert(main_index, [])
 
     def add_sub_keyword(self, key, main_index=None, sub_index=None):
-        '''
+        """
         Add a new sub keyword ($key) to the actual file
 
         Parameters
@@ -472,22 +483,24 @@ class OGSfile(object):
         -----
         There needs to be at least one main keyword, otherwise the subkeyword
         is not added.
-        '''
+        """
         if main_index is None:
             main_index = len(self.mainkw) - 1
             if main_index == -1:
                 # if no main key index is given, a subkey can't be added
-                print("ogs5py " + self.get_file_type() +
-                      ": Before adding a subkey, add a main keyword")
+                print(
+                    "ogs5py "
+                    + self.get_file_type()
+                    + ": Before adding a subkey, add a main keyword"
+                )
                 return
         if sub_index is None:
             sub_index = len(self.subkw[main_index])
         self.subkw[main_index].insert(sub_index, key)
         self.cont[main_index].insert(sub_index, [])
 
-    def add_content(self, content, main_index=None,
-                    sub_index=None, line_index=None):
-        '''
+    def add_content(self, content, main_index=None, sub_index=None, line_index=None):
+        """
         Add single-line content to the actual file
 
         Parameters
@@ -514,14 +527,17 @@ class OGSfile(object):
 
         If no sub keyword is present, a blank one ("") will be added
         and the content is then directly connected to the actual main keyword.
-        '''
+        """
         # set the main keyword index
         if main_index is None:
             main_index = len(self.mainkw) - 1
             if main_index == -1:
                 # if no main key index is given, content can't be added
-                print("ogs5py " + self.get_file_type() +
-                      ": Before adding content, add a main keyword")
+                print(
+                    "ogs5py "
+                    + self.get_file_type()
+                    + ": Before adding content, add a main keyword"
+                )
                 return
         # set the sub keyword index
         if sub_index is None:
@@ -543,7 +559,7 @@ class OGSfile(object):
             self.cont[main_index][sub_index].insert(line_index, content)
 
     def add_multi_content(self, content, main_index=None, sub_index=None):
-        '''
+        """
         Add multiple content to the actual file
 
         Parameters
@@ -569,7 +585,7 @@ class OGSfile(object):
 
         If no sub keyword is present, a blank one ("") will be added
         and the content is then directly connected to the actual main keyword.
-        '''
+        """
         # try to convert the content
         content = format_content(content)
         # iterate over content
@@ -579,7 +595,7 @@ class OGSfile(object):
             self.add_content(con, main_index, sub_index)
 
     def del_main_keyword(self, main_index=None, del_all=False):
-        '''
+        """
         Delete a main keyword (#key) by its position
 
         Parameters
@@ -588,7 +604,7 @@ class OGSfile(object):
             position, which main keyword should be deleted. Default: -1
         del_all: bool, optional
             State, if all main keywords shall be deleted. Default: False
-        '''
+        """
         # set the main keyword index
         if main_index is None:
             main_index = len(self.mainkw) - 1
@@ -602,7 +618,7 @@ class OGSfile(object):
             del self.cont[main_index]
 
     def del_sub_keyword(self, main_index=-1, sub_index=-1, del_all=False):
-        '''
+        """
         Delete a sub keyword ($key) by its position
 
         Parameters
@@ -615,19 +631,19 @@ class OGSfile(object):
             position, which sub keyword should be deleted. Default: -1
         del_all: bool, optional
             State, if all sub keywords shall be deleted. Default: False
-        '''
+        """
         if -len(self.mainkw) <= main_index < len(self.mainkw):
             if del_all:
                 self.subkw[main_index] = []
                 self.cont[main_index] = []
-            elif (-len(self.subkw[main_index]) <= sub_index <
-                  len(self.subkw[main_index])):
+            elif (
+                -len(self.subkw[main_index]) <= sub_index < len(self.subkw[main_index])
+            ):
                 del self.subkw[main_index][sub_index]
                 del self.cont[main_index][sub_index]
 
-    def del_content(self, main_index=-1,
-                    sub_index=-1, line_index=-1, del_all=False):
-        '''
+    def del_content(self, main_index=-1, sub_index=-1, line_index=-1, del_all=False):
+        """
         Delete content by its position
 
         Parameters
@@ -644,18 +660,20 @@ class OGSfile(object):
             position of the content line, that should be deleted. Default: -1
         del_all: bool, optional
             State, if all content shall be deleted. Default: False
-        '''
+        """
         if -len(self.mainkw) <= main_index < len(self.mainkw):
-            if (-len(self.subkw[main_index]) <= sub_index <
-                    len(self.subkw[main_index])):
+            if -len(self.subkw[main_index]) <= sub_index < len(self.subkw[main_index]):
                 if del_all:
                     if self.subkw[main_index][sub_index]:
                         self.cont[main_index][sub_index] = []
                     else:
                         # if the content was directly related to the mainkw
                         self.del_sub_keyword(main_index, sub_index)
-                elif (-len(self.cont[main_index][sub_index]) <= line_index <
-                      len(self.cont[main_index][sub_index])):
+                elif (
+                    -len(self.cont[main_index][sub_index])
+                    <= line_index
+                    < len(self.cont[main_index][sub_index])
+                ):
                     del self.cont[main_index][sub_index][line_index]
                     # if no content is left and it was directly related to main
                     if not self.cont[main_index][sub_index]:
@@ -663,7 +681,7 @@ class OGSfile(object):
                             self.del_sub_keyword(main_index, sub_index)
 
     def add_copy_link(self, path, symlink=False):
-        '''
+        """
         Instead of writing a file, you can give a path to an existing file,
         that will be copied/linked to the target folder.
 
@@ -674,24 +692,28 @@ class OGSfile(object):
         symlink : bool, optional
             on UNIX systems it is possible to use a symbolic link to save
             time if the file is big. Default: False
-        '''
+        """
         if os.path.isfile(path):
             path = os.path.abspath(path)
             self.copy_file = "link" if symlink else "copy"
             self.copy_path = path
         else:
-            print("ogs5py " + self.get_file_type() +
-                  ": Given copy-path is not a readable file: "+path)
+            print(
+                "ogs5py "
+                + self.get_file_type()
+                + ": Given copy-path is not a readable file: "
+                + path
+            )
 
     def del_copy_link(self):
-        '''
+        """
         Remove a former given link to an external file.
-        '''
+        """
         self.copy_file = None
         self.copy_path = None
 
     def read_file(self, path, encoding=None, verbose=False):
-        '''
+        """
         Read an existing OGS input file
 
         Parameters
@@ -703,7 +725,7 @@ class OGSfile(object):
             standard is used. Default: ``None``
         verbose : bool, optional
             Print information of the reading process. Default: False
-        '''
+        """
         # in python3 open was replaced with io.open
         # so we can use encoding key word in python2
         from io import open
@@ -716,16 +738,24 @@ class OGSfile(object):
             # if no main keyword is found, the file is corrupted
             if not mkw:
                 if verbose:
-                    print("ogs5py " + self.get_file_type() +
-                          ": Given path is not a readable ogs-file: "+path)
+                    print(
+                        "ogs5py "
+                        + self.get_file_type()
+                        + ": Given path is not a readable ogs-file: "
+                        + path
+                    )
                 return
             subkw_found = False
             stop_found = mkw == "STOP"
             # if the STOP keyword is found first, the file is corrupted
             if stop_found:
                 if verbose:
-                    print("ogs5py " + self.get_file_type() +
-                          ": ogs-file is empty: "+path)
+                    print(
+                        "ogs5py "
+                        + self.get_file_type()
+                        + ": ogs-file is empty: "
+                        + path
+                    )
                 return
             # add the found keyword
             self.add_main_keyword(mkw)
@@ -759,12 +789,16 @@ class OGSfile(object):
         # check if stop was found
         if not stop_found:
             if verbose:
-                print("ogs5py " + self.get_file_type() +
-                      ": Given ogs-file doesn't have a #STOP: "+path)
+                print(
+                    "ogs5py "
+                    + self.get_file_type()
+                    + ": Given ogs-file doesn't have a #STOP: "
+                    + path
+                )
             self.reset()
 
     def save(self, path, **kwargs):
-        '''
+        """
         Save the actual OGS input file in the given path.
 
         Parameters
@@ -773,7 +807,7 @@ class OGSfile(object):
             path to where to file should be saved
         update : bool, optional
             state if the content should be updated before saving. Default: True
-        '''
+        """
         if "update" in kwargs:
             update = bool(kwargs["update"])
         else:
@@ -782,8 +816,7 @@ class OGSfile(object):
         if update:
             self._update_out()
         # bug in OGS5 ... mpd files need Windows line-ending
-        if ((not self.is_empty and
-             self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED")):
+        if not self.is_empty and self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED":
             lend = "\r\n"
         else:
             lend = "\n"
@@ -797,38 +830,40 @@ class OGSfile(object):
                 print(self.top_com, end=lend, file=fout)
             # iterate over the main keywords
             for i, mkw in enumerate(self.mainkw):
-                print("#"+mkw, end=lend, file=fout)
+                print("#" + mkw, end=lend, file=fout)
                 # iterate over the subkeywords
                 for j, skw in enumerate(self.subkw[i]):
                     # check if skw is not "" (as in the exception-case)
                     if skw:
-                        print(SUB_IND+"$"+skw, end=lend, file=fout)
+                        print(SUB_IND + "$" + skw, end=lend, file=fout)
                     # iterate over the content
                     for con in self.cont[i][j]:
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation
-                        if ((mkw == "MEDIUM_PROPERTIES_DISTRIBUTED" and
-                             skw == "DATA")):
-                            print(*con,
-                                  # sep="\t", end="\n", file=fout)
-                                  sep=" ", end=lend, file=fout)
+                        if mkw == "MEDIUM_PROPERTIES_DISTRIBUTED" and skw == "DATA":
+                            print(
+                                *con,
+                                # sep="\t", end="\n", file=fout)
+                                sep=" ",
+                                end=lend,
+                                file=fout
+                            )
                         else:
-                            print(CON_IND, *con,
-                                  sep=" ", end=lend, file=fout)
+                            print(CON_IND, *con, sep=" ", end=lend, file=fout)
             # write the final STOP keyword
             print("#STOP", end="", file=fout)
 
     def write_file(self):
-        '''
+        """
         Write the actual OGS input file to the given folder.
         Its path is given by "task_root+task_id+file_ext".
-        '''
+        """
         # update the content
         self._update_out()
         # create the file path
         if not os.path.exists(self.task_root):
             os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
+        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
             # if no content is present skip this file
@@ -841,15 +876,15 @@ class OGSfile(object):
             os.symlink(self.copy_path, f_path)
 
     def _update_in(self):
-        '''
+        """
         An update routine to set the file data in the right format after input.
-        '''
+        """
         pass
 
     def _update_out(self):
-        '''
+        """
         An update routine to set the file data in the right format for output.
-        '''
+        """
         pass
 
     def __repr__(self):
@@ -862,17 +897,17 @@ class OGSfile(object):
         """
         out = ""
         for i, mkw in enumerate(self.mainkw):
-            out += "#"+mkw+"\n"
+            out += "#" + mkw + "\n"
             # iterate over the subkeywords
             for j, skw in enumerate(self.subkw[i]):
                 # check if skw is not "" (as in the exception-case)
                 if skw:
-                    out += SUB_IND+"$"+skw+"\n"
+                    out += SUB_IND + "$" + skw + "\n"
                 # iterate over the content
                 for con in self.cont[i][j][:3]:
-                    out += CON_IND+" ".join(con)+"\n"
+                    out += CON_IND + " ".join(con) + "\n"
                 if len(self.cont[i][j]) > 3:
-                    out += CON_IND+" ...\n"
+                    out += CON_IND + " ...\n"
         if self.mainkw:
             out += "#STOP"
         return out
@@ -889,14 +924,14 @@ class OGSfile(object):
 
 
 def search_mkw(fin):
-    '''
+    """
     Search for the first main keyword in a given file-stream.
 
     Parameters
     ----------
     fin : stream
         given opened file
-    '''
+    """
     mkw = ""
     for line in fin:
         # remove comments
@@ -910,7 +945,7 @@ def search_mkw(fin):
 
 
 def uncomment(line):
-    '''
+    """
     Remove OGS comments from a given line of an OGS file.
     Comments are indicated by ";". The line is then splitted by whitespaces.
 
@@ -918,86 +953,86 @@ def uncomment(line):
     ----------
     line : str
         given line
-    '''
+    """
     return line.split(";")[0].split()
 
 
 def is_key(sline):
-    '''
+    """
     Check if the given splitted line is an OGS key
 
     Parameters
     ----------
     sline : list of str
         given splitted line
-    '''
+    """
     return sline[0][0] in ["$", "#"]
 
 
 def is_mkey(sline):
-    '''
+    """
     Check if the given splitted line is a main key
 
     Parameters
     ----------
     sline : list of str
         given splitted line
-    '''
+    """
     return sline[0][0] == "#"
 
 
 def is_skey(sline):
-    '''
+    """
     Check if the given splitted line is a sub key
 
     Parameters
     ----------
     sline : list of str
         given splitted line
-    '''
+    """
     return sline[0][0] == "$"
 
 
 def get_key(sline):
-    '''
+    """
     Get the key of a splitted line if there is any. Else return ""
 
     Parameters
     ----------
     sline : list of str
         given splitted line
-    '''
+    """
     return sline[0][1:] if is_key(sline) else ""
 
 
 def format_dict(dict_in):
-    '''
+    """
     format the dictionary to use upper-case keys
 
     Parameters
     ----------
     dict_in : dict
         input dictionary
-    '''
+    """
     dict_out = {}
     for key in dict_in:
         new_key = str(key).upper()
         if new_key != key and new_key in dict_in:
-            print("Your given OGS-keywords are not unique: "+new_key)
+            print("Your given OGS-keywords are not unique: " + new_key)
             print("  --> DATA WILL BE LOST")
         dict_out[new_key] = dict_in[key]
     return dict_out
 
 
 def format_content(content):
-    '''
+    """
     format the content to be added to a 2D linewise array
 
     Parameters
     ----------
     content : anything
         Single object, or list of objects, or list of lists of objects.
-    '''
+    """
     # strings could be detected as iterable, so check this first
     if isinstance(content, STRTYPE):
         return [[content]]

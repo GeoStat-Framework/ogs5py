@@ -48,37 +48,41 @@ class BC(OGSfile):
 
     MKEYS = ["BOUNDARY_CONDITION"]
     # sorted
-    SKEYS = [[
-        "PCS_TYPE",
-        "PRIMARY_VARIABLE",
-        "COMP_NAME",
-        "GEO_TYPE",
-        "DIS_TYPE",
-        "TIM_TYPE",
-        "FCT_TYPE",
-        "MSH_TYPE",
-        "DIS_TYPE_CONDITION",
-        "EPSILON",
-        "TIME_CONTROLLED_ACTIVE",
-        "EXCAVATION",
-        "NO_DISP_INCREMENT",
-        "COPY_VALUE",
-        "PRESSURE_AS_HEAD",
-        "CONSTRAINED",
-    ]]
+    SKEYS = [
+        [
+            "PCS_TYPE",
+            "PRIMARY_VARIABLE",
+            "COMP_NAME",
+            "GEO_TYPE",
+            "DIS_TYPE",
+            "TIM_TYPE",
+            "FCT_TYPE",
+            "MSH_TYPE",
+            "DIS_TYPE_CONDITION",
+            "EPSILON",
+            "TIME_CONTROLLED_ACTIVE",
+            "EXCAVATION",
+            "NO_DISP_INCREMENT",
+            "COPY_VALUE",
+            "PRESSURE_AS_HEAD",
+            "CONSTRAINED",
+        ]
+    ]
 
-    STD = {"PCS_TYPE": "GROUNDWATER_FLOW",
-           "PRIMARY_VARIABLE": "HEAD",
-           "DIS_TYPE": ["CONSTANT", 0.0],
-           "GEO_TYPE": ["POLYLINE", "BC"]}
+    STD = {
+        "PCS_TYPE": "GROUNDWATER_FLOW",
+        "PRIMARY_VARIABLE": "HEAD",
+        "DIS_TYPE": ["CONSTANT", 0.0],
+        "GEO_TYPE": ["POLYLINE", "BC"],
+    }
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(BC, self).__init__(**OGS_Config)
-        self.file_ext = '.bc'
+        self.file_ext = ".bc"

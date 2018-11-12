@@ -25,7 +25,7 @@ from ogs5py.fileclasses.base import uncomment
 
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):
-    '''
+    """
     load a given OGS5 gli file
 
     Parameters
@@ -63,7 +63,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
     -----
     The $AREA keyword within the Nodes definition is NOT supported
     and will violate the read data if present.
-    '''
+    """
     # in python3 open was replaced with io.open
     from io import open
 
@@ -107,11 +107,11 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                     ids.append(int(ln_splt[0]))
                     pnts = np.vstack((pnts, pnt))
                     if "$NAME" in ln_splt:
-                        names.append(ln_splt[ln_splt.index("$NAME")+1])
+                        names.append(ln_splt[ln_splt.index("$NAME") + 1])
                     else:
                         names.append("")
                     if "$MD" in ln_splt:
-                        mds.append(float(ln_splt[ln_splt.index("$MD")+1]))
+                        mds.append(float(ln_splt[ln_splt.index("$MD") + 1]))
                     else:
                         # use -inf as standard md, if none is given
                         mds.append(-np.inf)
@@ -120,10 +120,10 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 ids = np.array(ids, dtype=int)
                 if len(np.unique(ids)) != len(ids):
                     raise ValueError(
-                        filepath +
-                        ": GLI: point ids are not unique: " + str(ids))
+                        filepath + ": GLI: point ids are not unique: " + str(ids)
+                    )
                 # hack to shift the ids acordingly
-                id_shift = np.zeros(np.max(ids)+1, dtype=int)
+                id_shift = np.zeros(np.max(ids) + 1, dtype=int)
                 id_shift[ids] = np.arange(ids.shape[0])
                 # save points
                 out["points"] = pnts
@@ -149,8 +149,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             while line and line.split()[0].isdigit():
                                 ply["POINTS"].append(int(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST+["$"+k for
-                                                      k in PLY_KEY_LIST]):
+                            if line in (GLI_KEY_LIST + ["$" + k for k in PLY_KEY_LIST]):
                                 need_new_line = False
                             tmp_pnt = np.array(ply["POINTS"], dtype=int)
                             # hack to shift point_ids
@@ -179,13 +178,12 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                         if key == "POLYLINES":
                             srf["POLYLINES"] = []
                             line = gli.readline().strip()
-                            while (line and line not in
-                                   (GLI_KEY_LIST+["$"+k for
-                                                  k in SRF_KEY_LIST])):
+                            while line and line not in (
+                                GLI_KEY_LIST + ["$" + k for k in SRF_KEY_LIST]
+                            ):
                                 srf["POLYLINES"].append(str(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST+["$"+k for
-                                                      k in SRF_KEY_LIST]):
+                            if line in (GLI_KEY_LIST + ["$" + k for k in SRF_KEY_LIST]):
                                 need_new_line = False
                         else:
                             srf_typ = SRF_TYPES[SRF_KEY_LIST.index(key)]
@@ -210,13 +208,12 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                         if key == "SURFACES":
                             vol["SURFACES"] = []
                             line = gli.readline().strip()
-                            while (line and line not in
-                                   (GLI_KEY_LIST+["$"+k for
-                                                  k in VOL_KEY_LIST])):
+                            while line and line not in (
+                                GLI_KEY_LIST + ["$" + k for k in VOL_KEY_LIST]
+                            ):
                                 vol["SURFACES"].append(str(line.split()[0]))
                                 line = gli.readline().strip()
-                            if line in (GLI_KEY_LIST+["$"+k for
-                                                      k in VOL_KEY_LIST]):
+                            if line in (GLI_KEY_LIST + ["$" + k for k in VOL_KEY_LIST]):
                                 need_new_line = False
                         else:
                             vol_typ = VOL_TYPES[VOL_KEY_LIST.index(key)]
@@ -235,15 +232,15 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
 
             # handle unknown infos
             else:
-                raise ValueError(filepath +
-                                 ": GLI: file contains unknown infos: " +
-                                 line.strip())
+                raise ValueError(
+                    filepath + ": GLI: file contains unknown infos: " + line.strip()
+                )
 
     return out
 
 
 def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
-    '''
+    """
     save a given OGS5 mesh file
 
     Parameters
@@ -286,7 +283,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
         Comment to be added as header to the file, Default: None
     verbose : bool, optional
         Print information of the writing process. Default: True
-    '''
+    """
     with open(filepath, "w") as gli_f:
         if top_com:
             if verbose:
@@ -299,7 +296,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
         for pnt_i, pnt in enumerate(gli["points"]):
             # generate NAME
             if gli["point_names"][pnt_i]:
-                name = " $NAME "+str(gli["point_names"][pnt_i])
+                name = " $NAME " + str(gli["point_names"][pnt_i])
             else:
                 name = ""
             # generate MD
@@ -308,7 +305,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
             else:
                 pnt_md = " $MD {}".format(gli["point_md"][pnt_i])
             # generate string for actual point
-            tupl = (pnt_i,)+tuple(pnt)+(name, pnt_md)
+            tupl = (pnt_i,) + tuple(pnt) + (name, pnt_md)
             print("{} {} {} {}{}{}".format(*tupl), file=gli_f)
 
         if verbose:
@@ -319,7 +316,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
             # generate polyline
             for key in PLY_KEY_LIST:
                 if key != "POINTS" and ply[key] is not None:
-                    print(" $"+key, file=gli_f)
+                    print(" $" + key, file=gli_f)
                     print("  {}".format(ply[key]), file=gli_f)
                 elif ply[key] is not None:
                     print(" $POINTS", file=gli_f)
@@ -334,7 +331,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
             # generate surface
             for key in SRF_KEY_LIST:
                 if key != "POLYLINES" and srf[key] is not None:
-                    print(" $"+key, file=gli_f)
+                    print(" $" + key, file=gli_f)
                     print("  {}".format(srf[key]), file=gli_f)
                 elif srf[key] is not None:
                     print(" $POLYLINES", file=gli_f)
@@ -349,7 +346,7 @@ def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
             # generate volume
             for key in VOL_KEY_LIST:
                 if key != "SURFACES" and vol[key] is not None:
-                    print(" $"+key, file=gli_f)
+                    print(" $" + key, file=gli_f)
                     print("  {}".format(vol[key]), file=gli_f)
                 elif vol[key] is not None:
                     print(" $SURFACES", file=gli_f)

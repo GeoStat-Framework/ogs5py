@@ -7,17 +7,11 @@ tools for the ogs5py-mesh package
 """
 from __future__ import division, print_function, absolute_import
 import numpy as np
-from ogs5py.tools._types import (
-    STRTYPE,
-    GLI_KEYS,
-    PLY_KEYS,
-    SRF_KEYS,
-    VOL_KEYS,
-)
+from ogs5py.tools._types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
 
 
 def has_whitespaces(string):
-    '''
+    """
     Check if a given string contains whitespaces.
 
     Parameters
@@ -30,9 +24,9 @@ def has_whitespaces(string):
     has_ws : bool
         True if whitespaces apear.
         False if no whitespaces or string ist not of type str.
-    '''
+    """
     if not isinstance(string, STRTYPE):
-        print(str(string)+" ("+str(type(string))+") is not a string!")
+        print(str(string) + " (" + str(type(string)) + ") is not a string!")
         return False
     has_ws = False
     for char in string:
@@ -46,7 +40,7 @@ def has_whitespaces(string):
 
 
 def check_polyline(ply, point_cnt, verbose=True):
-    '''
+    """
     Check if a given ply dictonary is valid in the sence, that the
     contained data is consistent.
 
@@ -71,7 +65,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     -------
     result : bool
         Validity of the given ply dict.
-    '''
+    """
     if verbose:
         print("  checking polyline for validity")
         print("  ------------------------------")
@@ -88,18 +82,20 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply keys are not valid!")
-            print("  needs: "+" ".join(PLY_KEYS))
-            print("  found: "+" ".join(map(str, in_ply_keys)))
-            print("  missing: "+" ".join(map(str, PLY_KEYS-in_ply_keys)))
-            print("  corrupted: "+" ".join(map(str, in_ply_keys-PLY_KEYS)))
+            print("  needs: " + " ".join(PLY_KEYS))
+            print("  found: " + " ".join(map(str, in_ply_keys)))
+            print("  missing: " + " ".join(map(str, PLY_KEYS - in_ply_keys)))
+            print("  corrupted: " + " ".join(map(str, in_ply_keys - PLY_KEYS)))
         return False
     # check NAME
-    if isinstance(ply["NAME"], STRTYPE) and \
-       not has_whitespaces(ply["NAME"]) and \
-       len(ply["NAME"]) > 0:
+    if (
+        isinstance(ply["NAME"], STRTYPE)
+        and not has_whitespaces(ply["NAME"])
+        and len(ply["NAME"]) > 0
+    ):
         if verbose:
             print("  ply['NAME'] valid")
-            print("  NAME: '"+ply["NAME"]+"'")
+            print("  NAME: '" + ply["NAME"] + "'")
     else:
         if verbose:
             print("  ply['NAME'] not valid")
@@ -115,22 +111,25 @@ def check_polyline(ply, point_cnt, verbose=True):
     # check POINTS
     pnt_avail = True
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
-    if (ply["POINTS"] is None or
-            (isinstance(ply['POINTS'], np.ndarray) and
-             np.issubdtype(ply['POINTS'].dtype, np.integer) and
-             ply['POINTS'].ndim == 1 and
-             ply['POINTS'].shape[0] >= 1 and
-             np.min(ply['POINTS']) >= 0 and
-             np.max(ply['POINTS']) < point_cnt)):
+    if ply["POINTS"] is None or (
+        isinstance(ply["POINTS"], np.ndarray)
+        and np.issubdtype(ply["POINTS"].dtype, np.integer)
+        and ply["POINTS"].ndim == 1
+        and ply["POINTS"].shape[0] >= 1
+        and np.min(ply["POINTS"]) >= 0
+        and np.max(ply["POINTS"]) < point_cnt
+    ):
         if ply["POINTS"] is None:
             pnt_avail = False
         if verbose:
             print("  ply['POINTS'] valid")
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
-    elif (isinstance(ply['POINTS'], np.ndarray) and
-          np.issubdtype(ply['POINTS'].dtype, np.integer) and
-          ply['POINTS'].ndim == 1 and
-          ply['POINTS'].shape[0] == 0):
+    elif (
+        isinstance(ply["POINTS"], np.ndarray)
+        and np.issubdtype(ply["POINTS"].dtype, np.integer)
+        and ply["POINTS"].ndim == 1
+        and ply["POINTS"].shape[0] == 0
+    ):
         pnt_avail = False
         if verbose:
             print("  ply['POINTS'] valid")
@@ -139,8 +138,9 @@ def check_polyline(ply, point_cnt, verbose=True):
             print("  ply['POINTS'] not valid")
             return False
     # check EPSILON
-    if ply["EPSILON"] is None or\
-       (isinstance(ply["EPSILON"], float) and ply["EPSILON"] >= 0.0):
+    if ply["EPSILON"] is None or (
+        isinstance(ply["EPSILON"], float) and ply["EPSILON"] >= 0.0
+    ):
         if verbose:
             print("  ply['EPSILON'] valid")
     else:
@@ -164,8 +164,7 @@ def check_polyline(ply, point_cnt, verbose=True):
             print("  ply['MAT_GROUP'] not valid")
             return False
     # check POINT_VECTOR
-    if ply["POINT_VECTOR"] is None or\
-       isinstance(ply["POINT_VECTOR"], STRTYPE):
+    if ply["POINT_VECTOR"] is None or isinstance(ply["POINT_VECTOR"], STRTYPE):
         if verbose:
             print("  ply['POINT_VECTOR'] valid")
     else:
@@ -186,7 +185,7 @@ def check_polyline(ply, point_cnt, verbose=True):
 
 
 def check_surface(srf, ply_names, verbose=True):
-    '''
+    """
     Check if a given surface dictonary is valid in the sence, that the
     contained data is consistent.
     Checks for correct polyline, surface and volume definitions
@@ -213,7 +212,7 @@ def check_surface(srf, ply_names, verbose=True):
     -------
     result : bool
         Validity of the given surface dict.
-    '''
+    """
     if verbose:
         print("  checking surface for validity")
         print("  -----------------------------")
@@ -230,18 +229,20 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf keys are not valid!")
-            print("  needs: "+" ".join(SRF_KEYS))
-            print("  found: "+" ".join(map(str, in_srf_keys)))
-            print("  missing: "+" ".join(map(str, SRF_KEYS-in_srf_keys)))
-            print("  corrupted: "+" ".join(map(str, in_srf_keys-SRF_KEYS)))
+            print("  needs: " + " ".join(SRF_KEYS))
+            print("  found: " + " ".join(map(str, in_srf_keys)))
+            print("  missing: " + " ".join(map(str, SRF_KEYS - in_srf_keys)))
+            print("  corrupted: " + " ".join(map(str, in_srf_keys - SRF_KEYS)))
         return False
     # check NAME
-    if isinstance(srf["NAME"], STRTYPE) and \
-       not has_whitespaces(srf["NAME"]) and \
-       len(srf["NAME"]) > 0:
+    if (
+        isinstance(srf["NAME"], STRTYPE)
+        and not has_whitespaces(srf["NAME"])
+        and len(srf["NAME"]) > 0
+    ):
         if verbose:
             print("  srf['NAME'] valid")
-            print("  NAME: '"+srf["NAME"]+"'")
+            print("  NAME: '" + srf["NAME"] + "'")
     else:
         if verbose:
             print("  srf['NAME'] not valid")
@@ -255,9 +256,10 @@ def check_surface(srf, ply_names, verbose=True):
             print("  srf['ID'] not valid")
             return False
     # check POLYLINES
-    if (srf['POLYLINES'] is None or
-            (isinstance(srf['POLYLINES'], list) and
-             all(ply in ply_names for ply in srf['POLYLINES']))):
+    if srf["POLYLINES"] is None or (
+        isinstance(srf["POLYLINES"], list)
+        and all(ply in ply_names for ply in srf["POLYLINES"])
+    ):
         if verbose:
             print("  srf['POLYLINES'] valid")
     else:
@@ -265,8 +267,9 @@ def check_surface(srf, ply_names, verbose=True):
             print("  srf['POLYLINES'] not valid")
             return False
     # check EPSILON
-    if srf["EPSILON"] is None or\
-       (isinstance(srf["EPSILON"], float) and srf["EPSILON"] >= 0.0):
+    if srf["EPSILON"] is None or (
+        isinstance(srf["EPSILON"], float) and srf["EPSILON"] >= 0.0
+    ):
         if verbose:
             print("  srf['EPSILON'] valid")
     else:
@@ -298,7 +301,7 @@ def check_surface(srf, ply_names, verbose=True):
             print("  srf['TIN'] not valid")
             return False
     # check if at least POINT_VECTOR or POINTS are given
-    if bool(srf["TIN"] is None) == (not bool(srf['POLYLINES'])):
+    if bool(srf["TIN"] is None) == (not bool(srf["POLYLINES"])):
         if verbose:
             print("  Either 'TIN' or 'POLYLINES' need to be present!")
             return False
@@ -311,7 +314,7 @@ def check_surface(srf, ply_names, verbose=True):
 
 
 def check_volume(vol, srf_names, verbose=True):
-    '''
+    """
     Check if a given volume dictonary is valid in the sence, that the
     contained data is consistent.
 
@@ -334,7 +337,7 @@ def check_volume(vol, srf_names, verbose=True):
     -------
     result : bool
         Validity of the given surface dict.
-    '''
+    """
     if verbose:
         print("  checking volume for validity")
         print("  ----------------------------")
@@ -351,26 +354,30 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol keys are not valid!")
-            print("  needs: "+" ".join(VOL_KEYS))
-            print("  found: "+" ".join(map(str, in_vol_keys)))
-            print("  missing: "+" ".join(map(str, VOL_KEYS-in_vol_keys)))
-            print("  corrupted: "+" ".join(map(str, in_vol_keys-VOL_KEYS)))
+            print("  needs: " + " ".join(VOL_KEYS))
+            print("  found: " + " ".join(map(str, in_vol_keys)))
+            print("  missing: " + " ".join(map(str, VOL_KEYS - in_vol_keys)))
+            print("  corrupted: " + " ".join(map(str, in_vol_keys - VOL_KEYS)))
         return False
     # check NAME
-    if isinstance(vol["NAME"], STRTYPE) and \
-       not has_whitespaces(vol["NAME"]) and \
-       len(vol["NAME"]) > 0:
+    if (
+        isinstance(vol["NAME"], STRTYPE)
+        and not has_whitespaces(vol["NAME"])
+        and len(vol["NAME"]) > 0
+    ):
         if verbose:
             print("  vol['NAME'] valid")
-            print("  NAME: '"+vol["NAME"]+"'")
+            print("  NAME: '" + vol["NAME"] + "'")
     else:
         if verbose:
             print("  vol['NAME'] not valid")
             return False
     # check SURFACES
-    if isinstance(vol['SURFACES'], list) and \
-       len(vol['SURFACES']) > 0 and \
-       all(srf in srf_names for srf in vol['SURFACES']):
+    if (
+        isinstance(vol["SURFACES"], list)
+        and len(vol["SURFACES"]) > 0
+        and all(srf in srf_names for srf in vol["SURFACES"])
+    ):
         if verbose:
             print("  vol['SURFACES'] valid")
     else:
@@ -408,11 +415,12 @@ def check_volume(vol, srf_names, verbose=True):
         print("")
     return True
 
+
 ###############################################################################
 
 
 def check_gli_dict(gli, verbose=True):
-    '''
+    """
     Check if a given gli dictonary is valid in the sence, that the
     contained data is consistent.
     Checks for correct polyline, surface and volume definitions.
@@ -459,7 +467,7 @@ def check_gli_dict(gli, verbose=True):
     -------
     result : bool
         Validity of the given gli dict.
-    '''
+    """
     if verbose:
         print("")
         print("checking gli for validity")
@@ -478,19 +486,21 @@ def check_gli_dict(gli, verbose=True):
     else:
         if verbose:
             print("gli keys are not valid!")
-            print("needs: "+" ".join(GLI_KEYS))
-            print("found: "+" ".join(map(str, in_gli_keys)))
-            print("missing: "+" ".join(map(str, GLI_KEYS-in_gli_keys)))
-            print("corrupted: "+" ".join(map(str, in_gli_keys-GLI_KEYS)))
+            print("needs: " + " ".join(GLI_KEYS))
+            print("found: " + " ".join(map(str, in_gli_keys)))
+            print("missing: " + " ".join(map(str, GLI_KEYS - in_gli_keys)))
+            print("corrupted: " + " ".join(map(str, in_gli_keys - GLI_KEYS)))
         return False
     # check points
     if gli["points"] is None:
         point_cnt = 0
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
-    elif (isinstance(gli["points"], np.ndarray) and
-          np.issubdtype(gli["points"].dtype, np.floating) and
-          gli["points"].ndim == 2 and
-          gli["points"].shape[1] == 3):
+    elif (
+        isinstance(gli["points"], np.ndarray)
+        and np.issubdtype(gli["points"].dtype, np.floating)
+        and gli["points"].ndim == 2
+        and gli["points"].shape[1] == 3
+    ):
         point_cnt = gli["points"].shape[0]
         if verbose:
             print("gli['points'] valid")
@@ -510,10 +520,12 @@ def check_gli_dict(gli, verbose=True):
                 print("gli['point_names'] valid")
                 print("")
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
-    elif (isinstance(gli["point_names"], np.ndarray) and
-          np.issubdtype(gli["point_names"].dtype, np.object0) and
-          gli["point_names"].ndim == 1 and
-          gli["point_names"].shape[0] == point_cnt):
+    elif (
+        isinstance(gli["point_names"], np.ndarray)
+        and np.issubdtype(gli["point_names"].dtype, np.object0)
+        and gli["point_names"].ndim == 1
+        and gli["point_names"].shape[0] == point_cnt
+    ):
         names_valid = True
         for name in gli["point_names"]:
             names_valid &= isinstance(name, STRTYPE)
@@ -541,13 +553,15 @@ def check_gli_dict(gli, verbose=True):
                 print("gli['point_md'] valid")
                 print("")
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
-    elif (isinstance(gli["point_md"], np.ndarray) and
-          np.issubdtype(gli["point_md"].dtype, np.floating) and
-          gli["point_md"].ndim == 1 and
-          gli["point_md"].shape[0] == point_cnt):
+    elif (
+        isinstance(gli["point_md"], np.ndarray)
+        and np.issubdtype(gli["point_md"].dtype, np.floating)
+        and gli["point_md"].ndim == 1
+        and gli["point_md"].shape[0] == point_cnt
+    ):
         md_valid = True
         for pnt_md in gli["point_md"]:
-            md_valid &= (pnt_md >= 0.0 or pnt_md == -np.inf)
+            md_valid &= pnt_md >= 0.0 or pnt_md == -np.inf
         if md_valid:
             if verbose:
                 print("gli['point_md'] valid")

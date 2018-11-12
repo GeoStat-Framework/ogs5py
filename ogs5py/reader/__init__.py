@@ -1,5 +1,4 @@
-
-'''
+"""
 ogs5py-read Python Package
 
 
@@ -14,13 +13,9 @@ Copyright 2017 Sebastian Mueller
 History
  -------
 Written,  SM, 2017
-'''
+"""
 from __future__ import absolute_import
 
-from ogs5py.reader.reader import (readvtk, readpvd,
-                                  readtec_point, readtec_polyline)
+from ogs5py.reader.reader import readvtk, readpvd, readtec_point, readtec_polyline
 
-__all__ = ["readvtk",
-           "readpvd",
-           "readtec_point",
-           "readtec_polyline"]
+__all__ = ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]

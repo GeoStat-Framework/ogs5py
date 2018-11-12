@@ -9,25 +9,15 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 import meshio as mio
-from ogs5py.tools._types import (
-    ELEM_NAMES,
-    NODE_NO,
-    MESHIO_NAMES,
-    ELEM_DIM,
-    EMPTY_MSH,
-)
-from ogs5py.tools.tools import (
-    unique_rows,
-    replace,
-    rotation_matrix,
-)
+from ogs5py.tools._types import ELEM_NAMES, NODE_NO, MESHIO_NAMES, ELEM_DIM, EMPTY_MSH
+from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
 from ogs5py.fileclasses.base import uncomment
 
 
-def load_ogs5msh(filepath, verbose=True,
-                 ignore_unknown=False, max_node_no=8,
-                 encoding=None):
-    '''
+def load_ogs5msh(
+    filepath, verbose=True, ignore_unknown=False, max_node_no=8, encoding=None
+):
+    """
     load a given OGS5 mesh file
 
     Parameters
@@ -71,8 +61,9 @@ def load_ogs5msh(filepath, verbose=True,
     -----
     The $AREA keyword within the Nodes definition is NOT supported
     and will violate the read data if present.
-    '''
+    """
     import pandas as pd
+
     # in python3 open was replaced with io.open
     from io import open
 
@@ -92,7 +83,7 @@ def load_ogs5msh(filepath, verbose=True,
             if not line:
                 # raise EOFError(filepath+": reached end of file.. unexpected")
                 if verbose:
-                    print(filepath+": reached end of file... unexpected")
+                    print(filepath + ": reached end of file... unexpected")
                 break
 
             # skip blank lines
@@ -106,7 +97,7 @@ def load_ogs5msh(filepath, verbose=True,
                 # creat new empty output-dictionary
                 out.append(dcp(EMPTY_MSH))
                 if verbose:
-                    print("found 'FEM_MSH' number: "+str(no_msh))
+                    print("found 'FEM_MSH' number: " + str(no_msh))
 
             elif uncomment(line)[0] == "$AXISYMMETRY":
                 if no_msh == -1:
@@ -167,10 +158,9 @@ def load_ogs5msh(filepath, verbose=True,
                     print("read 'NODES'")
                     print(no_nodes)
                 # read points with numpys fromfile (which is quite fast)
-                out[no_msh]["nodes"] = \
-                    np.fromfile(msh,
-                                count=no_nodes*4,
-                                sep=" ").reshape((no_nodes, 4))[:, 1:]
+                out[no_msh]["nodes"] = np.fromfile(
+                    msh, count=no_nodes * 4, sep=" "
+                ).reshape((no_nodes, 4))[:, 1:]
 
             elif uncomment(line)[0] == "$ELEMENTS":
                 if no_msh == -1:
@@ -186,10 +176,10 @@ def load_ogs5msh(filepath, verbose=True,
                 # names=range(max_node_no) to assure rectangular shape by cols
                 tmp = pd.read_csv(
                     msh,
-                    engine='c',
+                    engine="c",
                     delim_whitespace=True,
                     nrows=no_elements,
-                    names=range(max_node_no+4),  # +4 for the "-1" entry
+                    names=range(max_node_no + 4),  # +4 for the "-1" entry
                 ).values
                 # check if all given element-typs are OGS known
                 pos_ele = 2  # can be shift to right, if "-1" occures
@@ -199,7 +189,7 @@ def load_ogs5msh(filepath, verbose=True,
                 check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
                 if not np.all(check_elem):
                     if verbose or True:
-                        print(filepath+": unsupported cell-types found:")
+                        print(filepath + ": unsupported cell-types found:")
                         print(np.unique(tmp[np.invert(check_elem), pos_ele]))
                     if not ignore_unknown:
                         raise ValueError("file contains unknown element types")
@@ -213,13 +203,12 @@ def load_ogs5msh(filepath, verbose=True,
                 out[no_msh]["element_id"] = {}
                 # iterate over all valid given element-types
                 for elem in np.unique(tmp[check_elem, pos_ele]):
-                    pos = (tmp[:, pos_ele] == elem)
-                    out[no_msh]["elements"][elem] = \
-                        tmp[pos, pos_ele+1:pos_ele+1+NODE_NO[elem]].astype(int)
-                    out[no_msh]["material_id"][elem] = \
-                        tmp[pos, 1].astype(int)
-                    out[no_msh]["element_id"][elem] = \
-                        tmp[pos, 0].astype(int)
+                    pos = tmp[:, pos_ele] == elem
+                    out[no_msh]["elements"][elem] = tmp[
+                        pos, pos_ele + 1 : pos_ele + 1 + NODE_NO[elem]
+                    ].astype(int)
+                    out[no_msh]["material_id"][elem] = tmp[pos, 1].astype(int)
+                    out[no_msh]["element_id"][elem] = tmp[pos, 0].astype(int)
                 # rewind file
                 msh.seek(filepos)
                 # skip the elements-definition
@@ -239,10 +228,9 @@ def load_ogs5msh(filepath, verbose=True,
             else:
                 if ignore_unknown:
                     if verbose:
-                        print("file contains unknown infos: "+line.strip())
+                        print("file contains unknown infos: " + line.strip())
                 else:
-                    raise ValueError("file contains unknown infos: " +
-                                     line.strip())
+                    raise ValueError("file contains unknown infos: " + line.strip())
 
     # if a single mesh is found, return it directly
     if len(out) == 1:
@@ -250,14 +238,14 @@ def load_ogs5msh(filepath, verbose=True,
     # if no mesh was found, return an empty one
     elif len(out) == 0:
         if verbose:
-            print(filepath+": no 'FEM_MSH' found.. try to read old format")
+            print(filepath + ": no 'FEM_MSH' found.. try to read old format")
         out = load_ogs5msh_old(filepath, verbose, max_node_no, encoding)
 
     return out
 
 
 def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
-    '''
+    """
     load a given old-style OGS5 mesh file
 
     Parameters
@@ -289,8 +277,9 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
                 contains material ids for each element sorted by element types
             element_id : dictionary
                 contains element ids for each element sorted by element types
-    '''
+    """
     import pandas as pd
+
     # in python3 open was replaced with io.open
     from io import open
 
@@ -314,11 +303,9 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
                 print("read 'NODES'")
                 print(no_nodes)
             # read points with numpys fromfile (which is quite fast)
-            out["nodes"] = np.fromfile(
-                msh,
-                count=no_nodes*4,
-                sep=" ",
-            ).reshape((no_nodes, 4))[:, 1:]
+            out["nodes"] = np.fromfile(msh, count=no_nodes * 4, sep=" ").reshape(
+                (no_nodes, 4)
+            )[:, 1:]
 
             # read ELEMENTS
             if verbose:
@@ -328,10 +315,10 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             # names=range(max_node_no) to assure rectangular shape by cols
             tmp = pd.read_csv(
                 msh,
-                engine='c',
+                engine="c",
                 delim_whitespace=True,
                 nrows=no_elements,
-                names=range(max_node_no+4),  # +4 for the "-1" entry
+                names=range(max_node_no + 4),  # +4 for the "-1" entry
             ).values
             # check if all given element-typs are OGS known
             pos_ele = 2  # can be shift to right, if "-1" occures
@@ -341,7 +328,7 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
             if not np.all(check_elem):
                 if verbose:
-                    print(filepath+": unsupported cell-types found:")
+                    print(filepath + ": unsupported cell-types found:")
                     print(np.unique(tmp[np.invert(check_elem), pos_ele]))
                     print("...they will be skipped")
             # read the elements
@@ -352,23 +339,22 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             out["element_id"] = {}
             # iterate over all valid given element-types
             for elem in np.unique(tmp[check_elem, pos_ele]):
-                pos = (tmp[:, pos_ele] == elem)
-                out["elements"][elem] = \
-                    tmp[pos, pos_ele+1:pos_ele+1+NODE_NO[elem]].astype(int)
-                out["material_id"][elem] = \
-                    tmp[pos, 1].astype(int)
-                out["element_id"][elem] = \
-                    tmp[pos, 0].astype(int)
+                pos = tmp[:, pos_ele] == elem
+                out["elements"][elem] = tmp[
+                    pos, pos_ele + 1 : pos_ele + 1 + NODE_NO[elem]
+                ].astype(int)
+                out["material_id"][elem] = tmp[pos, 1].astype(int)
+                out["element_id"][elem] = tmp[pos, 0].astype(int)
 
         # handle unknown infos
         elif verbose:
-            print(filepath+": no 'old' mesh found...")
+            print(filepath + ": no 'old' mesh found...")
 
     return out
 
 
 def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
-    '''
+    """
     save a given OGS5 mesh file
 
     Parameters
@@ -398,7 +384,7 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
         (The MSH file doesn't allow comments as header)
     verbose : bool, optional
         Print information of the writing process. Default: True
-    '''
+    """
     import pandas as pd
 
     if not isinstance(mesh, (list, tuple)):
@@ -413,61 +399,55 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
         for i, mesh_i in enumerate(mesh):
 
             if verbose:
-                print("write 'FEM_MSH' number: "+str(i))
+                print("write 'FEM_MSH' number: " + str(i))
             msh.write("#FEM_MSH\n")
 
             for key in mesh_i["mesh_data"]:
                 if verbose:
-                    print("write "+key)
-                if key in ["AXISYMMETRY",
-                           "CROSS_SECTION"] and mesh_i["mesh_data"][key]:
-                    msh.write("$"+key+"\n")
+                    print("write " + key)
+                if key in ["AXISYMMETRY", "CROSS_SECTION"] and mesh_i["mesh_data"][key]:
+                    msh.write("$" + key + "\n")
                 elif key == "GEO_TYPE":
-                    msh.write("$"+key+"\n")
+                    msh.write("$" + key + "\n")
                     geo_type = mesh_i["mesh_data"]["GEO_TYPE"]
                     geo_name = mesh_i["mesh_data"]["GEO_NAME"]
-                    msh.write(geo_type+" "+geo_name+"\n")
+                    msh.write(geo_type + " " + geo_name + "\n")
                 else:
-                    msh.write("$"+key+"\n")
-                    msh.write(str(mesh_i["mesh_data"][key])+"\n")
+                    msh.write("$" + key + "\n")
+                    msh.write(str(mesh_i["mesh_data"][key]) + "\n")
 
             if verbose:
                 print("write NODES")
             msh.write("$NODES\n")
             no_nodes = mesh_i["nodes"].shape[0]
-            msh.write(str(no_nodes)+"\n")
-            data = pd.DataFrame(index=np.arange(no_nodes),
-                                columns=np.arange(4))
+            msh.write(str(no_nodes) + "\n")
+            data = pd.DataFrame(index=np.arange(no_nodes), columns=np.arange(4))
             data[0] = np.arange(no_nodes)
             data[np.arange(1, 4)] = mesh_i["nodes"]
-            data.to_csv(msh, header=None, index=None, sep=' ', mode='a')
+            data.to_csv(msh, header=None, index=None, sep=" ", mode="a")
 
             if verbose:
                 print("write ELEMENTS")
             msh.write("$ELEMENTS\n")
             no_el = no_of_elements(mesh_i)
-            msh.write(str(no_el)+"\n")
-            data = pd.DataFrame(index=np.arange(no_el),
-                                columns=np.arange(8+3))
+            msh.write(str(no_el) + "\n")
+            data = pd.DataFrame(index=np.arange(no_el), columns=np.arange(8 + 3))
             # initialize the offset for each element-type
             o_s = 0
             for elem in ELEM_NAMES:
                 if elem not in mesh_i["elements"]:
                     continue
                 no_el = mesh_i["elements"][elem].shape[0]
-                data.loc[np.arange(o_s, o_s+no_el), 0] \
-                    = mesh_i["element_id"][elem]
-                data.loc[np.arange(o_s, o_s+no_el), 1] \
-                    = mesh_i["material_id"][elem]
-                data.loc[np.arange(o_s, o_s+no_el), 2] \
-                    = elem
-                data.loc[np.arange(o_s, o_s+no_el),
-                         np.arange(3, 3+NODE_NO[elem])] \
-                    = mesh_i["elements"][elem]
+                data.loc[np.arange(o_s, o_s + no_el), 0] = mesh_i["element_id"][elem]
+                data.loc[np.arange(o_s, o_s + no_el), 1] = mesh_i["material_id"][elem]
+                data.loc[np.arange(o_s, o_s + no_el), 2] = elem
+                data.loc[
+                    np.arange(o_s, o_s + no_el), np.arange(3, 3 + NODE_NO[elem])
+                ] = mesh_i["elements"][elem]
                 o_s += no_el
             # sort the elements by their ID
             data.sort_values(by=0, inplace=True)
-            data.to_csv(msh, header=None, index=None, sep=' ', mode='a')
+            data.to_csv(msh, header=None, index=None, sep=" ", mode="a")
 
             # add lines between LAYERS
             if i < len(mesh) - 1:
@@ -478,9 +458,8 @@ def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
         msh.write("#STOP")
 
 
-def import_mesh(filepath, file_format=None,
-                ignore_unknown=False, import_dim=(1, 2, 3)):
-    '''
+def import_mesh(filepath, file_format=None, ignore_unknown=False, import_dim=(1, 2, 3)):
+    """
     import an external unstructured mesh from diffrent file-formats
 
     Parameters
@@ -517,16 +496,17 @@ def import_mesh(filepath, file_format=None,
     This routine calls the 'read' function from the meshio package
     and converts the output (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
-    '''
+    """
     points, cells, __, __, __ = mio.read(filepath, file_format=file_format)
     out = convert_meshio(points, cells, ignore_unknown, import_dim)
 
     return out
 
 
-def export_mesh(filepath, mesh, file_format=None,
-                export_material_id=True, add_data_by_id=None):
-    '''
+def export_mesh(
+    filepath, mesh, file_format=None, export_material_id=True, add_data_by_id=None
+):
+    """
     import an external unstructured mesh from diffrent file-formats
 
     Parameters
@@ -565,7 +545,7 @@ def export_mesh(filepath, mesh, file_format=None,
     -----
     This routine calls the 'write' function from the meshio package
     and converts the input (see here: https://github.com/nschloe/meshio)
-    '''
+    """
     points = dcp(np.ascontiguousarray(mesh["nodes"]))
     cells = {}
     cell_data = {}
@@ -577,18 +557,21 @@ def export_mesh(filepath, mesh, file_format=None,
         cells[MESHIO_NAMES[elemi]] = dcp(mesh["elements"][eleme])
         # export material ID if stated
         if export_material_id:
-            cell_data[MESHIO_NAMES[elemi]] =\
-                {"material_id": dcp(mesh["material_id"][eleme])}
+            cell_data[MESHIO_NAMES[elemi]] = {
+                "material_id": dcp(mesh["material_id"][eleme])
+            }
         # write additional data
         if add_data_by_id is not None:
             # if material ID was written, the dictionary already exists
             if MESHIO_NAMES[elemi] in cell_data:
-                cell_data[MESHIO_NAMES[elemi]]["add_data"] =\
-                    add_data_by_id[mesh["element_id"][eleme]]
+                cell_data[MESHIO_NAMES[elemi]]["add_data"] = add_data_by_id[
+                    mesh["element_id"][eleme]
+                ]
             # if material ID was not written, create a dictionary
             else:
-                cell_data[MESHIO_NAMES[elemi]] =\
-                    {"add_data": add_data_by_id[mesh["element_id"][eleme]]}
+                cell_data[MESHIO_NAMES[elemi]] = {
+                    "add_data": add_data_by_id[mesh["element_id"][eleme]]
+                }
 
     if not export_material_id and add_data_by_id is None:
         cell_data = None
@@ -598,13 +581,13 @@ def export_mesh(filepath, mesh, file_format=None,
     )
     mio.write(filepath, mesh_out, file_format=file_format)
 
+
 #    mio.write(filepath, points, cells,
 #              cell_data=cell_data, file_format=file_format)
 
 
-def convert_meshio(points, cells,
-                   ignore_unknown=False, import_dim=(1, 2, 3)):
-    '''
+def convert_meshio(points, cells, ignore_unknown=False, import_dim=(1, 2, 3)):
+    """
     convert points and cells from meshio to ogs format
 
     Parameters
@@ -640,7 +623,7 @@ def convert_meshio(points, cells,
     This routine uses the meshio data structure.
     (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
-    '''
+    """
     if not isinstance(import_dim, (set, list, tuple)):
         import_dim = [import_dim]
 
@@ -667,11 +650,13 @@ def convert_meshio(points, cells,
             continue
         elements[ELEM_NAMES[elm_i]] = cells[elm_e]
 
-    out = {"mesh_data": {},
-           "nodes": points,
-           "elements": elements,
-           "material_id": gen_std_mat_id(elements),
-           "element_id": gen_std_elem_id(elements)}
+    out = {
+        "mesh_data": {},
+        "nodes": points,
+        "elements": elements,
+        "material_id": gen_std_mat_id(elements),
+        "element_id": gen_std_elem_id(elements),
+    }
 
     rem_dim = {1, 2, 3} - set(import_dim)
     remove_dim(out, rem_dim)
@@ -680,7 +665,7 @@ def convert_meshio(points, cells,
 
 
 def remove_dim(mesh, remove):
-    '''
+    """
     Remove elements by given dimensions from a mesh.
 
     Parameters
@@ -700,14 +685,14 @@ def remove_dim(mesh, remove):
     Notes
     -----
     This will reset the element ids to default (ordered by element types)
-    '''
+    """
     if not isinstance(remove, (set, list, tuple)):
         remove = [remove]
     edited = False
     for i in remove:
         if i not in range(1, 4):
             continue
-        for elem in ELEM_DIM[i-1]:
+        for elem in ELEM_DIM[i - 1]:
             if elem in mesh["elements"]:
                 edited = True
                 del mesh["elements"][elem]
@@ -717,7 +702,7 @@ def remove_dim(mesh, remove):
 
 
 def combine(mesh_1, mesh_2, decimals=4, fast=False):
-    '''
+    """
     Combine mesh_1 and mesh_2 to one single mesh. The node list will be
     updated to eliminate duplicates. Element intersections are not checked.
 
@@ -766,17 +751,14 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
                 contains material ids for each element sorted by element types
             element_id : dictionary
                 contains element ids for each element sorted by element types
-    '''
+    """
     # hack to prevent numerical errors from decimal rounding (random shift)
     shift = np.random.rand(3)
     shift_mesh(mesh_1, shift)
     shift_mesh(mesh_2, shift)
     # combine the node lists and make them unique
     nodes, __, ixr = unique_rows(
-        np.vstack((mesh_1["nodes"],
-                   mesh_2["nodes"])),
-        decimals=decimals,
-        fast=fast,
+        np.vstack((mesh_1["nodes"], mesh_2["nodes"])), decimals=decimals, fast=fast
     )
     node_id_repl = range(len(ixr))
     node_offset = mesh_1["nodes"].shape[0]
@@ -801,19 +783,24 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
             material_id[elem] = mesh_2["material_id"][elem]
             element_id[elem] = mesh_2["element_id"][elem] + offset
         else:
-            tmp = np.vstack((mesh_1["elements"][elem],
-                             mesh_2["elements"][elem] + node_offset))
+            tmp = np.vstack(
+                (mesh_1["elements"][elem], mesh_2["elements"][elem] + node_offset)
+            )
             elements[elem] = replace(tmp, node_id_repl, ixr)
-            material_id[elem] = np.hstack((mesh_1["material_id"][elem],
-                                           mesh_2["material_id"][elem]))
-            element_id[elem] = np.hstack((mesh_1["element_id"][elem],
-                                          mesh_2["element_id"][elem] + offset))
+            material_id[elem] = np.hstack(
+                (mesh_1["material_id"][elem], mesh_2["material_id"][elem])
+            )
+            element_id[elem] = np.hstack(
+                (mesh_1["element_id"][elem], mesh_2["element_id"][elem] + offset)
+            )
     # create the ouput dict
-    out = {"mesh_data": mesh_1["mesh_data"],
-           "nodes": nodes,
-           "elements": elements,
-           "material_id": material_id,
-           "element_id": element_id}
+    out = {
+        "mesh_data": mesh_1["mesh_data"],
+        "nodes": nodes,
+        "elements": elements,
+        "material_id": material_id,
+        "element_id": element_id,
+    }
 
     # back shifting of the meshes
     shift_mesh(out, -shift)
@@ -824,7 +811,7 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
 
 
 def unique_nodes(mesh, decimals=3):
-    '''
+    """
     Make the node-list of the given mesh unique if there are duplicates
 
     Parameters
@@ -852,12 +839,12 @@ def unique_nodes(mesh, decimals=3):
         Number of decimal places to round the nodes to (default: 3).
         This will not round the output, it is just for comparison of the
         node vectors.
-    '''
+    """
     mesh = combine(mesh, EMPTY_MSH, decimals)
 
 
 def get_centroids(mesh):
-    '''
+    """
     calculate the centroids of the given elements
 
     Parameters
@@ -874,7 +861,7 @@ def get_centroids(mesh):
     -------
     result : list of dictionaries or single dict of ndarrays (like 'mesh')
         Centroids of elements sorted by element types.
-    '''
+    """
     single = False
     if not isinstance(mesh, (list, tuple)):
         tmp_mesh = [mesh]
@@ -899,7 +886,7 @@ def get_centroids(mesh):
 
 
 def get_mesh_center(mesh):
-    '''
+    """
     calculate the center of the given mesh
 
     Parameters
@@ -916,7 +903,7 @@ def get_mesh_center(mesh):
     -------
     result : list of dictionaries or single dict of ndarrays (like 'mesh')
         Centroids of elements sorted by element types.
-    '''
+    """
     if not isinstance(mesh, (list, tuple)):
         tmp_mesh = [mesh]
     else:
@@ -933,10 +920,10 @@ def get_mesh_center(mesh):
     return np.mean(node_stack, axis=0)
 
 
-def rotate_mesh(mesh, angle,
-                rotation_axis=(0., 0., 1.),
-                rotation_point=(0., 0., 0.)):
-    '''
+def rotate_mesh(
+    mesh, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+):
+    """
     Rotate a given mesh around a given rotation point and axis
     with a given angle.
 
@@ -953,15 +940,15 @@ def rotate_mesh(mesh, angle,
         Array containing the vector for ratation axis. Default: (0,0,1)
     rotation_point : array_like, optional
         Array containing the vector for ratation base point. Default:(0,0,0)
-    '''
+    """
     rot = rotation_matrix(rotation_axis, angle)
-    shift_mesh(mesh, -1.0*np.array(rotation_point))
+    shift_mesh(mesh, -1.0 * np.array(rotation_point))
     mesh["nodes"] = np.inner(rot, mesh["nodes"]).T
     shift_mesh(mesh, rotation_point)
 
 
 def shift_mesh(mesh, vector):
-    '''
+    """
     Shift a given mesh with a given vector.
 
     Parameters
@@ -973,13 +960,13 @@ def shift_mesh(mesh, vector):
                 Array with all node postions.
     vector : ndarray
         array containing the shifting vector
-    '''
+    """
     for i in range(3):
         mesh["nodes"][:, i] += vector[i]
 
 
 def transform_mesh(mesh, xyz_func, **kwargs):
-    '''
+    """
     Transform a given mesh with a given function "xyz_func".
     kwargs will be forwarded to "xyz_func".
 
@@ -993,15 +980,15 @@ def transform_mesh(mesh, xyz_func, **kwargs):
     xyz_func : function
         the function transforming the points:
         ``x_new, y_new, z_new = f(x_old, y_old, z_old, **kwargs)``
-    '''
-    trans = xyz_func(mesh["nodes"][:, 0],
-                     mesh["nodes"][:, 1],
-                     mesh["nodes"][:, 2], **kwargs)
+    """
+    trans = xyz_func(
+        mesh["nodes"][:, 0], mesh["nodes"][:, 1], mesh["nodes"][:, 2], **kwargs
+    )
     mesh["nodes"] = np.array(trans).T
 
 
 def no_of_elements(mesh):
-    '''
+    """
     Calculate the number of elements contained in the given mesh.
 
     Parameters
@@ -1016,7 +1003,7 @@ def no_of_elements(mesh):
     -------
     result : int
         number of elements
-    '''
+    """
     no_elem = 0
     for elem in mesh["elements"]:
         no_elem += mesh["elements"][elem].shape[0]
@@ -1025,7 +1012,7 @@ def no_of_elements(mesh):
 
 
 def gen_std_elem_id(elements, id_offset=0):
-    '''
+    """
     Generate the standard element ids from given elements.
 
     Parameters
@@ -1040,21 +1027,21 @@ def gen_std_elem_id(elements, id_offset=0):
     -------
     element_id : dict
         contains element ids for elements, sorted by element types
-    '''
+    """
     element_id = {}
     offset = id_offset
     for elem in ELEM_NAMES:
         if elem not in elements:
             continue
         elem_no = elements[elem].shape[0]
-        element_id[elem] = np.arange(elem_no)+offset
+        element_id[elem] = np.arange(elem_no) + offset
         offset += elem_no
 
     return element_id
 
 
 def gen_std_mat_id(elements, mat_id=0):
-    '''
+    """
     Generate the standard material ids from given elements.
 
     Parameters
@@ -1068,16 +1055,15 @@ def gen_std_mat_id(elements, mat_id=0):
     -------
     material_id : dict
         contains 0 as unique material id for elements, sorted by element types
-    '''
+    """
     material_id = {}
     for elem in elements:
-        material_id[elem] = int(mat_id)*np.ones(elements[elem].shape[0],
-                                                dtype=int)
+        material_id[elem] = int(mat_id) * np.ones(elements[elem].shape[0], dtype=int)
     return material_id
 
 
 def set_mat_id(mesh, mat_id=0):
-    '''
+    """
     Generate the standard material ids from given elements.
 
     Parameters
@@ -1090,5 +1076,5 @@ def set_mat_id(mesh, mat_id=0):
 
     mat_id : integer, optional
         Define the standard material ID. Default: 0
-    '''
+    """
     mesh["material_id"] = gen_std_mat_id(mesh["elements"], mat_id=mat_id)

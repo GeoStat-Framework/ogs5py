@@ -10,8 +10,9 @@ import os
 import tempfile
 import numpy as np
 from ogs5py.fileclasses.msh.tools import export_mesh
-os.environ['QT_API'] = 'pyqt'
-os.environ['ETS_TOOLKIT'] = 'qt4'
+
+os.environ["QT_API"] = "pyqt"
+os.environ["ETS_TOOLKIT"] = "qt4"
 
 MAYA_AVAIL = True
 try:
@@ -21,7 +22,7 @@ except ImportError:
 
 
 def show_mesh(mesh, show_element_id=True):
-    '''
+    """
     Display a given mesh colored by its material ID.
 
     Parameters
@@ -52,19 +53,21 @@ def show_mesh(mesh, show_element_id=True):
     -----
     This routine needs "mayavi" to display the mesh.
     (see here: https://github.com/enthought/mayavi)
-    '''
+    """
     # stop if mayavi is not installed
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
-        print("..if you are running an IPython console" +
-              ", don't run it under qt5. Mayavi still uses qt4.")
+        print(
+            "..if you are running an IPython console"
+            + ", don't run it under qt5. Mayavi still uses qt4."
+        )
         return
 
     # close all mayavi scenes
     mlab.close(all=True)
     # set the bounds for the color range
     min_id = np.inf
-    max_id = 0.
+    max_id = 0.0
     for matid in mesh["material_id"]:
         min_id = np.min((min_id, np.min(mesh["material_id"][matid])))
         max_id = np.max((max_id, np.max(mesh["material_id"][matid])))
@@ -81,10 +84,10 @@ def show_mesh(mesh, show_element_id=True):
     surface = mlab.pipeline.surface(data_source)
     # make the edges visible
     surface.actor.property.edge_visibility = True
-    surface.actor.property.line_width = 1.
+    surface.actor.property.line_width = 1.0
     surface.actor.property.interpolation = "flat"
     # settings for the material ID
-#    surface.parent.scalar_lut_manager.lut_mode = "Set1"
+    #    surface.parent.scalar_lut_manager.lut_mode = "Set1"
     if show_element_id:
         surface.parent.scalar_lut_manager.use_default_range = False
         surface.parent.scalar_lut_manager.data_range = [min_id, max_id]
@@ -94,10 +97,10 @@ def show_mesh(mesh, show_element_id=True):
         surface.parent.scalar_lut_manager.data_name = "Material ID"
         surface.parent.scalar_lut_manager.shadow = True
         surface.parent.scalar_lut_manager.show_scalar_bar = True
-        surface.parent.scalar_lut_manager.scalar_bar.label_format = '%.0f'
-#        mlab.colorbar(surface, orientation='vertical', label_fmt='%.0f')
+        surface.parent.scalar_lut_manager.scalar_bar.label_format = "%.0f"
+    #        mlab.colorbar(surface, orientation='vertical', label_fmt='%.0f')
     # give it a name
-    surface.name = 'OGS mesh'
+    surface.name = "OGS mesh"
     # show it
     mlab.show()
     # close the temp file and delete it

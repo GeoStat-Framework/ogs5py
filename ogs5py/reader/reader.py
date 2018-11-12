@@ -12,15 +12,15 @@ import os
 import glob
 import xml.etree.ElementTree as ET
 import numpy as np
-from vtk import (vtkDataReader,
-                 vtkXMLFileReadTester)
+from vtk import vtkDataReader, vtkXMLFileReadTester
 from ogs5py.tools._types import PCS_TYP
-from ogs5py.reader.vtkhelper import (vtkreader_dict,
-                                     XMLreader_dict)
-from ogs5py.reader.techelper import (split_ply_path,
-                                     split_pnt_path,
-                                     readtec_single_table,
-                                     readtec_multi_table)
+from ogs5py.reader.vtkhelper import vtkreader_dict, XMLreader_dict
+from ogs5py.reader.techelper import (
+    split_ply_path,
+    split_pnt_path,
+    readtec_single_table,
+    readtec_multi_table,
+)
 
 from ogs5py.reader.tools import split_file_path
 
@@ -31,9 +31,9 @@ from ogs5py.reader.tools import split_file_path
 
 
 def readvtk_single(infile):
-    '''
+    """
     read an arbitrary vtk/vtkXML file to a dictionary containing its data
-    '''
+    """
     xml_checker = vtkXMLFileReadTester()
     xml_checker.SetFileName(infile)
     is_xml = bool(xml_checker.TestReadFile())
@@ -43,7 +43,7 @@ def readvtk_single(infile):
         if xml_type in XMLreader_dict:
             reader = XMLreader_dict[xml_type]
         else:
-            print(infile+": XML file not valid (Type '"+str(xml_type)+"')")
+            print(infile + ": XML file not valid (Type '" + str(xml_type) + "')")
             if xml_type == "Collection":
                 print("...try the 'readpvd' function")
             return {}
@@ -59,7 +59,7 @@ def readvtk_single(infile):
                 reader_found = True
                 break
         if not reader_found:
-            print(infile+": vtk file not valid")
+            print(infile + ": vtk file not valid")
             checker.CloseVTKFile()
             return {}
         checker.CloseVTKFile()
@@ -81,7 +81,7 @@ def readvtk_single(infile):
 
 
 def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    '''
+    """
     a genearal reader for OGS vtk outputfiles
     give a dictionary containing their data
 
@@ -116,7 +116,7 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
         keys are the point names and the items are the data from the
         corresponding files
         if pcs="ALL", the output is a dictionary with the PCS-types as keys
-    '''
+    """
     # for a single file return the output immediately
     if single_file is not None:
         return readvtk_single(single_file)
@@ -132,18 +132,18 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
         return out
     # in the filename, there is a underscore before the PCS-type
     if pcs != "":
-        pcs = "_"+pcs
+        pcs = "_" + pcs
     if pcs == "_RANDOM_WALK":
         pcs = "_RWPT"
     output = {}
     # format task_root proper as directory path
-    task_root = os.path.dirname(task_root+"/")+"/"
+    task_root = os.path.dirname(task_root + "/") + "/"
     # get a list of all output files "{id}0000.vtk" ... "{id}999[...]9.vtk"
     # if pcs is RWPT the name-sheme is different
     if pcs == "_RWPT":
-        infiles = glob.glob(task_root+task_id+pcs+"_[0-9]*.particles.vtk")
+        infiles = glob.glob(task_root + task_id + pcs + "_[0-9]*.particles.vtk")
     else:
-        infiles = glob.glob(task_root+task_id+pcs+"[0-9][0-9][0-9]*[0-9].vtk")
+        infiles = glob.glob(task_root + task_id + pcs + "[0-9][0-9][0-9]*[0-9].vtk")
 
     # sort input files by name, since they are sorted by timesteps
     infiles.sort()
@@ -163,7 +163,9 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
             if out["header"] and "=" in out["header"]:
                 # ndmin = 1 to match the standard format
                 out["field_data"]["TIME"] = np.array(
-                    float(out["header"].split("=")[1]), ndmin=1)
+                    float(out["header"].split("=")[1]), 
+                    ndmin=1,
+                )
         if "field_data" in out and "TIME" in out["field_data"]:
             time.append(out["field_data"]["TIME"])
             data.append(out)
@@ -191,10 +193,10 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 
 def readpvd_single(infile):
-    '''
+    """
     read a paraview pvd file and convert all concerned files
     to a dictionary containing their data
-    '''
+    """
     output = {}
     # read the pvd file as XML and extract the needed file infos
     if not os.path.isfile(infile):
@@ -204,7 +206,7 @@ def readpvd_single(infile):
     files = []
     infos = []
     # get the file_root to the pvd-file
-    root = split_file_path(infile)[0]+"/"
+    root = split_file_path(infile)[0] + "/"
     if root == "/":
         root = "./"
     # iterate through the data collection
@@ -225,7 +227,7 @@ def readpvd_single(infile):
 
 
 def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    '''
+    """
     read a paraview pvd file and convert all concerned files
     to a dictionary containing their data
 
@@ -260,7 +262,7 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
         keys are the point names and the items are the data from the
         corresponding files
         if pcs="ALL", the output is a dictionary with the PCS-types as keys
-    '''
+    """
     # for a single file return the output immediately
     if single_file is not None:
         root, ext = os.path.splitext(single_file)
@@ -283,11 +285,11 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
         return out
     # in the filename, there is a underscore before the PCS-type
     if pcs != "":
-        pcs = "_"+pcs
+        pcs = "_" + pcs
     output = {}
     # format task_root proper as directory path
-    task_root = os.path.dirname(task_root+"/")+"/"
-    infile = task_root+task_id+pcs+".pvd"
+    task_root = os.path.dirname(task_root + "/") + "/"
+    infile = task_root + task_id + pcs + ".pvd"
     # get the pvd information about the concerned files
     pvd_info = readpvd_single(infile)
     # if pvd is empty: return
@@ -308,7 +310,7 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
     for file_i in files:
         # format the file-path
         if split_file_path(file_i)[0] in ["", "."]:
-            file_i = task_root+"".join(split_file_path(file_i)[1:])
+            file_i = task_root + "".join(split_file_path(file_i)[1:])
         # read the file
         data.append(readvtk_single(file_i))
     # append the infos stored in the pvd header
@@ -324,7 +326,7 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 
 def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    '''
+    """
     collect TECPLOT point output from OGS5
 
     the Filenames are structured the following way:
@@ -359,7 +361,7 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
         keys are the point names and the items are the data from the
         corresponding files
         if pcs="ALL", the output is a dictionary with the PCS-types as keys
-    '''
+    """
     # for a single file return the output immediately
     if single_file is not None:
         return readtec_single_table(single_file)
@@ -375,9 +377,9 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
             if out_single != {}:
                 out[pcs_single] = out_single
         return out
-    task_root = os.path.dirname(task_root+"/")+"/"
+    task_root = os.path.dirname(task_root + "/") + "/"
     # find point output by keyword "time"
-    infiles = glob.glob(task_root+task_id+"_time_*."+"tec")
+    infiles = glob.glob(task_root + task_id + "_time_*." + "tec")
 
     out = {}
     for infile in infiles:
@@ -392,9 +394,14 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
     return out
 
 
-def readtec_polyline(task_root=".", task_id=None, pcs="ALL", single_file=None,
-                     trim=True):
-    '''
+def readtec_polyline(
+    task_root=".",
+    task_id=None,
+    pcs="ALL",
+    single_file=None,
+    trim=True,
+):
+    """
     collect TECPLOT polyline output from OGS5
 
     the Filenames are structured the following way:
@@ -436,7 +443,7 @@ def readtec_polyline(task_root=".", task_id=None, pcs="ALL", single_file=None,
         ply_id (it is assumed, that the ply_ids are continuous, if not, the
         corresponding list entries are "None")
         if pcs="ALL", the output is a dictionary with the PCS-types as keys
-    '''
+    """
     # for a single file return the output immediately
     if single_file is not None:
         return readtec_multi_table(single_file)
@@ -451,8 +458,8 @@ def readtec_polyline(task_root=".", task_id=None, pcs="ALL", single_file=None,
                 out[pcs_single] = out_single
         return out
     # format the root_path
-    task_root = os.path.dirname(task_root+"/")+"/"
-    infiles = glob.glob(task_root+task_id+"_ply_?*_t[0-9]*.tec")
+    task_root = os.path.dirname(task_root + "/") + "/"
+    infiles = glob.glob(task_root + task_id + "_ply_?*_t[0-9]*.tec")
     # sort the infiles by name to sort it by timestep (pitfall!!!)
     infiles.sort()
 
@@ -468,9 +475,9 @@ def readtec_polyline(task_root=".", task_id=None, pcs="ALL", single_file=None,
             cnt = len(out[line_name])
             if cnt <= time_step:
                 # if the timesteps are not continous, insert None-values
-                out[line_name] += (1+time_step-cnt)*[None]
+                out[line_name] += (1 + time_step - cnt) * [None]
         else:
-            out[line_name] = (1+time_step)*[None]
+            out[line_name] = (1 + time_step) * [None]
         # add the actual file-data
         out[line_name][time_step] = readtec_multi_table(infile)
 
@@ -484,11 +491,13 @@ def readtec_polyline(task_root=".", task_id=None, pcs="ALL", single_file=None,
 
 
 def readtec_domain():
-    '''
+    """
     This is a dummy for the TECPLOT-domain output of OGS which is not
     implemented because the output is separated by element types where
     VTK works out much better.
-    '''
-    raise NotImplementedError("Reader for Tecplot domain " +
-                              "output not yet implemented " +
-                              "....please(!) generate vtk/pvd here")
+    """
+    raise NotImplementedError(
+        "Reader for Tecplot domain "
+        + "output not yet implemented "
+        + "....please(!) generate vtk/pvd here"
+    )

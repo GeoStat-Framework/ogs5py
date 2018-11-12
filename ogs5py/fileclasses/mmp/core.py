@@ -1,6 +1,6 @@
-'''
+"""
 Class for the ogs MEDIUM_PROPERTIES file.
-'''
+"""
 
 from __future__ import absolute_import, division, print_function
 from ogs5py.fileclasses.base import OGSfile
@@ -80,64 +80,68 @@ class MMP(OGSfile):
 
     MKEYS = ["MEDIUM_PROPERTIES"]
     # sorted
-    SKEYS = [[
-        "PCS_TYPE",
-        "NAME",
-        "GEO_TYPE",
-        "GEOMETRY_DIMENSION",
-        "GEOMETRY_INCLINATION",
-        "GEOMETRY_AREA",
-        "POROSITY",
-        "VOL_MAT",
-        "VOL_BIO",
-        "TORTUOSITY",
-        "FLOWLINEARITY",
-        "ORGANIC_CARBON",
-        "STORAGE",
-        "CONDUCTIVITY_MODEL",
-        "UNCONFINED",
-        "PERMEABILITY_TENSOR",
-        "PERMEABILITY_FUNCTION_DEFORMATION",
-        "PERMEABILITY_FUNCTION_STRAIN",
-        "PERMEABILITY_FUNCTION_PRESSURE",
-        "PERMEABILITY_SATURATION",
-        "PERMEABILITY_FUNCTION_STRESS",
-        "PERMEABILITY_FUNCTION_EFFSTRESS",
-        "PERMEABILITY_FUNCTION_VELOCITY",
-        "PERMEABILITY_FUNCTION_POROSITY",
-        "CAPILLARY_PRESSURE",
-        "TRANSFER_COEFFICIENT",
-        "SPECIFIC_STORAGE",
-        "STORAGE_FUNCTION_EFFSTRESS",
-        "MASS_DISPERSION",
-        "COMPOUND_DEPENDENT_DT",
-        "HEAT_DISPERSION",
-        "DIFFUSION",
-        "EVAPORATION",
-        "SURFACE_FRICTION",
-        "WIDTH",
-        "RILL",
-        "CHANNEL",
-        "PERMEABILITY_DISTRIBUTION",
-        "POROSITY_DISTRIBUTION",
-        "HEAT_TRANSFER",
-        "PARTICLE_DIAMETER",
-        "INTERPHASE_FRICTION",
-        "ELEMENT_VOLUME_MULTIPLYER",
-    ]]
+    SKEYS = [
+        [
+            "PCS_TYPE",
+            "NAME",
+            "GEO_TYPE",
+            "GEOMETRY_DIMENSION",
+            "GEOMETRY_INCLINATION",
+            "GEOMETRY_AREA",
+            "POROSITY",
+            "VOL_MAT",
+            "VOL_BIO",
+            "TORTUOSITY",
+            "FLOWLINEARITY",
+            "ORGANIC_CARBON",
+            "STORAGE",
+            "CONDUCTIVITY_MODEL",
+            "UNCONFINED",
+            "PERMEABILITY_TENSOR",
+            "PERMEABILITY_FUNCTION_DEFORMATION",
+            "PERMEABILITY_FUNCTION_STRAIN",
+            "PERMEABILITY_FUNCTION_PRESSURE",
+            "PERMEABILITY_SATURATION",
+            "PERMEABILITY_FUNCTION_STRESS",
+            "PERMEABILITY_FUNCTION_EFFSTRESS",
+            "PERMEABILITY_FUNCTION_VELOCITY",
+            "PERMEABILITY_FUNCTION_POROSITY",
+            "CAPILLARY_PRESSURE",
+            "TRANSFER_COEFFICIENT",
+            "SPECIFIC_STORAGE",
+            "STORAGE_FUNCTION_EFFSTRESS",
+            "MASS_DISPERSION",
+            "COMPOUND_DEPENDENT_DT",
+            "HEAT_DISPERSION",
+            "DIFFUSION",
+            "EVAPORATION",
+            "SURFACE_FRICTION",
+            "WIDTH",
+            "RILL",
+            "CHANNEL",
+            "PERMEABILITY_DISTRIBUTION",
+            "POROSITY_DISTRIBUTION",
+            "HEAT_TRANSFER",
+            "PARTICLE_DIAMETER",
+            "INTERPHASE_FRICTION",
+            "ELEMENT_VOLUME_MULTIPLYER",
+        ]
+    ]
 
-    STD = {"GEOMETRY_DIMENSION": 2,
-           "STORAGE": [1, 1.0e-4],
-           "PERMEABILITY_TENSOR": ["ISOTROPIC", 1.0e-4],
-           "POROSITY": [1, 0.2]}
+    STD = {
+        "GEOMETRY_DIMENSION": 2,
+        "STORAGE": [1, 1.0e-4],
+        "PERMEABILITY_TENSOR": ["ISOTROPIC", 1.0e-4],
+        "POROSITY": [1, 0.2],
+    }
 
     def __init__(self, **OGS_Config):
-        '''
+        """
         Input
         -----
 
         OGS_Config dictonary
 
-        '''
+        """
         super(MMP, self).__init__(**OGS_Config)
-        self.file_ext = '.mmp'
+        self.file_ext = ".mmp"

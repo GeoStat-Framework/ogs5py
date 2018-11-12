@@ -9,9 +9,7 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 from numpy import ascontiguousarray as ascont
-from vtk import (vtkStructuredPoints,
-                 vtkStructuredPointsWriter,
-                 vtkFieldData)
+from vtk import vtkStructuredPoints, vtkStructuredPointsWriter, vtkFieldData
 from vtk.util.numpy_support import numpy_to_vtk as np2vtk
 
 from ogs5py.tools._types import STRTYPE
@@ -32,10 +30,10 @@ def is_str_array(array):
     """
     array = np.asanyarray(array)
 
-    if array.dtype.kind in {'U', 'S'}:
+    if array.dtype.kind in {"U", "S"}:
         return True
 
-    if array.dtype.kind == 'O':
+    if array.dtype.kind == "O":
         for val in array.reshape(-1):
             if not isinstance(val, STRTYPE):
                 return False
@@ -84,9 +82,10 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
         data = vtkFieldData()
         for sgl_data in vtk_dict["field_data"]:
             if verbose:
-                print("  Set '"+sgl_data+"'")
-            arr = np2vtk(ascont(vtk_dict["field_data"][sgl_data].reshape(-1,
-                         order="F")))
+                print("  Set '" + sgl_data + "'")
+            arr = np2vtk(
+                ascont(vtk_dict["field_data"][sgl_data].reshape(-1, order="F"))
+            )
             arr.SetName(sgl_data)
             data.AddArray(arr)
         out.SetFieldData(data)
@@ -97,9 +96,10 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
         data = out.GetPointData()
         for sgl_data in vtk_dict["point_data"]:
             if verbose:
-                print("  Set '"+sgl_data+"'")
-            arr = np2vtk(ascont(vtk_dict["point_data"][sgl_data].reshape(-1,
-                         order="F")))
+                print("  Set '" + sgl_data + "'")
+            arr = np2vtk(
+                ascont(vtk_dict["point_data"][sgl_data].reshape(-1, order="F"))
+            )
             arr.SetName(sgl_data)
             data.AddArray(arr)
 
@@ -109,9 +109,8 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
         data = out.GetCellData()
         for sgl_data in vtk_dict["cell_data"]:
             if verbose:
-                print("  Set '"+sgl_data+"'")
-            arr = np2vtk(ascont(vtk_dict["cell_data"][sgl_data].reshape(-1,
-                         order="F")))
+                print("  Set '" + sgl_data + "'")
+            arr = np2vtk(ascont(vtk_dict["cell_data"][sgl_data].reshape(-1, order="F")))
             arr.SetName(sgl_data)
             data.AddArray(arr)
 
@@ -123,10 +122,10 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
     writer.Write()
 
 
-def rotate_points(points, angle,
-                  rotation_axis=(0., 0., 1.),
-                  rotation_point=(0., 0., 0.)):
-    '''
+def rotate_points(
+    points, angle, rotation_axis=(0.0, 0.0, 1.0), rotation_point=(0.0, 0.0, 0.0)
+):
+    """
     Rotate points around a given rotation point and axis with a given angle.
 
     Parameters
@@ -144,16 +143,16 @@ def rotate_points(points, angle,
     -------
     new_array : ndarray
         rotated array
-    '''
+    """
     rot = rotation_matrix(rotation_axis, angle)
-    new_points = shift_points(points, -1.0*np.array(rotation_point))
+    new_points = shift_points(points, -1.0 * np.array(rotation_point))
     new_points = np.inner(rot, new_points).T
     new_points = shift_points(new_points, rotation_point)
     return new_points
 
 
 def shift_points(points, vector):
-    '''
+    """
     Shift points with a given vector.
 
     Parameters
@@ -167,7 +166,7 @@ def shift_points(points, vector):
     -------
     new_array : ndarray
         shifted array
-    '''
+    """
     new_points = dcp(points)
     for i in range(3):
         new_points[:, i] += vector[i]
@@ -175,7 +174,7 @@ def shift_points(points, vector):
 
 
 def transform_points(points, xyz_func, **kwargs):
-    '''
+    """
     Transform points with a given function "xyz_func".
     kwargs will be forwarded to "xyz_func".
 
@@ -191,16 +190,22 @@ def transform_points(points, xyz_func, **kwargs):
     -------
     new_array : ndarray
         transformed array
-    '''
+    """
     trans = xyz_func(points[:, 0], points[:, 1], points[:, 2], **kwargs)
     return np.array(trans).T
 
 
-def hull_deform(x_in, y_in, z_in,
-                niv_top=10., niv_bot=0.,
-                func_top=None, func_bot=None,
-                direction="z"):
-    '''
+def hull_deform(
+    x_in,
+    y_in,
+    z_in,
+    niv_top=10.0,
+    niv_bot=0.0,
+    func_top=None,
+    func_bot=None,
+    direction="z",
+):
+    """
     Providing a transformation function to deform a given mesh in a given
     direction by self defined hull-functions ``z = func(x, y)``.
     Could be used with ``transform_mesh`` and ``transform_points``.
@@ -229,7 +234,7 @@ def hull_deform(x_in, y_in, z_in,
     -------
     x_out, y_out, z_out : ndarray
         transformed arrays
-    '''
+    """
 
     if direction == "x":
         x1_in = y_in
@@ -253,8 +258,8 @@ def hull_deform(x_in, y_in, z_in,
     if isinstance(func_top, (float, int)):
 
         def func_top_redef(x_in, __):
-            '''redefining func_top for constant value'''
-            return float(func_top)*np.ones_like(x_in)
+            """redefining func_top for constant value"""
+            return float(func_top) * np.ones_like(x_in)
 
         func_t = func_top_redef
     else:
@@ -263,16 +268,17 @@ def hull_deform(x_in, y_in, z_in,
     if isinstance(func_bot, (float, int)):
 
         def func_bot_redef(x_in, __):
-            '''redefining func_bot for constant value'''
-            return float(func_bot)*np.ones_like(x_in)
+            """redefining func_bot for constant value"""
+            return float(func_bot) * np.ones_like(x_in)
 
         func_b = func_bot_redef
     else:
         func_b = func_bot
 
-    scale = (x3_in - niv_bot)/(niv_top - niv_bot)
-    x3_out = scale*(func_t(x1_in, x2_in) -
-                    func_b(x1_in, x2_in)) + func_b(x1_in, x2_in)
+    scale = (x3_in - niv_bot) / (niv_top - niv_bot)
+    x3_out = scale * (func_t(x1_in, x2_in) - func_b(x1_in, x2_in)) + func_b(
+        x1_in, x2_in
+    )
 
     if direction == "x":
         return x3_out, x1_in, x2_in
@@ -288,7 +294,7 @@ def hull_deform(x_in, y_in, z_in,
 
 
 def rotation_matrix(vector, angle):
-    '''
+    """
     Create a rotation matrix for rotation around a given vector with a given
     angle.
 
@@ -304,17 +310,17 @@ def rotation_matrix(vector, angle):
     result : ndarray
         matrix to be used for matrix multiplication with vectors to be
         rotated.
-    '''
+    """
     # vector has to be normed
-    vector = np.asfarray(vector)/np.linalg.norm(vector)
+    vector = np.asfarray(vector) / np.linalg.norm(vector)
     mat = np.cross(np.eye(3), vector)
     cosa = np.cos(angle)
     sina = np.sin(angle)
-    return cosa*np.eye(3) + sina*mat + (1-cosa)*np.outer(vector, vector)
+    return cosa * np.eye(3) + sina * mat + (1 - cosa) * np.outer(vector, vector)
 
 
 def replace(arr, inval, outval):
-    '''
+    """
     replace certain values of 'arr' defined in 'inval' with values defined
     in 'outval'
 
@@ -331,7 +337,7 @@ def replace(arr, inval, outval):
     -------
     result : ndarray
         array of the same shape as 'arr' containing the new data
-    '''
+    """
     # convert input to numpy array
     inval = np.array(inval).reshape(-1)
     outval = np.array(outval).reshape(-1)
@@ -348,7 +354,7 @@ def replace(arr, inval, outval):
 
 
 def unique_rows(data, decimals=4, fast=True):
-    '''
+    """
     unique made row-data with respect to given precision
 
     this is constructed to work best if point-pairs appear.
@@ -387,7 +393,7 @@ def unique_rows(data, decimals=4, fast=True):
     as possible. If you use it with a stack of 2 arrays and the first one is
     already unique, the resulting array will still have the first array at the
     beginning.
-    '''
+    """
     if data.ndim != 2:
         raise ValueError("unique_rows: Wrong input shape. Only 2D allowed!")
     if fast:
@@ -395,17 +401,17 @@ def unique_rows(data, decimals=4, fast=True):
         tmp = np.around(data, decimals=decimals)
         # using the 1D numpy 'unique' function by defining a special dtype
         # since numpy 1.13.0 actually not needed anymore (axis parameter added)
-        tmp = np.ascontiguousarray(tmp).view(np.dtype((np.void,
-                                                       tmp.dtype.itemsize
-                                                       * tmp.shape[1])))
+        tmp = np.ascontiguousarray(tmp).view(
+            np.dtype((np.void, tmp.dtype.itemsize * tmp.shape[1]))
+        )
     else:
         # get the tolerance from the given decimals
-        tol = np.power(10., -decimals)
+        tol = np.power(10.0, -decimals)
         # calculate all distances to each other (fancy!)
         dim_i = []
         for i in range(data.shape[1]):
             # is this a bottle neck? ... apparently
-            dim_i.append(np.subtract.outer(data[:, i], data[:, i])**2)
+            dim_i.append(np.subtract.outer(data[:, i], data[:, i]) ** 2)
         distance = np.sqrt(np.sum(dim_i, axis=0))
         # just use the upper triangle above the diagonal
         distance[np.tril_indices_from(distance)] = np.inf
@@ -431,7 +437,7 @@ def unique_rows(data, decimals=4, fast=True):
 
 
 def unique_rows_old(data, decimals=4):
-    '''
+    """
     returns unique made data with respect to given precision in "decimals"
     The output is sorted like the input data.
     data needs to be 2D
@@ -464,16 +470,16 @@ def unique_rows_old(data, decimals=4):
     as possible. If you use it with a stack of 2 arrays and the first one is
     already unique, the resulting array will still have the first array at the
     beginning.
-    '''
+    """
     if data.ndim != 2:
         raise ValueError("unique_rows: Wrong input shape. Only 2D allowed!")
 
     # round the input to the given precicion
     tmp = np.around(data, decimals=decimals)
     # using the 1D numpy 'unique' function by defining a special numpy dtype
-    tmp = np.ascontiguousarray(tmp).view(np.dtype((np.void,
-                                                   tmp.dtype.itemsize
-                                                   * tmp.shape[1])))
+    tmp = np.ascontiguousarray(tmp).view(
+        np.dtype((np.void, tmp.dtype.itemsize * tmp.shape[1]))
+    )
     __, i_x, i_xr = np.unique(tmp, return_index=True, return_inverse=True)
     out = data[i_x]
     # sort the output according to the input
