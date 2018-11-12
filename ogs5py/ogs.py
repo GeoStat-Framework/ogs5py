@@ -184,7 +184,10 @@ class OGS(object):
     """
 
     def __init__(
-        self, task_root=CWD + "/ogs5model", task_id="model", output_dir=None
+        self,
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
+        output_dir=None,
     ):
         """
         Initialize an OGS file.
@@ -198,9 +201,12 @@ class OGS(object):
         output_dir : string, optional
             Path to the output directory. Default is the task_root folder.
         """
-        self._task_root = task_root
+        self._task_root = os.path.normpath(task_root)
         self._task_id = task_id
-        self.output_dir = output_dir
+        if output_dir is None:
+            self.output_dir = None
+        else:
+            self.output_dir = os.path.normpath(output_dir)
 
         self.bc = BC(task_root=task_root, task_id=task_id)
         self.cct = CCT(task_root=task_root, task_id=task_id)
@@ -656,7 +662,7 @@ class OGS(object):
         # otherwise set it in the task_root directory
         if self.output_dir is not None:
             # format the outputdir
-            output_dir = os.path.dirname(self.output_dir + "/")
+            output_dir = os.path.normpath(self.output_dir)
             # check if outputdir is given as absolut path
             if not os.path.isabs(output_dir):
                 # if not, put the outputfolder in the task_root

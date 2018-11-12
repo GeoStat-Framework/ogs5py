@@ -135,20 +135,23 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
     # in the filename, there is a underscore before the PCS-type
     if pcs != "":
         pcs = "_" + pcs
+    # YEAHAA.. inconsistency
     if pcs == "_RANDOM_WALK":
         pcs = "_RWPT"
     output = {}
     # format task_root proper as directory path
-    task_root = os.path.dirname(task_root + "/") + "/"
+    task_root = os.path.normpath(task_root)
     # get a list of all output files "{id}0000.vtk" ... "{id}999[...]9.vtk"
     # if pcs is RWPT the name-sheme is different
     if pcs == "_RWPT":
         infiles = glob.glob(
-            task_root + task_id + pcs + "_[0-9]*.particles.vtk"
+            os.path.join(task_root, task_id + pcs + "_[0-9]*.particles.vtk")
         )
     else:
         infiles = glob.glob(
-            task_root + task_id + pcs + "[0-9][0-9][0-9]*[0-9].vtk"
+            os.path.join(
+                task_root, task_id + pcs + "[0-9][0-9][0-9]*[0-9].vtk"
+            )
         )
 
     # sort input files by name, since they are sorted by timesteps
@@ -293,8 +296,8 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
         pcs = "_" + pcs
     output = {}
     # format task_root proper as directory path
-    task_root = os.path.dirname(task_root + "/") + "/"
-    infile = task_root + task_id + pcs + ".pvd"
+    task_root = os.path.normpath(task_root)
+    infile = os.path.join(task_root, task_id + pcs + ".pvd")
     # get the pvd information about the concerned files
     pvd_info = readpvd_single(infile)
     # if pvd is empty: return
@@ -315,7 +318,9 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
     for file_i in files:
         # format the file-path
         if split_file_path(file_i)[0] in ["", "."]:
-            file_i = task_root + "".join(split_file_path(file_i)[1:])
+            file_i = os.path.join(
+                task_root, "".join(split_file_path(file_i)[1:])
+            )
         # read the file
         data.append(readvtk_single(file_i))
     # append the infos stored in the pvd header
@@ -382,9 +387,9 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
             if out_single != {}:
                 out[pcs_single] = out_single
         return out
-    task_root = os.path.dirname(task_root + "/") + "/"
+    task_root = os.path.normpath(task_root)
     # find point output by keyword "time"
-    infiles = glob.glob(task_root + task_id + "_time_*." + "tec")
+    infiles = glob.glob(os.path.join(task_root, task_id + "_time_*." + "tec"))
 
     out = {}
     for infile in infiles:
@@ -459,8 +464,10 @@ def readtec_polyline(
                 out[pcs_single] = out_single
         return out
     # format the root_path
-    task_root = os.path.dirname(task_root + "/") + "/"
-    infiles = glob.glob(task_root + task_id + "_ply_?*_t[0-9]*.tec")
+    task_root = os.path.normpath(task_root)
+    infiles = glob.glob(
+        os.path.join(task_root, task_id + "_ply_?*_t[0-9]*.tec")
+    )
     # sort the infiles by name to sort it by timestep (pitfall!!!)
     infiles.sort()
 

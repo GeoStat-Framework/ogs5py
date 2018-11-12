@@ -90,7 +90,7 @@ def split_pnt_path(
     # remove the directory-part from the filepath to get the basename
     name = os.path.basename(infile)
     # search for the suffix (aka file ending)
-    suffix_pat = re.compile("\.tec$")
+    suffix_pat = re.compile(r"\.tec$")
     suffix_match = suffix_pat.search(name)
     # check for the task_id
     if task_id is None:
@@ -112,7 +112,7 @@ def split_pnt_path(
             + re.escape(id_name)
             + "_time_"
             + re.escape(pnt_name)
-            + "+[\._]"
+            + r"+[\._]"
         )
         midtrm_match = midtrm_pat.search(name)
         if midtrm_match is None:
@@ -162,7 +162,7 @@ def split_pnt_path(
                     PCS = PCS[: len(pcs_sgl)]
                     # retrive the pnt name from the file-path
                     PCS_pat = re.compile(
-                        "_" + re.escape(PCS + extra) + "\.tec$"
+                        "_" + re.escape(PCS + extra) + r"\.tec$"
                     )
                     PCS_match = PCS_pat.search(name)
                     pnt = name[prefix_match.span()[1] : PCS_match.span()[0]]
@@ -173,7 +173,7 @@ def split_pnt_path(
                     # POINT name is guessed as a name without "_"
                     # the rest will be set as PCS
                     midtrm_pat = re.compile(
-                        "^" + re.escape(id_name) + "_time_[^_]+[\._]"
+                        "^" + re.escape(id_name) + r"_time_[^_]+[\._]"
                     )
                     midtrm_match = midtrm_pat.search(name)
                     if midtrm_match is None:
@@ -229,8 +229,8 @@ def split_ply_path(
         prefix_pat = re.compile("^" + re.escape(task_id) + "_ply_")
         id_name = task_id
     # search for different parts in the string
-    midtrm_pat = re.compile("_t\d+[\._]")
-    suffix_pat = re.compile("\.tec$")
+    midtrm_pat = re.compile(r"_t\d+[\._]")
+    suffix_pat = re.compile(r"\.tec$")
     prefix_match = prefix_pat.search(name)
     midtrm_match = midtrm_pat.search(name)
     suffix_match = suffix_pat.search(name)

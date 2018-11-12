@@ -411,18 +411,6 @@ class GLI(OGSfile):
         else:
             print("the mesh could not be saved since it is not valid")
 
-    #    def write_file(self):
-    #        '''
-    #        Write the actual OGS input file to the given folder.
-    #        Its path is given by "task_root+task_id+file_ext".
-    #        '''
-    #        # create the file path
-    #        if not os.path.exists(self.task_root):
-    #            os.makedirs(self.task_root)
-    #        f_path = os.path.join(self.task_root, self.task_id+self.file_ext)
-    #        # save the data
-    #        self.save(f_path, verbose=False)
-
     def check(self, verbose=True):
         """
         Check if the gli is valid in the sence, that the
