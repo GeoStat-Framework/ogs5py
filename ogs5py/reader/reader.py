@@ -21,7 +21,6 @@ from ogs5py.reader.techelper import (
     readtec_single_table,
     readtec_multi_table,
 )
-
 from ogs5py.reader.tools import split_file_path
 
 
@@ -162,9 +161,6 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
     if not infiles:
         return output
     for infile in infiles:
-        # trim the filename
-        filename = infile.split("/")[-1]
-        filename = ".".join(filename.split(".")[:-1])
         # read the single vtk-file
         out = readvtk_single(infile)
         # in the RWPT files the TIME is not given as field_data but in header
@@ -213,10 +209,6 @@ def readpvd_single(infile):
     pvd_info = info_root.attrib
     files = []
     infos = []
-    # get the file_root to the pvd-file
-    root = split_file_path(infile)[0] + "/"
-    if root == "/":
-        root = "./"
     # iterate through the data collection
     for dataset in info_root[0]:
         files.append(dataset.attrib["file"])
