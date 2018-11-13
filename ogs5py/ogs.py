@@ -695,12 +695,10 @@ class OGS(object):
                     if "GEM_INIT_FILE" in self.gem.subkw[i]:
                         index = self.gem.subkw[i].index("GEM_INIT_FILE")
                         ext_name = self.gem.cont[i][index][0][0]
-                        print(ext_name)
                         ext_file = GEMinit(
                             lst_name=ext_name, task_root=self.task_root
                         )
                         path = os.path.join(task_root, ext_name)
-                        print(path)
                         ext_file.read_file(path, encoding=encoding)
                         self.gem_init.append(dcp(ext_file))
 

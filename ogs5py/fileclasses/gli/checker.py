@@ -99,7 +99,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['NAME'] not valid")
-            return False
+        return False
     # check ID
     if ply["ID"] is None or (isinstance(ply["ID"], int) and ply["ID"] >= 0):
         if verbose:
@@ -107,7 +107,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['ID'] not valid")
-            return False
+        return False
     # check POINTS
     pnt_avail = True
     # see https://github.com/numpy/numpy/pull/9505 for issubdtype
@@ -136,7 +136,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['POINTS'] not valid")
-            return False
+        return False
     # check EPSILON
     if ply["EPSILON"] is None or (
         isinstance(ply["EPSILON"], float) and ply["EPSILON"] >= 0.0
@@ -146,7 +146,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['EPSILON'] not valid")
-            return False
+        return False
     # check TYPE
     if ply["TYPE"] is None or isinstance(ply["TYPE"], int):
         if verbose:
@@ -154,7 +154,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['TYPE'] not valid")
-            return False
+        return False
     # check MAT_GROUP
     if ply["MAT_GROUP"] is None or isinstance(ply["MAT_GROUP"], int):
         if verbose:
@@ -162,7 +162,7 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['MAT_GROUP'] not valid")
-            return False
+        return False
     # check POINT_VECTOR
     if ply["POINT_VECTOR"] is None or isinstance(ply["POINT_VECTOR"], STRTYPE):
         if verbose:
@@ -170,12 +170,12 @@ def check_polyline(ply, point_cnt, verbose=True):
     else:
         if verbose:
             print("  ply['POINT_VECTOR'] not valid")
-            return False
+        return False
     # check if at least POINT_VECTOR or POINTS are given
     if (ply["POINT_VECTOR"] is None) == (not pnt_avail):
         if verbose:
             print("  Either 'POINT_VECTOR' or 'POINTS' need to be present!")
-            return False
+        return False
     # finally
     if verbose:
         print("  ------------")
@@ -246,7 +246,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['NAME'] not valid")
-            return False
+        return False
     # check ID
     if srf["ID"] is None or (isinstance(srf["ID"], int) and srf["ID"] >= 0):
         if verbose:
@@ -254,7 +254,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['ID'] not valid")
-            return False
+        return False
     # check POLYLINES
     if srf["POLYLINES"] is None or (
         isinstance(srf["POLYLINES"], list)
@@ -265,7 +265,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['POLYLINES'] not valid")
-            return False
+        return False
     # check EPSILON
     if srf["EPSILON"] is None or (
         isinstance(srf["EPSILON"], float) and srf["EPSILON"] >= 0.0
@@ -275,7 +275,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['EPSILON'] not valid")
-            return False
+        return False
     # check TYPE
     if srf["TYPE"] is None or isinstance(srf["TYPE"], int):
         if verbose:
@@ -283,7 +283,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['TYPE'] not valid")
-            return False
+        return False
     # check MAT_GROUP
     if srf["MAT_GROUP"] is None or isinstance(srf["MAT_GROUP"], int):
         if verbose:
@@ -291,7 +291,7 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['MAT_GROUP'] not valid")
-            return False
+        return False
     # check TIN
     if srf["TIN"] is None or isinstance(srf["TIN"], STRTYPE):
         if verbose:
@@ -299,12 +299,12 @@ def check_surface(srf, ply_names, verbose=True):
     else:
         if verbose:
             print("  srf['TIN'] not valid")
-            return False
+        return False
     # check if at least POINT_VECTOR or POINTS are given
     if bool(srf["TIN"] is None) == (not bool(srf["POLYLINES"])):
         if verbose:
             print("  Either 'TIN' or 'POLYLINES' need to be present!")
-            return False
+        return False
     # finally
     if verbose:
         print("  ------------")
@@ -371,7 +371,7 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol['NAME'] not valid")
-            return False
+        return False
     # check SURFACES
     if (
         isinstance(vol["SURFACES"], list)
@@ -383,7 +383,7 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol['SURFACES'] not valid")
-            return False
+        return False
     # check TYPE
     if vol["TYPE"] is None or isinstance(vol["TYPE"], int):
         if verbose:
@@ -391,7 +391,7 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol['TYPE'] not valid")
-            return False
+        return False
     # check MAT_GROUP
     if vol["MAT_GROUP"] is None or isinstance(vol["MAT_GROUP"], int):
         if verbose:
@@ -399,7 +399,7 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol['MAT_GROUP'] not valid")
-            return False
+        return False
     # check LAYER
     if vol["LAYER"] is None or isinstance(vol["LAYER"], int):
         if verbose:
@@ -407,7 +407,7 @@ def check_volume(vol, srf_names, verbose=True):
     else:
         if verbose:
             print("  vol['LAYER'] not valid")
-            return False
+        return False
     # finally
     if verbose:
         print("  ------------")
@@ -514,7 +514,7 @@ def check_gli_dict(gli, verbose=True):
         if point_cnt > 0:
             if verbose:
                 print("gli['point_names'] not valid")
-                return False
+            return False
         else:
             if verbose:
                 print("gli['point_names'] valid")
@@ -547,7 +547,7 @@ def check_gli_dict(gli, verbose=True):
         if point_cnt > 0:
             if verbose:
                 print("gli['point_md'] not valid")
-                return False
+            return False
         else:
             if verbose:
                 print("gli['point_md'] valid")
@@ -590,7 +590,7 @@ def check_gli_dict(gli, verbose=True):
             if len(ply_names) != len(set(ply_names)):
                 if verbose:
                     print("gli['polylines'] names have duplicates")
-                    return False
+                return False
             if verbose:
                 print("gli['polylines'] valid")
                 print("")
@@ -614,7 +614,7 @@ def check_gli_dict(gli, verbose=True):
             if len(srf_names) != len(set(srf_names)):
                 if verbose:
                     print("gli['surfaces'] names have duplicates")
-                    return False
+                return False
             if verbose:
                 print("gli['surfaces'] valid")
                 print("")
@@ -638,7 +638,7 @@ def check_gli_dict(gli, verbose=True):
             if len(vol_names) != len(set(vol_names)):
                 if verbose:
                     print("gli['volumes'] names have duplicates")
-                    return False
+                return False
             if verbose:
                 print("gli['volumes'] valid")
                 print("")

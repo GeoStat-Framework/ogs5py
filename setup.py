@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """
-ogs5py
-
-ogs5py is a python API for OpenGeoSys5 (www.opengeosys.org)
+ogs5py: a python API for OpenGeoSys5 (www.opengeosys.org)
 
 You can download OGS5 from:
     * www.opengeosys.org/ogs-5
@@ -61,7 +59,7 @@ setup(
         "meshio",  # import/export external meshes
         "vtk",  # for the readers
         "pexpect",  # handle command calles
-        #        'pygmsh',  # optional for creating gmesh based mashes
+        #        'pygmsh',  # optional for creating gmesh based meshes
         #        'mayavi',  # optional to view a mesh
     ],
     packages=find_packages(exclude=["tests*", "docs*"]),
