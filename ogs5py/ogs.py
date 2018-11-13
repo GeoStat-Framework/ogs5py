@@ -777,10 +777,8 @@ class OGS(object):
             else:
                 ogs_root = check_ogs
 
-        # create the model_root for ogs
-        model_root = os.path.join(self.task_root, self.task_id)
         # create the command to call ogs
-        args = [ogs_root, model_root]
+        args = [ogs_root, self.task_id]
         # add optional output directory
         # check if output directory is an absolute path with os.path.isabs
         # otherwise set it in the task_root directory
@@ -790,7 +788,9 @@ class OGS(object):
             # check if outputdir is given as absolut path
             if not os.path.isabs(output_dir):
                 # if not, put the outputfolder in the task_root
-                output_dir = os.path.join(self.task_root, output_dir)
+                output_dir = os.path.join(
+                    os.path.abspath(self.task_root), output_dir
+                )
             # create the outputdir
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
@@ -820,7 +820,12 @@ class OGS(object):
         # create a splitted output stream (to file and stdout)
         out = Output(log, print_log=print_log)
         # call ogs with pexpect
-        child = CmdRun(" ".join(args), timeout=timeout, logfile=out)
+        child = CmdRun(
+            " ".join(args),
+            timeout=timeout,
+            logfile=out,
+            cwd=os.path.abspath(self.task_root),
+        )
         # wait for ogs to finish
         child.expect(pexpect.EOF)
         # close the output stream
