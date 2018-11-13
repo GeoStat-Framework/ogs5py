@@ -16,8 +16,7 @@ from ogs5py.tools._types import (
     ELEM_DIM,
     EMPTY_MSH,
 )
-from ogs5py.tools.tools import unique_rows, replace, rotation_matrix
-from ogs5py.fileclasses.base import uncomment
+from ogs5py.tools.tools import unique_rows, replace, rotation_matrix, uncomment
 
 
 def load_ogs5msh(

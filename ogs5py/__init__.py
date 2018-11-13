@@ -31,7 +31,7 @@ TIM - Time settings
 
 from __future__ import absolute_import
 
-from ogs5py.ogs import OGS, search_task_id
+from ogs5py.ogs import OGS
 from ogs5py.fileclasses import (
     BC,
     CCT,
@@ -61,21 +61,22 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
+from ogs5py.tools.tools import search_task_id
 from ogs5py.tools._types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
 
 # from ogs5py.reader import (readvtk,
 #                            readpvd,
 #                            readtec_point,
 #                            readtec_polyline)
-
-__version__ = "0.3.0"
-
 # indentation of subkeywords
 SUB_IND = "  "
 # indentation of content
 CON_IND = "   "
 
-__all__ = [
+__version__ = "0.3.0"
+
+__all__ = ["OGS"]
+__all__ += [
     "BC",
     "CCT",
     "DDC",
@@ -104,7 +105,7 @@ __all__ = [
     "ST",
     "TIM",
 ]
-__all__ += ["OGS", "search_task_id"]
+__all__ += ["search_task_id"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 __all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]

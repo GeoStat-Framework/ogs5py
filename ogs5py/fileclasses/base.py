@@ -9,13 +9,18 @@ from __future__ import print_function, division
 import os
 import shutil
 import itertools
-import collections
 import time
 import numpy as np
 
-# import pandas as pd
-
-from ogs5py.tools._types import STRTYPE
+from ogs5py.tools.tools import (
+    format_content,
+    search_mkw,
+    uncomment,
+    get_key,
+    is_key,
+    is_mkey,
+    is_skey,
+)
 
 # current working directory
 CWD = os.getcwd()
@@ -973,144 +978,3 @@ class OGSfile(object):
         Type : str
         """
         return self.__repr__()
-
-
-def search_mkw(fin):
-    """
-    Search for the first main keyword in a given file-stream.
-
-    Parameters
-    ----------
-    fin : stream
-        given opened file
-    """
-    mkw = ""
-    for line in fin:
-        # remove comments
-        sline = uncomment(line)
-        if not sline:
-            continue
-        if is_mkey(sline):
-            mkw = get_key(sline)
-            break
-    return mkw
-
-
-def uncomment(line):
-    """
-    Remove OGS comments from a given line of an OGS file.
-    Comments are indicated by ";". The line is then splitted by whitespaces.
-
-    Parameters
-    ----------
-    line : str
-        given line
-    """
-    return line.split(";")[0].split()
-
-
-def is_key(sline):
-    """
-    Check if the given splitted line is an OGS key
-
-    Parameters
-    ----------
-    sline : list of str
-        given splitted line
-    """
-    return sline[0][0] in ["$", "#"]
-
-
-def is_mkey(sline):
-    """
-    Check if the given splitted line is a main key
-
-    Parameters
-    ----------
-    sline : list of str
-        given splitted line
-    """
-    return sline[0][0] == "#"
-
-
-def is_skey(sline):
-    """
-    Check if the given splitted line is a sub key
-
-    Parameters
-    ----------
-    sline : list of str
-        given splitted line
-    """
-    return sline[0][0] == "$"
-
-
-def get_key(sline):
-    """
-    Get the key of a splitted line if there is any. Else return ""
-
-    Parameters
-    ----------
-    sline : list of str
-        given splitted line
-    """
-    return sline[0][1:] if is_key(sline) else ""
-
-
-def format_dict(dict_in):
-    """
-    format the dictionary to use upper-case keys
-
-    Parameters
-    ----------
-    dict_in : dict
-        input dictionary
-    """
-    dict_out = {}
-    for key in dict_in:
-        new_key = str(key).upper()
-        if new_key != key and new_key in dict_in:
-            print("Your given OGS-keywords are not unique: " + new_key)
-            print("  --> DATA WILL BE LOST")
-        dict_out[new_key] = dict_in[key]
-    return dict_out
-
-
-def format_content(content):
-    """
-    format the content to be added to a 2D linewise array
-
-    Parameters
-    ----------
-    content : anything
-        Single object, or list of objects, or list of lists of objects.
-    """
-    # strings could be detected as iterable, so check this first
-    if isinstance(content, STRTYPE):
-        return [[content]]
-    # convert iterators (like zip)
-    if isinstance(content, collections.Iterator):
-        content = list(content)
-    # check for a single content thats not a string
-    try:
-        iter(content)
-    except TypeError:
-        return [[content]]
-    # check if any list in in the given list
-    # if so, we handle each entry as a line
-    for con in content:
-        found_list = False
-        # check for a list
-        try:
-            iter(con)
-        except TypeError:
-            pass
-        else:
-            if not isinstance(con, STRTYPE):
-                found_list = True
-                break
-    # if a list is found, we take the content as multiple lines
-    if found_list:
-        return content
-    # else we handle the content as single data
-    return [content]

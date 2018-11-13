@@ -110,6 +110,7 @@ from ogs5py.fileclasses import (
     TIM,
 )
 from ogs5py.tools._types import OGS_EXT
+from ogs5py.tools.tools import search_task_id, Output
 from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 
 # pexpect.spawn just runs on unix-like systems
@@ -138,7 +139,6 @@ class OGS(object):
         Comment at the top of the written files
     bot_com : string
         Comment at the bottom of the written files
-
 
     Attribute-Classes
     -----------------
@@ -523,6 +523,12 @@ class OGS(object):
         self.gem_init = []
         self.copy_files = []
 
+        # reset to initial attributes
+        self.task_root = self._task_root
+        self.task_id = self._task_id
+        self.top_com = self._top_com
+        self.bot_com = self._bot_com
+
     def load_model(
         self,
         task_root,
@@ -857,79 +863,3 @@ class OGS(object):
             os.remove(log)
 
         return success
-
-
-class Output(object):
-    """A class to duplicate an output stream to stdout."""
-
-    def __init__(self, file_or_name, print_log=True):
-        """Construct a new Output object.
-
-        Parameters
-        ----------
-        file_or_name : filename or open filehandle (writable)
-            File that will be duplicated
-        print_log : bool, optional
-            State if log should be printed. Default: True
-        """
-        if hasattr(file_or_name, "write") and hasattr(file_or_name, "seek"):
-            self.file = file_or_name
-        else:
-            self.file = open(file_or_name, "w")
-        self._closed = False
-        self.encoding = sys.stdout.encoding
-        if not self.encoding:
-            self.encoding = "utf-8"
-        self.print_log = print_log
-        self.last_line = ""
-
-    def close(self):
-        """Close the file and restore the channel."""
-        self.flush()
-        self.file.close()
-        self._closed = True
-
-    def write(self, data):
-        """Write data to both channels."""
-        self.last_line = data.decode(self.encoding)
-        self.file.write(self.last_line)
-        if self.print_log:
-            sys.stdout.write(data)
-            sys.stdout.flush()
-
-    def flush(self):
-        """Flush both channels."""
-        self.file.flush()
-        if self.print_log:
-            sys.stdout.flush()
-
-    def __del__(self):
-        if not self._closed:
-            self.close()
-
-
-def search_task_id(task_root):
-    """
-    Search for OGS model names in the given path
-
-    Parameters
-    ----------
-    task_root : str
-        Path to the destiny folder.
-
-    Return
-    ------
-    found_ids : list of str
-        List of all found task_ids.
-    """
-    found_ids = []
-    # iterate over all ogs file-extensions
-    for ext in OGS_EXT:
-        # search for files with given extension
-        files = glob.glob(os.path.join(task_root, "*" + ext))
-        # take the first found file if there are multiple
-        for fil in files:
-            tmp_id = os.path.splitext(os.path.basename(fil))[0]
-            if tmp_id not in found_ids:
-                found_ids.append(tmp_id)
-    return found_ids

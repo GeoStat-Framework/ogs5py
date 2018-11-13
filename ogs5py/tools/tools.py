@@ -6,13 +6,253 @@ tools for the ogs5py package
 @author: sebastian
 """
 from __future__ import division, print_function, absolute_import
+import os
+import sys
+import glob
+import collections
 from copy import deepcopy as dcp
 import numpy as np
-from numpy import ascontiguousarray as ascont
-from vtk import vtkStructuredPoints, vtkStructuredPointsWriter, vtkFieldData
-from vtk.util.numpy_support import numpy_to_vtk as np2vtk
 
-from ogs5py.tools._types import STRTYPE
+from ogs5py.tools._types import STRTYPE, OGS_EXT
+
+
+class Output(object):
+    """A class to duplicate an output stream to stdout."""
+
+    def __init__(self, file_or_name, print_log=True):
+        """Construct a new Output object.
+
+        Parameters
+        ----------
+        file_or_name : filename or open filehandle (writable)
+            File that will be duplicated
+        print_log : bool, optional
+            State if log should be printed. Default: True
+        """
+        if hasattr(file_or_name, "write") and hasattr(file_or_name, "seek"):
+            self.file = file_or_name
+        else:
+            self.file = open(file_or_name, "w")
+        self._closed = False
+        self.encoding = sys.stdout.encoding
+        if not self.encoding:
+            self.encoding = "utf-8"
+        self.print_log = print_log
+        self.last_line = ""
+
+    def close(self):
+        """Close the file and restore the channel."""
+        self.flush()
+        self.file.close()
+        self._closed = True
+
+    def write(self, data):
+        """Write data to both channels."""
+        self.last_line = data.decode(self.encoding)
+        self.file.write(self.last_line)
+        if self.print_log:
+            sys.stdout.write(data)
+            sys.stdout.flush()
+
+    def flush(self):
+        """Flush both channels."""
+        self.file.flush()
+        if self.print_log:
+            sys.stdout.flush()
+
+    def __del__(self):
+        if not self._closed:
+            self.close()
+
+
+def search_mkw(fin):
+    """
+    Search for the first main keyword in a given file-stream.
+
+    Parameters
+    ----------
+    fin : stream
+        given opened file
+    """
+    mkw = ""
+    for line in fin:
+        # remove comments
+        sline = uncomment(line)
+        if not sline:
+            continue
+        if is_mkey(sline):
+            mkw = get_key(sline)
+            break
+    return mkw
+
+
+def uncomment(line):
+    """
+    Remove OGS comments from a given line of an OGS file.
+    Comments are indicated by ";". The line is then splitted by whitespaces.
+
+    Parameters
+    ----------
+    line : str
+        given line
+    """
+    return line.split(";")[0].split()
+
+
+def is_key(sline):
+    """
+    Check if the given splitted line is an OGS key
+
+    Parameters
+    ----------
+    sline : list of str
+        given splitted line
+    """
+    return sline[0][0] in ["$", "#"]
+
+
+def is_mkey(sline):
+    """
+    Check if the given splitted line is a main key
+
+    Parameters
+    ----------
+    sline : list of str
+        given splitted line
+    """
+    return sline[0][0] == "#"
+
+
+def is_skey(sline):
+    """
+    Check if the given splitted line is a sub key
+
+    Parameters
+    ----------
+    sline : list of str
+        given splitted line
+    """
+    return sline[0][0] == "$"
+
+
+def get_key(sline):
+    """
+    Get the key of a splitted line if there is any. Else return ""
+
+    Parameters
+    ----------
+    sline : list of str
+        given splitted line
+    """
+    return sline[0][1:] if is_key(sline) else ""
+
+
+def format_dict(dict_in):
+    """
+    format the dictionary to use upper-case keys
+
+    Parameters
+    ----------
+    dict_in : dict
+        input dictionary
+    """
+    dict_out = {}
+    for key in dict_in:
+        new_key = str(key).upper()
+        if new_key != key and new_key in dict_in:
+            print("Your given OGS-keywords are not unique: " + new_key)
+            print("  --> DATA WILL BE LOST")
+        dict_out[new_key] = dict_in[key]
+    return dict_out
+
+
+def format_content(content):
+    """
+    format the content to be added to a 2D linewise array
+
+    Parameters
+    ----------
+    content : anything
+        Single object, or list of objects, or list of lists of objects.
+    """
+    # strings could be detected as iterable, so check this first
+    if isinstance(content, STRTYPE):
+        return [[content]]
+    # convert iterators (like zip)
+    if isinstance(content, collections.Iterator):
+        content = list(content)
+    # check for a single content thats not a string
+    try:
+        iter(content)
+    except TypeError:
+        return [[content]]
+    # check if any list in in the given list
+    # if so, we handle each entry as a line
+    for con in content:
+        found_list = False
+        # check for a list
+        try:
+            iter(con)
+        except TypeError:
+            pass
+        else:
+            if not isinstance(con, STRTYPE):
+                found_list = True
+                break
+    # if a list is found, we take the content as multiple lines
+    if found_list:
+        return content
+    # else we handle the content as single data
+    return [content]
+
+
+def search_task_id(task_root):
+    """
+    Search for OGS model names in the given path
+
+    Parameters
+    ----------
+    task_root : str
+        Path to the destiny folder.
+
+    Return
+    ------
+    found_ids : list of str
+        List of all found task_ids.
+    """
+    found_ids = []
+    # iterate over all ogs file-extensions
+    for ext in OGS_EXT:
+        # search for files with given extension
+        files = glob.glob(os.path.join(task_root, "*" + ext))
+        # take the first found file if there are multiple
+        for fil in files:
+            tmp_id = os.path.splitext(os.path.basename(fil))[0]
+            if tmp_id not in found_ids:
+                found_ids.append(tmp_id)
+    return found_ids
+
+
+def split_file_path(path, abs_path=False):
+    """
+    decompose a path to a file into the dir-path, the basename
+    and the file-extension
+
+    Parameters
+    ----------
+    path : string
+        string containing the path to a file
+    abs_path: bool, optional
+        convert the path to an absolut path. Default: False
+
+    Returns
+    -------
+    result : tuple of strings
+        tuple containing the dir-path, basename and file-extension
+    """
+    if abs_path:
+        path = os.path.abspath(path)
+    return os.path.split(path)[:1] + os.path.splitext(os.path.basename(path))
 
 
 def is_str_array(array):
@@ -40,88 +280,6 @@ def is_str_array(array):
         return True
 
     return False
-
-
-def save_vtk_stru_point(path, vtk_dict, verbose=True):
-    """
-    A routine to save a structured point vtk file given by a dictionary.
-
-    Parameters
-    ----------
-    path : string
-        Path for the file to be saved to.
-    vtk_dict : dict
-        Dictionary containing information of a structured point vtk file.
-        The following keywords are allowed:
-
-        * ``"dimensions"``: (int, int, int)
-        * ``"origin"``: (float, float, float)
-        * ``"spacing"``: (float, float, float)
-        * ``"header"``: string
-        * ``"field_data"``: dict of {"name": array}
-        * ``"point_data"``: dict of {"name": array}
-        * ``"cell_data"``: dict of {"name": array}
-
-    verbose : bool, optional
-        Print information of the writing process. Default: True
-
-    Notes
-    -----
-    All data is assumed to be scalar.
-    """
-    out = vtkStructuredPoints()
-    if verbose:
-        print("Set 'dimensions', 'origin', 'spacing'")
-    out.SetDimensions(vtk_dict["dimensions"])
-    out.SetOrigin(vtk_dict["origin"])
-    out.SetSpacing(vtk_dict["spacing"])
-
-    if vtk_dict["field_data"]:
-        if verbose:
-            print("Set 'field_data'")
-        data = vtkFieldData()
-        for sgl_data in vtk_dict["field_data"]:
-            if verbose:
-                print("  Set '" + sgl_data + "'")
-            arr = np2vtk(
-                ascont(vtk_dict["field_data"][sgl_data].reshape(-1, order="F"))
-            )
-            arr.SetName(sgl_data)
-            data.AddArray(arr)
-        out.SetFieldData(data)
-
-    if vtk_dict["point_data"]:
-        if verbose:
-            print("Set 'point_data'")
-        data = out.GetPointData()
-        for sgl_data in vtk_dict["point_data"]:
-            if verbose:
-                print("  Set '" + sgl_data + "'")
-            arr = np2vtk(
-                ascont(vtk_dict["point_data"][sgl_data].reshape(-1, order="F"))
-            )
-            arr.SetName(sgl_data)
-            data.AddArray(arr)
-
-    if vtk_dict["cell_data"]:
-        if verbose:
-            print("Set 'cell_data'")
-        data = out.GetCellData()
-        for sgl_data in vtk_dict["cell_data"]:
-            if verbose:
-                print("  Set '" + sgl_data + "'")
-            arr = np2vtk(
-                ascont(vtk_dict["cell_data"][sgl_data].reshape(-1, order="F"))
-            )
-            arr.SetName(sgl_data)
-            data.AddArray(arr)
-
-    writer = vtkStructuredPointsWriter()
-    writer.SetFileName(path)
-    writer.SetInputData(out)
-    if "header" in vtk_dict:
-        writer.SetHeader(vtk_dict["header"])
-    writer.Write()
 
 
 def rotate_points(

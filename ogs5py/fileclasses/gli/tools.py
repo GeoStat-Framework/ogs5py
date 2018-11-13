@@ -21,7 +21,7 @@ from ogs5py.tools._types import (
     EMPTY_SRF,
     EMPTY_VOL,
 )
-from ogs5py.fileclasses.base import uncomment
+from ogs5py.tools.tools import uncomment
 
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):

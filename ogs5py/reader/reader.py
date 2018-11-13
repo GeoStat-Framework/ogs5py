@@ -21,7 +21,7 @@ from ogs5py.reader.techelper import (
     readtec_single_table,
     readtec_multi_table,
 )
-from ogs5py.reader.tools import split_file_path
+from ogs5py.tools.tools import split_file_path
 
 
 ###############################################################################
