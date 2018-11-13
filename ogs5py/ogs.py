@@ -49,6 +49,9 @@ pct : Particle Definition for Random walk
 pqc : Phreqqc coupling
     PHREEQC configuration for the model.
     (just a line-wise file with no comfort)
+pqcdat : Phreqqc coupling (the phreeqc.dat file)
+    phreeqc.dat file for the model.
+    (just a line-wise file with no comfort)
 rei : Reaction Interface
     Information of the Reaction Interface for the model.
 rfd : definition of time-curves for variing BCs or STs
@@ -99,6 +102,7 @@ from ogs5py.fileclasses import (
     PCS,
     PCT,
     PQC,
+    PQCdat,
     REI,
     RFD,
     RFR,
@@ -174,6 +178,9 @@ class OGS(object):
         Information of the Particles defined for Randomwalk setting.
     pqc : Phreqqc coupling (not supported yet)
         Information of the Boundary Conditions for the model.
+    pqcdat : Phreqqc coupling (the phreeqc.dat file)
+        phreeqc.dat file for the model.
+        (just a line-wise file with no comfort)
     rei : Reaction Interface
         Information of the Reaction Interface for the model.
     rfd : definition of time-curves for variing BCs or STs
@@ -240,6 +247,7 @@ class OGS(object):
         self.pcs = PCS(task_root=task_root, task_id=task_id)
         self.pct = PCT(task_root=task_root, task_id=task_id)
         self.pqc = PQC(task_root=task_root, task_id=task_id)
+        self.pqcdat = PQCdat(task_root=task_root, task_id=task_id)
         self.rei = REI(task_root=task_root, task_id=task_id)
         self.rfd = RFD(task_root=task_root, task_id=task_id)
         self.st = ST(task_root=task_root, task_id=task_id)
@@ -315,6 +323,7 @@ class OGS(object):
             self.rfr[i].task_root = value
         for i in range(len(self.gem_init)):
             self.gem_init[i].task_root = value
+        self.pqcdat.task_root = value
 
     @property
     def task_id(self):
@@ -482,6 +491,8 @@ class OGS(object):
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).write_file()
 
+        self.pqcdat.write_file()
+
         for mpd_file in self.mpd:
             mpd_file.write_file()
 
@@ -505,6 +516,7 @@ class OGS(object):
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).reset()
+        self.pqcdat.reset()
         self.mpd = []
         self.gli_ext = []
         self.rfr = []
@@ -720,6 +732,14 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.rfr.append(dcp(ext_file))
+
+            # read phreeqc.dat
+            if ext == ".pqc":
+                self.pqcdat.read_file(
+                    path=os.path.join(task_root, "phreeqc.dat"),
+                    encoding=encoding,
+                    verbose=verbose,
+                )
 
         return True
 

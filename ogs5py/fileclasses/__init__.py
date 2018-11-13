@@ -26,6 +26,7 @@ from ogs5py.fileclasses.out import OUT
 from ogs5py.fileclasses.pcs import PCS
 from ogs5py.fileclasses.pct import PCT
 from ogs5py.fileclasses.pqc import PQC
+from ogs5py.fileclasses.pqc import PQCdat
 from ogs5py.fileclasses.rei import REI
 from ogs5py.fileclasses.rfd import RFD
 from ogs5py.fileclasses.st import ST
@@ -54,6 +55,7 @@ __all__ = [
     "PCS",
     "PCT",
     "PQC",
+    "PQCdat",
     "REI",
     "RFD",
     "ST",
