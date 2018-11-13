@@ -111,6 +111,12 @@ class RFR(object):
         else:
             self.data = np.zeros(0)
 
+    def __bool__(self):
+        return not self.check(False)
+
+    def __nonzero__(self):
+        return self.__bool__()
+
     def check(self, verbose=True):
         """
         Check if the external geometry definition is valid in the sence,

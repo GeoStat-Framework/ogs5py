@@ -656,7 +656,13 @@ class MSHsgl(OGSfile):
         else:
             kwargs["verbose"] = verbose = False
         if self.check(verbose=verbose):
-            save_ogs5msh(path, self._meshlist, top_com=None, **kwargs)
+            save_ogs5msh(
+                path,
+                self._meshlist,
+                top_com=None,
+                bot_com=self.bot_com,
+                **kwargs,
+            )
         else:
             print("the mesh could not be saved since it is not valid")
 

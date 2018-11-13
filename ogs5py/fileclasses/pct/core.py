@@ -39,11 +39,20 @@ class PCT(object):
         self.copy_file = None
         self.copy_path = None
 
+    def __bool__(self):
+        return not self.is_empty
+
+    def __nonzero__(self):
+        return self.__bool__()
+
     @property
     def is_empty(self):
         """state if the OGS file is empty"""
-        # check if the list of main keywords is empty
-        return not self.data.shape[0] >= 1
+        # check if the data is empty
+        if self.check(False):
+            return not self.data.shape[0] >= 1
+        # if check is not passed, handle it as empty file
+        return True
 
     def check(self, verbose=True):
         """
