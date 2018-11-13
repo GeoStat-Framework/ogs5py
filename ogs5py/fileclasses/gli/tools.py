@@ -249,9 +249,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
     return out
 
 
-def save_ogs5gli(
-    filepath, gli, top_com=None, bot_com=None, verbose=True, **kwargs
-):
+def save_ogs5gli(filepath, gli, top_com=None, verbose=True):
     """
     save a given OGS5 mesh file
 
@@ -293,25 +291,9 @@ def save_ogs5gli(
                 "LAYER" (int or None)
     top_com : str, optional
         Comment to be added as header to the file, Default: None
-    bot_com : str, optional
-        Comment to be added at the bottom to the file, Default: None
     verbose : bool, optional
         Print information of the writing process. Default: True
-    **kwargs
-        These can contain ``sub_ind`` and ``con_ind`` for indentation
-        definition for sub-keys and content
     """
-    from ogs5py import SUB_IND, CON_IND
-
-    if "sub_ind" in kwargs:
-        sub_ind = kwargs["sub_ind"]
-    else:
-        sub_ind = SUB_IND
-    if "con_ind" in kwargs:
-        con_ind = kwargs["con_ind"]
-    else:
-        con_ind = CON_IND
-
     with open(filepath, "w") as gli_f:
         if top_com:
             if verbose:
@@ -344,12 +326,12 @@ def save_ogs5gli(
             # generate polyline
             for key in PLY_KEY_LIST:
                 if key != "POINTS" and ply[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(ply[key]), file=gli_f)
+                    print(" $" + key, file=gli_f)
+                    print("  {}".format(ply[key]), file=gli_f)
                 elif ply[key] is not None:
-                    print(sub_ind + "$POINTS", file=gli_f)
+                    print(" $POINTS", file=gli_f)
                     for pnt in ply["POINTS"]:
-                        print(con_ind + "{}".format(pnt), file=gli_f)
+                        print("  {}".format(pnt), file=gli_f)
 
         if verbose:
             print("write #SURFACES")
@@ -359,12 +341,12 @@ def save_ogs5gli(
             # generate surface
             for key in SRF_KEY_LIST:
                 if key != "POLYLINES" and srf[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(srf[key]), file=gli_f)
+                    print(" $" + key, file=gli_f)
+                    print("  {}".format(srf[key]), file=gli_f)
                 elif srf[key] is not None:
-                    print(sub_ind + "$POLYLINES", file=gli_f)
+                    print(" $POLYLINES", file=gli_f)
                     for ply in srf["POLYLINES"]:
-                        print(con_ind + "{}".format(ply), file=gli_f)
+                        print("  {}".format(ply), file=gli_f)
 
         if verbose:
             print("write #VOLUMES")
@@ -374,17 +356,13 @@ def save_ogs5gli(
             # generate volume
             for key in VOL_KEY_LIST:
                 if key != "SURFACES" and vol[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(vol[key]), file=gli_f)
+                    print(" $" + key, file=gli_f)
+                    print("  {}".format(vol[key]), file=gli_f)
                 elif vol[key] is not None:
-                    print(sub_ind + "$SURFACES", file=gli_f)
+                    print(" $SURFACES", file=gli_f)
                     for srf in vol["SURFACES"]:
-                        print(con_ind + "{}".format(srf), file=gli_f)
+                        print("  {}".format(srf), file=gli_f)
 
         if verbose:
             print("write #STOP")
-        if bot_com:
-            print("#STOP", file=gli_f)
-            print(bot_com, end="", file=gli_f)
-        else:
-            print("#STOP", end="", file=gli_f)
+        print("#STOP", end="", file=gli_f)

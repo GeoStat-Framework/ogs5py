@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
 History
@@ -10,7 +10,6 @@ import os
 import shutil
 import itertools
 import collections
-import time
 import numpy as np
 
 # import pandas as pd
@@ -19,14 +18,12 @@ from ogs5py.tools._types import STRTYPE
 
 # current working directory
 CWD = os.getcwd()
-# Top Comment for io-files
-TOP_COM = "|-------------- Written with ogs5py --------------|"
-# Bottom Comment for io-files
-BOT_COM = (
-    "|-- Written with ogs5py on: "
-    + time.strftime("%Y-%m-%d_%H-%M-%S")
-    + " --|"
-)
+# indentation of subkeywords
+SUB_IND = "  "
+# indentation of content
+CON_IND = "   "
+# Top Comment for OGSpy
+TOP_COM = "|-----------Written with ogs5py-----------|"
 
 
 class LineFile(object):
@@ -107,12 +104,6 @@ class LineFile(object):
         Delete every content.
         """
         self.lines = []
-
-    def __bool__(self):
-        return not self.is_empty
-
-    def __nonzero__(self):
-        return self.__bool__()
 
     def check(self, verbose=True):
         """
@@ -250,7 +241,6 @@ class OGSfile(object):
         self.task_root = task_root
         self.task_id = task_id
         self.top_com = TOP_COM
-        self.bot_com = BOT_COM
         # placeholder for later derived classes for each file-type
         self.file_ext = ".std"
         # list of main keywords indicated by "#"
@@ -285,12 +275,6 @@ class OGSfile(object):
                 else:
                     out += 2 * tab + "- no sub keyword\n"
         self.__doc__.format(out)
-
-    def __bool__(self):
-        return not self.is_empty
-
-    def __nonzero__(self):
-        return self.__bool__()
 
     @property
     def is_empty(self):
@@ -838,8 +822,6 @@ class OGSfile(object):
         update : bool, optional
             state if the content should be updated before saving. Default: True
         """
-        from ogs5py import SUB_IND, CON_IND
-
         if "update" in kwargs:
             update = bool(kwargs["update"])
         else:
@@ -848,13 +830,13 @@ class OGSfile(object):
         if update:
             self._update_out()
         # bug in OGS5 ... mpd files need Windows line-ending
-        #        if (
-        #            not self.is_empty
-        #            and self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED"
-        #        ):
-        #            lend = "\r\n"
-        #        else:
-        #            lend = "\n"
+        if (
+            not self.is_empty
+            and self.mainkw[0] == "MEDIUM_PROPERTIES_DISTRIBUTED"
+        ):
+            lend = "\r\n"
+        else:
+            lend = "\n"
 
         lend = "\n"
 
@@ -886,22 +868,10 @@ class OGSfile(object):
                                 end=lend,
                                 file=fout
                             )
-                        elif CON_IND:
-                            print(
-                                CON_IND[:-1],  # hack to fit with sep=" "
-                                *con,
-                                sep=" ",
-                                end=lend,
-                                file=fout
-                            )
                         else:
-                            print(*con, sep=" ", end=lend, file=fout)
-            # write the final STOP keyword and the bottom comment
-            if self.bot_com:
-                print("#STOP", end=lend, file=fout)
-                print(self.bot_com, end="", file=fout)
-            else:
-                print("#STOP", end="", file=fout)
+                            print(CON_IND, *con, sep=" ", end=lend, file=fout)
+            # write the final STOP keyword
+            print("#STOP", end="", file=fout)
 
     def write_file(self):
         """
@@ -945,8 +915,6 @@ class OGSfile(object):
         ----
         Type : str
         """
-        from ogs5py import SUB_IND, CON_IND
-
         out = ""
         for i, mkw in enumerate(self.mainkw):
             out += "#" + mkw + "\n"
@@ -1113,4 +1081,5 @@ def format_content(content):
     if found_list:
         return content
     # else we handle the content as single data
-    return [content]
+    else:
+        return [content]

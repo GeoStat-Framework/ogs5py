@@ -71,8 +71,6 @@ class DDC(OGSfile):
         update : bool, optional
             state if the content should be updated before saving. Default: True
         """
-        from ogs5py import SUB_IND, CON_IND
-
         if "update" in kwargs:
             update = bool(kwargs["update"])
         else:
@@ -90,26 +88,9 @@ class DDC(OGSfile):
                 # iterate over the subkeywords
                 for j, skw in enumerate(self.subkw[i]):
                     # the number of related content is behind the sub key
-                    print(
-                        SUB_IND + "$" + skw,
-                        len(self.cont[i][j]),
-                        sep=" ",
-                        file=fout,
-                    )
+                    print("$" + skw, len(self.cont[i][j]), sep=" ", file=fout)
                     # iterate over the content
                     for con in self.cont[i][j]:
-                        if CON_IND:
-                            print(
-                                CON_IND[:-1],  # hack to fit with sep=" "
-                                *con,
-                                sep=" ",
-                                file=fout
-                            )
-                        else:
-                            print(*con, sep=" ", file=fout)
+                        print(*con, sep=" ", file=fout)
             # write the final STOP keyword
-            if self.bot_com:
-                print("#STOP", file=fout)
-                print(self.bot_com, end="", file=fout)
-            else:
-                print("#STOP", end="", file=fout)
+            print("#STOP", end="", file=fout)

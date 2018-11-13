@@ -9,7 +9,6 @@ from ogs5py.fileclasses.cct import CCT
 from ogs5py.fileclasses.ddc import DDC
 from ogs5py.fileclasses.fct import FCT
 from ogs5py.fileclasses.gem import GEM
-from ogs5py.fileclasses.gem import GEMinit
 from ogs5py.fileclasses.gli import GLI
 from ogs5py.fileclasses.gli import GLIext
 from ogs5py.fileclasses.ic import IC
@@ -37,7 +36,6 @@ __all__ = [
     "DDC",
     "FCT",
     "GEM",
-    "GEMinit",
     "GLI",
     "GLIext",
     "IC",

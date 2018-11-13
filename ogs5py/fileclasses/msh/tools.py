@@ -361,9 +361,7 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
     return out
 
 
-def save_ogs5msh(
-    filepath, mesh, top_com=None, bot_com=None, verbose=True, **kwargs
-):
+def save_ogs5msh(filepath, mesh, top_com=None, verbose=True):
     """
     save a given OGS5 mesh file
 
@@ -392,30 +390,13 @@ def save_ogs5msh(
     top_com : str, optional
         Comment to be added as header to the file, Default: None
         (The MSH file doesn't allow comments as header)
-    bot_com : str, optional
-        Comment to be added at the bottom to the file, Default: None
     verbose : bool, optional
         Print information of the writing process. Default: True
-    **kwargs
-        These can contain ``sub_ind`` and ``con_ind`` for indentation
-        definition for sub-keys and content
     """
     import pandas as pd
-    from ogs5py import SUB_IND, CON_IND
-
-    if "sub_ind" in kwargs:
-        sub_ind = kwargs["sub_ind"]
-    else:
-        sub_ind = SUB_IND
-    if "con_ind" in kwargs:
-        con_ind = kwargs["con_ind"]
-    else:
-        con_ind = CON_IND
 
     if not isinstance(mesh, (list, tuple)):
         mesh = [mesh]
-
-    top_com = None
 
     with open(filepath, "w") as msh:
         if top_com:
@@ -436,21 +417,21 @@ def save_ogs5msh(
                     key in ["AXISYMMETRY", "CROSS_SECTION"]
                     and mesh_i["mesh_data"][key]
                 ):
-                    msh.write(sub_ind + "$" + key + "\n")
+                    msh.write("$" + key + "\n")
                 elif key == "GEO_TYPE":
-                    msh.write(sub_ind + "$" + key + "\n")
+                    msh.write("$" + key + "\n")
                     geo_type = mesh_i["mesh_data"]["GEO_TYPE"]
                     geo_name = mesh_i["mesh_data"]["GEO_NAME"]
                     msh.write(geo_type + " " + geo_name + "\n")
                 else:
-                    msh.write(sub_ind + "$" + key + "\n")
-                    msh.write(con_ind + str(mesh_i["mesh_data"][key]) + "\n")
+                    msh.write("$" + key + "\n")
+                    msh.write(str(mesh_i["mesh_data"][key]) + "\n")
 
             if verbose:
                 print("write NODES")
-            msh.write(sub_ind + "$NODES\n")
+            msh.write("$NODES\n")
             no_nodes = mesh_i["nodes"].shape[0]
-            msh.write(con_ind + str(no_nodes) + "\n")
+            msh.write(str(no_nodes) + "\n")
             data = pd.DataFrame(
                 index=np.arange(no_nodes), columns=np.arange(4)
             )
@@ -460,9 +441,9 @@ def save_ogs5msh(
 
             if verbose:
                 print("write ELEMENTS")
-            msh.write(sub_ind + "$ELEMENTS\n")
+            msh.write("$ELEMENTS\n")
             no_el = no_of_elements(mesh_i)
-            msh.write(con_ind + str(no_el) + "\n")
+            msh.write(str(no_el) + "\n")
             data = pd.DataFrame(
                 index=np.arange(no_el), columns=np.arange(8 + 3)
             )
@@ -494,12 +475,7 @@ def save_ogs5msh(
 
         if verbose:
             print("writing finished: STOP")
-        #        msh.write("#STOP")
-        if bot_com:
-            print("#STOP", file=msh)
-            print(bot_com, end="", file=msh)
-        else:
-            print("#STOP", end="", file=msh)
+        msh.write("#STOP")
 
 
 def import_mesh(
