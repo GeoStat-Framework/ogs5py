@@ -1,0 +1,12 @@
+|-------------- Written with ogs5py --------------|
+#SOURCE_TERM
+$PCS_TYPE
+RICHARDS_FLOW
+$PRIMARY_VARIABLE
+PRESSURE1
+$GEO_TYPE
+POLYLINE RIGHT_BOUNDARY
+$DIS_TYPE
+CONSTANT_NEUMANN 5.0e-11 // 9.37e-006 //
+#STOP
+|-- Written with ogs5py on: 2018-11-13_16-55-19 --|

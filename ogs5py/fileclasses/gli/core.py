@@ -407,7 +407,13 @@ class GLI(OGSfile):
         else:
             kwargs["verbose"] = verbose = False
         if self.check(verbose=verbose):
-            save_ogs5gli(path, self.__dict, top_com=self.top_com, **kwargs)
+            save_ogs5gli(
+                path,
+                self.__dict,
+                top_com=self.top_com,
+                bot_com=self.bot_com,
+                **kwargs,
+            )
         else:
             print("the mesh could not be saved since it is not valid")
 
@@ -965,6 +971,12 @@ class GLIext(object):
                 self.data = np.zeros((0, 3))
         if not self.check(False):
             raise ValueError("Gli external: data not valid")
+
+    def __bool__(self):
+        return not self.check(False)
+
+    def __nonzero__(self):
+        return self.__bool__()
 
     def check(self, verbose=True):
         """

@@ -38,6 +38,7 @@ from ogs5py.fileclasses import (
     DDC,
     FCT,
     GEM,
+    GEMinit,
     GLI,
     GLIext,
     IC,
@@ -68,12 +69,18 @@ from ogs5py.tools._types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
 
 __version__ = "0.3.0"
 
+# indentation of subkeywords
+SUB_IND = "  "
+# indentation of content
+CON_IND = "   "
+
 __all__ = [
     "BC",
     "CCT",
     "DDC",
     "FCT",
     "GEM",
+    "GEMinit",
     "GLI",
     "GLIext",
     "IC",
@@ -97,4 +104,5 @@ __all__ = [
 ]
 __all__ += ["OGS", "search_task_id"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
+__all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]

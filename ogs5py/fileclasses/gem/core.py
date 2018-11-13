@@ -4,7 +4,6 @@ Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
 
 from __future__ import absolute_import, division, print_function
 import os
-from copy import deepcopy
 from ogs5py.fileclasses.base import OGSfile, LineFile
 
 # current working directory
@@ -87,9 +86,15 @@ class GEM(OGSfile):
         self.file_ext = ".gem"
 
 
-class GEMext(object):
+class GEMinit(object):
     """
-    Class for an external definition for the ogs GEOMETRY file.
+    Class for GEMS3K input file (lst file) that contains the names of
+
+        * the GEMS data file (dch file),
+        * the GEMS numerical settings (ipm file)
+        * the example setup (dbr file)
+
+    used to initialize the GEMS3K kernel.
 
     Attributes
     ----------
@@ -101,50 +106,148 @@ class GEMext(object):
         list of the given files as LineFile-Classes
     is_empty : bool
         state of the file is empty
+
+    Info
+    ----
+    http://gems.web.psi.ch/GEMS3/index.html
+
+    http://gems.web.psi.ch/GEMS3K/
+
+    http://gems.web.psi.ch/GEMS3K/doc/html/gems3k-iofiles.html
     """
 
     def __init__(
         self,
-        task_root=os.path.join(CWD, "ogs5model"),
         lst_name="model-dat.lst",
-        files=None,
+        dch=None,
+        ipm=None,
+        dbr=None,
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
     ):
         """
         Input
         -----
         lst_name: string
             name of the lst file
+        dch: LineFile or None
+            the GEMS data file
+        ipm: LineFile or None
+            the GEMS data file
+        dbr: LineFile or None
+            the GEMS data file
+        task_root : str
+            Path to the destiny folder.
         """
-        self.task_root = task_root
+        self._task_root = task_root
+        self.task_id = task_id
         self.lst_name = lst_name
-        if files is not None:
-            self.files = files
+        # add files
+        if dch is not None:
+            self.dch = dch
         else:
-            self.files = []
+            self.dch = LineFile(
+                file_name=self.task_id + "-dch",
+                file_ext=".dat",
+                task_root=self.task_root,
+            )
+        if ipm is not None:
+            self.ipm = ipm
+        else:
+            self.ipm = LineFile(
+                file_name=self.task_id + "-ipm",
+                file_ext=".dat",
+                task_root=self.task_root,
+            )
+        if dbr is not None:
+            self.dbr = dbr
+        else:
+            self.dbr = LineFile(
+                file_name=self.task_id + "-dbr",
+                file_ext=".dat",
+                task_root=self.task_root,
+            )
 
     def get_file_type(self):
         """Get the OGS file class name"""
         return "lst"
 
     @property
+    def files(self):
+        """
+        List of the included files: dch, ipm, dbr.
+        """
+        out_list = []
+        if self.dch is not None:
+            out_list.append(self.dch)
+        if self.ipm is not None:
+            out_list.append(self.ipm)
+        if self.dbr is not None:
+            out_list.append(self.dbr)
+        return out_list
+
+    @property
+    def file_names(self):
+        """
+        The names of the included files.
+        """
+        out_list = []
+        for file in self.files:
+            out_list.append(file.file_name + file.file_ext)
+        return out_list
+
+    def __bool__(self):
+        return not self.is_empty
+
+    def __nonzero__(self):
+        return self.__bool__()
+
+    @property
     def is_empty(self):
         """state if the file is empty"""
-        # check if the list of main keywords is empty
+        # check if the files are empty
         if self.check(False):
-            return not bool(self.files)
+            return not any(self.files)
         # if check is not passed, handle it as empty file
         return True
+
+    @property
+    def task_root(self):
+        """
+        Get and set the task_root path of the ogs model.
+        """
+        return self._task_root
+
+    @task_root.setter
+    def task_root(self, value):
+        self._task_root = value
+        self.dch.task_root = value
+        self.ipm.task_root = value
+        self.dbr.task_root = value
 
     def reset(self):
         """
         Delete every content.
         """
-        self.files = []
+        self.dch = LineFile(
+            file_name=self.task_id + "-dch",
+            file_ext=".dat",
+            task_root=self.task_root,
+        )
+        self.ipm = LineFile(
+            file_name=self.task_id + "-ipm",
+            file_ext=".dat",
+            task_root=self.task_root,
+        )
+        self.dbr = LineFile(
+            file_name=self.task_id + "-dbr",
+            file_ext=".dat",
+            task_root=self.task_root,
+        )
 
     def check(self, verbose=True):
         """
-        Check if the external geometry definition is valid in the sence,
-        that the contained data is consistent.
+        Check if the GEM external file is valid.
 
         Parameters
         ----------
@@ -154,15 +257,18 @@ class GEMext(object):
         Returns
         -------
         result : bool
-            Validity of the given gli.
+            Validity.
         """
         # no checks are performed
-        return True
+        out = True
+        for file in self.files:
+            out &= file.check(verbose)
+        return out
 
     def save(self, path):
         """
         Save the actual GEM external file in the given path.
-        lst - dch - ipm - dbr
+        lst file containing: dch, ipm, dbr
 
         Parameters
         ----------
@@ -199,7 +305,9 @@ class GEMext(object):
                 for line in fin:
                     if line.strip().startswith("-t"):
                         file_names = []
-                        for file_name in line.strip().split()[1:]:
+                        # get rid of leading "-t"
+                        for file_name in line.split()[1:]:
+                            # get rid of " and ' around strings
                             file_names.append(file_name.strip('"').strip("'"))
                         break
         except IOError:
@@ -211,18 +319,28 @@ class GEMext(object):
                     + path
                 )
         else:
-            for file_name in file_names:
-                file_cl = LineFile(
-                    file_name=os.path.splitext(file_name)[0],
-                    file_ext=os.path.splitext(file_name)[1],
-                    task_root=self.task_root,
-                )
-                file_cl.read_file(
-                    path=os.path.join(root, file_name),
-                    encoding=encoding,
-                    verbose=verbose,
-                )
-                self.files.append(deepcopy(file_cl))
+            # hard coded order of files
+            self.dch.file_name = os.path.splitext(file_names[0])[0]
+            self.dch.file_ext = os.path.splitext(file_names[0])[1]
+            self.dch.read_file(
+                path=os.path.join(root, file_names[0]),
+                encoding=encoding,
+                verbose=verbose,
+            )
+            self.ipm.file_name = os.path.splitext(file_names[1])[0]
+            self.ipm.file_ext = os.path.splitext(file_names[1])[1]
+            self.ipm.read_file(
+                path=os.path.join(root, file_names[1]),
+                encoding=encoding,
+                verbose=verbose,
+            )
+            self.dbr.file_name = os.path.splitext(file_names[2])[0]
+            self.dbr.file_ext = os.path.splitext(file_names[2])[1]
+            self.dbr.read_file(
+                path=os.path.join(root, file_names[2]),
+                encoding=encoding,
+                verbose=verbose,
+            )
 
     def write_file(self):
         """
@@ -246,8 +364,8 @@ class GEMext(object):
         Type : str
         """
         out_str = "-t"
-        for file in self.files:
-            out_str += ' "' + file.file_name + file.file_ext + '"'
+        for file_name in self.file_names:
+            out_str += ' "' + file_name + '"'
         return out_str
 
     def __str__(self):
