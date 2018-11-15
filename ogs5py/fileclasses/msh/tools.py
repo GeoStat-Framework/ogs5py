@@ -756,7 +756,7 @@ def remove_dim(mesh, remove):
         mesh["element_id"] = gen_std_elem_id(mesh["elements"])
 
 
-def combine(mesh_1, mesh_2, decimals=4, fast=False):
+def combine(mesh_1, mesh_2, decimals=4, fast=True):
     """
     Combine mesh_1 and mesh_2 to one single mesh. The node list will be
     updated to eliminate duplicates. Element intersections are not checked.
@@ -789,7 +789,7 @@ def combine(mesh_1, mesh_2, decimals=4, fast=False):
     fast : bool, optional
         If fast is True, the vector comparison is executed by a
         decimal comparison. If fast is False, all pairwise distances
-        are calculated. Default: False
+        are calculated. Default: True
 
     Returns
     -------
