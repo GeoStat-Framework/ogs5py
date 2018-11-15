@@ -9,14 +9,20 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 import meshio as mio
-from ogs5py.tools._types import (
+from ogs5py.tools.types import (
     ELEM_NAMES,
     NODE_NO,
     MESHIO_NAMES,
     ELEM_DIM,
     EMPTY_MSH,
 )
-from ogs5py.tools.tools import unique_rows, replace, rotation_matrix, uncomment
+from ogs5py.tools.tools import (
+    unique_rows,
+    replace,
+    rotation_matrix,
+    uncomment,
+    volume,
+)
 
 
 def load_ogs5msh(
@@ -934,6 +940,50 @@ def get_centroids(mesh):
                 continue
             points = mesh_i["nodes"][mesh_i["elements"][elem]]
             out[elem] = np.mean(points, axis=1)
+        result.append(out)
+
+    if single:
+        result = result[0]
+
+    return result
+
+
+def get_volumes(mesh):
+    """
+    calculate the volumes of the given elements
+
+    Parameters
+    ----------
+    mesh : list of dicts or single dict
+        each dict containing
+        at least the following keywords
+            nodes : ndarray
+                Array with all node postions.
+            elements : dict of ndarrays
+                Contains array of nodes for elements sorted by element types.
+
+    Returns
+    -------
+    result : list of dictionaries or single dict of ndarrays (like 'mesh')
+        Volumes of elements sorted by element types.
+    """
+    single = False
+    if not isinstance(mesh, (list, tuple)):
+        tmp_mesh = [mesh]
+        single = True
+    else:
+        tmp_mesh = mesh
+
+    result = []
+    for mesh_i in tmp_mesh:
+        out = {}
+        for elem in ELEM_NAMES:
+            if elem not in mesh_i["elements"]:
+                continue
+            points = mesh_i["nodes"][mesh_i["elements"][elem]]
+            # node number needs to be first for "volume()"
+            points = np.swapaxes(points, 0, 1)
+            out[elem] = volume(elem, points)
         result.append(out)
 
     if single:

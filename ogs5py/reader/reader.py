@@ -13,7 +13,7 @@ import glob
 import xml.etree.ElementTree as ET
 import numpy as np
 from vtk import vtkDataReader, vtkXMLFileReadTester
-from ogs5py.tools._types import PCS_TYP
+from ogs5py.tools.types import PCS_TYP
 from ogs5py.reader.vtkhelper import vtkreader_dict, XMLreader_dict
 from ogs5py.reader.techelper import (
     split_ply_path,

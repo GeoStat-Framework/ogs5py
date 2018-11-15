@@ -21,7 +21,7 @@ from vtk import (
 )
 from vtk.util.numpy_support import vtk_to_numpy as vtk2np
 import numpy as np
-from ogs5py.tools._types import VTK_TYP, NODE_NO
+from ogs5py.tools.types import VTK_TYP, NODE_NO
 
 
 ###############################################################################

@@ -9,7 +9,7 @@ from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 from ogs5py.fileclasses.msh import generator as gen
-from ogs5py.tools._types import ELEM_NAMES, EMPTY_MSH
+from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
 from ogs5py.fileclasses.msh.checker import check_mesh_list, check_mesh_dict
 from ogs5py.fileclasses.msh.tools import (
     load_ogs5msh,
@@ -18,6 +18,7 @@ from ogs5py.fileclasses.msh.tools import (
     export_mesh,
     combine,
     get_centroids,
+    get_volumes,
     remove_dim,
     gen_std_elem_id,
     gen_std_mat_id,
@@ -36,7 +37,6 @@ class MSHsgl(OGSfile):
     History
     -------
     Written,  SM, June 2017
-
     """
 
     def __init__(self, mesh_dict=None, **OGS_Config):
@@ -408,6 +408,31 @@ class MSHsgl(OGSfile):
     def MATERIAL_ID(self):
         self._dict["material_id"] = gen_std_mat_id(self.ELEMENTS)
 
+    @property
+    def MATERIAL_ID_flat(self):
+        """
+        Get flat version of the MATERIAL_IDs of the mesh.
+
+        See "mesh.MATERIAL_ID"
+        This flattend MATERIAL_IDs are a stacked version of MATERIAL_ID, to get
+        one continous array. They are stacked in order of the ELEMENT_IDs.
+        Standard stack order is given by:
+            "line" "tri" "quad" "tet" "pyra" "pris" "hex"
+
+        Info
+        ----
+        Type : ndarray
+            The centroids are a list containing xyz-coordiantes
+        """
+        # just call centroids once
+        tmp = dcp(self.MATERIAL_ID)
+        out = np.empty(self.ELEMENT_NO, dtype=int)
+        for elem in ELEM_NAMES:
+            if elem not in self.ELEMENTS:
+                continue
+            out[self.ELEMENT_ID[elem]] = tmp[elem]
+        return out
+
     #######################
     # ELEMENT_ID
     #######################
@@ -485,7 +510,6 @@ class MSHsgl(OGSfile):
     def centroids(self):
         """
         Get the centroids of the mesh.
-        See the "mesh.get_centroids" method.
 
         Info
         ----
@@ -512,8 +536,8 @@ class MSHsgl(OGSfile):
     @property
     def centroids_flat(self):
         """
-        Get the centroids of the mesh if already calculated
-        (if not, "None" is returned).
+        Get flat version of the centroids of the mesh.
+
         See the "mesh.get_centroids" method.
         This flattend centroids are a stacked version of centroids, to get
         one continous array. They are stacked in order of the element ids.
@@ -528,6 +552,60 @@ class MSHsgl(OGSfile):
         # just call centroids once
         tmp = dcp(self.centroids)
         out = np.empty((self.ELEMENT_NO, 3), dtype=float)
+        for elem in ELEM_NAMES:
+            if elem not in self.ELEMENTS:
+                continue
+            out[self.ELEMENT_ID[elem]] = tmp[elem]
+        return out
+
+    #######################
+    # centroids
+    #######################
+    @property
+    def volumes(self):
+        """
+        Get the volumes of the mesh-elements.
+
+        Info
+        ----
+        Type : dict of ndarrays
+            The volumes are a dictionary containing the n-dimension volumes
+            sorted by their element-type
+                "line" : ndarray of shape (n_line,3)
+                    1D element with 2 nodes
+                "tri" : ndarray of shape (n_tri,3)
+                    2D element with 3 nodes
+                "quad" : ndarray of shape (n_quad,3)
+                    2D element with 4 nodes
+                "tet" : ndarray of shape (n_tet,3)
+                    3D element with 4 nodes
+                "pyra" : ndarray of shape (n_pyra,3)
+                    3D element with 5 nodes
+                "pris" : ndarray of shape (n_pris,3)
+                    3D element with 6 nodes
+                "hex" : ndarray of shape (n_hex,3)
+                    3D element with 8 nodes
+        """
+        return get_volumes(self._dict)
+
+    @property
+    def volumes_flat(self):
+        """
+        Get flat version of the volumes of the mesh-elements.
+
+        This flattend volumes are a stacked version of centroids, to get
+        one continous array. They are stacked in order of the element ids.
+        Standard stack order is given by:
+            "line" "tri" "quad" "tet" "pyra" "pris" "hex"
+
+        Info
+        ----
+        Type : ndarray
+            The volumes are a list containing the n-dimensional element volume
+        """
+        # just call volumes once
+        tmp = dcp(self.volumes)
+        out = np.empty(self.ELEMENT_NO, dtype=float)
         for elem in ELEM_NAMES:
             if elem not in self.ELEMENTS:
                 continue

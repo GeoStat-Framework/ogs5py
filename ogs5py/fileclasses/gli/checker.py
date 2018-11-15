@@ -7,7 +7,7 @@ tools for the ogs5py-mesh package
 """
 from __future__ import division, print_function, absolute_import
 import numpy as np
-from ogs5py.tools._types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
+from ogs5py.tools.types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
 
 
 def has_whitespaces(string):

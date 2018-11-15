@@ -8,7 +8,7 @@ tools for the ogs5py-mesh package
 from __future__ import division, print_function, absolute_import
 import numpy as np
 from ogs5py.fileclasses.msh.tools import no_of_elements
-from ogs5py.tools._types import (
+from ogs5py.tools.types import (
     STRTYPE,
     NODE_NO,
     MESH_KEYS,

@@ -63,7 +63,7 @@ from ogs5py.fileclasses import (
     TIM,
 )
 from ogs5py.tools.tools import search_task_id
-from ogs5py.tools._types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
+from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
 
 # from ogs5py.reader import (readvtk,
 #                            readpvd,

@@ -8,7 +8,7 @@ tools for the ogs5py-mesh package
 from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
-from ogs5py.tools._types import (
+from ogs5py.tools.types import (
     PLY_KEY_LIST,
     PLY_TYPES,
     SRF_KEY_LIST,

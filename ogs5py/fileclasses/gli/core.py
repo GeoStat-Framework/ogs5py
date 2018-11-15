@@ -11,7 +11,7 @@ import os
 import numpy as np
 
 # import ogs5py.fileclasses.gli.generator as gen
-from ogs5py.tools._types import STRTYPE, EMPTY_GLI
+from ogs5py.tools.types import STRTYPE, EMPTY_GLI
 from ogs5py.fileclasses.gli.checker import (
     check_gli_dict,
     check_polyline,

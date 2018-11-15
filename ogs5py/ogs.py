@@ -112,7 +112,7 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
-from ogs5py.tools._types import OGS_EXT
+from ogs5py.tools.types import OGS_EXT
 from ogs5py.tools.tools import search_task_id, Output
 from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 

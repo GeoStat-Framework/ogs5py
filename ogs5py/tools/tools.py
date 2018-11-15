@@ -13,7 +13,7 @@ import collections
 from copy import deepcopy as dcp
 import numpy as np
 
-from ogs5py.tools._types import STRTYPE, OGS_EXT
+from ogs5py.tools.types import STRTYPE, OGS_EXT
 
 
 class Output(object):
@@ -654,3 +654,106 @@ def unique_rows_old(data, decimals=4):
     ixrsort = replace(i_xr, sort, np.arange(len(i_x)))
 
     return out[sort], ixsort, ixrsort
+
+
+####################
+# volume functions #
+####################
+
+
+def volume(typ, *pnt):
+    """
+    Volume of a OGS5 Meshelement
+
+    Parameters
+    ----------
+    typ : string
+        OGS5 Meshelement type. Should be one of the following:
+
+            * "line" : 1D element with 2 nodes
+            * "tri" : 2D element with 3 nodes
+            * "quad" : 2D element with 4 nodes
+            * "tet" : 3D element with 4 nodes
+            * "pyra" : 3D element with 5 nodes
+            * "pris" : 3D element with 6 nodes
+            * "hex" : 3D element with 8 nodes
+
+    *pnt : Node Choordinates ``pnt = (x_0, x_1, ...)``
+        List of points defining the Meshelement. A point is given as an
+        (x,y,z) tuple and for each point, there can be a stack of points, if
+        the volume should be calculated for multiple elements of the same type.
+
+    Returns
+    -------
+    Volume : ndarray
+        Array containing the volumes of the give elements.
+    """
+    # if the pntinates are stacked, divide them
+    if len(pnt) == 1:
+        np_pnt = np.array(pnt[0], ndmin=3, dtype=float)
+        pnt = []
+        for i in range(np_pnt.shape[0]):
+            pnt.append(np_pnt[i])
+    # else assure we got numpy arrays as lists of points (x,y,z)
+    else:
+        pnt_list = list(pnt)
+        pnt = []
+        for i in range(len(pnt_list)):
+            pnt.append(np.array(pnt_list[i], ndmin=2, dtype=float))
+
+    if typ == "line":
+        return _vol_line(*pnt)
+    if typ == "tri":
+        return _vol_tri(*pnt)
+    if typ == "quad":
+        return _vol_quad(*pnt)
+    if typ == "tet":
+        return _vol_tet(*pnt)
+    if typ == "pyra":
+        return _vol_pyra(*pnt)
+    if typ == "pris":
+        return _vol_pris(*pnt)
+    if typ == "hex":
+        return _vol_hex(*pnt)
+
+    print("unknown volume typ: " + str(typ))
+    return 0.0
+
+
+def _vol_line(*pnt):
+    return np.linalg.norm(pnt[1] - pnt[0], axis=1)
+
+
+def _vol_tri(*pnt):
+    cross = np.cross(pnt[1] - pnt[0], pnt[2] - pnt[0], axis=1)
+    return 0.5 * np.linalg.norm(cross, axis=1)
+
+
+def _vol_quad(*pnt):
+    return _vol_tri(pnt[0], pnt[1], pnt[2]) + _vol_tri(pnt[2], pnt[3], pnt[0])
+
+
+def _vol_tet(*pnt):
+    cross = np.cross(pnt[2] - pnt[0], pnt[3] - pnt[0], axis=1)
+    out = np.einsum("ij,ij->i", pnt[1] - pnt[0], cross)
+    # See: https://stackoverflow.com/a/39657770/6696397
+    #    out = np.sum((pnt[1] - pnt[0]) * cross, axis=1)
+    return np.abs(out) / 6.0
+
+
+def _vol_pyra(*pnt):
+    return _vol_tet(pnt[0], pnt[1], pnt[2], pnt[4]) + _vol_tet(
+        pnt[0], pnt[2], pnt[3], pnt[4]
+    )
+
+
+def _vol_pris(*pnt):
+    return _vol_pyra(pnt[0], pnt[3], pnt[4], pnt[1], pnt[2]) + _vol_tet(
+        pnt[3], pnt[4], pnt[5], pnt[2]
+    )
+
+
+def _vol_hex(*pnt):
+    return _vol_pris(
+        pnt[0], pnt[1], pnt[2], pnt[4], pnt[5], pnt[6]
+    ) + _vol_pris(pnt[0], pnt[2], pnt[3], pnt[4], pnt[5], pnt[6], pnt[7])

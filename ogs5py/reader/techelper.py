@@ -22,7 +22,7 @@ from ogs5py.reader.vtkhelper import (
     _poly_data_read,
     _rect_grid_read,
 )
-from ogs5py.tools._types import PCS_TYP
+from ogs5py.tools.types import PCS_TYP
 
 tecreader_dict = {
     "vtkUnstructuredGrid": (vtkUnstructuredGridReader, _unst_grid_read),
