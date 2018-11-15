@@ -4,6 +4,7 @@ File classes
 """
 from __future__ import absolute_import
 
+from ogs5py.fileclasses.asc import ASC
 from ogs5py.fileclasses.bc import BC
 from ogs5py.fileclasses.cct import CCT
 from ogs5py.fileclasses.ddc import DDC
@@ -33,6 +34,7 @@ from ogs5py.fileclasses.st import ST
 from ogs5py.fileclasses.tim import TIM
 
 __all__ = [
+    "ASC",
     "BC",
     "CCT",
     "DDC",

@@ -33,6 +33,7 @@ from __future__ import absolute_import
 
 from ogs5py.ogs import OGS
 from ogs5py.fileclasses import (
+    ASC,
     BC,
     CCT,
     DDC,
@@ -77,6 +78,7 @@ __version__ = "0.3.0"
 
 __all__ = ["OGS"]
 __all__ += [
+    "ASC",
     "BC",
     "CCT",
     "DDC",

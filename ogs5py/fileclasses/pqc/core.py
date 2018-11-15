@@ -30,8 +30,15 @@ class PQC(LineFile):
 
         """
         super(PQC, self).__init__(**OGS_Config)
-        self.file_name = self.task_id
         self.file_ext = ".pqc"
+
+    @property
+    def file_name(self):
+        return self.task_id
+
+    @file_name.setter
+    def file_name(self, value):
+        self.task_id = value
 
 
 class PQCdat(LineFile):

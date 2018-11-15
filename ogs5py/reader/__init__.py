@@ -1,10 +1,12 @@
 """
-ogs5py-read Python Package
+ogs5py.reader
+-------------
 
+ogs5py subpackage to read the OGS5 output.
 
 Get help on each function by typing
->>> import ogs5py-read
->>> help(ogs5py-read.function)
+>>> import ogs5py.reader
+>>> help(ogs5py.reader.function)
 
 
 Copyright 2017 Sebastian Mueller

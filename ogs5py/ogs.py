@@ -69,6 +69,8 @@ rfr : list of restart files
     RESTART files as defined in the INITIAL_CONDITION
 gem_init : list of GEMS3K input files (lst file)
     given as GEMinit classes
+asc : list of ogs ASC files
+    This file type comes either from .tim .pcs or .gem
 """
 from __future__ import absolute_import, division, print_function
 import os
@@ -81,6 +83,7 @@ from whichcraft import which
 from pexpect.popen_spawn import PopenSpawn
 import pexpect
 from ogs5py.fileclasses import (
+    ASC,
     BC,
     CCT,
     DDC,
@@ -200,6 +203,8 @@ class OGS(object):
         RESTART files as defined in the INITIAL_CONDITION
     gem_init : list of GEMS3K input files (lst file)
         given as GEMinit classes
+    asc : list of ogs ASC files
+        This file type comes either from .tim .pcs or .gem
     copy_files : list of path-strings
         Files that should be copied to the destiny folder.
     """
@@ -265,6 +270,9 @@ class OGS(object):
         # create a list for GEMS3K input files (lst file)
         self.gem_init = []
 
+        # create a list for ASC files
+        self.asc = []
+
         # create a list of arbitrary files to be copied (names will be same)
         self.copy_files = []
 
@@ -323,6 +331,8 @@ class OGS(object):
             self.rfr[i].task_root = value
         for i in range(len(self.gem_init)):
             self.gem_init[i].task_root = value
+        for i in range(len(self.asc)):
+            self.asc[i].task_root = value
         self.pqcdat.task_root = value
 
     @property
@@ -334,6 +344,10 @@ class OGS(object):
 
     @task_id.setter
     def task_id(self, value):
+        for i in range(len(self.asc)):
+            self.asc[i].file_name = (
+                value + self.asc[i].file_name[len(self._task_id) :]
+            )
         self._task_id = value
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
@@ -483,6 +497,33 @@ class OGS(object):
         else:
             print("OGS.del_rfr: given index is not valid.")
 
+    def add_asc(self, asc_file):
+        """
+        Method to add a ASC file.
+
+        See ogs5py.ASC for further information
+        """
+        if isinstance(asc_file, ASC):
+            asc_file.task_root = self.task_root
+            self.asc.append(asc_file)
+
+    def del_asc(self, index=None):
+        """
+        Method to delete a ASC file.
+
+        Parameters
+        ----------
+        index : int or None, optional
+            The index of the ASC file that should be deleted.
+            If None, all ASC files are deleted. Default: None
+        """
+        if index is None:
+            self.asc = []
+        elif -len(self.asc) <= index < len(self.asc):
+            del self.asc[index]
+        else:
+            print("OGS.del_rfr: given index is not valid.")
+
     def write_input(self):
         """
         method to call all write_file() methods that are initialized
@@ -505,6 +546,9 @@ class OGS(object):
         for gem_init_file in self.gem_init:
             gem_init_file.write_file()
 
+        for asc_file in self.asc:
+            asc_file.write_file()
+
         for copy_file in self.copy_files:
             base = os.path.basename(copy_file)
             shutil.copyfile(copy_file, os.path.join(self.task_root, base))
@@ -521,6 +565,7 @@ class OGS(object):
         self.gli_ext = []
         self.rfr = []
         self.gem_init = []
+        self.asc = []
         self.copy_files = []
 
         # reset to initial attributes
@@ -746,6 +791,19 @@ class OGS(object):
                     encoding=encoding,
                     verbose=verbose,
                 )
+
+        # load ASC files
+        files = glob.glob(os.path.join(task_root, task_id + "*.asc"))
+        for fil in files:
+            raw_file_name = os.path.basename(fil)
+            f_name, f_ext = os.path.splitext(raw_file_name)
+            ext_file = ASC(
+                file_name=self.task_id + f_name[len(task_id) :],
+                task_root=self.task_root,
+            )
+            path = os.path.join(task_root, fil)
+            ext_file.read_file(path, encoding=encoding)
+            self.asc.append(dcp(ext_file))
 
         return True
 
