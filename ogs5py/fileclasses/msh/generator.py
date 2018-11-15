@@ -399,7 +399,7 @@ def grid_adapter2D(
             element_no=element_no,
             element_size=in_res,
         )
-        mesh_in.MATERIAL_ID = in_mat
+        mesh_in["material_id"] = gen_std_mat_id(mesh_in["elements"], in_mat)
         out = combine(mesh_in, out)
 
     return out
@@ -486,7 +486,7 @@ def grid_adapter3D(
             element_no=element_no,
             element_size=in_res,
         )
-        mesh_in.MATERIAL_ID = in_mat
+        mesh_in["material_id"] = gen_std_mat_id(mesh_in["elements"], in_mat)
         dec = int(np.ceil(-np.log10(min(min(in_res), min(out_res)))))
         out = combine(mesh_in, out, dec)
 
