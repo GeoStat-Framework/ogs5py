@@ -9,7 +9,7 @@ from __future__ import division, print_function, absolute_import
 
 import numpy as np
 
-from ogs5py import GLI as gli
+from ogs5py.fileclasses.gli.core import GLI as gli
 
 
 def rectengular(
