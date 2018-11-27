@@ -548,6 +548,7 @@ def import_mesh(
     and converts the output (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
     """
+
     points, cells, __, __, __ = mio.read(filepath, file_format=file_format)
     out = convert_meshio(points, cells, ignore_unknown, import_dim)
 
@@ -562,7 +563,7 @@ def export_mesh(
     add_data_by_id=None,
 ):
     """
-    import an external unstructured mesh from diffrent file-formats
+    export an ogs mesh to diffrent file-formats
 
     Parameters
     ----------
@@ -592,8 +593,9 @@ def export_mesh(
     export_material_id : bool, optional
         Here you can specify if the material_id should be exported.
         Default: True
-    add_data_by_id : ndarray, optional
+    add_data_by_id : ndarray or dict, optional
         Here you can specify additional element data sorted by their IDs.
+        It can be a dictionary with data-name as key and the ndarray as value.
         Default: None
 
     Notes
@@ -604,6 +606,9 @@ def export_mesh(
     points = dcp(np.ascontiguousarray(mesh["nodes"]))
     cells = {}
     cell_data = {}
+    # assure we have a dict for the additional data
+    if add_data_by_id is not None and not isinstance(add_data_by_id, dict):
+        add_data_by_id = {"add_data": add_data_by_id}
     for elemi, eleme in enumerate(ELEM_NAMES):
         # skip elements not present in the mesh
         if eleme not in mesh["elements"]:
@@ -619,14 +624,16 @@ def export_mesh(
         if add_data_by_id is not None:
             # if material ID was written, the dictionary already exists
             if MESHIO_NAMES[elemi] in cell_data:
-                cell_data[MESHIO_NAMES[elemi]]["add_data"] = add_data_by_id[
-                    mesh["element_id"][eleme]
-                ]
+                for data in add_data_by_id:
+                    cell_data[MESHIO_NAMES[elemi]][data] = add_data_by_id[
+                        data
+                    ][mesh["element_id"][eleme]]
             # if material ID was not written, create a dictionary
             else:
-                cell_data[MESHIO_NAMES[elemi]] = {
-                    "add_data": add_data_by_id[mesh["element_id"][eleme]]
-                }
+                for data in add_data_by_id:
+                    cell_data[MESHIO_NAMES[elemi]] = {
+                        data: add_data_by_id[data][mesh["element_id"][eleme]]
+                    }
 
     if not export_material_id and add_data_by_id is None:
         cell_data = None
