@@ -65,15 +65,15 @@ class MMP(OGSfile):
     Standard block
     --------------
     :GEOMETRY_DIMENSION: 2,
-    :STORAGE: [[1, 1.0e-4]],
-    :PERMEABILITY_TENSOR: [["ISOTROPIC", 1.0e-4]],
-    :POROSITY: [[1, 0.2]]
+    :STORAGE: [1, 1.0e-4],
+    :PERMEABILITY_TENSOR: ["ISOTROPIC", 1.0e-4],
+    :POROSITY: [1, 0.2]
 
     Info
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mmp
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L281
     """

@@ -43,7 +43,7 @@ class GEM(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/gem
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/gem
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_REACT_GEM.cpp#L2644
     """

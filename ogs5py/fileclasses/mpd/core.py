@@ -27,7 +27,7 @@ class MPD(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mmp
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L5260
     """

@@ -34,14 +34,14 @@ class BC(OGSfile):
     --------------
     :PCS_TYPE: "GROUNDWATER_FLOW"
     :PRIMARY_VARIABLE: "HEAD"
-    :DIS_TYPE: [["CONSTANT", 0.0]]
-    :GEO_TYPE: [["POLYLINE", "BC"]]
+    :DIS_TYPE: ["CONSTANT", 0.0]
+    :GEO_TYPE: ["POLYLINE", "BC"]
 
     Info
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/bc
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/bc
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_bc_new.cpp#L228
     """

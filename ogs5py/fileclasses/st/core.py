@@ -34,14 +34,14 @@ class ST(OGSfile):
     --------------
     :PCS_TYPE: "GROUNDWATER_FLOW"
     :PRIMARY_VARIABLE: "HEAD"
-    :GEO_TYPE: [["POINT", "WELL"]]
-    :DIS_TYPE: [["CONSTANT_NEUMANN", -1.0e-03]]
+    :GEO_TYPE: ["POINT", "WELL"]
+    :DIS_TYPE: ["CONSTANT_NEUMANN", -1.0e-03]
 
     Info
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/st
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/st
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_st_new.cpp#L221
     """

@@ -29,13 +29,13 @@ class IC(OGSfile):
     :PCS_TYPE: "GROUNDWATER_FLOW"
     :PRIMARY_VARIABLE: "HEAD"
     :GEO_TYPE: "DOMAIN"
-    :DIS_TYPE: [["CONSTANT", 0.0]]
+    :DIS_TYPE: ["CONSTANT", 0.0]
 
     Info
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/ic
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/ic
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_ic_new.cpp#L222
     """

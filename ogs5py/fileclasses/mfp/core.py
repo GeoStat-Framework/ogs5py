@@ -44,7 +44,7 @@ class MFP(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mfp
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mfp
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_mfp_new.cpp#L140
     """

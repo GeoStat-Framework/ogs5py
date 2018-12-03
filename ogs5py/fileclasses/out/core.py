@@ -34,13 +34,13 @@ class OUT(OGSfile):
     :NOD_VALUES: "HEAD"
     :GEO_TYPE: "DOMAIN"
     :DAT_TYPE: "PVD"
-    :TIM_TYPE: [["STEPS", 1]]
+    :TIM_TYPE: ["STEPS", 1]
 
     Info
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/out
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/out
 
     https://github.com/ufz/ogs5/blob/master/FEM/Output.cpp#L194
 

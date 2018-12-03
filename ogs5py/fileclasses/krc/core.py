@@ -93,7 +93,7 @@ class KRC(OGSfile):
     ----
     See : ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/krc
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/krc
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp
 

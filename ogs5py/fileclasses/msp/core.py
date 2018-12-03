@@ -42,7 +42,7 @@ class MSP(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/msp
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/msp
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_msp_new.cpp#L65
     """

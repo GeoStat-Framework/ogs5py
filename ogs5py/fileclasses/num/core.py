@@ -44,7 +44,7 @@ class NUM(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/num
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/num
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_num_new.cpp#L346
     """

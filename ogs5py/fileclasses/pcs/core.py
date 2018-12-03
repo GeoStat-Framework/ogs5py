@@ -55,7 +55,7 @@ class PCS(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/pcs
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pcs
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_pcs.cpp#L1803
     """

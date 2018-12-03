@@ -45,7 +45,7 @@ class MCP(OGSfile):
     ----
     See: ``add_block``
 
-    https://svn.ufz.de/ogs/wiki/public/doc-auto/by_ext/mcp
+    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mcp
 
     https://github.com/ufz/ogs5/blob/master/FEM/rfmat_cp.cpp#L269
     """
