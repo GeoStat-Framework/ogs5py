@@ -10,8 +10,34 @@ by Sebastian Mueller 2018
 (inspired by Falk Hesse and Miao Jing)
 """
 
+import os
+import codecs
+import re
+
 from setuptools import setup, find_packages
-from ogs5py import __version__ as VERSION
+
+
+# find __version__ ############################################################
+
+def read(*parts):
+    """read file data"""
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, *parts), "r") as fp:
+        return fp.read()
+
+
+def find_version(*file_paths):
+    """find version without importing module"""
+    version_file = read(*file_paths)
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
+    )
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
+###############################################################################
+
 
 DOCLINES = __doc__.split("\n")
 README = open("README.md").read()
@@ -36,6 +62,8 @@ Topic :: Scientific/Engineering
 Topic :: Software Development
 Topic :: Utilities
 """
+
+VERSION = find_version("ogs5py", "__init__.py")
 
 setup(
     name="ogs5py",
