@@ -549,8 +549,8 @@ def import_mesh(
     If there is any "vertex" in the element data, it will be removed.
     """
 
-    points, cells, __, __, __ = mio.read(filepath, file_format=file_format)
-    out = convert_meshio(points, cells, ignore_unknown, import_dim)
+    mesh = mio.read(filepath, file_format=file_format)
+    out = convert_meshio(mesh.points, mesh.cells, ignore_unknown, import_dim)
 
     return out
 
