@@ -644,10 +644,6 @@ def export_mesh(
     mio.write(filepath, mesh_out, file_format=file_format)
 
 
-#    mio.write(filepath, points, cells,
-#              cell_data=cell_data, file_format=file_format)
-
-
 def convert_meshio(points, cells, ignore_unknown=False, import_dim=(1, 2, 3)):
     """
     convert points and cells from meshio to ogs format
