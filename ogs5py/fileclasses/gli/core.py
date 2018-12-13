@@ -412,7 +412,7 @@ class GLI(OGSfile):
                 self.__dict,
                 top_com=self.top_com,
                 bot_com=self.bot_com,
-                **kwargs,
+                **kwargs
             )
         else:
             print("the mesh could not be saved since it is not valid")
