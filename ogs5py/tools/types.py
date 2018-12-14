@@ -184,9 +184,9 @@ NODE_NO = {
     "hex": 8,
 }
 # all pcs types supported by OGS5
+# https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pcs/s_pcs_type
 PCS_TYP = [
     "",  # special case for no specified pcs in "*.out"
-    "NO_PCS",  # ...used in Benchmarks
     "GROUNDWATER_FLOW",  # HEAD
     "LIQUID_FLOW",  # PRESSURE1
     "RICHARDS_FLOW",  # PRESSURE1
@@ -199,12 +199,16 @@ PCS_TYP = [
     "OVERLAND_FLOW",  # HEAD
     "FLUID_MOMENTUM",  # VELOCITY1_X, VELOCITY1_Y, VELOCITY1_Z
     "RANDOM_WALK",  # with particles in *.pct file
+    "NO_PCS",  # ...used in Benchmarks
+    "TNEQ",  # ...used in Benchmarks
+    "TES",  # ...used in Benchmarks
+    "DEFORMATION_SINGLEFLOW_MONO",  # ...used in Benchmarks
+    "MULTI_COMPONENTIAL_FLOW",  # ...used in Benchmarks
 ]
 # file extensions by pcs type (and the unspecified case "")
 PCS_EXT = [""] + ["_" + pcs for pcs in PCS_TYP[1:]]
 # all PRIMARY_VARIABLE types supported by OGS5 (sorted by PCS_TYP)
 PRIM_VAR = [
-    [""],
     [""],
     ["HEAD"],
     ["PRESSURE1"],
@@ -218,6 +222,11 @@ PRIM_VAR = [
     ["HEAD"],
     ["VELOCITY1_X", "VELOCITY1_Y", "VELOCITY1_Z"],
     [""],  # with particles in *.pct file
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
 ]
 PRIM_VAR_BY_PCS = {}
 for i, pcs in enumerate(PCS_TYP):
