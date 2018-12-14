@@ -63,7 +63,7 @@ Topic :: Software Development
 Topic :: Utilities
 """
 
-VERSION = find_version("ogs5py", "__init__.py")
+VERSION = find_version("ogs5py", "_version.py")
 
 setup(
     name="ogs5py",
@@ -85,6 +85,7 @@ setup(
         "whichcraft",  # search for ogs
         "pandas>=0.23.0",  # read-routines and formatting
         "meshio",  # import/export external meshes
+        "lxml",  # meshio vtu support
         "vtk",  # for the readers
         "pexpect",  # handle command calles
         #        'pygmsh',  # optional for creating gmesh based meshes

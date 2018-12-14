@@ -82,4 +82,3 @@ class OUT(OGSfile):
         """
         super(OUT, self).__init__(**OGS_Config)
         self.file_ext = ".out"
-        self.force_writing = True

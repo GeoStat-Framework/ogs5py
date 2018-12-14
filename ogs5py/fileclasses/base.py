@@ -5,7 +5,7 @@ History
 -------
 Written,  SM, Mar 2018
 """
-from __future__ import print_function, division
+from __future__ import print_function, division, absolute_import
 import os
 import shutil
 import itertools
@@ -21,6 +21,7 @@ from ogs5py.tools.tools import (
     is_mkey,
     is_skey,
 )
+from ogs5py._version import __version__ as version
 
 # current working directory
 CWD = os.getcwd()
@@ -28,7 +29,7 @@ CWD = os.getcwd()
 TOP_COM = "|-------------- Written with ogs5py --------------|"
 # Bottom Comment for io-files
 BOT_COM = (
-    "|-- Written with ogs5py on: "
+    "|-- Written with ogs5py (" + version + ") on: "
     + time.strftime("%Y-%m-%d_%H-%M-%S")
     + " --|"
 )

@@ -78,6 +78,7 @@ import shutil
 import glob
 import sys
 import time
+import warnings
 from copy import deepcopy as dcp
 from whichcraft import which
 from pexpect.popen_spawn import PopenSpawn
@@ -530,6 +531,13 @@ class OGS(object):
         """
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
+            ogs_file = getattr(self, ext[1:])
+            if ogs_file.is_empty and ogs_file.force_writing:
+                warnings.warn(
+                    self.task_id
+                    + ext
+                    + ": file is empty, but forced to be written!"
+                )
             getattr(self, ext[1:]).write_file()
 
         self.pqcdat.write_file()

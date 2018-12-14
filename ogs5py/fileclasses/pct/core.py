@@ -38,6 +38,7 @@ class PCT(object):
         # if an existing file should be copied
         self.copy_file = None
         self.copy_path = None
+        self._force = False
 
     def __bool__(self):
         return not self.is_empty
@@ -53,6 +54,15 @@ class PCT(object):
             return not self.data.shape[0] >= 1
         # if check is not passed, handle it as empty file
         return True
+
+    @property
+    def force_writing(self):
+        """:class:`bool`: state if the file is written even if empty"""
+        return self._force
+
+    @force_writing.setter
+    def force_writing(self, force):
+        self._force = bool(force)
 
     def check(self, verbose=True):
         """
@@ -122,7 +132,7 @@ class PCT(object):
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
             # if no content is present skip this file
-            if not self.is_empty:
+            if self.force_writing or not self.is_empty:
                 self.save(f_path)
         # copy a given file if wanted
         elif self.copy_file == "copy":

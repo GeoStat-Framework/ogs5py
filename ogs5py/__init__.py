@@ -31,6 +31,7 @@ TIM - Time settings
 
 from __future__ import absolute_import
 
+from ogs5py._version import __version__
 from ogs5py.ogs import OGS
 from ogs5py.fileclasses import (
     ASC,
@@ -74,9 +75,8 @@ SUB_IND = "  "
 # indentation of content
 CON_IND = "   "
 
-__version__ = "0.4.0rc1"
-
-__all__ = ["OGS"]
+__all__ = ["__version__"]
+__all__ += ["OGS"]
 __all__ += [
     "ASC",
     "BC",
