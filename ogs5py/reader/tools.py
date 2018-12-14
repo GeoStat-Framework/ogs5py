@@ -5,7 +5,7 @@ tools for the ogs5readerpy package
 
 @author: sebastian
 """
-from __future__ import division, print_function
+from __future__ import division, print_function, absolute_import
 from numpy import ascontiguousarray as ascont
 from vtk import vtkStructuredPoints, vtkStructuredPointsWriter, vtkFieldData
 from vtk.util.numpy_support import numpy_to_vtk as np2vtk

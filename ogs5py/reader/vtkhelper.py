@@ -107,7 +107,7 @@ def _unst_grid_read(obj):
     return output
 
 
-def _stru_grid_read():
+def _stru_grid_read(obj):
     """
     a reader for vtk structured grid objects
     """
@@ -156,11 +156,32 @@ def _poly_data_read(obj):
     return output
 
 
-def _rect_grid_read():
+def _rect_grid_read(obj):
     """
     a reader for vtk rectengular grid objects
     """
-    raise NotImplementedError("Rectengular Grid Reader not yet implemented")
+    output = {}
+    output["dimensions"] = np.array(obj.GetDimensions())
+    output["x"] = vtk2np(obj.GetXCoordinates())
+    output["y"] = vtk2np(obj.GetYCoordinates())
+    output["z"] = vtk2np(obj.GetZCoordinates())
+    output["field_data"] = _get_data(obj.GetFieldData())
+    output["point_data"] = _get_data(obj.GetPointData())
+    output["cell_data"] = _get_data(obj.GetCellData())
+    # reshape cell and point data according to the give dimensions
+    dim = output["dimensions"]
+    for arr in output["cell_data"]:
+        output["cell_data"][arr] = np.squeeze(
+            np.reshape(
+                output["cell_data"][arr], np.maximum(dim - 1, 1), order="F"
+            )
+        )
+    for arr in output["point_data"]:
+        output["point_data"][arr] = np.reshape(
+            output["point_data"][arr], dim, order="F"
+        )
+    return output
+#    raise NotImplementedError("Rectengular Grid Reader not yet implemented")
 
 
 ###############################################################################

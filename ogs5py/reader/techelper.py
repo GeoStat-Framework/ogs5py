@@ -3,7 +3,7 @@
 """
 Helper functions for the tecplot readers in ogs5py
 """
-from __future__ import division, print_function
+from __future__ import division, print_function, absolute_import
 import os
 import re
 import numpy as np
