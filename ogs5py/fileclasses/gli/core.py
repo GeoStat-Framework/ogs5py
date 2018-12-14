@@ -48,6 +48,7 @@ class GLI(OGSfile):
         """
         super(GLI, self).__init__(**OGS_Config)
         self.file_ext = ".gli"
+        self.force_writing = True
 
         if gli_dict is None:
             self.__dict = dcp(EMPTY_GLI)

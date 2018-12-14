@@ -70,12 +70,7 @@ class OUT(OGSfile):
         [""],  # content directly related to main key "VERSION"
     ]
 
-    STD = {
-        "NOD_VALUES": "HEAD",
-        "GEO_TYPE": "DOMAIN",
-        "DAT_TYPE": "PVD",
-        "TIM_TYPE": ["STEPS", 1],
-    }
+    STD = {}
 
     def __init__(self, **OGS_Config):
         """
@@ -87,3 +82,4 @@ class OUT(OGSfile):
         """
         super(OUT, self).__init__(**OGS_Config)
         self.file_ext = ".out"
+        self.force_writing = True

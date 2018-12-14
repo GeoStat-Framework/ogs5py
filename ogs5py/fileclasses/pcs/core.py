@@ -112,3 +112,4 @@ class PCS(OGSfile):
         """
         super(PCS, self).__init__(**OGS_Config)
         self.file_ext = ".pcs"
+        self.force_writing = True

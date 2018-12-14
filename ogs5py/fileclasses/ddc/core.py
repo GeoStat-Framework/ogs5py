@@ -1,5 +1,5 @@
 """
-Class for the ogs COMMUNICATION TABLE file.
+Class for the ogs DOMAIN DECOMPOSITION file.
 """
 
 from __future__ import absolute_import, division, print_function

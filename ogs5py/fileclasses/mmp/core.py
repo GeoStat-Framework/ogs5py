@@ -145,3 +145,4 @@ class MMP(OGSfile):
         """
         super(MMP, self).__init__(**OGS_Config)
         self.file_ext = ".mmp"
+        self.force_writing = True

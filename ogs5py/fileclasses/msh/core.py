@@ -70,6 +70,7 @@ class MSHsgl(OGSfile):
         """
         super(MSHsgl, self).__init__(**OGS_Config)
         self.file_ext = ".msh"
+        self.force_writing = True
 
         if mesh_dict is None:
             self.__dict = EMPTY_MSH

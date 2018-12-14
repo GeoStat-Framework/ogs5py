@@ -73,7 +73,7 @@ class BC(OGSfile):
         "PCS_TYPE": "GROUNDWATER_FLOW",
         "PRIMARY_VARIABLE": "HEAD",
         "DIS_TYPE": ["CONSTANT", 0.0],
-        "GEO_TYPE": ["POLYLINE", "BC"],
+        "GEO_TYPE": ["POLYLINE", "boundary"],
     }
 
     def __init__(self, **OGS_Config):
@@ -86,3 +86,4 @@ class BC(OGSfile):
         """
         super(BC, self).__init__(**OGS_Config)
         self.file_ext = ".bc"
+        self.force_writing = True

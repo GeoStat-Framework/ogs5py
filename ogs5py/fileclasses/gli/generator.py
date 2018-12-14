@@ -13,7 +13,7 @@ from ogs5py.fileclasses.gli.core import GLI as gli
 
 
 def rectengular(
-    dim=3, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"
+    dim=2, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"
 ):
     """
     generate a rectengular boundary for a grid in 2D or 3D as gli.

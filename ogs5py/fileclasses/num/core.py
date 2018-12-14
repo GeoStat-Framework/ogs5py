@@ -82,7 +82,6 @@ class NUM(OGSfile):
     STD = {
         "PCS_TYPE": "GROUNDWATER_FLOW",
         "LINEAR_SOLVER": [2, 5, 1.0e-14, 1000, 1.0, 100, 4],
-        #           "ELE_GAUSS_POINTS": 3,
     }
 
     def __init__(self, **OGS_Config):

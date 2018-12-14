@@ -24,7 +24,7 @@ from ogs5py.fileclasses.msh.gmsh import (
 
 
 def rectengular(
-    dim=3,
+    dim=2,
     mesh_origin=(0.0, 0.0, 0.0),
     element_no=(10, 10, 10),
     element_size=(1.0, 1.0, 1.0),

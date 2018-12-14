@@ -76,3 +76,4 @@ class TIM(OGSfile):
         """
         super(TIM, self).__init__(**OGS_Config)
         self.file_ext = ".tim"
+        self.force_writing = True

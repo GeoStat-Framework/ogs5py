@@ -89,6 +89,7 @@ class LineFile(object):
         self.file_ext = file_ext
         self.task_root = task_root
         self.task_id = task_id
+        self._force = False
 
     @classmethod
     def _get_clsname(cls):
@@ -106,6 +107,15 @@ class LineFile(object):
             return not bool(self.lines)
         # if check is not passed, handle it as empty file
         return True
+
+    @property
+    def force_writing(self):
+        """:class:`bool`: state if the file is written even if empty"""
+        return self._force
+
+    @force_writing.setter
+    def force_writing(self, force):
+        self._force = bool(force)
 
     def reset(self):
         """
@@ -191,7 +201,7 @@ class LineFile(object):
         """
         Write the acutal file.
         """
-        if not self.is_empty:
+        if self.force_writing or not self.is_empty:
             # create the file path
             if not os.path.exists(self.task_root):
                 os.makedirs(self.task_root)
@@ -270,6 +280,7 @@ class OGSfile(object):
         # if an existing file should be copied
         self.copy_file = None
         self.copy_path = None
+        self._force = False
 
     @classmethod
     def _get_clsname(cls):
@@ -302,6 +313,15 @@ class OGSfile(object):
         """state if the OGS file is empty"""
         # check if the list of main keywords is empty
         return not bool(self.mainkw)
+
+    @property
+    def force_writing(self):
+        """:class:`bool`: state if the file is written even if empty"""
+        return self._force
+
+    @force_writing.setter
+    def force_writing(self, force):
+        self._force = bool(force)
 
     def get_block_no(self):
         """Get the number of blocks in the file."""
@@ -922,7 +942,7 @@ class OGSfile(object):
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
             # if no content is present skip this file
-            if not self.is_empty:
+            if self.force_writing or not self.is_empty:
                 self.save(f_path)
         # copy a given file if wanted
         elif self.copy_file == "copy":

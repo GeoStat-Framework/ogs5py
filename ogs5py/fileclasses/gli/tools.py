@@ -317,69 +317,74 @@ def save_ogs5gli(
             if verbose:
                 print("write top comment")
             print(str(top_com), file=gli_f)
+
         if verbose:
             print("write #POINTS")
-        print("#POINTS", file=gli_f)
-        # write all points
-        for pnt_i, pnt in enumerate(gli["points"]):
-            # generate NAME
-            if gli["point_names"][pnt_i]:
-                name = " $NAME " + str(gli["point_names"][pnt_i])
-            else:
-                name = ""
-            # generate MD
-            if gli["point_md"][pnt_i] == -np.inf:
-                pnt_md = ""
-            else:
-                pnt_md = " $MD {}".format(gli["point_md"][pnt_i])
-            # generate string for actual point
-            tupl = (pnt_i,) + tuple(pnt) + (name, pnt_md)
-            print("{} {} {} {}{}{}".format(*tupl), file=gli_f)
+        if gli["points"] is not None:
+            print("#POINTS", file=gli_f)
+            # write all points
+            for pnt_i, pnt in enumerate(gli["points"]):
+                # generate NAME
+                if gli["point_names"][pnt_i]:
+                    name = " $NAME " + str(gli["point_names"][pnt_i])
+                else:
+                    name = ""
+                # generate MD
+                if gli["point_md"][pnt_i] == -np.inf:
+                    pnt_md = ""
+                else:
+                    pnt_md = " $MD {}".format(gli["point_md"][pnt_i])
+                # generate string for actual point
+                tupl = (pnt_i,) + tuple(pnt) + (name, pnt_md)
+                print("{} {} {} {}{}{}".format(*tupl), file=gli_f)
 
         if verbose:
             print("write #POLYLINES")
         # write all polylines
-        for ply in gli["polylines"]:
-            print("#POLYLINE", file=gli_f)
-            # generate polyline
-            for key in PLY_KEY_LIST:
-                if key != "POINTS" and ply[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(ply[key]), file=gli_f)
-                elif ply[key] is not None:
-                    print(sub_ind + "$POINTS", file=gli_f)
-                    for pnt in ply["POINTS"]:
-                        print(con_ind + "{}".format(pnt), file=gli_f)
+        if gli["polylines"] is not None:
+            for ply in gli["polylines"]:
+                print("#POLYLINE", file=gli_f)
+                # generate polyline
+                for key in PLY_KEY_LIST:
+                    if key != "POINTS" and ply[key] is not None:
+                        print(sub_ind + "$" + key, file=gli_f)
+                        print(con_ind + "{}".format(ply[key]), file=gli_f)
+                    elif ply[key] is not None:
+                        print(sub_ind + "$POINTS", file=gli_f)
+                        for pnt in ply["POINTS"]:
+                            print(con_ind + "{}".format(pnt), file=gli_f)
 
         if verbose:
             print("write #SURFACES")
         # write all surfaces
-        for srf in gli["surfaces"]:
-            print("#SURFACE", file=gli_f)
-            # generate surface
-            for key in SRF_KEY_LIST:
-                if key != "POLYLINES" and srf[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(srf[key]), file=gli_f)
-                elif srf[key] is not None:
-                    print(sub_ind + "$POLYLINES", file=gli_f)
-                    for ply in srf["POLYLINES"]:
-                        print(con_ind + "{}".format(ply), file=gli_f)
+        if gli["surfaces"] is not None:
+            for srf in gli["surfaces"]:
+                print("#SURFACE", file=gli_f)
+                # generate surface
+                for key in SRF_KEY_LIST:
+                    if key != "POLYLINES" and srf[key] is not None:
+                        print(sub_ind + "$" + key, file=gli_f)
+                        print(con_ind + "{}".format(srf[key]), file=gli_f)
+                    elif srf[key] is not None:
+                        print(sub_ind + "$POLYLINES", file=gli_f)
+                        for ply in srf["POLYLINES"]:
+                            print(con_ind + "{}".format(ply), file=gli_f)
 
         if verbose:
             print("write #VOLUMES")
         # write all volumes
-        for vol in gli["volumes"]:
-            print("#VOLUME", file=gli_f)
-            # generate volume
-            for key in VOL_KEY_LIST:
-                if key != "SURFACES" and vol[key] is not None:
-                    print(sub_ind + "$" + key, file=gli_f)
-                    print(con_ind + "{}".format(vol[key]), file=gli_f)
-                elif vol[key] is not None:
-                    print(sub_ind + "$SURFACES", file=gli_f)
-                    for srf in vol["SURFACES"]:
-                        print(con_ind + "{}".format(srf), file=gli_f)
+        if gli["volumes"] is not None:
+            for vol in gli["volumes"]:
+                print("#VOLUME", file=gli_f)
+                # generate volume
+                for key in VOL_KEY_LIST:
+                    if key != "SURFACES" and vol[key] is not None:
+                        print(sub_ind + "$" + key, file=gli_f)
+                        print(con_ind + "{}".format(vol[key]), file=gli_f)
+                    elif vol[key] is not None:
+                        print(sub_ind + "$SURFACES", file=gli_f)
+                        for srf in vol["SURFACES"]:
+                            print(con_ind + "{}".format(srf), file=gli_f)
 
         if verbose:
             print("write #STOP")
