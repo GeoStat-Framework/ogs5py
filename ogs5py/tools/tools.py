@@ -10,6 +10,8 @@ import os
 import sys
 import glob
 import collections
+import ast
+import itertools
 from copy import deepcopy as dcp
 import numpy as np
 
@@ -166,6 +168,42 @@ def format_dict(dict_in):
     return dict_out
 
 
+def guess_type(string):
+    """
+    guess the type of a value given as string and return it accordingly
+
+    Parameters
+    ----------
+    string : str
+        given string containing the value
+    """
+    string = str(string)
+    try:
+        value = ast.literal_eval(string)
+    except:  # SyntaxError or ValueError
+        return string
+    else:
+        return value
+
+
+def format_content_line(content):
+    """
+    format a line of content to be a list of values
+
+    Parameters
+    ----------
+    content : anything
+        Single object, or list of objects
+    """
+    # assure that content is a list of strings
+    content = list(np.array(content, dtype=str).reshape(-1))
+    # if the content is given as string with whitespaces, split it
+    content = list(itertools.chain(*[con.split() for con in content]))
+    # guess types of values
+    content = list(map(guess_type, content))
+    return content
+
+
 def format_content(content):
     """
     format the content to be added to a 2D linewise array
@@ -202,7 +240,7 @@ def format_content(content):
     # if a list is found, we take the content as multiple lines
     if found_list:
         return content
-    # else we handle the content as single data
+    # else we handle the content as single line
     return [content]
 
 
@@ -445,10 +483,10 @@ def hull_deform(
 
     if direction == "x":
         return x3_out, x1_in, x2_in
-    elif direction == "y":
+    if direction == "y":
         return x1_in, x3_out, x2_in
-
-    return x1_in, x2_in, x3_out
+    if direction == "z":
+        return x1_in, x2_in, x3_out
 
 
 #####################
