@@ -124,9 +124,10 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                         + ": GLI: point ids are not unique: "
                         + str(ids)
                     )
-                # hack to shift the ids acordingly
-                id_shift = np.zeros(np.max(ids) + 1, dtype=int)
-                id_shift[ids] = np.arange(ids.shape[0])
+                if pnts.shape[0] > 0:
+                    # hack to shift the ids acordingly (if not ascending)
+                    id_shift = np.zeros(np.max(ids) + 1, dtype=int)
+                    id_shift[ids] = np.arange(ids.shape[0])
                 # save points
                 out["points"] = pnts
                 out["point_names"] = np.array(names, dtype=object)
@@ -156,7 +157,7 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                             ):
                                 need_new_line = False
                             tmp_pnt = np.array(ply["POINTS"], dtype=int)
-                            # hack to shift point_ids
+                            # hack to shift point_ids (if not ascending)
                             tmp_pnt = id_shift[tmp_pnt]
                             ply["POINTS"] = tmp_pnt
                         else:
