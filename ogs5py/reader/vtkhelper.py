@@ -181,7 +181,6 @@ def _rect_grid_read(obj):
             output["point_data"][arr], dim, order="F"
         )
     return output
-#    raise NotImplementedError("Rectengular Grid Reader not yet implemented")
 
 
 ###############################################################################
