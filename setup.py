@@ -19,6 +19,7 @@ from setuptools import setup, find_packages
 
 # find __version__ ############################################################
 
+
 def read(*parts):
     """read file data"""
     here = os.path.abspath(os.path.dirname(__file__))
@@ -35,6 +36,7 @@ def find_version(*file_paths):
     if version_match:
         return version_match.group(1)
     raise RuntimeError("Unable to find version string.")
+
 
 ###############################################################################
 
@@ -75,7 +77,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
-    url="https://github.com/MuellerSeb/ogs5py",
+    url="https://github.com/GeoStat-Framework/ogs5py",
     license="LGPL -  see LICENSE",
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
