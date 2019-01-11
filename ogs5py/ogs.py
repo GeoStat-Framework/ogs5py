@@ -3,11 +3,11 @@ Class for an OGS run.
 
 Parameters
 ----------
-task_root : string, optional
+task_root : :class:`str`, optional
     Path to the destiny folder. Default is the current working dir
-task_id : string, optional
+task_id : :class:`str`, optional
     Name for the ogs task. Default: "ogs"
-output_dir : string, optional
+output_dir : :class:`str`, optional
     Path to the output directory. Default is the task_root folder.
 
 Properties
@@ -131,17 +131,26 @@ class OGS(object):
 
     In this class everything for an OGS5 model can be specified.
 
+    Parameters
+    ----------
+    task_root : :class:`str`, optional
+        Path to the destiny folder. Default is the current working dir
+    task_id : :class:`str`, optional
+        Name for the ogs task. Default: "model"
+    output_dir : :class:`str`, optional
+        Path to the output directory. Default is the task_root folder.
+
     Attributes
     ----------
-    task_root : string
+    task_root : :class:`str`
         Path to the destiny folder.
-    task_id : string
+    task_id : :class:`str`
         Name for the ogs task.
-    output_dir : string or None
+    output_dir : :class:`str` or None
         Path to the output directory.
-    top_com : string
+    top_com : :class:`str`
         Comment at the top of the written files
-    bot_com : string
+    bot_com : :class:`str`
         Comment at the bottom of the written files
 
     Attribute-Classes
@@ -216,18 +225,6 @@ class OGS(object):
         task_id="model",
         output_dir=None,
     ):
-        """
-        Initialize an OGS file.
-
-        Parameters
-        ----------
-        task_root : string, optional
-            Path to the destiny folder. Default is the current working dir
-        task_id : string, optional
-            Name for the ogs task. Default: "model"
-        output_dir : string, optional
-            Path to the output directory. Default is the task_root folder.
-        """
         self._task_root = os.path.normpath(task_root)
         self._task_id = task_id
         if output_dir is None:
@@ -261,25 +258,18 @@ class OGS(object):
 
         # create a list for mpd files
         self.mpd = []
-
         # create a list for external Geometry definition (TIN and POINT_VECTOR)
         self.gli_ext = []
-
         # create a list for RESTART files in the INITIAL_CONDITION
         self.rfr = []
-
         # create a list for GEMS3K input files (lst file)
         self.gem_init = []
-
         # create a list for ASC files
         self.asc = []
-
         # create a list of arbitrary files to be copied (names will be same)
         self.copy_files = []
-
         # store the Top Comment
         self._top_com = TOP_COM
-
         # store the Bottom Comment
         self._bot_com = BOT_COM
 
@@ -339,7 +329,7 @@ class OGS(object):
     @property
     def task_id(self):
         """
-        Get and set the task_id name of the ogs model.
+        :class:`str`: task_id (name) of the ogs model.
         """
         return self._task_id
 
@@ -421,7 +411,7 @@ class OGS(object):
 
         See ogs5py.GLI for further information
         """
-        if isinstance(gli_ext_file, MPD):
+        if isinstance(gli_ext_file, GLIext):
             gli_ext_file.task_root = self.task_root
             self.gli_ext.append(gli_ext_file)
 
@@ -602,7 +592,9 @@ class OGS(object):
             Path to the destiny folder.
         task_id : str or None, optional
             Task ID of the model to load. If None is given, it will be
-            determind by the found files. Default: None
+            determind by the found files. If multiple possible task_ids were
+            found, the first one in alphabetic order will be used.
+            Default: None
         use_task_root : Bool, optional
             State if the given task_root should be used for this model.
             Default: False
@@ -649,6 +641,9 @@ class OGS(object):
                     + task_root
                 )
             return False
+        else:
+            if verbose:
+                print("ogs5py.OGS.laod_model - found ids: " + str(found_ids))
         # take the first found task_id
         if task_id is None:
             # take the first found task_id
@@ -662,6 +657,8 @@ class OGS(object):
                 )
                 print(found_ids)
             return False
+        if verbose:
+            print("ogs5py.OGS.laod_model - use id: " + task_id)
         # overwrite the task_root
         if use_task_root:
             self.task_root = task_root
