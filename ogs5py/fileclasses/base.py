@@ -946,7 +946,7 @@ class BlockFile(File):
                     # iterate over the content
                     for con in self.cont[i][j]:
                         # if content is empty (eg ""), skip it
-                        if not con or (len(con) == 1 and not con[0]) :
+                        if not con or (len(con) == 1 and con[0]=="") :
                             continue
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation
