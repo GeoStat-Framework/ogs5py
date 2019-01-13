@@ -341,10 +341,7 @@ class OGS(object):
             )
         self._task_id = value
         for ext in OGS_EXT:
-            # workaround to get access to class-members by name
             getattr(self, ext[1:]).task_id = value
-        # the mpd file is not connected to the task_id since its name
-        # is explicitly given in the MMP file
 
     def add_copy_file(self, path):
         """
@@ -790,9 +787,10 @@ class OGS(object):
                         self.rfr.append(dcp(ext_file))
 
             # read phreeqc.dat
-            if ext == ".pqc":
+            if ext == ".pqc":  # phreeqc.dat or Phreeqc.dat
+                pqcfiles = glob.glob(os.path.join(task_root, "*hreeqc.dat"))
                 self.pqcdat.read_file(
-                    path=os.path.join(task_root, "phreeqc.dat"),
+                    path=pqcfiles[0],
                     encoding=encoding,
                     verbose=verbose,
                 )
