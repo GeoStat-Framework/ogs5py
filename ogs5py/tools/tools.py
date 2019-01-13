@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
 tools for the ogs5py package
@@ -226,6 +225,7 @@ def format_content(content):
         return [[content]]
     # check if any list in in the given list
     # if so, we handle each entry as a line
+    found_list = False
     for con in content:
         found_list = False
         # check for a list
