@@ -115,6 +115,7 @@ from ogs5py.fileclasses import (
 )
 from ogs5py.tools.types import OGS_EXT
 from ogs5py.tools.tools import search_task_id, Output
+from ogs5py.tools.script import gen_script
 from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 
 # pexpect.spawn just runs on unix-like systems
@@ -568,6 +569,53 @@ class OGS(object):
         self.task_id = self._task_id
         self.top_com = self._top_com
         self.bot_com = self._bot_com
+
+    def gen_script(
+        self,
+        script_dir=os.path.join(os.getcwd(), "ogs_script"),
+        script_name="model.py",
+        ogs_cls_name="model",
+        task_root=None,
+        task_id=None,
+        output_dir=None,
+        separate_files=None,
+    ):
+        """
+        Generate a python script for the given model
+
+        Parameters
+        ----------
+        script_dir : str
+            target directory for the script
+        script_name : str
+            name for the script file (including .py ending)
+        ogs_cls_name : str
+            name of the model in the script
+        task_root : str
+            used task_root in the script
+        task_id : str
+            used task_id in the script
+        output_dir : str
+            used output_dir in the script
+        separate_files : list of str or None
+            list of files, that should be written to separate files and
+            then loaded from the script
+
+        Notes
+        -----
+        This will only create BlockFiles from the script. GLI and MSH files
+        as well as every other file are stored separately.
+        """
+        gen_script(
+            self,
+            script_dir,
+            script_name,
+            ogs_cls_name,
+            task_root,
+            task_id,
+            output_dir,
+            separate_files,
+        )
 
     def load_model(
         self,
