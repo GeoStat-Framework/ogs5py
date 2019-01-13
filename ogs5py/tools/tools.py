@@ -97,7 +97,7 @@ def uncomment(line):
     line : str
         given line
     """
-    return line.split(";")[0].split()
+    return line.split(";")[0].split("//")[0].split()
 
 
 def is_key(sline):
