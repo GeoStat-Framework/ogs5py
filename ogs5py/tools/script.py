@@ -5,7 +5,6 @@ script creation for ogs5py
 from __future__ import division, print_function, absolute_import
 import os
 import shutil
-import numpy as np
 
 from ogs5py.tools.types import STRTYPE, OGS_EXT
 from ogs5py.fileclasses.base import BlockFile
@@ -73,15 +72,26 @@ def add_block_file(block_file, script, ogs_cls_name="model"):
         for j, skey in enumerate(skeys):
             if skey == "":
                 skey = mkey
-            shape = np.array(cont[j]).shape
+            line_no = len(cont[j])
+            # empty value
+            if (
+                line_no == 0
+                or (line_no == 1 and not cont[j][0])
+                or (
+                    line_no == 1
+                    and len(cont[j][0]) == 1
+                    and cont[j][0][0] == ""
+                )
+            ):
+                print(tab(1) + skey + "=[],", file=script)
             # single value
-            if shape[0] == 1 and shape[1] == 1:
+            elif line_no == 1 and len(cont[j][0]) == 1:
                 print(
                     tab(1) + skey + "=" + formater(cont[j][0][0]) + ",",
                     file=script,
                 )
             # single line
-            elif shape[0] == 1:
+            elif line_no == 1:
                 print(
                     tab(1) + skey + "=" + get_line(cont[j][0]) + ",",
                     file=script,
@@ -165,13 +175,43 @@ def gen_script(
     script_dir=os.path.join(os.getcwd(), "ogs_script"),
     script_name="model.py",
     ogs_cls_name="model",
-    task_root="ogs5_model",
+    task_root=None,
     task_id=None,
     output_dir=None,
     separate_files=None,
 ):
+    """
+    Generate a python script for the given model
+
+    Parameters
+    ----------
+    ogs_class : OGS
+        model class to be converted to a script
+    script_dir : str
+        target directory for the script
+    script_name : str
+        name for the script file (including .py ending)
+    ogs_cls_name : str
+        name of the model in the script
+    task_root : str
+        used task_root in the script
+    task_id : str
+        used task_id in the script
+    output_dir : str
+        used output_dir in the script
+    separate_files : list of str or None
+        list of files, that should be written to separate files and
+        then loaded from the script
+
+    Notes
+    -----
+    This will only create BlockFiles from the script. GLI and MSH files
+    as well as every other file are stored separately.
+    """
     if separate_files is None:
         separate_files = []
+    if task_root is None:
+        task_id = ogs_class.task_root
     if task_id is None:
         task_id = ogs_class.task_id
     if not os.path.exists(script_dir):
@@ -205,7 +245,7 @@ def gen_script(
         if output_dir is not None:
             print(
                 tab(1) + "output_dir=" + formater(output_dir) + ",",
-                file=script
+                file=script,
             )
         print(")", file=script)
 
