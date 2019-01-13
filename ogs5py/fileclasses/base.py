@@ -8,11 +8,10 @@ Written,  SM, Mar 2018
 from __future__ import print_function, division, absolute_import
 import os
 import shutil
-import itertools
 import time
-import numpy as np
 
 from ogs5py.tools.tools import (
+    format_content_line,
     format_content,
     search_mkw,
     uncomment,
@@ -29,15 +28,209 @@ CWD = os.getcwd()
 TOP_COM = "|-------------- Written with ogs5py --------------|"
 # Bottom Comment for io-files
 BOT_COM = (
-    "|-- Written with ogs5py (" + version + ") on: "
+    "|-- Written with ogs5py ("
+    + version
+    + ") on: "
     + time.strftime("%Y-%m-%d_%H-%M-%S")
     + " --|"
 )
 
 
-class LineFile(object):
+class File(object):
+    """
+    File class with minimal functionality.
+
+    Parameters
+    ----------
+    task_root : :class:`str`, optional
+        Path to the destiny folder. Default is the current working dir
+    task_id : :class:`str`, optional
+        Name for the ogs task. Default: "ogs"
+    file_ext : :class:`str`, optional
+        extension of the file (with leading dot ".std")
+        Default: ".std"
+    """
+
+    def __init__(
+        self,
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
+        file_ext=".std",
+    ):
+        self.task_root = task_root
+        self.task_id = task_id
+        self.top_com = TOP_COM
+        self.bot_com = BOT_COM
+        # placeholder for later derived classes for each file-type
+        self.file_ext = file_ext
+        # if an existing file should be copied
+        self.copy_file = None
+        self.copy_path = None
+        self._force = False
+
+    @classmethod
+    def _get_clsname(cls):
+        return cls.__name__
+
+    def get_file_type(self):
+        """Get the OGS file class name"""
+        return self._get_clsname()
+
+    @property
+    def file_path(self):
+        """:class:`str`: save path of the file"""
+        return os.path.join(self.task_root, self.task_id + self.file_ext)
+
+    @property
+    def is_empty(self):
+        """state if the OGS file is empty"""
+        return False
+
+    @property
+    def force_writing(self):
+        """:class:`bool`: state if the file is written even if empty"""
+        return self._force
+
+    @force_writing.setter
+    def force_writing(self, force):
+        self._force = bool(force)
+
+    def reset(self):
+        """
+        Delete every content.
+        """
+        pass
+
+    def add_copy_link(self, path, symlink=False):
+        """
+        Instead of writing a file, you can give a path to an existing file,
+        that will be copied/linked to the target folder.
+
+        Parameters
+        ----------
+        path : str
+            path to the existing file that should be copied
+        symlink : bool, optional
+            on UNIX systems it is possible to use a symbolic link to save
+            time if the file is big. Default: False
+        """
+        if os.path.isfile(path):
+            path = os.path.abspath(path)
+            self.copy_file = "link" if symlink else "copy"
+            self.copy_path = path
+        else:
+            print(
+                "ogs5py "
+                + self.get_file_type()
+                + ": Given copy-path is not a readable file: "
+                + path
+            )
+
+    def del_copy_link(self):
+        """
+        Remove a former given link to an external file.
+        """
+        self.copy_file = None
+        self.copy_path = None
+
+    def read_file(self, path, encoding=None, verbose=False):
+        """
+        Read an existing file
+        """
+        pass
+
+    def save(self, path, **kwargs):
+        """
+        Save the actual file in the given path.
+
+        Parameters
+        ----------
+        path : str
+            path to where to file should be saved
+        """
+        pass
+
+    def write_file(self):
+        """
+        Write the actual OGS input file to the given folder.
+        Its path is given by "task_root+task_id+file_ext".
+        """
+        # update the content
+        self._update_out()
+        # create the file path
+        if not os.path.exists(self.task_root):
+            os.makedirs(self.task_root)
+        f_path = self.file_path
+        # check if we can copy the file or if we need to write it from data
+        if self.copy_file is None:
+            # if no content is present skip this file
+            if self.force_writing or not self.is_empty:
+                self.save(f_path)
+        # copy a given file if wanted
+        elif self.copy_file == "copy":
+            shutil.copyfile(self.copy_path, f_path)
+        else:
+            os.symlink(self.copy_path, f_path)
+
+    def check(self, verbose=True):
+        """
+        Check if the given file is valid.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            Print information for the executed checks. Default: True
+
+        Returns
+        -------
+        result : bool
+            Validity of the given file.
+        """
+        return True
+
+    def _update_in(self):
+        """
+        An update routine to set the file data in the right format after input.
+        """
+        pass
+
+    def _update_out(self):
+        """
+        An update routine to set the file data in the right format for output.
+        """
+        pass
+
+    def __bool__(self):
+        return not self.is_empty
+
+    def __nonzero__(self):
+        return self.__bool__()
+
+    def __str__(self):
+        return self.__repr__()
+
+
+class LineFile(File):
     """
     OGS class to handle line-wise text files.
+
+    Parameters
+    ----------
+    lines : list of str, optional
+        content of the file as a list of lines
+        Default: None
+    file_name : str, optional
+        name of the file without extension
+        Default: "textfile"
+    file_ext : str, optional
+        extension of the file (with leading dot ".txt")
+        Default: ".txt"
+    task_root : str, optional
+        Path to the destiny folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task. (a place holder)
+        Default: "model"
 
     Attributes
     ----------
@@ -61,74 +254,32 @@ class LineFile(object):
         task_root=os.path.join(CWD, "ogs5model"),
         task_id="model",
     ):
-        """
-        Initialize an OGS line-wise text file.
-
-        Parameters
-        ----------
-        lines : list of str, optional
-            content of the file as a list of lines
-            Default: None
-        file_name : str, optional
-            name of the file without extension
-            Default: "textfile"
-        file_ext : str, optional
-            extension of the file (with leading dot ".txt")
-            Default: ".txt"
-        task_root : str, optional
-            Path to the destiny folder.
-            Default: cwd+"ogs5model"
-        task_id : str, optional
-            Name for the ogs task. (a place holder)
-            Default: "model"
-        """
+        super(LineFile, self).__init__(task_root, task_id, file_ext)
         if lines is not None:
             self.lines = lines
         else:
             self.lines = []
         self.file_name = file_name
-        self.file_ext = file_ext
-        self.task_root = task_root
-        self.task_id = task_id
-        self._force = False
 
-    @classmethod
-    def _get_clsname(cls):
-        return cls.__name__
-
-    def get_file_type(self):
-        """Get the OGS file class name"""
-        return self._get_clsname()
+    @property
+    def file_path(self):
+        """:class:`str`: save path of the file"""
+        return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     @property
     def is_empty(self):
-        """state if the file is empty"""
+        """:class:`bool`: state if the file is empty"""
         # check if the list of main keywords is empty
         if self.check(False):
             return not bool(self.lines)
         # if check is not passed, handle it as empty file
         return True
 
-    @property
-    def force_writing(self):
-        """:class:`bool`: state if the file is written even if empty"""
-        return self._force
-
-    @force_writing.setter
-    def force_writing(self, force):
-        self._force = bool(force)
-
     def reset(self):
         """
         Delete every content.
         """
         self.lines = []
-
-    def __bool__(self):
-        return not self.is_empty
-
-    def __nonzero__(self):
-        return self.__bool__()
 
     def check(self, verbose=True):
         """
@@ -198,28 +349,7 @@ class LineFile(object):
                     + path
                 )
 
-    def write_file(self):
-        """
-        Write the acutal file.
-        """
-        if self.force_writing or not self.is_empty:
-            # create the file path
-            if not os.path.exists(self.task_root):
-                os.makedirs(self.task_root)
-            f_path = os.path.join(
-                self.task_root, self.file_name + self.file_ext
-            )
-            # save the data
-            self.save(f_path)
-
     def __repr__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         out = ""
         for line in self.lines[:5]:
             out += line + "\n"
@@ -227,20 +357,20 @@ class LineFile(object):
             out += "..."
         return out
 
-    def __str__(self):
-        """
-        Return a formatted representation of the file.
 
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()
-
-
-class OGSfile(object):
+class BlockFile(File):
     """
     OGS Base class to derive all file formats.
+
+    Parameters
+    ----------
+    task_root : :class:`str`, optional
+        Path to the destiny folder. Default is the current working dir
+    task_id : :class:`str`, optional
+        Name for the ogs task. Default: "ogs"
+    file_ext : :class:`str`, optional
+        extension of the file (with leading dot ".std")
+        Default: ".std"
     """
 
     MKEYS = []
@@ -249,26 +379,13 @@ class OGSfile(object):
     STD = {}
 
     def __init__(
-        self, task_root=os.path.join(CWD, "ogs5model"), task_id="model"
+        self,
+        task_root=os.path.join(CWD, "ogs5model"),
+        task_id="model",
+        file_ext=".std",
     ):
-        """
-        Initialize an OGS file.
+        super(BlockFile, self).__init__(task_root, task_id, file_ext)
 
-        Parameters
-        ----------
-        task_root : string, optional
-            Path to the destiny folder. Default is the current working dir
-        task_id : string, optional
-            Name for the ogs task. Default: "ogs"
-        """
-        #        self._add_doc()
-
-        self.task_root = task_root
-        self.task_id = task_id
-        self.top_com = TOP_COM
-        self.bot_com = BOT_COM
-        # placeholder for later derived classes for each file-type
-        self.file_ext = ".std"
         # list of main keywords indicated by "#"
         self.mainkw = []
         # list of subkeywords sorted by main keywords indicated by "$"
@@ -278,55 +395,11 @@ class OGSfile(object):
         # content of each subkeyword, each list is a line
         self.cont = []
 
-        # if an existing file should be copied
-        self.copy_file = None
-        self.copy_path = None
-        self._force = False
-
-    @classmethod
-    def _get_clsname(cls):
-        return cls.__name__
-
-    def get_file_type(self):
-        """Get the OGS file class name"""
-        return self._get_clsname()
-
-    def _add_doc(self):
-        out = ""
-        tab = "    "
-        for i, mkw in enumerate(self.MKEYS):
-            out += min(i, 1) * tab + "- " + mkw + "\n"
-            for skw in self.SKEYS[i]:
-                if skw:
-                    out += 2 * tab + "- " + skw + "\n"
-                else:
-                    out += 2 * tab + "- no sub keyword\n"
-        self.__doc__.format(out)
-
-    def __bool__(self):
-        return not self.is_empty
-
-    def __nonzero__(self):
-        return self.__bool__()
-
     @property
     def is_empty(self):
         """state if the OGS file is empty"""
         # check if the list of main keywords is empty
         return not bool(self.mainkw)
-
-    @property
-    def force_writing(self):
-        """:class:`bool`: state if the file is written even if empty"""
-        return self._force
-
-    @force_writing.setter
-    def force_writing(self, force):
-        self._force = bool(force)
-
-    def get_block_no(self):
-        """Get the number of blocks in the file."""
-        return len(self.mainkw)
 
     def reset(self):
         """
@@ -335,37 +408,9 @@ class OGSfile(object):
         self.del_main_keyword(del_all=True)
         self._update_in()
 
-    def update_block(self, index=None, main_key=None, **block):
-        """
-        Update a Block from the actual file.
-
-        Parameters
-        ----------
-        index : int or None, optional
-            Positional index of the block of interest. As default, the last
-            one is used. Default: None
-        main_key : string, optional
-            Main keyword of the block that should be updated (see: ``MKEYS``)
-            This shouldn't be done.
-            Default: None
-        **block : keyword dict
-            here the dict-keywords are the ogs-subkeywords and the value is
-            the content that should be added with this ogs-subkeyword
-            If a block should contain content directly connected to a main
-            keyword, use this main keyword as input-keyword and the content as
-            value: ``SUBKEY=content``
-        """
-        # get the block
-        upd_block = self.get_block(index, as_dict=True)
-        # change the main key if wanted
-        if main_key is not None:
-            upd_block["main_key"] = main_key
-        # update the block
-        upd_block.update(block)
-        # remove the old one
-        self.del_main_keyword(main_index=index, del_all=False)
-        # set the updated one
-        self.add_block(index=index, **upd_block)
+    def get_block_no(self):
+        """Get the number of blocks in the file."""
+        return len(self.mainkw)
 
     def get_block(self, index=None, as_dict=True):
         """
@@ -408,6 +453,42 @@ class OGSfile(object):
             return out
 
         return main_key, sub_key, cont
+
+    def update_block(self, index=None, main_key=None, **block):
+        """
+        Update a Block from the actual file.
+
+        Parameters
+        ----------
+        index : int or None, optional
+            Positional index of the block of interest. As default, the last
+            one is used. Default: None
+        main_key : string, optional
+            Main keyword of the block that should be updated (see: ``MKEYS``)
+            This shouldn't be done.
+            Default: None
+        **block : keyword dict
+            here the dict-keywords are the ogs-subkeywords and the value is
+            the content that should be added with this ogs-subkeyword
+            If a block should contain content directly connected to a main
+            keyword, use this main keyword as input-keyword and the content as
+            value: ``SUBKEY=content``
+        """
+        # get the block
+        upd_block = self.get_block(index, as_dict=True)
+        # change the main key if wanted
+        if main_key is not None:
+            upd_block["main_key"] = main_key
+        # if content is directly related to mkey we rewrite it
+        if "" in upd_block:
+            tmp_block = {upd_block["main_key"]: upd_block[""]}
+            upd_block = tmp_block
+        # update the block
+        upd_block.update(block)
+        # remove the old one
+        self.del_main_keyword(main_index=index, del_all=False)
+        # set the updated one
+        self.add_block(index=index, **upd_block)
 
     def add_block(self, index=None, main_key=None, **block):
         """
@@ -487,9 +568,8 @@ class OGSfile(object):
         for skw in self.SKEYS[mindex]:
             if skw not in block:
                 continue
-            if skw:  # needed? "" can't be a keyword
-                self.add_sub_keyword(skw, main_index=index)
-                self.add_multi_content(block[skw], main_index=index)
+            self.add_sub_keyword(skw, main_index=index)
+            self.add_multi_content(block[skw], main_index=index)
 
     def add_main_keyword(self, key, main_index=None):
         """
@@ -598,10 +678,8 @@ class OGSfile(object):
         # get the position
         if line_index is None:
             line_index = len(self.cont[main_index][sub_index])
-        # assure that content is a list of strings
-        content = list(np.array(content, dtype=str).reshape(-1))
-        # if the content is given as string with whitespaces, split it
-        content = list(itertools.chain(*[con.split() for con in content]))
+        # format content line
+        content = format_content_line(content)
         # add the content (if sth was given (no blank lines))
         if content:
             self.cont[main_index][sub_index].insert(line_index, content)
@@ -736,38 +814,6 @@ class OGSfile(object):
                         if not self.subkw[main_index][sub_index]:
                             self.del_sub_keyword(main_index, sub_index)
 
-    def add_copy_link(self, path, symlink=False):
-        """
-        Instead of writing a file, you can give a path to an existing file,
-        that will be copied/linked to the target folder.
-
-        Parameters
-        ----------
-        path : str
-            path to the existing file that should be copied
-        symlink : bool, optional
-            on UNIX systems it is possible to use a symbolic link to save
-            time if the file is big. Default: False
-        """
-        if os.path.isfile(path):
-            path = os.path.abspath(path)
-            self.copy_file = "link" if symlink else "copy"
-            self.copy_path = path
-        else:
-            print(
-                "ogs5py "
-                + self.get_file_type()
-                + ": Given copy-path is not a readable file: "
-                + path
-            )
-
-    def del_copy_link(self):
-        """
-        Remove a former given link to an external file.
-        """
-        self.copy_file = None
-        self.copy_path = None
-
     def read_file(self, path, encoding=None, verbose=False):
         """
         Read an existing OGS input file
@@ -816,14 +862,14 @@ class OGSfile(object):
             # add the found keyword
             self.add_main_keyword(mkw)
             for line in fin:
-                # remove comments
+                # remove comments and split line
                 sline = uncomment(line)
                 # skip blank lines and comments
                 if not sline:
                     continue
                 if not is_key(sline) and not subkw_found:
                     # handle exceptional case when content is present
-                    # without subkey (like #POINTS in .gli)
+                    # without subkey (like #CURVE)
                     self.add_sub_keyword("")
                     subkw_found = True
                     self.add_content(sline)
@@ -899,6 +945,9 @@ class OGSfile(object):
                         print(SUB_IND + "$" + skw, end=lend, file=fout)
                     # iterate over the content
                     for con in self.cont[i][j]:
+                        # if content is empty (eg ""), skip it
+                        if not con or (len(con) == 1 and not con[0]) :
+                            continue
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation
                         if (
@@ -929,48 +978,7 @@ class OGSfile(object):
             else:
                 print("#STOP", end="", file=fout)
 
-    def write_file(self):
-        """
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+file_ext".
-        """
-        # update the content
-        self._update_out()
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
-        # check if we can copy the file or if we need to write it from data
-        if self.copy_file is None:
-            # if no content is present skip this file
-            if self.force_writing or not self.is_empty:
-                self.save(f_path)
-        # copy a given file if wanted
-        elif self.copy_file == "copy":
-            shutil.copyfile(self.copy_path, f_path)
-        else:
-            os.symlink(self.copy_path, f_path)
-
-    def _update_in(self):
-        """
-        An update routine to set the file data in the right format after input.
-        """
-        pass
-
-    def _update_out(self):
-        """
-        An update routine to set the file data in the right format for output.
-        """
-        pass
-
     def __repr__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         from ogs5py import SUB_IND, CON_IND
 
         out = ""
@@ -989,13 +997,3 @@ class OGSfile(object):
         if self.mainkw:
             out += "#STOP"
         return out
-
-    def __str__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()
