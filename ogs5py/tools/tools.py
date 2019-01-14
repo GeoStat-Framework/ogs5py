@@ -145,7 +145,14 @@ def get_key(sline):
     sline : list of str
         given splitted line
     """
-    return sline[0][1:] if is_key(sline) else ""
+    key = sline[0][1:] if is_key(sline) else ""
+    # space between #/$ and key --> workaround
+    if not key and is_key(sline) and len(sline) > 1:
+        key = sline[1]
+    # typos occure
+    while key.startswith("#") or key.startswith("$"):
+        key = key[1:]
+    return key
 
 
 def format_dict(dict_in):
