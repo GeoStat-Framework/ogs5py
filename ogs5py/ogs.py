@@ -801,6 +801,21 @@ class OGS(object):
                         path = os.path.join(task_root, ext_name)
                         ext_file.read_file(path, encoding=encoding)
                         self.mpd.append(dcp(ext_file))
+                    # external GEOMETRY_AREA
+                    if "GEOMETRY_AREA" in self.mmp.subkw[i]:
+                        index = self.mmp.subkw[i].index("GEOMETRY_AREA")
+                        if self.mmp.cont[i][index][0][0] == "FILE":
+                            ext_name = self.mmp.cont[i][index][0][1]
+                            raw_file_name = os.path.basename(ext_name)
+                            f_name, f_ext = os.path.splitext(raw_file_name)
+                            ext_file = MPD(
+                                file_name=f_name,
+                                file_ext=f_ext,
+                                task_root=self.task_root,
+                            )
+                            path = os.path.join(task_root, ext_name)
+                            ext_file.read_file(path, encoding=encoding)
+                            self.mpd.append(dcp(ext_file))
 
             # append GEMS3K init file
             if ext == ".gem":
