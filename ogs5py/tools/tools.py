@@ -251,7 +251,7 @@ def format_content(content):
     return [content]
 
 
-def search_task_id(task_root):
+def search_task_id(task_root, search_ext=None):
     """
     Search for OGS model names in the given path
 
@@ -259,15 +259,19 @@ def search_task_id(task_root):
     ----------
     task_root : str
         Path to the destiny folder.
+    search_ext : str
+        OGS extension that should be searched for. Default: All known.
 
     Return
     ------
     found_ids : list of str
         List of all found task_ids.
     """
+    if search_ext is None:
+        search_ext = OGS_EXT
     found_ids = []
     # iterate over all ogs file-extensions
-    for ext in OGS_EXT:
+    for ext in search_ext:
         # search for files with given extension
         files = glob.glob(os.path.join(task_root, "*" + ext))
         # take the first found file if there are multiple
