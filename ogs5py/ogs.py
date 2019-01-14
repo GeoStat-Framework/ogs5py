@@ -627,6 +627,7 @@ class OGS(object):
         skip_ext=None,
         encoding=None,
         verbose=False,
+        search_ext=None,  # (".pcs"),
     ):
         """
         Load an existing OGS5 model.
@@ -655,6 +656,8 @@ class OGS(object):
             standard is used. Default: ``None``
         verbose : bool, optional
             Print information of the reading process. Default: False
+        search_ext : str
+            OGS extension that should be searched for. Default: ".pcs"
 
         Notes
         -----
@@ -678,13 +681,12 @@ class OGS(object):
         if skip_ext is None:
             skip_ext = []
         # search for possible task_ids in the directory
-        found_ids = search_task_id(task_root)
+        found_ids = search_task_id(task_root, search_ext)
         if not found_ids:
-            if verbose:
-                print(
-                    "ogs5py.OGS.laod_model - nothing was found at: "
-                    + task_root
-                )
+            raise ValueError(
+                "ogs5py.OGS.laod_model - nothing was found at: "
+                + task_root
+            )
             return False
         else:
             if verbose:
@@ -695,12 +697,12 @@ class OGS(object):
             task_id = found_ids[0]
         # check if the given task_id is found
         elif task_id not in found_ids:
-            if verbose:
-                print(
-                    "ogs5py.OGS.load_model - didn't find given task_id: "
-                    + task_root
-                )
-                print(found_ids)
+            raise ValueError(
+                "ogs5py.OGS.load_model - didn't find given task_id ("
+                + task_id
+                + ") at: "
+                + task_root
+            )
             return False
         if verbose:
             print("ogs5py.OGS.laod_model - use id: " + task_id)
