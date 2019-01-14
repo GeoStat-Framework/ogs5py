@@ -848,7 +848,7 @@ class BlockFile(File):
                     )
                 return
             subkw_found = False
-            stop_found = mkw == "STOP"
+            stop_found = mkw.startswith("STOP")
             # if the STOP keyword is found first, the file is corrupted
             if stop_found:
                 if verbose:
@@ -860,7 +860,16 @@ class BlockFile(File):
                     )
                 return
             # add the found keyword
-            self.add_main_keyword(mkw)
+            valid_mkey = False
+            for key in self.MKEYS:
+                if mkw.startswith(key):
+                    valid_mkey = True
+                    self.add_main_keyword(key)
+                    break
+            if not valid_mkey:
+                raise ValueError(path+": Unknown main_key: "+mkw)
+            else:
+                main_index = self.MKEYS.index(key)
             for line in fin:
                 # remove comments and split line
                 sline = uncomment(line)
@@ -876,14 +885,32 @@ class BlockFile(File):
                 # check if given line is a key
                 elif is_mkey(sline):
                     # if STOP is found, stop the reading
-                    if get_key(sline) == "STOP":
+                    if get_key(sline).startswith("STOP"):
                         stop_found = True
                         self._update_in()
                         return
-                    self.add_main_keyword(get_key(sline))
+                    mkw = get_key(sline)
+                    valid_mkey = False
+                    for key in self.MKEYS:
+                        if mkw.startswith(key):
+                            valid_mkey = True
+                            self.add_main_keyword(key)
+                            break
+                    if not valid_mkey:
+                        raise ValueError(path+": Unknown main_key: "+mkw)
+                    else:
+                        main_index = self.MKEYS.index(key)
                     subkw_found = False
                 elif is_skey(sline):
-                    self.add_sub_keyword(get_key(sline))
+                    skey = get_key(sline)
+                    valid_skey = False
+                    for key in self.SKEYS[main_index]:
+                        if skey.startswith(key):
+                            valid_skey = True
+                            self.add_sub_keyword(key)
+                            break
+                    if not valid_skey:
+                        raise ValueError(path+": Unknown subkey: "+skey)
                     subkw_found = True
                 else:
                     self.add_content(sline)
