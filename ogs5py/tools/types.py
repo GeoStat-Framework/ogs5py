@@ -26,34 +26,37 @@ EMPTY_GLI = {
     "volumes": [],
 }
 GLI_KEY_LIST = ["#POINTS", "#POLYLINE", "#SURFACE", "#VOLUME", "#STOP"]
+# https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_ply.cpp#L577
 PLY_KEY_LIST = [
-    "ID",
-    "NAME",
-    "POINTS",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "POINT_VECTOR",
+    "ID",  # int
+    "NAME",  # str
+    "TYPE",  # int
+    "EPSILON",  # float
+    "MAT_GROUP",  # int
+    "POINTS",  # list
+    "POINT_VECTOR",  # str
 ]
-PLY_TYPES = [int, str, list, float, int, int, str]
+PLY_TYPES = [int, str, int, float, int, list, str]
+# https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_sfc.cpp#L996
 SRF_KEY_LIST = [
-    "ID",
-    "NAME",
-    "POLYLINES",
-    "EPSILON",
-    "TYPE",
-    "MAT_GROUP",
-    "TIN",
+    "ID",  # int
+    "NAME",  # str
+    "EPSILON",  # float
+    "TYPE",  # int
+    "TIN",  # str
+    "MAT_GROUP",  # int
+    "POLYLINES",  # list
 ]
-SRF_TYPES = [int, str, list, float, int, int, str]
+SRF_TYPES = [int, str, float, int, str, int, list]
+# https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_vol.cpp#L130
 VOL_KEY_LIST = [
-    "NAME",
-    "SURFACES",
-    "TYPE",  # can be string (former int)
-    "MAT_GROUP",  # can be string (former int)
-    "LAYER",
+    "NAME",  # str
+    "TYPE",  # str
+    "SURFACES",  # list
+    "MAT_GROUP",  # str
+    "LAYER",  # int
 ]
-VOL_TYPES = [str, list, str, str, int]
+VOL_TYPES = [str, str, list, str, int]
 EMPTY_PLY = {}
 for key in PLY_KEY_LIST:
     EMPTY_PLY[key] = None
