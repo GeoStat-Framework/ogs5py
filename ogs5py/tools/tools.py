@@ -52,7 +52,7 @@ class Output(object):
         self.last_line = data.decode(self.encoding)
         self.file.write(self.last_line)
         if self.print_log:
-            sys.stdout.write(data)
+            sys.stdout.write(self.last_line)
             sys.stdout.flush()
 
     def flush(self):
