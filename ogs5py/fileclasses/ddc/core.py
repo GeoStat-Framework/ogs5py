@@ -3,10 +3,10 @@ Class for the ogs DOMAIN DECOMPOSITION file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class DDC(OGSfile):
+class DDC(BlockFile):
     """
     Class for the ogs MPI DOMAIN DECOMPOSITION file.
 
@@ -34,11 +34,7 @@ class DDC(OGSfile):
 
     STD = {}
 
-    def __init__(
-        self,
-        # count=None,
-        **OGS_Config
-    ):
+    def __init__(self, **OGS_Config):
         """
         Input
         -----
@@ -47,18 +43,7 @@ class DDC(OGSfile):
 
         """
         super(DDC, self).__init__(**OGS_Config)
-
-    #        self.count = count
-    #
-    #    @property
-    #    def file_ext(self):
-    #        if self.count is None or self.count <= 1:
-    #            return '.ddc'
-    #        return '.'+str(self.count)+'ddc'
-    #
-    #    @file_ext.setter
-    #    def file_ext(self, val):
-    #        pass
+        self.file_ext = ".ddc"
 
     def save(self, path, **kwargs):
         """

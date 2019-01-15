@@ -3,10 +3,10 @@ Class for the ogs USER DEFINED TIME CURVES file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class RFD(OGSfile):
+class RFD(BlockFile):
     """
     Class for the ogs USER DEFINED TIME CURVES file.
 
@@ -15,6 +15,10 @@ class RFD(OGSfile):
     - PROJECT
     - CURVE
     - CURVES
+    - RENUMBER really?
+    - ITERATION_PROPERTIES_CONCENTRATION really?
+    - REFERENCE_CONDITIONS really?
+    - APRIORI_REFINE_ELEMENT
 
     Standard block
     --------------
@@ -29,9 +33,17 @@ class RFD(OGSfile):
     https://github.com/ufz/ogs5/blob/master/FEM/files0.cpp#L370
     """
 
-    MKEYS = ["PROJECT", "CURVE", "CURVES"]
+    MKEYS = [
+        "PROJECT",
+        "CURVE",
+        "CURVES",
+        "RENUMBER",
+        "ITERATION_PROPERTIES_CONCENTRATION",
+        "REFERENCE_CONDITIONS",
+        "APRIORI_REFINE_ELEMENT",
+    ]
     # just a workaround in this case... since all content is related to mainkw
-    SKEYS = [[""], [""], [""]]
+    SKEYS = [[""]] * 7
 
     STD = {}
 

@@ -26,13 +26,13 @@ from ogs5py.tools.tools import (
     unique_rows,
     replace,
 )
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import File
 
 # current working directory
 CWD = os.getcwd()
 
 
-class GLI(OGSfile):
+class GLI(File):
     """
     Class for the ogs GEOMETRY file.
     """
@@ -328,7 +328,7 @@ class GLI(OGSfile):
         if check_gli_dict(tmp, verbose=verbose):
             self.__dict = tmp
         else:
-            print("GLI.load: given gli is not valid")
+            raise ValueError("GLI.load: "+filepath+": given gli is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
         """
@@ -932,31 +932,28 @@ class GLI(OGSfile):
         return dcp(self.__dict)
 
 
-class GLIext(object):
+class GLIext(File):
     """
     Class for an external definition for the ogs GEOMETRY file.
     """
 
     def __init__(
         self,
-        typ,
+        typ="TIN",
         data=None,
         file_name=None,
         file_ext=None,
         task_root=os.path.join(CWD, "ogs5model"),
         task_id="model",
     ):
-        """
-        Input
-        -----
-        """
+        super(GLIext, self).__init__(task_root, task_id)
+
         if typ not in ["TIN", "POINT_VECTOR"]:
             raise ValueError("typ needs to be either 'TIN' or 'POINT_VECTOR'")
         self.typ = typ
-        self.task_root = task_root
         if file_name is None:
             file_name = task_id
-        self.task_id = file_name
+        self.file_name = file_name
         if file_ext is None:
             if typ == "TIN":
                 file_ext = ".tin"
@@ -973,11 +970,15 @@ class GLIext(object):
         if not self.check(False):
             raise ValueError("Gli external: data not valid")
 
-    def __bool__(self):
-        return not self.check(False)
+    @property
+    def is_empty(self):
+        """state if the OGS file is empty"""
+        return self.data.shape[0] == 0
 
-    def __nonzero__(self):
-        return self.__bool__()
+    @property
+    def file_path(self):
+        """:class:`str`: save path of the file"""
+        return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     def check(self, verbose=True):
         """
@@ -1050,15 +1051,3 @@ class GLIext(object):
             self.data = data
         elif verbose:
             print("Gli external: File data not valid")
-
-    def write_file(self):
-        """
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+file_ext".
-        """
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
-        # save the data
-        self.save(f_path)

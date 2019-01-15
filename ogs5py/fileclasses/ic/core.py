@@ -5,12 +5,12 @@ Class for the ogs INITIAL_CONDITION file.
 from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile, File
 
 CWD = os.getcwd()
 
 
-class IC(OGSfile):
+class IC(BlockFile):
     """
     Class for the ogs INITIAL_CONDITION file.
 
@@ -72,7 +72,7 @@ class IC(OGSfile):
         self.file_ext = ".ic"
 
 
-class RFR(object):
+class RFR(File):
     """
     Class for the ogs RESTART file, if the DIS_TYPE in IC is set to RESTART
     """
@@ -86,10 +86,10 @@ class RFR(object):
         task_root=os.path.join(CWD, "ogs5model"),
         task_id="model",
     ):
-        """
-        Input
-        -----
-        """
+        if file_ext is None:
+            file_ext = ".rfr"
+        super(RFR, self).__init__(task_root, task_id, file_ext)
+
         if line1_4 is None:
             line1_4 = [
                 "#0#0#0#1#100000#0"
@@ -99,23 +99,25 @@ class RFR(object):
                 "HEAD, m",
             ]
         self.line1_4 = line1_4
-        self.task_root = task_root
+
         if file_name is None:
             file_name = task_id
-        self.task_id = file_name
-        if file_ext is None:
-            file_ext = ".rfr"
-        self.file_ext = file_ext
+        self.file_name = file_name
+
         if data:
             self.data = np.array(data)
         else:
             self.data = np.zeros(0)
 
-    def __bool__(self):
-        return not self.check(False)
+    @property
+    def is_empty(self):
+        """state if the OGS file is empty"""
+        return bool(self.data.shape) and self.data.shape[0] > 0
 
-    def __nonzero__(self):
-        return self.__bool__()
+    @property
+    def file_path(self):
+        """:class:`str`: save path of the file"""
+        return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     def check(self, verbose=True):
         """
@@ -170,18 +172,6 @@ class RFR(object):
         self.line1_4 = lines
         self.data = np.loadtxt(path, skiprows=4)[:, 1]
 
-    def write_file(self):
-        """
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+file_ext".
-        """
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
-        # save the data
-        self.save(f_path)
-
     def __repr__(self):
         """
         Return a formatted representation of the file.
@@ -198,13 +188,3 @@ class RFR(object):
         if len(self.data) > 10:
             out += "..."
         return out
-
-    def __str__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()

@@ -3,10 +3,11 @@ Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+import os
+from ogs5py.fileclasses.base import BlockFile
 
 
-class MPD(OGSfile):
+class MPD(BlockFile):
     """
     Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file.
 
@@ -49,7 +50,7 @@ class MPD(OGSfile):
         super(MPD, self).__init__(**OGS_Config)
         if file_name is None:
             file_name = self.task_id
-        self.task_id = file_name
+        self.file_name = file_name
         self.file_ext = file_ext
 
     # no top comment allowed in the MPD file
@@ -61,3 +62,8 @@ class MPD(OGSfile):
     @top_com.setter
     def top_com(self, val):
         pass
+
+    @property
+    def file_path(self):
+        """:class:`str`: save path of the file"""
+        return os.path.join(self.task_root, self.file_name + self.file_ext)

@@ -3,10 +3,10 @@ Class for the ogs KINETRIC REACTION file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class KRC(OGSfile):
+class KRC(BlockFile):
     """
     Class for the ogs KINETRIC REACTION file.
 
@@ -192,6 +192,8 @@ class KRC(OGSfile):
             "REACTION_DEACTIVATION",
             "DEBUG_OUTPUT",
             "ACTIVITY_MODEL",
+            "REALATIVE_ERROR",  # really?
+            "MAX_TIMESTEP",  # really?
         ],
     ]
 

@@ -3,10 +3,10 @@ Class for the ogs COMPONENT_PROPERTIES file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class MCP(OGSfile):
+class MCP(BlockFile):
     """
     Class for the ogs COMPONENT_PROPERTIES file.
 
@@ -77,6 +77,12 @@ class MCP(OGSfile):
             "OutputMassOfComponentInModel",
             "VALENCE",
             "A_ZERO",
+            "CRITICAL_VOLUME",  # really?
+            "CRITICAL_DENSITY",  # really?
+            "COMP_CAPACITY",  # really?
+            "COMP_CONDUCTIVITY",  # really?
+            "SOLUTE",  # really?
+            "MOLECULAR_WEIGHT",  # really?
         ]
     ]
 

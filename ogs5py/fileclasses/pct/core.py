@@ -5,12 +5,12 @@ Class for the ogs PARTICLE DEFINITION file for RANDOM_WALK.
 from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
-import shutil
+from ogs5py.fileclasses.base import File
 
 CWD = os.getcwd()
 
 
-class PCT(object):
+class PCT(File):
     """
     Class for the ogs Particle file, if the PCS TYPE is RANDOM_WALK
     """
@@ -26,25 +26,13 @@ class PCT(object):
             0 for different pseudo-random series.
             Default: 1
         """
+        super(PCT, self).__init__(task_root, task_id)
         self.s_flag = s_flag
-        self.task_root = task_root
-        self.task_id = task_id
         self.file_ext = ".pct"
         if data:
             self.data = np.array(data)
         else:
             self.data = np.zeros((0, 10))
-
-        # if an existing file should be copied
-        self.copy_file = None
-        self.copy_path = None
-        self._force = False
-
-    def __bool__(self):
-        return not self.is_empty
-
-    def __nonzero__(self):
-        return self.__bool__()
 
     @property
     def is_empty(self):
@@ -54,15 +42,6 @@ class PCT(object):
             return not self.data.shape[0] >= 1
         # if check is not passed, handle it as empty file
         return True
-
-    @property
-    def force_writing(self):
-        """:class:`bool`: state if the file is written even if empty"""
-        return self._force
-
-    @force_writing.setter
-    def force_writing(self, force):
-        self._force = bool(force)
 
     def check(self, verbose=True):
         """
@@ -120,55 +99,6 @@ class PCT(object):
         # use numpy to read the data
         self.data = np.loadtxt(path, skiprows=2)
 
-    def write_file(self):
-        """
-        Write the actual OGS input file to the given folder.
-        Its path is given by "task_root+task_id+file_ext".
-        """
-        # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
-        f_path = os.path.join(self.task_root, self.task_id + self.file_ext)
-        # check if we can copy the file or if we need to write it from data
-        if self.copy_file is None:
-            # if no content is present skip this file
-            if self.force_writing or not self.is_empty:
-                self.save(f_path)
-        # copy a given file if wanted
-        elif self.copy_file == "copy":
-            shutil.copyfile(self.copy_path, f_path)
-        else:
-            os.symlink(self.copy_path, f_path)
-
-    def add_copy_link(self, path, symlink=False):
-        """
-        Instead of writing a file, you can give a path to an existing file,
-        that will be copied to the target folder
-
-        Parameters
-        ----------
-        path : str
-            path to the existing file that should be copied
-        symlink : bool, optional
-            on UNIX systems it is possible to use a symbolic link to save
-            time if the file is big. Default: False
-        """
-        if os.path.isfile(path):
-            path = os.path.abspath(path)
-            self.copy_file = "link" if symlink else "copy"
-            self.copy_path = path
-        else:
-            print(
-                "ogs5py.PCT: Given copy-path is not a readable file: " + path
-            )
-
-    def del_copy_link(self):
-        """
-        Remove a former given link to an external file.
-        """
-        self.copy_file = None
-        self.copy_path = None
-
     def __repr__(self):
         """
         Return a formatted representation of the file.
@@ -181,13 +111,3 @@ class PCT(object):
         out += str(self.data.shape[0]) + "\n"
         out += str(self.data)
         return out
-
-    def __str__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()

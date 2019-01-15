@@ -3,10 +3,10 @@ Class for the ogs PROCESS file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class PCS(OGSfile):
+class PCS(BlockFile):
     """
     Class for the ogs PROCESS file.
 
@@ -20,6 +20,7 @@ class PCS(OGSfile):
         - DEACTIVATED_SUBDOMAIN
         - DISSOLVED_CO2_INGAS_PCS_NAME
         - DISSOLVED_CO2_PCS_NAME
+        - TEMPERATURE_UNIT
         - ELEMENT_MATRIX_OUTPUT
         - GEO_TYPE
         - MEDIUM_TYPE
@@ -71,6 +72,7 @@ class PCS(OGSfile):
             "APP_TYPE",
             "COUNT",
             "PRIMARY_VARIABLE",
+            "TEMPERATURE_UNIT",
             "ELEMENT_MATRIX_OUTPUT",
             "BOUNDARY_CONDITION_OUTPUT",
             "OutputMassOfGasInModel",
@@ -84,7 +86,7 @@ class PCS(OGSfile):
             "MEDIUM_TYPE",
             "SATURATION_SWITCH",
             "USE_VELOCITIES_FOR_TRANSPORT",
-            #        "SIMULATOR",
+            "SIMULATOR",  # really?
             "SIMULATOR_PATH",
             "SIMULATOR_MODEL_PATH",
             "USE_PRECALCULATED_FILES",

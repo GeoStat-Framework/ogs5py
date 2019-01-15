@@ -3,10 +3,10 @@ Class for the ogs SOURCE_TERM file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class ST(OGSfile):
+class ST(BlockFile):
     """
     Class for the ogs SOURCE_TERM file.
 
@@ -18,6 +18,7 @@ class ST(OGSfile):
         - COMP_NAME
         - CONSTRAINED
         - DISTRIBUTE_VOLUME_FLUX
+        - EPSILON
         - DIS_TYPE
         - EXPLICIT_SURFACE_WATER_PRESSURE
         - FCT_TYPE
@@ -54,6 +55,7 @@ class ST(OGSfile):
             "PRIMARY_VARIABLE",
             "COMP_NAME",
             "GEO_TYPE",
+            "EPSILON",  # new dec 2018
             "DIS_TYPE",
             "NODE_AVERAGING",
             "DISTRIBUTE_VOLUME_FLUX",

@@ -3,10 +3,10 @@ Class for the ogs OUTPUT file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class OUT(OGSfile):
+class OUT(BlockFile):
     """
     Class for the ogs OUTPUT file.
 

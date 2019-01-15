@@ -3,39 +3,44 @@ Class for the ogs BOUNDARY CONDITION file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class BC(OGSfile):
+class BC(BlockFile):
     """
     Class for the ogs BOUNDARY CONDITION file.
 
-    Keywords for a block
-    --------------------
-    - BOUNDARY_CONDITION
-        - COMP_NAME
-        - CONSTRAINED
-        - COPY_VALUE
-        - DIS_TYPE
-        - DIS_TYPE_CONDITION
-        - EPSILON
-        - EXCAVATION
-        - FCT_TYPE
-        - GEO_TYPE
-        - MSH_TYPE
-        - NO_DISP_INCREMENT
-        - PCS_TYPE
-        - PRESSURE_AS_HEAD
-        - PRIMARY_VARIABLE
-        - TIME_CONTROLLED_ACTIVE
-        - TIM_TYPE
+    Notes
+    -----
+    Main-Keywords (#) :
+        - BOUNDARY_CONDITION
+
+    Sub-Keywords ($) per Main-Keyword:
+        - BOUNDARY_CONDITION
+
+            - COMP_NAME
+            - CONSTRAINED
+            - COPY_VALUE
+            - DIS_TYPE
+            - DIS_TYPE_CONDITION
+            - EPSILON
+            - EXCAVATION
+            - FCT_TYPE
+            - GEO_TYPE
+            - MSH_TYPE
+            - NO_DISP_INCREMENT
+            - PCS_TYPE
+            - PRESSURE_AS_HEAD
+            - PRIMARY_VARIABLE
+            - TIME_CONTROLLED_ACTIVE
+            - TIM_TYPE
 
     Standard block
     --------------
     :PCS_TYPE: "GROUNDWATER_FLOW"
     :PRIMARY_VARIABLE: "HEAD"
     :DIS_TYPE: ["CONSTANT", 0.0]
-    :GEO_TYPE: ["POLYLINE", "BC"]
+    :GEO_TYPE: ["POLYLINE", "boundary"]
 
     Info
     ----
@@ -47,7 +52,6 @@ class BC(OGSfile):
     """
 
     MKEYS = ["BOUNDARY_CONDITION"]
-    # sorted
     SKEYS = [
         [
             "PCS_TYPE",

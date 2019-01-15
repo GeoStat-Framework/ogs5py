@@ -3,10 +3,10 @@ Class for the ogs MEDIUM_PROPERTIES file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class MMP(OGSfile):
+class MMP(BlockFile):
     """
     Class for the ogs MEDIUM_PROPERTIES file.
 
@@ -125,6 +125,8 @@ class MMP(OGSfile):
             "PARTICLE_DIAMETER",
             "INTERPHASE_FRICTION",
             "ELEMENT_VOLUME_MULTIPLYER",
+            "MEDIUM_TYPE",  # really?
+            "DENSITY",  # really?
         ]
     ]
 

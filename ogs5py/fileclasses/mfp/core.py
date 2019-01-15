@@ -3,10 +3,10 @@ Class for the ogs FLUID PROPERTY file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class MFP(OGSfile):
+class MFP(BlockFile):
     """
     Class for the ogs FLUID PROPERTY file.
 
@@ -66,6 +66,8 @@ class MFP(OGSfile):
             "TEMPERATURE",
             "VISCOSITY",
             "SPECIFIC_HEAT_CAPACITY",
+            "SPECIFIC_HEAT_CONDUCTIVITY",  # really?
+            "HEAT_CAPACITY",  # really?
             "HEAT_CONDUCTIVITY",
             "PHASE_DIFFUSION",
             "DIFFUSION",
@@ -73,6 +75,8 @@ class MFP(OGSfile):
             "ISOTHERM",
             "GRAVITY",
             "SPECIFIC_HEAT_SOURCE",
+            "PCS_TYPE",  # really?
+            "THERMAL",  #really?
         ]
     ]
 

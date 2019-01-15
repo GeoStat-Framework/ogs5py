@@ -27,10 +27,10 @@ from ogs5py.fileclasses.msh.tools import (
     transform_mesh,
     no_of_elements,
 )
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import File
 
 
-class MSHsgl(OGSfile):
+class MSHsgl(File):
     """
     Class for a single mesh file.
 
@@ -666,8 +666,8 @@ class MSHsgl(OGSfile):
         if check_mesh_list(tmp, verbose=verbose):
             self._block = 0
             self._meshlist = tmp
-        elif verbose:
-            print("given mesh is not valid")
+        else:
+            raise ValueError("MSH: " + filepath + ": given mesh is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
         """
@@ -775,7 +775,7 @@ class MSHsgl(OGSfile):
         if check_mesh_dict(tmp):
             self._meshlist = [tmp]
         else:
-            print("given mesh is not valid")
+            raise ValueError("MSH:" + filepath + ": given mesh is not valid")
 
     def export_mesh(self, filepath, verbose=False, **kwargs):
         """
@@ -984,13 +984,6 @@ class MSHsgl(OGSfile):
         return dcp(self._dict)
 
     def __repr__(self):
-        """
-        Return a formatted representation of the mesh.
-
-        Info
-        ----
-        Type : str
-        """
         out = "#FEM_MSH\n"
         if self.AXISYMMETRY:
             out += " $AXISYMMETRY\n"
@@ -1026,56 +1019,38 @@ class MSHsgl(OGSfile):
         out += "#STOP\n"
         return out
 
-    def __str__(self):
-        """
-        Return a formatted representation of the mesh.
-
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()
-
 
 class MSH(MSHsgl):
     """
-    Class for a multi layer mesh file that contains multiple
-    '#FEM_MSH' Blocks
+    Class for a multi layer mesh file that contains multiple '#FEM_MSH' Blocks
 
-    History
-    -------
-    Written,  SM, Mar 2018
+    Parameters
+    ----------
+    mesh_list : list of dict or None, optional
+        each dictionary contains one '#FEM_MSH' block of the mesh file with
+        the following information:
 
+        mesh_data : dictionary
+            contains information about
+                AXISYMMETRY: bool (just true, otherwise not present)
+                CROSS_SECTION: bool (just true, otherwise not present)
+                PCS_TYPE: string
+                GEO_TYPE: list of 2 str ("geo_type_name" and "geo_name")
+                GEO_NAME: string
+                LAYER: int
+        nodes : ndarray
+            Array with all node postions
+        elements : dictionary
+            contains array of nodelists for elements sorted by element type
+        material_id : dictionary
+            contains material ids for each element sorted by element type
+    task_root : string, optional
+        Path to the destiny folder. Default is the current working dir
+    task_id : string, optional
+        Name for the ogs task. Default: "ogs"
     """
 
     def __init__(self, mesh_list=None, **OGS_Config):
-        """
-        Parameters
-        ----------
-        mesh_list : list of dict or None, optional
-            each dictionary contains one '#FEM_MSH' block of the mesh file with
-            the following information:
-
-            mesh_data : dictionary
-                contains information about
-                    AXISYMMETRY: bool (just true, otherwise not present)
-                    CROSS_SECTION: bool (just true, otherwise not present)
-                    PCS_TYPE: string
-                    GEO_TYPE: list of 2 str ("geo_type_name" and "geo_name")
-                    GEO_NAME: string
-                    LAYER: int
-            nodes : ndarray
-                Array with all node postions
-            elements : dictionary
-                contains array of nodelists for elements sorted by element type
-            material_id : dictionary
-                contains material ids for each element sorted by element type
-        task_root : string, optional
-            Path to the destiny folder. Default is the current working dir
-        task_id : string, optional
-            Name for the ogs task. Default: "ogs"
-
-        """
         super(MSH, self).__init__(None, **OGS_Config)
 
         if mesh_list is None:
@@ -1127,11 +1102,7 @@ class MSH(MSHsgl):
     @property
     def block(self):
         """
-        Get and set the actual mesh block
-
-        Info
-        ----
-        Type : int
+        :class:`int`: The actual block to access in the file.
         """
         return self._block
 
@@ -1149,13 +1120,6 @@ class MSH(MSHsgl):
         self._block = 0
 
     def __repr__(self):
-        """
-        Return a formatted representation of the mesh.
-
-        Info
-        ----
-        Type : str
-        """
         out = ""
         old_block = self.block
         for i in range(len(self._meshlist)):
@@ -1193,13 +1157,3 @@ class MSH(MSHsgl):
             out += "#STOP\n"
         self.block = old_block
         return out
-
-    def __str__(self):
-        """
-        Return a formatted representation of the mesh.
-
-        Info
-        ----
-        Type : str
-        """
-        return self.__repr__()

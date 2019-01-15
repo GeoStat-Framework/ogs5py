@@ -3,10 +3,10 @@ Class for the ogs NUMERICS file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class NUM(OGSfile):
+class NUM(BlockFile):
     """
     Class for the ogs NUMERICS file.
 
@@ -33,7 +33,6 @@ class NUM(OGSfile):
         - PCS_TYPE
         - PLASTICITY_TOLERANCE
         - RENUMBER
-        - TIME_STEPS
 
     Standard block
     --------------
@@ -75,6 +74,8 @@ class NUM(OGSfile):
             "FEM_FCT",
             "NEWTON_DAMPING",
             "ADDITIONAL_NEWTON_TOLERANCES",
+            "REACTION_SCALING",  # really?
+            "METHOD",  # really?
             #        "TIME_STEPS",
         ]
     ]

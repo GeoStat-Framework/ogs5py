@@ -3,10 +3,10 @@ Class for the ogs SOLID_PROPERTIES file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class MSP(OGSfile):
+class MSP(BlockFile):
     """
     Class for the ogs SOLID_PROPERTIES file.
 

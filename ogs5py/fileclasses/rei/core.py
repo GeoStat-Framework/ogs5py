@@ -3,10 +3,10 @@ Class for the ogs REACTION_INTERFACE file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class REI(OGSfile):
+class REI(BlockFile):
     """
     Class for the ogs REACTION_INTERFACE file.
 
@@ -71,6 +71,8 @@ class REI(OGSfile):
             "PCS_RENAME_INIT",
             "PCS_RENAME_PRE",
             "PCS_RENAME_POST",
+            "CONSTANT_PRESSURE",  # really?
+            "CONSTANT_TEMPERATURE",  # really?
         ]
     ]
 

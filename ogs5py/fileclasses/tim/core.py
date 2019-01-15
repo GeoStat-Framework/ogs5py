@@ -3,10 +3,10 @@ Class for the ogs TIME_STEPPING file.
 """
 
 from __future__ import absolute_import, division, print_function
-from ogs5py.fileclasses.base import OGSfile
+from ogs5py.fileclasses.base import BlockFile
 
 
-class TIM(OGSfile):
+class TIM(BlockFile):
     """
     Class for the ogs TIME_STEPPING file.
 

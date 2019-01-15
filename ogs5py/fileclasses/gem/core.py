@@ -4,13 +4,13 @@ Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
 
 from __future__ import absolute_import, division, print_function
 import os
-from ogs5py.fileclasses.base import OGSfile, LineFile
+from ogs5py.fileclasses.base import BlockFile, LineFile
 
 # current working directory
 CWD = os.getcwd()
 
 
-class GEM(OGSfile):
+class GEM(BlockFile):
     """
     Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
 
@@ -67,8 +67,11 @@ class GEM(OGSfile):
             "MY_SMART_GEMS",
             "FLAG_DISABLE_GEM",
             "KINETIC_GEM",
-            #        "DISABLE_GEMS",
-            #        "GEM_CALCULATE_BOUNDARY_NODES",
+            "DISABLE_GEMS",  # really?
+            "GEM_CALCULATE_BOUNDARY_NODES",  # really?
+            "GEM_SMART",  # really?
+            "FLAG_NODE_ELEMENT",  # really?
+            "FLAG_CALCULATE_BOUNDARY_NODE",  # really?
         ]
     ]
 
@@ -185,6 +188,20 @@ class GEMinit(object):
         if self.dbr is not None:
             out_list.append(self.dbr)
         return out_list
+
+    @property
+    def file_name(self):
+        """
+        The name of the lst file.
+        """
+        return os.path.splitext(self.lst_name)[0]
+
+    @property
+    def file_ext(self):
+        """
+        The extension of the lst file.
+        """
+        return os.path.splitext(self.lst_name)[1]
 
     @property
     def file_names(self):
