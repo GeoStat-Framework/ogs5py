@@ -1,7 +1,19 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-ogs5py: A python-API for the OpenGeoSys 5 scientific modeling package
-=====================================================================
+Welcome to ogs5py
+=================
+
+Purpose
+-------
+ogs5py is A python-API for the OpenGeoSys 5 scientific modeling package.
+
+
+Installation
+------------
+You can install the latest version with the following command:
+
+    pip install https://github.com/GeoStat-Framework/ogs5py/archive/master.zip
+
 
 Contents
 --------
@@ -28,95 +40,92 @@ It comes along with a set of handy readers for almost all output formats:
 
 Example
 -------
-    import os
-    import numpy as np
-    from ogs5py import OGS
-    from ogs5py.reader import readpvd
-    # get the current working directory
-    CWD = os.getcwd()
-    # ------------------------ogs configuration---------------------------------- #
-    pwell = "w00"
-    dim_no = 2
-    dire = os.path.dirname(CWD+"/test-ogs/")
-    pcs_type_flow = 'GROUNDWATER_FLOW'
-    var_name_flow = 'HEAD'
-    t_id = 'pt'
-    # ------------------------time configuration--------------------------------- #
-    time_start = 0
-    time_steps = np.array([10, 5, 4, 3, 2, 1, 4])
-    step_size = np.array([30, 60, 300, 600, 900, 1800, 3600])
-    time_end = np.sum(time_steps*step_size)
-    # ------------------------generate ogs base class---------------------------- #
-    ogs = OGS(task_root=dire+"/",
-              task_id=t_id,
-              output_dir=dire+"/"+pwell+"/")
-    # ------------------------generate mesh + gli-------------------------------- #
-    # generate a radial mesh
-    ogs.msh.generate("radial", dim=dim_no, rad=np.arange(51))
-    # generate a radial boundary geometry
-    ogs.gli.generate("radial", dim=dim_no, rad_out=50.)
-    # add the pumping well
-    ogs.gli.add_points([0., 0., 0.], pwell)
-    # --------------generate different ogs input classes------------------------- #
-    # set boundary condition
-    for ply in ogs.gli.POLYLINE_NAMES:
-        ogs.bc.add_block(PCS_TYPE=pcs_type_flow,
-                         PRIMARY_VARIABLE=var_name_flow,
-                         GEO_TYPE=['POLYLINE', ply],
-                         DIS_TYPE=['CONSTANT', 0.0])
-    # set pumping condition at the pumpingwell
-    ogs.st.add_block(PCS_TYPE=pcs_type_flow,
-                     PRIMARY_VARIABLE=var_name_flow,
-                     GEO_TYPE=['POINT', pwell],
-                     DIS_TYPE=['CONSTANT_NEUMANN', -1.0e-04])
-    # set the initial condition
-    ogs.ic.add_block(PCS_TYPE=pcs_type_flow,
-                     PRIMARY_VARIABLE=var_name_flow,
-                     GEO_TYPE='DOMAIN',
-                     DIS_TYPE=['CONSTANT', 0.0])
-    # set the fluid properties
-    ogs.mfp.add_block(FLUID_TYPE='LIQUID',
-                      DENSITY=[1, 1.0e+03],
-                      VISCOSITY=[1, 1.0e-03])
-    # permeability, storage and porosity
-    ogs.mmp.add_block(GEOMETRY_DIMENSION=dim_no,
-                      STORAGE=[1, 1.0e-04],
-                      PERMEABILITY_TENSOR=['ISOTROPIC', 1.0e-4],
-                      POROSITY='0.2')
-    # set the parameters for the solver
-    ogs.num.add_block(PCS_TYPE=pcs_type_flow,
-                      LINEAR_SOLVER=[2, 5, 1.0e-06, 1000, 1.0, 1, 4],
-                      ELE_GAUSS_POINTS=3)
-    # set the outputformat for the whole domain (just for checking)
-    ogs.out.add_block(NOD_VALUES=var_name_flow,
-                      GEO_TYPE='DOMAIN',
-                      DAT_TYPE='PVD',
-                      TIM_TYPE=['STEPS', 1])
-    # set the process type
-    ogs.pcs.add_block(PCS_TYPE=pcs_type_flow,
-                      NUM_TYPE='NEW')
-    # set the timesteps
-    ogs.tim.add_block(PCS_TYPE=pcs_type_flow,
-                      TIME_START=time_start,
-                      TIME_END=time_end,
-                      TIME_STEPS=zip(time_steps, step_size))
-    # --------------run OGS simulation------------------------------------------- #
-    print("write files")
-    ogs.write_input()
-    print("run model")
-    ogs.run_model()
-    print("load output")
-    out = readpvd(task_root=dire+"/"+pwell+"/",
-                  task_id=t_id,
-                  pcs=None)
-    print(out.keys())
 
-Installation
-------------
-Just download the code an run the following command from the
-source code directory:
+In the following a simple transient pumping test is simulated on a radial symmetric mesh. The point output at the observation well is plotted afterwards.
 
-    pip install -U .
+```python
+from ogs5py import OGS
+from ogs5py.reader import readtec_point
+from matplotlib import pyplot as plt
+
+model = OGS(task_root="pump_test", task_id="model")
+
+# generate a radial mesh
+model.msh.generate("radial", dim=2, rad=range(51))
+# generate a radial outer boundary
+model.gli.generate("radial", dim=2, rad_out=50.)
+model.gli.add_points([0., 0., 0.], "pwell")
+model.gli.add_points([1., 0., 0.], "owell")
+
+model.bc.add_block(  # boundary condition
+    PCS_TYPE='GROUNDWATER_FLOW',
+    PRIMARY_VARIABLE='HEAD',
+    GEO_TYPE=['POLYLINE', "boundary"],
+    DIS_TYPE=['CONSTANT', 0.0],
+)
+model.st.add_block(  # source term
+    PCS_TYPE='GROUNDWATER_FLOW',
+    PRIMARY_VARIABLE='HEAD',
+    GEO_TYPE=['POINT', "pwell"],
+    DIS_TYPE=['CONSTANT_NEUMANN', -1.0e-04],
+)
+model.ic.add_block(  # initial condition
+    PCS_TYPE='GROUNDWATER_FLOW',
+    PRIMARY_VARIABLE='HEAD',
+    GEO_TYPE='DOMAIN',
+    DIS_TYPE=['CONSTANT', 0.0],
+)
+model.mmp.add_block(  # medium properties
+    GEOMETRY_DIMENSION=2,
+    STORAGE=[1, 1.0e-04],
+    PERMEABILITY_TENSOR=['ISOTROPIC', 1.0e-4],
+    POROSITY=0.2,
+)
+model.num.add_block(  # numerical solver
+    PCS_TYPE='GROUNDWATER_FLOW',
+    LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
+)
+model.out.add_block(  # domain output
+    PCS_TYPE='GROUNDWATER_FLOW',
+    NOD_VALUES='HEAD',
+    GEO_TYPE='DOMAIN',
+    DAT_TYPE='PVD',
+    TIM_TYPE=['STEPS', 1],
+)
+model.out.add_block(  # point observation
+    PCS_TYPE='GROUNDWATER_FLOW',
+    NOD_VALUES='HEAD',
+    GEO_TYPE=['POINT', "owell"],
+    DAT_TYPE='TECPLOT',
+    TIM_TYPE=['STEPS', 1],
+)
+model.pcs.add_block(  # set the process type
+    PCS_TYPE='GROUNDWATER_FLOW',
+    NUM_TYPE='NEW',
+)
+model.tim.add_block(  # set the timesteps
+    PCS_TYPE='GROUNDWATER_FLOW',
+    TIME_START=0,
+    TIME_END=600,
+    TIME_STEPS=[
+        [10, 30],
+        [5, 60],
+    ],
+)
+model.write_input()
+success = model.run_model()
+
+point = readtec_point(
+    task_root="pump_test",
+    task_id="model",
+    pcs='GROUNDWATER_FLOW',
+)
+time = point['owell']["TIME"]
+head = point['owell']["HEAD"]
+
+plt.plot(time, head)
+plt.show()
+```
 
 Requirements
 ------------
