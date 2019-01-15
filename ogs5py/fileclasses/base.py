@@ -867,7 +867,7 @@ class BlockFile(File):
                     self.add_main_keyword(key)
                     break
             if not valid_mkey:
-                raise ValueError(path+": Unknown main_key: "+mkw)
+                raise ValueError(path + ": Unknown main_key: " + mkw)
             else:
                 main_index = self.MKEYS.index(key)
             for line in fin:
@@ -897,7 +897,7 @@ class BlockFile(File):
                             self.add_main_keyword(key)
                             break
                     if not valid_mkey:
-                        raise ValueError(path+": Unknown main_key: "+mkw)
+                        raise ValueError(path + ": Unknown main_key: " + mkw)
                     else:
                         main_index = self.MKEYS.index(key)
                     subkw_found = False
@@ -910,7 +910,7 @@ class BlockFile(File):
                             self.add_sub_keyword(key)
                             break
                     if not valid_skey:
-                        raise ValueError(path+": Unknown subkey: "+skey)
+                        raise ValueError(path + ": Unknown subkey: " + skey)
                     subkw_found = True
                 else:
                     self.add_content(sline)
@@ -973,7 +973,7 @@ class BlockFile(File):
                     # iterate over the content
                     for con in self.cont[i][j]:
                         # if content is empty (eg ""), skip it
-                        if not con or (len(con) == 1 and con[0]=="") :
+                        if not con or (len(con) == 1 and con[0] == ""):
                             continue
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation

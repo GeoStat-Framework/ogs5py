@@ -76,7 +76,7 @@ class MFP(BlockFile):
             "GRAVITY",
             "SPECIFIC_HEAT_SOURCE",
             "PCS_TYPE",  # really?
-            "THERMAL",  #really?
+            "THERMAL",  # really?
         ]
     ]
 

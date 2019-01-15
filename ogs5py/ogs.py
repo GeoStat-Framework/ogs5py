@@ -684,8 +684,7 @@ class OGS(object):
         found_ids = search_task_id(task_root, search_ext)
         if not found_ids:
             raise ValueError(
-                "ogs5py.OGS.laod_model - nothing was found at: "
-                + task_root
+                "ogs5py.OGS.laod_model - nothing was found at: " + task_root
             )
             return False
         else:
@@ -855,9 +854,7 @@ class OGS(object):
             if ext == ".pqc":  # phreeqc.dat or Phreeqc.dat
                 pqcfiles = glob.glob(os.path.join(task_root, "*hreeqc.dat"))
                 self.pqcdat.read_file(
-                    path=pqcfiles[0],
-                    encoding=encoding,
-                    verbose=verbose,
+                    path=pqcfiles[0], encoding=encoding, verbose=verbose
                 )
 
         # load ASC files

@@ -328,7 +328,9 @@ class GLI(File):
         if check_gli_dict(tmp, verbose=verbose):
             self.__dict = tmp
         else:
-            raise ValueError("GLI.load: "+filepath+": given gli is not valid")
+            raise ValueError(
+                "GLI.load: " + filepath + ": given gli is not valid"
+            )
 
     def read_file(self, path, encoding=None, verbose=False):
         """
