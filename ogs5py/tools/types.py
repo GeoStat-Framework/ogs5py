@@ -86,13 +86,14 @@ PLY_KEYS = {
 }
 SRF_KEYS = {"ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"}
 VOL_KEYS = {"NAME", "SURFACES", "TYPE", "MAT_GROUP", "LAYER"}
-# all names for element types in ogs 5
-ELEM_NAMES = ["line", "tri", "quad", "tet", "pyra", "pris", "hex"]
 # names sorted by dimensionality
 ELEM_1D = ["line"]
 ELEM_2D = ["tri", "quad"]
 ELEM_3D = ["tet", "pyra", "pris", "hex"]
+# names sorted by dim
 ELEM_DIM = [ELEM_1D, ELEM_2D, ELEM_3D]
+# all names for element types in ogs 5
+ELEM_NAMES = ELEM_1D + ELEM_2D + ELEM_3D
 # keys for the mesh-dict
 MESH_KEYS = {"mesh_data", "nodes", "elements", "material_id", "element_id"}
 MESH_DATA_KEYS = {
