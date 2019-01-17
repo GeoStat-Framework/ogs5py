@@ -206,7 +206,7 @@ def gen_script(
     Notes
     -----
     This will only create BlockFiles from the script. GLI and MSH files
-    as well as every other file are stored separately.
+    as well as every listed or line-wise file will be stored separately.
     """
     if separate_files is None:
         separate_files = []

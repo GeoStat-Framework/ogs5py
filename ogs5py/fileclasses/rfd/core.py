@@ -15,10 +15,6 @@ class RFD(BlockFile):
     - PROJECT
     - CURVE
     - CURVES
-    - RENUMBER really?
-    - ITERATION_PROPERTIES_CONCENTRATION really?
-    - REFERENCE_CONDITIONS really?
-    - APRIORI_REFINE_ELEMENT
 
     Standard block
     --------------
@@ -37,13 +33,13 @@ class RFD(BlockFile):
         "PROJECT",
         "CURVE",
         "CURVES",
-        "RENUMBER",
-        "ITERATION_PROPERTIES_CONCENTRATION",
-        "REFERENCE_CONDITIONS",
-        "APRIORI_REFINE_ELEMENT",
+        "RENUMBER",  # really?
+        "ITERATION_PROPERTIES_CONCENTRATION",  # really?
+        "REFERENCE_CONDITIONS",  # really?
+        "APRIORI_REFINE_ELEMENT",  # really?
     ]
     # just a workaround in this case... since all content is related to mainkw
-    SKEYS = [[""]] * 7
+    SKEYS = [[""]] * len(MKEYS)
 
     STD = {}
 

@@ -18,18 +18,17 @@ from ogs5py.tools.types import STRTYPE, OGS_EXT
 
 
 class Output(object):
-    """A class to duplicate an output stream to stdout."""
+    """A class to duplicate an output stream to stdout.
+
+    Parameters
+    ----------
+    file_or_name : filename or open filehandle (writable)
+        File that will be duplicated
+    print_log : bool, optional
+        State if log should be printed. Default: True
+    """
 
     def __init__(self, file_or_name, print_log=True):
-        """Construct a new Output object.
-
-        Parameters
-        ----------
-        file_or_name : filename or open filehandle (writable)
-            File that will be duplicated
-        print_log : bool, optional
-            State if log should be printed. Default: True
-        """
         if hasattr(file_or_name, "write") and hasattr(file_or_name, "seek"):
             self.file = file_or_name
         else:
