@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-tools for the ogs5py-mesh package
-
-@author: sebastian
+checking routines for the ogs5py-GLI package
 """
 from __future__ import division, print_function, absolute_import
 import numpy as np

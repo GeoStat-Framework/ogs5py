@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-tools for the ogs5readerpy package
-
-@author: sebastian
+tools for the ogs5py.reader package
 """
 from __future__ import division, print_function, absolute_import
 from numpy import ascontiguousarray as ascont

@@ -1,8 +1,6 @@
 """
 core module for the ogs5py-mesh package.
 Containing the classes for the OGS5 mesh files.
-
-@author: Sebastian Mueller
 """
 
 from __future__ import division, print_function, absolute_import
@@ -34,40 +32,34 @@ class MSHsgl(File):
     """
     Class for a single mesh file.
 
-    History
-    -------
-    Written,  SM, June 2017
+    Parameters
+    ----------
+    mesh_dict : dict or None, optional
+        Dictionary contains one '#FEM_MSH' block of the mesh file with
+        the following information (sorted by keys):
+            - mesh_data : dictionary
+                contains information about (sorted by keys):
+                    - AXISYMMETRY: bool (just true, otherwise not present)
+                    - CROSS_SECTION: bool (just true, otherwise not present)
+                    - PCS_TYPE: string
+                    - GEO_TYPE: str
+                    - GEO_NAME: string
+                    - LAYER: int
+            - nodes : ndarray
+                Array with all node postions
+            - elements : dictionary
+                contains array of nodelists for elements sorted by element type
+            - material_id : dictionary
+                contains material ids for each element sorted by element type
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(self, mesh_dict=None, **OGS_Config):
-        """
-        Parameters
-        ----------
-        mesh_dict : dict or None, optional
-            Contains one '#FEM_MSH' block of an OGS5 mesh file with
-            the following information:
-                mesh_data : dict
-                    contains information about
-                        AXISYMMETRY (bool)
-                        CROSS_SECTION (bool)
-                        PCS_TYPE (str)
-                        GEO_NAME (str)
-                        GEO_TYPE (str)
-                        LAYER (int)
-                nodes : ndarray
-                    Array with all node postions
-                elements : dictionary
-                    contains arrays of nodelists sorted by element type
-                material_id : dictionary
-                    contains material ids sorted by element type
-                element_id : dictionary
-                    contains element ids sorted by element type
-            Default: None
-        task_root : string, optional
-            Path to the destiny folder. Default is the current working dir
-        task_id : string, optional
-            Name for the ogs task. Default: "ogs"
-        """
         super(MSHsgl, self).__init__(**OGS_Config)
         self.file_ext = ".msh"
         self.force_writing = True
@@ -1028,26 +1020,27 @@ class MSH(MSHsgl):
     ----------
     mesh_list : list of dict or None, optional
         each dictionary contains one '#FEM_MSH' block of the mesh file with
-        the following information:
-
-        mesh_data : dictionary
-            contains information about
-                AXISYMMETRY: bool (just true, otherwise not present)
-                CROSS_SECTION: bool (just true, otherwise not present)
-                PCS_TYPE: string
-                GEO_TYPE: list of 2 str ("geo_type_name" and "geo_name")
-                GEO_NAME: string
-                LAYER: int
-        nodes : ndarray
-            Array with all node postions
-        elements : dictionary
-            contains array of nodelists for elements sorted by element type
-        material_id : dictionary
-            contains material ids for each element sorted by element type
-    task_root : string, optional
-        Path to the destiny folder. Default is the current working dir
-    task_id : string, optional
-        Name for the ogs task. Default: "ogs"
+        the following information (sorted by keys):
+            - mesh_data : dictionary
+                contains information about (sorted by keys):
+                    - AXISYMMETRY: bool (just true, otherwise not present)
+                    - CROSS_SECTION: bool (just true, otherwise not present)
+                    - PCS_TYPE: string
+                    - GEO_TYPE: str
+                    - GEO_NAME: string
+                    - LAYER: int
+            - nodes : ndarray
+                Array with all node postions
+            - elements : dictionary
+                contains array of nodelists for elements sorted by element type
+            - material_id : dictionary
+                contains material ids for each element sorted by element type
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(self, mesh_list=None, **OGS_Config):

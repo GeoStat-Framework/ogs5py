@@ -154,7 +154,7 @@ def add_list_file(list_file, script, base, cls_name, ogs_cls_name="model"):
         add = "add_rfr"
     elif base == "GEMinit":
         add = "add_gem_init"
-    else:
+    else:  # ASC as default case
         base = "ASC"
         add = "add_asc"
 
@@ -211,7 +211,7 @@ def gen_script(
     if separate_files is None:
         separate_files = []
     if task_root is None:
-        task_id = ogs_class.task_root
+        task_root = ogs_class.task_root
     if task_id is None:
         task_id = ogs_class.task_id
     if not os.path.exists(script_dir):
@@ -236,7 +236,7 @@ def gen_script(
     # open the script file
     with open(path, "w") as script:
         print("# -*- coding: utf-8 -*-", file=script)
-        print("from __future__ import division, print_function", file=script)
+        # print("from __future__ import division, print_function", file=script)
         print("from ogs5py import " + load, file=script)
         print("", file=script)
         print(ogs_cls_name + " = OGS(", file=script)

@@ -49,15 +49,15 @@ def load_ogs5msh(
     Returns
     -------
     out : list of dictionaries
-        each dictionary contains one '#FEM_MSH' block of the mesh file
+        each dictionary contains one ``#FEM_MSH`` block of the mesh file
         with the following information
             mesh_data : dictionary containing information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
             nodes : ndarray
                 Array with all node postions
             elements : dictionary
@@ -379,12 +379,12 @@ def save_ogs5msh(
         each dictionary contains one '#FEM_MSH' block of the mesh file
         with the following information
             mesh_data : dictionary containing information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
             nodes : ndarray
                 Array with all node postions
             elements : dictionary
@@ -419,6 +419,7 @@ def save_ogs5msh(
     if not isinstance(mesh, (list, tuple)):
         mesh = [mesh]
 
+    # top comment not allowed in .msh files.
     top_com = None
 
     with open(filepath, "w") as msh:
@@ -498,7 +499,6 @@ def save_ogs5msh(
 
         if verbose:
             print("writing finished: STOP")
-        #        msh.write("#STOP")
         if bot_com:
             print("#STOP", file=msh)
             print(bot_com, end="", file=msh)
@@ -572,12 +572,12 @@ def export_mesh(
         dictionary contains one '#FEM_MSH' block of the mesh file
         with the following information
             mesh_data : dictionary containing information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
             nodes : ndarray
                 Array with all node postions
             elements : dictionary
@@ -770,12 +770,12 @@ def combine(mesh_1, mesh_2, decimals=4, fast=True):
         with the following information
             mesh_data : dict
                 containing optional information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
+                    - AXISYMMETRY (bool)
+                    - CROSS_SECTION (bool)
+                    - PCS_TYPE (str)
+                    - GEO_TYPE (str)
+                    - GEO_NAME (str)
+                    - LAYER (int)
             nodes : ndarray
                 Array with all node postions
             elements : dictionary

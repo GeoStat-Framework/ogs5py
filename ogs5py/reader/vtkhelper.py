@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun  1 20:18:39 2017
-
-@author: sebastian
+Helper functions for the vtk readers in ogs5py
 """
 
 from __future__ import absolute_import, division, print_function

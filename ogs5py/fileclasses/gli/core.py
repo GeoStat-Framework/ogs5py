@@ -1,8 +1,6 @@
 """
 core module for the ogs5py GLI file.
 Containing the classes for the OGS5 GLI files.
-
-@author: Sebastian Mueller
 """
 
 from __future__ import division, print_function, absolute_import
@@ -35,17 +33,51 @@ CWD = os.getcwd()
 class GLI(File):
     """
     Class for the ogs GEOMETRY file.
+
+    Parameters
+    ----------
+    gli_dict : :class:`dict` or :class:`None`, optional
+        dictionary containing the gli file
+        Includes the following information (sorted by keys):
+            points : ndarray
+                Array with all point postions
+            point_names : ndarray (of strings)
+                Array with all point names
+            point_md : ndarray
+                Array with all Material-densities at the points
+                if point_md should be undefined it takes the value -np.inf
+            polylines : list of dict, each containing information about
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POINTS`` (ndarray)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``POINT_VECTOR`` (str or None)
+            surfaces : list of dict, each containing information about
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POLYLINES`` (list of str)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``TIN`` (str or None)
+            volumes : list of dict, each containing information about
+                - ``NAME`` (str)
+                - ``SURFACES`` (list of str)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``LAYER`` (int or None)
+        Default: :class:`None`
+    task_root : :class:`str`, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : :class:`str`, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(self, gli_dict=None, **OGS_Config):
-        """
-        Input
-        -----
-        gli_dict : dict, optional
-            Dictionary containing an gli file representation.
-        OGS_Config : dict, optional
-            OGS configuration
-        """
         super(GLI, self).__init__(**OGS_Config)
         self.file_ext = ".gli"
         self.force_writing = True
@@ -63,6 +95,7 @@ class GLI(File):
     # Pretend that there is a main keyword in the standard BASE-FORMAT
     @property
     def is_empty(self):
+        """:class:`bool`: State if the GLI File is empty"""
         return self.POINTS is None
 
     #######################
@@ -937,6 +970,28 @@ class GLI(File):
 class GLIext(File):
     """
     Class for an external definition for the ogs GEOMETRY file.
+
+    Parameters
+    ----------
+    typ : :class:`str`, optional
+        Type of the extermal geometry definition. Either ``TIN`` for a
+        triangulated surface or ``POINT_VECTOR`` for a polyline.
+        Default: ``"TIN"``
+    data : :any:`numpy.ndarray`, optional
+        Data for the external geometry definition.
+        Default: :class:`None`
+    file_name : str, optional
+        File name for the RFR file. If :class:`None`, the task_id is used.
+        Default: :class:`None`
+    file_ext : :class:`str`, optional
+        extension of the file (with leading dot ".rfr")
+        Default: ".rfr"
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(

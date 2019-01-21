@@ -29,39 +29,49 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
 
     Parameters
     ----------
-    filepath : string
-        path to the '*.msh' OGS5 mesh file to load
-    verbose : bool, optional
+    filepath : :class:`str`
+        path to the '*.msh' OGS5 gli file to load
+    verbose : :class:`bool`, optional
         Print information of the reading process. Default: True
-    encoding : str or None, optional
-        encoding of the given file. If ``None`` is given, the system
-        standard is used. Default: ``None``
+    encoding : :class:`str` or :class:`None`, optional
+        encoding of the given file. If :class:`None` is given, the system
+        standard is used. Default: :class:`None`
 
     Returns
     -------
-    out : list of dictionaries
-        each dictionary contains one '#FEM_MSH' block of the mesh file
-        with the following information
-            mesh_data : dictionary containing information about
-                AXISYMMETRY (bool)
-                CROSS_SECTION (bool)
-                PCS_TYPE (str)
-                GEO_TYPE (str)
-                GEO_NAME (str)
-                LAYER (int)
-            nodes : ndarray
-                Array with all node postions
-            elements : dictionary
-                contains nodelists for elements sorted by element types
-            material_id : dictionary
-                contains material ids for each element sorted by element types
-            element_id : dictionary
-                contains element ids for each element sorted by element types
+    gli : :class:`dict`
+        dictionary containing the gli file
+        Includes the following information (sorted by keys):
+            points : ndarray
+                Array with all point postions
+            point_names : ndarray (of strings)
+                Array with all point names
+            point_md : ndarray
+                Array with all Material-densities at the points
+                if point_md should be undefined it takes the value -np.inf
+            polylines : list of dict, each containing information about
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POINTS`` (ndarray)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``POINT_VECTOR`` (str or None)
+            surfaces : list of dict, each containing information about
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POLYLINES`` (list of str)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``TIN`` (str or None)
+            volumes : list of dict, each containing information about
+                - ``NAME`` (str)
+                - ``SURFACES`` (list of str)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``LAYER`` (int or None)
 
-    Notes
-    -----
-    The $AREA keyword within the Nodes definition is NOT supported
-    and will violate the read data if present.
     """
     # in python3 open was replaced with io.open
     from io import open
@@ -260,8 +270,8 @@ def save_ogs5gli(
     filepath : string
         path to the '*.msh' OGS5 mesh file to save
     gli : dict
-        dictionary contains block from the gli file
-        with the following information
+        Dictionary containing the gli file.
+        Includes the following information (sorted by keys):
             points : ndarray
                 Array with all point postions
             point_names : ndarray (of strings)
@@ -270,27 +280,27 @@ def save_ogs5gli(
                 Array with all Material-densities at the points
                 if point_md should be undefined it takes the value -np.inf
             polylines : list of dict, each containing information about
-                "ID" (int or None)
-                "NAME" (str)
-                "POINTS" (ndarray)
-                "EPSILON" (float or None)
-                "TYPE" (int or None)
-                "MAT_GROUP" (int or None)
-                "POINT_VECTOR" (str or None)
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POINTS`` (ndarray)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``POINT_VECTOR`` (str or None)
             surfaces : list of dict, each containing information about
-                "ID" (int or None)
-                "NAME" (str)
-                "POLYLINES" (list of str)
-                "EPSILON" (float or None)
-                "TYPE" (int or None)
-                "MAT_GROUP" (int or None)
-                "TIN" (str or None)
+                - ``ID`` (int or None)
+                - ``NAME`` (str)
+                - ``POLYLINES`` (list of str)
+                - ``EPSILON`` (float or None)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``TIN`` (str or None)
             volumes : list of dict, each containing information about
-                "NAME" (str)
-                "SURFACES" (list of str)
-                "TYPE" (int or None)
-                "MAT_GROUP" (int or None)
-                "LAYER" (int or None)
+                - ``NAME`` (str)
+                - ``SURFACES`` (list of str)
+                - ``TYPE`` (int or None)
+                - ``MAT_GROUP`` (int or None)
+                - ``LAYER`` (int or None)
     top_com : str, optional
         Comment to be added as header to the file, Default: None
     bot_com : str, optional

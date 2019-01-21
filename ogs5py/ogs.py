@@ -1,76 +1,5 @@
 """
-Class for an OGS run.
-
-Parameters
-----------
-task_root : :class:`str`, optional
-    Path to the destiny folder. Default is the current working dir
-task_id : :class:`str`, optional
-    Name for the ogs task. Default: "ogs"
-output_dir : :class:`str`, optional
-    Path to the output directory. Default is the task_root folder.
-
-Properties
-----------
-bc : Boundary Condition
-    Information of the Boundary Conditions for the model.
-cct : Communication Table
-    Information of the Communication Table for the model.
-fct : Function
-    Information of the Function definitions for the model.
-gem : geochemical thermodynamic modeling coupling
-    Information of the geochemical thermodynamic modeling
-    coupling for the model.
-gli : Geometry
-    Information of the Geometry for the model.
-ic  : Initial Condition
-    Information of the Initial Conditions for the model.
-krc : Kinetric Reaction
-    Information of the Kinetric Reaction for the model.
-mcp : reactive components for modelling chemical processes
-    Information of the reactive components for
-    modelling chemical processes for the model.
-mfp : Fluid Properties
-    Information of the Fluid Properties for the model.
-mmp : Medium Properties
-    Information of the Medium Properties for the model.
-msh : Mesh
-    Information of the Mesh for the model.
-msp : Solid Properties
-    Information of the Solid Properties for the model.
-num : Settings for the numerical solver
-    Information of the numerical solver for the model.
-out : Output Settings
-    Information of the Output Settings for the model.
-pcs : Process settings
-    Information of the Process settings for the model.
-pct : Particle Definition for Random walk
-    Information of the Particles defined for Randomwalk setting.
-pqc : Phreqqc coupling
-    PHREEQC configuration for the model.
-    (just a line-wise file with no comfort)
-pqcdat : Phreqqc coupling (the phreeqc.dat file)
-    phreeqc.dat file for the model.
-    (just a line-wise file with no comfort)
-rei : Reaction Interface
-    Information of the Reaction Interface for the model.
-rfd : definition of time-curves for variing BCs or STs
-    Information of the time curves for the model.
-st  : Source Term
-    Information of the Source Term for the model.
-tim : Time settings
-    Information of the Time settings for the model.
-
-mpd : Distributed Properties (list of files)
-    Information of the Distributed Properties for the model.
-gli_ext : list for external Geometry definition
-    External definition of surfaces (TIN) or polylines (POINT_VECTOR)
-rfr : list of restart files
-    RESTART files as defined in the INITIAL_CONDITION
-gem_init : list of GEMS3K input files (lst file)
-    given as GEMinit classes
-asc : list of ogs ASC files
-    This file type comes either from .tim .pcs or .gem
+Class for an OGS5 run.
 """
 from __future__ import absolute_import, division, print_function
 import os
@@ -81,7 +10,6 @@ import time
 import warnings
 from copy import deepcopy as dcp
 from whichcraft import which
-from pexpect.popen_spawn import PopenSpawn
 import pexpect
 from ogs5py.fileclasses import (
     ASC,
@@ -121,7 +49,7 @@ from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 # pexpect.spawn just runs on unix-like systems
 if sys.platform == "win32":
     OGS_NAME = "ogs.exe"
-    CmdRun = PopenSpawn
+    CmdRun = pexpect.popen_spawn.PopenSpawn
 else:
     OGS_NAME = "ogs"
     CmdRun = pexpect.spawn
@@ -141,83 +69,82 @@ class OGS(object):
     output_dir : :class:`str`, optional
         Path to the output directory. Default is the task_root folder.
 
+    Notes
+    -----
     Attributes
-    ----------
-    task_root : :class:`str`
-        Path to the destiny folder.
-    task_id : :class:`str`
-        Name for the ogs task.
-    output_dir : :class:`str` or None
-        Path to the output directory.
-    top_com : :class:`str`
-        Comment at the top of the written files
-    bot_com : :class:`str`
-        Comment at the bottom of the written files
+        task_root : :class:`str`
+            Path to the destiny folder.
+        task_id : :class:`str`
+            Name for the ogs task.
+        output_dir : :class:`str` or None
+            Path to the output directory.
+        top_com : :class:`str`
+            Comment at the top of the written files
+        bot_com : :class:`str`
+            Comment at the bottom of the written files
 
-    Attribute-Classes
-    -----------------
-    bc  : Boundary Condition
-        Information of the Boundary Conditions for the model.
-    cct : Communication Table
-        Information of the Communication Table for the model.
-    fct : Function
-        Information of the Function definitions for the model.
-    gem : geochemical thermodynamic modeling coupling
-        Information of the geochemical thermodynamic modeling
-        coupling for the model.
-    gli : Geometry
-        Information of the Geometry for the model.
-    ic  : Initial Condition
-        Information of the Initial Conditions for the model.
-    krc : Kinetric Reaction
-        Information of the Kinetric Reaction for the model.
-    mcp : reactive components for modelling chemical processes
-        Information of the reactive components for
-        modelling chemical processes for the model.
-    mfp : Fluid Properties
-        Information of the Fluid Properties for the model.
-    mmp : Medium Properties
-        Information of the Medium Properties for the model.
-    msh : Mesh
-        Information of the Mesh for the model.
-    msp : Solid Properties
-        Information of the Solid Properties for the model.
-    num : Settings for the numerical solver
-        Information of the numerical solver for the model.
-    out : Output Settings
-        Information of the Output Settings for the model.
-    pcs : Process settings
-        Information of the Process settings for the model.
-    pct : Particle Definition for Random walk
-        Information of the Particles defined for Randomwalk setting.
-    pqc : Phreqqc coupling (not supported yet)
-        Information of the Boundary Conditions for the model.
-    pqcdat : Phreqqc coupling (the phreeqc.dat file)
-        phreeqc.dat file for the model.
-        (just a line-wise file with no comfort)
-    rei : Reaction Interface
-        Information of the Reaction Interface for the model.
-    rfd : definition of time-curves for variing BCs or STs
-        Information of the time curves for the model.
-    st  : Source Term
-        Information of the Source Term for the model.
-    tim : Time settings
-        Information of the Time settings for the model.
+    The following Classes are present as attributes
+        bc  : Boundary Condition
+            Information of the Boundary Conditions for the model.
+        cct : Communication Table
+            Information of the Communication Table for the model.
+        fct : Function
+            Information of the Function definitions for the model.
+        gem : geochemical thermodynamic modeling coupling
+            Information of the geochemical thermodynamic modeling
+            coupling for the model.
+        gli : Geometry
+            Information of the Geometry for the model.
+        ic  : Initial Condition
+            Information of the Initial Conditions for the model.
+        krc : Kinetric Reaction
+            Information of the Kinetric Reaction for the model.
+        mcp : reactive components for modelling chemical processes
+            Information of the reactive components for
+            modelling chemical processes for the model.
+        mfp : Fluid Properties
+            Information of the Fluid Properties for the model.
+        mmp : Medium Properties
+            Information of the Medium Properties for the model.
+        msh : Mesh
+            Information of the Mesh for the model.
+        msp : Solid Properties
+            Information of the Solid Properties for the model.
+        num : Settings for the numerical solver
+            Information of the numerical solver for the model.
+        out : Output Settings
+            Information of the Output Settings for the model.
+        pcs : Process settings
+            Information of the Process settings for the model.
+        pct : Particle Definition for Random walk
+            Information of the Particles defined for Randomwalk setting.
+        pqc : Phreqqc coupling (not supported yet)
+            Information of the Boundary Conditions for the model.
+        pqcdat : Phreqqc coupling (the phreeqc.dat file)
+            phreeqc.dat file for the model.
+            (just a line-wise file with no comfort)
+        rei : Reaction Interface
+            Information of the Reaction Interface for the model.
+        rfd : definition of time-curves for variing BCs or STs
+            Information of the time curves for the model.
+        st  : Source Term
+            Information of the Source Term for the model.
+        tim : Time settings
+            Information of the Time settings for the model.
 
     Additional
-    ----------
-    mpd : Distributed Properties (list of files)
-        Information of the Distributed Properties for the model.
-    gli_ext : list for external Geometry definition
-        External definition of surfaces (TIN) or polylines (POINT_VECTOR)
-    rfr : list of restart files
-        RESTART files as defined in the INITIAL_CONDITION
-    gem_init : list of GEMS3K input files (lst file)
-        given as GEMinit classes
-    asc : list of ogs ASC files
-        This file type comes either from .tim .pcs or .gem
-    copy_files : list of path-strings
-        Files that should be copied to the destiny folder.
+        mpd : Distributed Properties (list of files)
+            Information of the Distributed Properties for the model.
+        gli_ext : list for external Geometry definition
+            External definition of surfaces (TIN) or polylines (POINT_VECTOR)
+        rfr : list of restart files
+            RESTART files as defined in the INITIAL_CONDITION
+        gem_init : list of GEMS3K input files (lst file)
+            given as GEMinit classes
+        asc : list of ogs ASC files
+            This file type comes either from .tim .pcs or .gem
+        copy_files : list of path-strings
+            Files that should be copied to the destiny folder.
     """
 
     def __init__(
