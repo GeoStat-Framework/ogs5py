@@ -2,6 +2,7 @@ language: python
 
 matrix:
   include:
+    # use macOS for py2 since building pandas wheels takes ages on linux
     - name: "MacOS py27"
       os: osx
       language: generic

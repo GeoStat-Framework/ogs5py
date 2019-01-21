@@ -1,5 +1,7 @@
 # Welcome to ogs5py
 
+[![Build Status](https://travis-ci.org/GeoStat-Framework/ogs5py.svg?branch=master)](https://travis-ci.org/GeoStat-Framework/ogs5py)
+[![Documentation Status](https://readthedocs.org/projects/ogs5py/badge/?version=latest)](https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
@@ -20,7 +22,7 @@ You can install the latest version with the following command:
 
 ## Documentation for ogs5py
 
-You can find the documentation under (...will follow soon...)
+You can find the documentation under [geostat-framework.readthedocs.io][doc_link].
 
 
 ### Tutorials and Examples
@@ -167,3 +169,4 @@ You can contact us via <info@geostat-framework.org>.
 
 [gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
+[doc_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/

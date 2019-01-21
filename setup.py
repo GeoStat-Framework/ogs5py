@@ -1,14 +1,5 @@
-#!/usr/bin/env python
-"""
-ogs5py: a python API for OpenGeoSys5 (www.opengeosys.org)
-
-You can download OGS5 from:
-    * www.opengeosys.org/ogs-5
-
-by Sebastian Mueller 2018
-
-(inspired by Falk Hesse and Miao Jing)
-"""
+# -*- coding: utf-8 -*-
+"""ogs5py: a python API for OpenGeoSys5"""
 
 import os
 import codecs
