@@ -6,3 +6,4 @@ meshio
 lxml
 vtk
 pexpect
+numpydoc
