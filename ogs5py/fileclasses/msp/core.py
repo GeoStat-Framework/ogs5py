@@ -10,36 +10,49 @@ class MSP(BlockFile):
     """
     Class for the ogs SOLID_PROPERTIES file.
 
-    Keywords for a block
-    --------------------
-    - SOLID_PROPERTIES
-        - BIOT_CONSTANT
-        - CREEP
-        - DENSITY
-        - ELASTICITY
-        - EXCAVATION
-        - E_Function
-        - GRAVITY_CONSTANT
-        - MICRO_STRUCTURE_PLAS
-        - NAME
-        - NON_REACTIVE_FRACTION
-        - PLASTICITY
-        - REACTIVE_SYSTEM
-        - SOLID_BULK_MODULUS
-        - SPECIFIC_HEAT_SOURCE
-        - STRESS_INTEGRATION_TOLERANCE
-        - STRESS_UNIT
-        - SWELLING_PRESSURE_TYPE
-        - THERMAL
-        - THRESHOLD_DEV_STR
-        - TIME_DEPENDENT_YOUNGS_POISSON
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - SOLID_PROPERTIES
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - SOLID_PROPERTIES
+
+            - BIOT_CONSTANT
+            - CREEP
+            - DENSITY
+            - ELASTICITY
+            - EXCAVATION
+            - E_Function
+            - GRAVITY_CONSTANT
+            - MICRO_STRUCTURE_PLAS
+            - NAME
+            - NON_REACTIVE_FRACTION
+            - PLASTICITY
+            - REACTIVE_SYSTEM
+            - SOLID_BULK_MODULUS
+            - SPECIFIC_HEAT_SOURCE
+            - STRESS_INTEGRATION_TOLERANCE
+            - STRESS_UNIT
+            - SWELLING_PRESSURE_TYPE
+            - THERMAL
+            - THRESHOLD_DEV_STR
+            - TIME_DEPENDENT_YOUNGS_POISSON
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/msp
@@ -79,13 +92,5 @@ class MSP(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(MSP, self).__init__(**OGS_Config)
-
         self.file_ext = ".msp"

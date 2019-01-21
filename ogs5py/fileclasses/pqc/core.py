@@ -10,25 +10,29 @@ class PQC(LineFile):
     """
     Class for the ogs PHREEQC interface file.
 
-    Info
-    ----
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
+
+    Notes
+    -----
     This is just handled as a line-wise file. You can access the data by line
     with:
         PQC.lines
 
+    See Also
+    --------
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pqc
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_react.cpp#L2136
     """
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(PQC, self).__init__(**OGS_Config)
         self.file_ext = ".pqc"
 
@@ -45,25 +49,29 @@ class PQCdat(LineFile):
     """
     Class for the ogs PHREEQC dat file.
 
-    Info
-    ----
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
+
+    Notes
+    -----
     This is just handled as a line-wise file. You can access the data by line
     with:
         PQCdat.lines
 
+    See Also
+    --------
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pqc
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_react.cpp#L2136
     """
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(PQCdat, self).__init__(**OGS_Config)
         self.file_name = "phreeqc"
         self.file_ext = ".dat"

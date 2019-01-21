@@ -10,39 +10,52 @@ class MCP(BlockFile):
     """
     Class for the ogs COMPONENT_PROPERTIES file.
 
-    Keywords for a block
-    --------------------
-    - COMPONENT_PROPERTIES
-        - ACENTRIC_FACTOR
-        - A_ZERO
-        - BUBBLE_VELOCITY
-        - CRITICAL_PRESSURE
-        - CRITICAL_TEMPERATURE
-        - DECAY
-        - DIFFUSION
-        - FLUID_ID
-        - FLUID_PHASE
-        - FORMULA
-        - ISOTHERM
-        - MAXIMUM_AQUEOUS_SOLUBILITY
-        - MINERAL_DENSITY
-        - MOBILE
-        - MOLAR_DENSITY
-        - MOLAR_VOLUME
-        - MOLAR_WEIGHT
-        - MOL_MASS
-        - NAME
-        - OutputMassOfComponentInModel
-        - TRANSPORT_PHASE
-        - VALENCE
-        - VOLUME_DIFFUSION
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - COMPONENT_PROPERTIES
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - COMPONENT_PROPERTIES
+
+            - ACENTRIC_FACTOR
+            - A_ZERO
+            - BUBBLE_VELOCITY
+            - CRITICAL_PRESSURE
+            - CRITICAL_TEMPERATURE
+            - DECAY
+            - DIFFUSION
+            - FLUID_ID
+            - FLUID_PHASE
+            - FORMULA
+            - ISOTHERM
+            - MAXIMUM_AQUEOUS_SOLUBILITY
+            - MINERAL_DENSITY
+            - MOBILE
+            - MOLAR_DENSITY
+            - MOLAR_VOLUME
+            - MOLAR_WEIGHT
+            - MOL_MASS
+            - NAME
+            - OutputMassOfComponentInModel
+            - TRANSPORT_PHASE
+            - VALENCE
+            - VOLUME_DIFFUSION
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mcp
@@ -89,12 +102,5 @@ class MCP(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(MCP, self).__init__(**OGS_Config)
         self.file_ext = ".mcp"

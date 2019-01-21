@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-History
--------
-Written,  SM, Mar 2018
+Base Classes for the OGS Files
 """
 from __future__ import print_function, division, absolute_import
 import os
@@ -43,9 +41,9 @@ class File(object):
     Parameters
     ----------
     task_root : :class:`str`, optional
-        Path to the destiny folder. Default is the current working dir
+        Path to the destiny folder. Default is cwd+"ogs5model"
     task_id : :class:`str`, optional
-        Name for the ogs task. Default: "ogs"
+        Name for the ogs task. Default: "model"
     file_ext : :class:`str`, optional
         extension of the file (with leading dot ".std")
         Default: ".std"
@@ -226,7 +224,7 @@ class LineFile(File):
         extension of the file (with leading dot ".txt")
         Default: ".txt"
     task_root : str, optional
-        Path to the destiny folder.
+        Path to the destiny model folder.
         Default: cwd+"ogs5model"
     task_id : str, optional
         Name for the ogs task. (a place holder)
@@ -364,10 +362,12 @@ class BlockFile(File):
 
     Parameters
     ----------
-    task_root : :class:`str`, optional
-        Path to the destiny folder. Default is the current working dir
-    task_id : :class:`str`, optional
-        Name for the ogs task. Default: "ogs"
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     file_ext : :class:`str`, optional
         extension of the file (with leading dot ".std")
         Default: ".std"

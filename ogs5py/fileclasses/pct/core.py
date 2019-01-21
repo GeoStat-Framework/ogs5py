@@ -13,19 +13,24 @@ CWD = os.getcwd()
 class PCT(File):
     """
     Class for the ogs Particle file, if the PCS TYPE is RANDOM_WALK
+
+    Parameters
+    ----------
+    data : np.array or None
+        particle data. Default: None
+    s_flag : int, optional
+        1 for same pseudo-random series,
+        0 for different pseudo-random series.
+        Default: 1
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(self, data=None, s_flag=1, task_root=CWD, task_id="model"):
-        """
-        Input
-        -----
-        data : np.array or None
-            particle data. Default: None
-        s_flag : int, optional
-            1 for same pseudo-random series,
-            0 for different pseudo-random series.
-            Default: 1
-        """
         super(PCT, self).__init__(task_root, task_id)
         self.s_flag = s_flag
         self.file_ext = ".pct"

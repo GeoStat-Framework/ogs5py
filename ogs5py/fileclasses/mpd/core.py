@@ -11,21 +11,40 @@ class MPD(BlockFile):
     """
     Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file.
 
-    Keywords for a block
-    --------------------
-    - MEDIUM_PROPERTIES_DISTRIBUTED
-        - MSH_TYPE
-        - MMP_TYPE
-        - DIS_TYPE
-        - CONVERSION_FACTOR
-        - DATA
+    Parameters
+    ----------
+    file_name : str, optional
+        File name for the MPD file. If :class:`None`, the task_id is used.
+        Default: :class:`None`
+    file_ext : :class:`str`, optional
+        extension of the file (with leading dot ".mpd")
+        Default: ".mpd"
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - MEDIUM_PROPERTIES_DISTRIBUTED
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - MEDIUM_PROPERTIES_DISTRIBUTED
+
+            - MSH_TYPE
+            - MMP_TYPE
+            - DIS_TYPE
+            - CONVERSION_FACTOR
+            - DATA
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
@@ -40,13 +59,6 @@ class MPD(BlockFile):
     STD = {}
 
     def __init__(self, file_name=None, file_ext=".mpd", **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(MPD, self).__init__(**OGS_Config)
         if file_name is None:
             file_name = self.task_id

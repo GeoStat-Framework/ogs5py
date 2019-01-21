@@ -14,33 +14,46 @@ class GEM(BlockFile):
     """
     Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
 
-    Keywords for a block
-    --------------------
-    - GEM_PROPERTIES
-        - CALCULATE_BOUNDARY_NODES
-        - DISABLE_GEMS
-        - FLAG_COUPLING_HYDROLOGY
-        - FLAG_DISABLE_GEM
-        - FLAG_POROSITY_CHANGE
-        - GEM_CALCULATE_BOUNDARY_NODES
-        - GEM_INIT_FILE
-        - GEM_THREADS
-        - ITERATIVE_SCHEME
-        - KINETIC_GEM
-        - MAX_FAILED_NODES
-        - MAX_POROSITY
-        - MIN_POROSITY
-        - MY_SMART_GEMS
-        - PRESSURE_GEM
-        - TEMPERATURE_GEM
-        - TRANSPORT_B
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - GEM_PROPERTIES
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - GEM_PROPERTIES
+
+            - CALCULATE_BOUNDARY_NODES
+            - DISABLE_GEMS
+            - FLAG_COUPLING_HYDROLOGY
+            - FLAG_DISABLE_GEM
+            - FLAG_POROSITY_CHANGE
+            - GEM_CALCULATE_BOUNDARY_NODES
+            - GEM_INIT_FILE
+            - GEM_THREADS
+            - ITERATIVE_SCHEME
+            - KINETIC_GEM
+            - MAX_FAILED_NODES
+            - MAX_POROSITY
+            - MIN_POROSITY
+            - MY_SMART_GEMS
+            - PRESSURE_GEM
+            - TEMPERATURE_GEM
+            - TRANSPORT_B
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/gem
@@ -78,13 +91,6 @@ class GEM(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(GEM, self).__init__(**OGS_Config)
         self.file_ext = ".gem"
 
@@ -99,19 +105,25 @@ class GEMinit(object):
 
     used to initialize the GEMS3K kernel.
 
-    Attributes
+    Parameters
     ----------
-    task_root : string
-        the task root folder
-    lst_name : string
-        the file-name of the GEM lst file
-    files : list of LineFiles
-        list of the given files as LineFile-Classes
-    is_empty : bool
-        state of the file is empty
+    lst_name: :class:`str` or :class:`None`, optional
+        name of the lst file
+    dch: :any:`LineFile` or :class:`None`
+        the GEMS data file
+    ipm: :any:`LineFile` or :class:`None`
+        the GEMS data file
+    dbr: :any:`LineFile` or :class:`None`
+        the GEMS data file
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Info
-    ----
+    See Also
+    --------
     http://gems.web.psi.ch/GEMS3/index.html
 
     http://gems.web.psi.ch/GEMS3K/
@@ -129,18 +141,6 @@ class GEMinit(object):
         task_id="model",
     ):
         """
-        Input
-        -----
-        lst_name: string
-            name of the lst file
-        dch: LineFile or None
-            the GEMS data file
-        ipm: LineFile or None
-            the GEMS data file
-        dbr: LineFile or None
-            the GEMS data file
-        task_root : str
-            Path to the destiny folder.
         """
         self._task_root = task_root
         self.task_id = task_id

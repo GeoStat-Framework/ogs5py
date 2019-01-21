@@ -14,22 +14,35 @@ class IC(BlockFile):
     """
     Class for the ogs INITIAL_CONDITION file.
 
-    Keywords for a block
-    --------------------
-    - INITIAL_CONDITION
-        - COMP_NAME
-        - DIS_TYPE
-        - GEO_TYPE
-        - PCS_TYPE
-        - PRIMARY_VARIABLE
-        - STORE_VALUES
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    :PCS_TYPE: "GROUNDWATER_FLOW"
-    :PRIMARY_VARIABLE: "HEAD"
-    :GEO_TYPE: "DOMAIN"
-    :DIS_TYPE: ["CONSTANT", 0.0]
+    Notes
+    -----
+    Main-Keywords (#):
+        - INITIAL_CONDITION
+
+    Sub-Keywords ($) per Main-Keyword:
+        - INITIAL_CONDITION
+
+            - COMP_NAME
+            - DIS_TYPE
+            - GEO_TYPE
+            - PCS_TYPE
+            - PRIMARY_VARIABLE
+            - STORE_VALUES
+
+    Standard block:
+        :PCS_TYPE: "GROUNDWATER_FLOW"
+        :PRIMARY_VARIABLE: "HEAD"
+        :GEO_TYPE: "DOMAIN"
+        :DIS_TYPE: ["CONSTANT", 0.0]
 
     Info
     ----
@@ -61,13 +74,6 @@ class IC(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(IC, self).__init__(**OGS_Config)
         self.file_ext = ".ic"
 
@@ -75,6 +81,28 @@ class IC(BlockFile):
 class RFR(File):
     """
     Class for the ogs RESTART file, if the DIS_TYPE in IC is set to RESTART
+
+    Parameters
+    ----------
+    data : :any:`numpy.ndarray`, optional
+        RFR data.
+        Default: :class:`None`
+    line1_4 : str or None, optional
+        First four lines of the RFR file. If :class:`None`, a standard header
+        is written.
+        Default: :class:`None`
+    file_name : str, optional
+        File name for the RFR file. If :class:`None`, the task_id is used.
+        Default: :class:`None`
+    file_ext : :class:`str`, optional
+        extension of the file (with leading dot ".rfr")
+        Default: ".rfr"
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
     """
 
     def __init__(
@@ -82,12 +110,10 @@ class RFR(File):
         data=None,
         line1_4=None,
         file_name=None,
-        file_ext=None,
+        file_ext=".rfr",
         task_root=os.path.join(CWD, "ogs5model"),
         task_id="model",
     ):
-        if file_ext is None:
-            file_ext = ".rfr"
         super(RFR, self).__init__(task_root, task_id, file_ext)
 
         if line1_4 is None:
@@ -142,7 +168,7 @@ class RFR(File):
 
     def save(self, path):
         """
-        Save the actual GLI external file in the given path.
+        Save the actual RFR external file in the given path.
 
         Parameters
         ----------
@@ -158,7 +184,7 @@ class RFR(File):
 
     def read_file(self, path, encoding=None):
         """
-        Write the actual OGS input file to the given folder.
+        Write the actual RFR input file to the given folder.
         Its path is given by "task_root+task_id+file_ext".
         """
         # in python3 open was replaced with io.open

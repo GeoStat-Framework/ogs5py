@@ -10,34 +10,52 @@ class OUT(BlockFile):
     """
     Class for the ogs OUTPUT file.
 
-    Keywords for a block
-    --------------------
-    - OUTPUT
-        - AMPLIFIER
-        - DAT_TYPE
-        - DIS_TYPE
-        - ELE_VALUES
-        - GEO_TYPE
-        - MFP_VALUES
-        - MMP_VALUES
-        - MSH_TYPE
-        - NOD_VALUES
-        - PCON_VALUES
-        - PCS_TYPE
-        - RWPT_VALUES
-        - TECPLOT_ZONE_SHARE
-        - TIM_TYPE
-        - VARIABLESHARING
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    :NOD_VALUES: "HEAD"
-    :GEO_TYPE: "DOMAIN"
-    :DAT_TYPE: "PVD"
-    :TIM_TYPE: ["STEPS", 1]
+    Notes
+    -----
+    Main-Keywords (#):
+        - OUTPUT
+        - VERSION
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - OUTPUT
+
+            - AMPLIFIER
+            - DAT_TYPE
+            - DIS_TYPE
+            - ELE_VALUES
+            - GEO_TYPE
+            - MFP_VALUES
+            - MMP_VALUES
+            - MSH_TYPE
+            - NOD_VALUES
+            - PCON_VALUES
+            - PCS_TYPE
+            - RWPT_VALUES
+            - TECPLOT_ZONE_SHARE
+            - TIM_TYPE
+            - VARIABLESHARING
+
+        - VERSION
+
+            (content directly related to the main-keyword)
+
+    Standard block:
+        :NOD_VALUES: "HEAD"
+        :GEO_TYPE: "DOMAIN"
+        :DAT_TYPE: "PVD"
+        :TIM_TYPE: ["STEPS", 1]
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/out
@@ -70,15 +88,13 @@ class OUT(BlockFile):
         [""],  # content directly related to main key "VERSION"
     ]
 
-    STD = {}
+    STD = {
+        "NOD_VALUES": "HEAD",
+        "GEO_TYPE": "DOMAIN",
+        "DAT_TYPE": "PVD",
+        "TIM_TYPE": ["STEPS", 1],
+    }
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(OUT, self).__init__(**OGS_Config)
         self.file_ext = ".out"

@@ -10,36 +10,49 @@ class REI(BlockFile):
     """
     Class for the ogs REACTION_INTERFACE file.
 
-    Keywords for a block
-    --------------------
-    - REACTION_INTERFACE
-        - ALL_PCS_DUMP
-        - DISSOLVED_NEUTRAL_CO2_SPECIES_NAME
-        - HEATPUMP_2DH_TO_2DV
-        - INITIAL_CONDITION_OUTPUT
-        - MOL_PER
-        - PCS_RENAME_INIT
-        - PCS_RENAME_POST
-        - PCS_RENAME_PRE
-        - POROSITY_RESTART
-        - PRESSURE
-        - P_VLE
-        - RESIDUAL
-        - SODIUM_SPECIES_NAME
-        - SOLID_SPECIES_DUMP_MOLES
-        - TEMPERATURE
-        - UPDATE_INITIAL_SOLID_COMPOSITION
-        - VLE
-        - WATER_CONCENTRATION
-        - WATER_SATURATION_LIMIT
-        - WATER_SPECIES_NAME
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - REACTION_INTERFACE
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - REACTION_INTERFACE
+
+            - ALL_PCS_DUMP
+            - DISSOLVED_NEUTRAL_CO2_SPECIES_NAME
+            - HEATPUMP_2DH_TO_2DV
+            - INITIAL_CONDITION_OUTPUT
+            - MOL_PER
+            - PCS_RENAME_INIT
+            - PCS_RENAME_POST
+            - PCS_RENAME_PRE
+            - POROSITY_RESTART
+            - PRESSURE
+            - P_VLE
+            - RESIDUAL
+            - SODIUM_SPECIES_NAME
+            - SOLID_SPECIES_DUMP_MOLES
+            - TEMPERATURE
+            - UPDATE_INITIAL_SOLID_COMPOSITION
+            - VLE
+            - WATER_CONCENTRATION
+            - WATER_SATURATION_LIMIT
+            - WATER_SPECIES_NAME
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/rei
@@ -79,12 +92,5 @@ class REI(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(REI, self).__init__(**OGS_Config)
         self.file_ext = ".rei"

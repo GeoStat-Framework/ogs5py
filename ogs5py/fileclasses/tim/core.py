@@ -10,30 +10,43 @@ class TIM(BlockFile):
     """
     Class for the ogs TIME_STEPPING file.
 
-    Keywords for a block
-    --------------------
-    - TIME_STEPPING
-        - CRITICAL_TIME
-        - INDEPENDENT
-        - PCS_TYPE
-        - SUBSTEPS
-        - TIME_CONTROL
-        - TIME_END
-        - TIME_FIXED_POINTS
-        - TIME_SPLITS
-        - TIME_START
-        - TIME_STEPS
-        - TIME_UNIT
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    :PCS_TYPE: "GROUNDWATER_FLOW"
-    :TIME_START: 0
-    :TIME_END: 1000
-    :TIME_STEPS: [[10, 100]]
+    Notes
+    -----
+    Main-Keywords (#):
+        - TIME_STEPPING
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - TIME_STEPPING
+
+            - CRITICAL_TIME
+            - INDEPENDENT
+            - PCS_TYPE
+            - SUBSTEPS
+            - TIME_CONTROL
+            - TIME_END
+            - TIME_FIXED_POINTS
+            - TIME_SPLITS
+            - TIME_START
+            - TIME_STEPS
+            - TIME_UNIT
+
+    Standard block:
+        :PCS_TYPE: "GROUNDWATER_FLOW"
+        :TIME_START: 0
+        :TIME_END: 1000
+        :TIME_STEPS: [10, 100]
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/tim
@@ -67,13 +80,6 @@ class TIM(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(TIM, self).__init__(**OGS_Config)
         self.file_ext = ".tim"
         self.force_writing = True

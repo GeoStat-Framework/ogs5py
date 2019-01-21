@@ -10,8 +10,23 @@ class ASC(LineFile):
     """
     Class for the ogs ASC file.
 
-    Info
-    ----
+    Parameters
+    ----------
+    lines : list of str, optional
+        content of the file as a list of lines
+        Default: None
+    file_name : str, optional
+        name of the file without extension
+        Default: "textfile"
+    task_root : str, optional
+        Path to the destiny folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task. (a place holder)
+        Default: "model"
+
+    Notes
+    -----
     This is just handled as a line-wise file. You can access the data by line
     with:
         ASC.lines
@@ -20,12 +35,5 @@ class ASC(LineFile):
     """
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(ASC, self).__init__(**OGS_Config)
         self.file_ext = ".asc"

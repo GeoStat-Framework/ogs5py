@@ -10,36 +10,49 @@ class ST(BlockFile):
     """
     Class for the ogs SOURCE_TERM file.
 
-    Keywords for a block
-    --------------------
-    - SOURCE_TERM
-        - AIR_BREAKING
-        - CHANNEL
-        - COMP_NAME
-        - CONSTRAINED
-        - DISTRIBUTE_VOLUME_FLUX
-        - EPSILON
-        - DIS_TYPE
-        - EXPLICIT_SURFACE_WATER_PRESSURE
-        - FCT_TYPE
-        - GEO_TYPE
-        - MSH_TYPE
-        - NEGLECT_SURFACE_WATER_PRESSURE
-        - NODE_AVERAGING
-        - PCS_TYPE
-        - PRIMARY_VARIABLE
-        - TIME_INTERPOLATION
-        - TIM_TYPE
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    :PCS_TYPE: "GROUNDWATER_FLOW"
-    :PRIMARY_VARIABLE: "HEAD"
-    :GEO_TYPE: ["POINT", "WELL"]
-    :DIS_TYPE: ["CONSTANT_NEUMANN", -1.0e-03]
+    Notes
+    -----
+    Main-Keywords (#):
+        - SOURCE_TERM
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - SOURCE_TERM
+
+            - AIR_BREAKING
+            - CHANNEL
+            - COMP_NAME
+            - CONSTRAINED
+            - DISTRIBUTE_VOLUME_FLUX
+            - EPSILON
+            - DIS_TYPE
+            - EXPLICIT_SURFACE_WATER_PRESSURE
+            - FCT_TYPE
+            - GEO_TYPE
+            - MSH_TYPE
+            - NEGLECT_SURFACE_WATER_PRESSURE
+            - NODE_AVERAGING
+            - PCS_TYPE
+            - PRIMARY_VARIABLE
+            - TIME_INTERPOLATION
+            - TIM_TYPE
+
+    Standard block:
+        :PCS_TYPE: "GROUNDWATER_FLOW"
+        :PRIMARY_VARIABLE: "HEAD"
+        :GEO_TYPE: ["POINT", "WELL"]
+        :DIS_TYPE: ["CONSTANT_NEUMANN", -1.0e-03]
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/st
@@ -79,12 +92,5 @@ class ST(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(ST, self).__init__(**OGS_Config)
         self.file_ext = ".st"

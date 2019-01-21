@@ -10,9 +10,18 @@ class BC(BlockFile):
     """
     Class for the ogs BOUNDARY CONDITION file.
 
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
+
     Notes
     -----
-    Main-Keywords (#) :
+    Main-Keywords (#):
         - BOUNDARY_CONDITION
 
     Sub-Keywords ($) per Main-Keyword:
@@ -35,15 +44,14 @@ class BC(BlockFile):
             - TIME_CONTROLLED_ACTIVE
             - TIM_TYPE
 
-    Standard block
-    --------------
-    :PCS_TYPE: "GROUNDWATER_FLOW"
-    :PRIMARY_VARIABLE: "HEAD"
-    :DIS_TYPE: ["CONSTANT", 0.0]
-    :GEO_TYPE: ["POLYLINE", "boundary"]
+    Standard block:
+        :PCS_TYPE: "GROUNDWATER_FLOW"
+        :PRIMARY_VARIABLE: "HEAD"
+        :DIS_TYPE: ["CONSTANT", 0.0]
+        :GEO_TYPE: ["POLYLINE", "boundary"]
 
-    Info
-    ----
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/bc
@@ -81,13 +89,6 @@ class BC(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(BC, self).__init__(**OGS_Config)
         self.file_ext = ".bc"
         self.force_writing = True

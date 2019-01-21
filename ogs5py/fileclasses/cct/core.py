@@ -10,19 +10,32 @@ class CCT(BlockFile):
     """
     Class for the ogs COMMUNICATION TABLE file.
 
-    Keywords for a block
-    --------------------
-    - COMMUNICATION_TABLE
-        - MYRANK
-        - NEIGHBOR
-        - NNEIGHBORS
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - COMMUNICATION_TABLE
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - COMMUNICATION_TABLE
+
+            - MYRANK
+            - NEIGHBOR
+            - NNEIGHBORS
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/cct
@@ -37,12 +50,5 @@ class CCT(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(CCT, self).__init__(**OGS_Config)
         self.file_ext = ".cct"

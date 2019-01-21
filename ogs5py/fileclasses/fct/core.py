@@ -10,23 +10,36 @@ class FCT(BlockFile):
     """
     Class for the ogs FUNCTION file.
 
-    Keywords for a block
-    --------------------
-    - FUNCTION
-        - DATA
-        - DIMENSION
-        - DIS_TYPE
-        - GEO_TYPE
-        - MATRIX
-        - TYPE
-        - VARIABLES
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - FUNCTION
 
-    Info
-    ----
+    Sub-Keywords ($) per Main-Keyword:
+        - FUNCTION
+
+            - DATA
+            - DIMENSION
+            - DIS_TYPE
+            - GEO_TYPE
+            - MATRIX
+            - TYPE
+            - VARIABLES
+
+    Standard block:
+        None
+
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/fct
@@ -51,12 +64,5 @@ class FCT(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(FCT, self).__init__(**OGS_Config)
         self.file_ext = ".fct"

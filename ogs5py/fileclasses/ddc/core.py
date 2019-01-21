@@ -10,16 +10,29 @@ class DDC(BlockFile):
     """
     Class for the ogs MPI DOMAIN DECOMPOSITION file.
 
-    Keywords for a block
-    --------------------
-    - DOMAIN
-        - ELEMENTS
-        - NODES_INNER
-        - NODES_BORDER
+    Parameters
+    ----------
+    task_root : str, optional
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
+    task_id : str, optional
+        Name for the ogs task.
+        Default: "model"
 
-    Standard block
-    --------------
-    None
+    Notes
+    -----
+    Main-Keywords (#):
+        - DOMAIN
+
+    Sub-Keywords ($) per Main-Keyword:
+        - DOMAIN
+
+            - ELEMENTS
+            - NODES_INNER
+            - NODES_BORDER
+
+    Standard block:
+        None
 
     Info
     ----
