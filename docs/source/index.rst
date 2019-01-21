@@ -122,21 +122,14 @@ Reader
 
 It comes along with a set of handy readers for almost all output formats:
 
-- VTK Domain output
-
-        ogs5py.reader.readvtk
-
-- PVD Domain output
-
-        ogs5py.reader.readpvd
-
-* TECPLOT point output
-
-        ogs5py.reader.readtec_point
-
-* TECPLOT polyline output
-
-        ogs5py.reader.readtec_polyline
+- VTK Domain output:
+    :any:`ogs5py.reader.readvtk`
+- PVD Domain output:
+    :any:`ogs5py.reader.readpvd`
+- TECPLOT point output:
+    :any:`ogs5py.reader.readtec_point`
+- TECPLOT polyline output:
+    :any:`ogs5py.reader.readtec_polyline`
 
 
 OGS5 executable
@@ -145,7 +138,9 @@ OGS5 executable
 The OGS5 executable needs to be in your sys-path under ``ogs``.
 Otherwise you need to specify the path to the executable within the run command:
 
-    ogs.run_model(ogs_root="path/to/ogs")
+.. code-block:: python
+
+    model.run_model(ogs_root="path/to/ogs")
 
 
 Requirements
