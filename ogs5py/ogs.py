@@ -21,6 +21,7 @@ import warnings
 from copy import deepcopy as dcp
 from whichcraft import which
 import pexpect
+from pexpect.popen_spawn import PopenSpawn
 from ogs5py.fileclasses import (
     ASC,
     BC,
@@ -59,7 +60,7 @@ from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 # pexpect.spawn just runs on unix-like systems
 if sys.platform == "win32":
     OGS_NAME = "ogs.exe"
-    CmdRun = pexpect.popen_spawn.PopenSpawn
+    CmdRun = PopenSpawn
 else:
     OGS_NAME = "ogs"
     CmdRun = pexpect.spawn
