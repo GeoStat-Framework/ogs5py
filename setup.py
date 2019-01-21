@@ -48,8 +48,7 @@ Development Status :: 3 - Alpha
 Intended Audience :: Developers
 Intended Audience :: End Users/Desktop
 Intended Audience :: Science/Research
-License :: OSI Approved :: \
-GNU Lesser General Public License v3 or later (LGPLv3+)
+License :: OSI Approved :: GNU General Public License v3 (GPLv3)
 Natural Language :: English
 Operating System :: MacOS
 Operating System :: MacOS :: MacOS X
@@ -78,7 +77,7 @@ setup(
     author="Sebastian Mueller",
     author_email="sebastian.mueller@ufz.de",
     url="https://github.com/GeoStat-Framework/ogs5py",
-    license="LGPL -  see LICENSE",
+    license="GPL -  see LICENSE",
     classifiers=[_f for _f in CLASSIFIERS.split("\n") if _f],
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,

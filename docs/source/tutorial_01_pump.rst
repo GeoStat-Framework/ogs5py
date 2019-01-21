@@ -1,32 +1,7 @@
-=================
-ogs5py Quickstart
-=================
+Tutorial 1: A pumping test
+==========================
 
-.. image:: pics/OGS.png
-   :width: 150px
-   :align: center
-
-ogs5py is A python-API for the `OpenGeoSys 5 <https://www.opengeosys.org/ogs-5/>`_ scientific modeling package.
-
-
-Installation
-============
-
-The package can be installed via `pip <https://pypi.org/project/gstools/>`_.
-On Windows you can install `WinPython <https://winpython.github.io/>`_ to get
-Python and pip running.
-
-.. code-block:: none
-
-    pip install https://github.com/GeoStat-Framework/ogs5py/archive/master.zip
-
-
-
-Pumping Test Example
-====================
-
-In the following a simple transient pumping test is simulated on a radial symmetric mesh.
-The point output at the observation well is plotted afterwards.
+This is a minimal example on how to setup a pumping test with ogs5py.
 
 .. code-block:: python
 
@@ -115,52 +90,3 @@ The point output at the observation well is plotted afterwards.
 .. image:: pics/01_pump_test_drawdown.png
    :width: 400px
    :align: center
-
-
-Reader
-======
-
-It comes along with a set of handy readers for almost all output formats:
-
-- VTK Domain output
-
-        ogs5py.reader.readvtk
-
-- PVD Domain output
-
-        ogs5py.reader.readpvd
-
-* TECPLOT point output
-
-        ogs5py.reader.readtec_point
-
-* TECPLOT polyline output
-
-        ogs5py.reader.readtec_polyline
-
-
-OGS5 executable
-===============
-
-The OGS5 executable needs to be in your sys-path under ``ogs``.
-Otherwise you need to specify the path to the executable within the run command:
-
-    ogs.run_model(ogs_root="path/to/ogs")
-
-
-Requirements
-============
-
-- `NumPy >= 1.13.0 <https://www.numpy.org>`_
-- `Pandas >= 0.23.0 <https://pandas.pydata.org/>`_
-- `whichcraft <https://github.com/pydanny/whichcraft>`_
-- `meshio <https://github.com/nschloe/meshio>`_
-- `lxml <https://github.com/lxml/lxml>`_
-- `vtk <https://vtk.org/>`_
-- `pexpect <https://github.com/pexpect/pexpect>`_
-
-
-License
-=======
-
-`GPL <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2018

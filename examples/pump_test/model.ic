@@ -1,0 +1,12 @@
+|-------------- Written with ogs5py --------------|
+#INITIAL_CONDITION
+  $PCS_TYPE
+   GROUNDWATER_FLOW
+  $PRIMARY_VARIABLE
+   HEAD
+  $DIS_TYPE
+   CONSTANT 0.0
+  $GEO_TYPE
+   DOMAIN
+#STOP
+|-- Written with ogs5py (0.5.0) on: 2019-01-21_16-01-09 --|

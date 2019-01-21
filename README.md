@@ -1,47 +1,32 @@
+# Welcome to ogs5py
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-Welcome to ogs5py
-=================
+<p align="center">
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/pics/OGS.png" alt="ogs5py-LOGO" width="251px"/>
+</p>
 
-Purpose
--------
-ogs5py is A python-API for the OpenGeoSys 5 scientific modeling package.
+## Purpose
+
+ogs5py is A python-API for the [OpenGeoSys 5][ogs5_link] scientific modeling package.
 
 
-Installation
-------------
+## Installation
+
 You can install the latest version with the following command:
 
     pip install https://github.com/GeoStat-Framework/ogs5py/archive/master.zip
 
 
-Contents
---------
-With ogs5py you can setup, control and start an OGS5 model within python.
+## Documentation for ogs5py
 
-It comes along with a set of handy readers for almost all output formats:
-
-* VTK Domain output
-
-        ogs5py.reader.readvtk
-
-* PVD Domain output
-
-        ogs5py.reader.readpvd
-
-* TECPLOT point output
-
-        ogs5py.reader.readtec_point
-
-* TECPLOT polyline output
-
-        ogs5py.reader.readtec_polyline
+You can find the documentation under (...will follow soon...)
 
 
-Example
--------
+### Tutorials and Examples
 
-In the following a simple transient pumping test is simulated on a radial symmetric mesh. The point output at the observation well is plotted afterwards.
+In the following a simple transient pumping test is simulated on a radial symmetric mesh.
+The point output at the observation well is plotted afterwards.
 
 ```python
 from ogs5py import OGS
@@ -127,12 +112,58 @@ plt.plot(time, head)
 plt.show()
 ```
 
-Requirements
-------------
-The ogs5 executable needs to be in your sys-path. Otherwise you need to specify the path to the executable within the run command:
+<p align="center">
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/01_pump_test_drawdown.png" alt="Drawdown" width="600px"/>
+</p>
+
+
+### Reader
+
+It comes along with a set of handy readers for almost all output formats:
+
+* VTK Domain output
+
+        ogs5py.reader.readvtk
+
+* PVD Domain output
+
+        ogs5py.reader.readpvd
+
+* TECPLOT point output
+
+        ogs5py.reader.readtec_point
+
+* TECPLOT polyline output
+
+        ogs5py.reader.readtec_polyline
+
+
+### OGS5 executable
+
+The OGS5 executable needs to be in your sys-path under ``ogs``.
+Otherwise you need to specify the path to the executable within the run command:
 
     ogs.run_model(ogs_root="path/to/ogs")
 
-Created April 2018, Copyright Sebastian Mueller 2018
 
-(inspired by Falk Hesse and Miao Jing)
+## Requirements:
+
+- [NumPy >= 1.13.0](https://www.numpy.org)
+- [Pandas >= 0.23.0](https://pandas.pydata.org/)
+- [whichcraft](https://github.com/pydanny/whichcraft)
+- [meshio](https://github.com/nschloe/meshio)
+- [lxml](https://github.com/lxml/lxml)
+- [vtk](https://vtk.org/)
+- [pexpect](https://github.com/pexpect/pexpect)
+
+## Contact
+
+You can contact us via <info@geostat-framework.org>.
+
+
+## License
+
+[GPL][gpl_link] © 2018-2019 (inspired by Falk Hesse and Miao Jing)
+
+[gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
+[ogs5_link]: https://www.opengeosys.org/ogs-5/
