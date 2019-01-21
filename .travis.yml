@@ -2,13 +2,11 @@ language: python
 
 matrix:
   include:
-    - name: "Linux py27"
-      sudo: required
-      language: python
-      python: 2.7
-      services: docker
+    - name: "MacOS py27"
+      os: osx
+      language: generic
       env:
-        - PIP=pip
+        - PIP=pip2
         - CIBW_BUILD="cp27-*"
         - COVER="off"
 
