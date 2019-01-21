@@ -113,7 +113,7 @@ plt.show()
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/01_pump_test_drawdown.png" alt="Drawdown" width="600px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/pics/01_pump_test_drawdown.png" alt="Drawdown" width="600px"/>
 </p>
 
 
