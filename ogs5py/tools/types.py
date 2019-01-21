@@ -1,10 +1,58 @@
 # -*- coding: utf-8 -*-
 """
-definition of element-type names and their encoding
+type definitions for ogs5
 
-List of elements in ogs mesh file: int int char int int int int int int int int
+GLI related Constants
+^^^^^^^^^^^^^^^^^^^^^
 
-@author: Sebastian Mueller
+.. autosummary::
+   EMPTY_GLI
+   GLI_KEYS
+   GLI_KEY_LIST
+   EMPTY_PLY
+   PLY_KEYS
+   PLY_KEY_LIST
+   PLY_TYPES
+   EMPTY_SRF
+   SRF_KEYS
+   SRF_KEY_LIST
+   SRF_TYPES
+   EMPTY_VOL
+   VOL_KEYS
+   VOL_KEY_LIST
+   VOL_TYPES
+
+MSH related Constants
+^^^^^^^^^^^^^^^^^^^^^
+
+.. autosummary::
+   EMPTY_MSH
+   MESH_KEYS
+   MESH_DATA_KEYS
+   ELEM_1D
+   ELEM_2D
+   ELEM_3D
+   ELEM_DIM
+   ELEM_NAMES
+   ELEM_TYP
+   ELEM_TYP1D
+   ELEM_TYP2D
+   ELEM_TYP3D
+   VTK_TYP
+   MESHIO_NAMES
+   NODE_NO
+
+General Constants
+^^^^^^^^^^^^^^^^^
+
+.. autosummary::
+   STRTYPE
+   PCS_TYP
+   PCS_EXT
+   PRIM_VAR
+   PRIM_VAR_BY_PCS
+   OGS_EXT
+
 """
 from __future__ import division, print_function, absolute_import
 import sys
@@ -13,8 +61,10 @@ import numpy as np
 # stringtype for python 2 and 3
 if sys.version_info[0] == 2:
     STRTYPE = basestring
+    """type: base string type"""
 else:
     STRTYPE = str
+    """type: base string type"""
 
 # keylists for the gli entries and templates for entries
 EMPTY_GLI = {
@@ -25,7 +75,11 @@ EMPTY_GLI = {
     "surfaces": [],
     "volumes": [],
 }
+"""dict: empty gli dict"""
+
 GLI_KEY_LIST = ["#POINTS", "#POLYLINE", "#SURFACE", "#VOLUME", "#STOP"]
+"""list: gli main keys"""
+
 # https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_ply.cpp#L577
 PLY_KEY_LIST = [
     "ID",  # int
@@ -36,7 +90,11 @@ PLY_KEY_LIST = [
     "POINTS",  # list
     "POINT_VECTOR",  # str
 ]
+"""list: gli polyline keys"""
+
 PLY_TYPES = [int, str, int, float, int, list, str]
+"""list: gli polyline key types"""
+
 # https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_sfc.cpp#L996
 SRF_KEY_LIST = [
     "ID",  # int
@@ -47,7 +105,11 @@ SRF_KEY_LIST = [
     "MAT_GROUP",  # int
     "POLYLINES",  # list
 ]
+"""list: gli surface keys"""
+
 SRF_TYPES = [int, str, float, int, str, int, list]
+"""list: gli surface key types"""
+
 # https://github.com/ufz/ogs5/blob/e704a791391a233084c3d74e1335f50206c5eb76/GEO/geo_vol.cpp#L130
 VOL_KEY_LIST = [
     "NAME",  # str
@@ -56,14 +118,24 @@ VOL_KEY_LIST = [
     "MAT_GROUP",  # str
     "LAYER",  # int
 ]
+"""list: gli volume keys"""
+
 VOL_TYPES = [str, str, list, str, int]
+"""list: gli volume key types"""
+
 EMPTY_PLY = {}
+"""dict: empty ogs gli polyline dict"""
+
 for key in PLY_KEY_LIST:
     EMPTY_PLY[key] = None
 EMPTY_SRF = {}
+"""dict: empty ogs gli surface dict"""
+
 for key in SRF_KEY_LIST:
     EMPTY_SRF[key] = None
 EMPTY_VOL = {}
+"""dict: empty ogs gli volume dict"""
+
 for key in VOL_KEY_LIST:
     EMPTY_VOL[key] = None
 # keys for the gli-dict
@@ -75,6 +147,8 @@ GLI_KEYS = {
     "surfaces",
     "volumes",
 }
+"""set: ogs gli dict keys"""
+
 PLY_KEYS = {
     "ID",
     "NAME",
@@ -84,18 +158,36 @@ PLY_KEYS = {
     "MAT_GROUP",
     "POINT_VECTOR",
 }
+"""set: ogs gli polyline keys"""
+
 SRF_KEYS = {"ID", "NAME", "POLYLINES", "EPSILON", "TYPE", "MAT_GROUP", "TIN"}
+"""set: ogs gli surface keys"""
+
 VOL_KEYS = {"NAME", "SURFACES", "TYPE", "MAT_GROUP", "LAYER"}
+"""set: ogs gli volume keys"""
+
 # names sorted by dimensionality
 ELEM_1D = ["line"]
+"""set: ogs element names"""
+
 ELEM_2D = ["tri", "quad"]
+"""set: ogs element names"""
+
 ELEM_3D = ["tet", "pyra", "pris", "hex"]
+"""set: ogs element names"""
+
 # names sorted by dim
 ELEM_DIM = [ELEM_1D, ELEM_2D, ELEM_3D]
+"""set: ogs element names"""
+
 # all names for element types in ogs 5
 ELEM_NAMES = ELEM_1D + ELEM_2D + ELEM_3D
+"""list: ogs element names"""
+
 # keys for the mesh-dict
 MESH_KEYS = {"mesh_data", "nodes", "elements", "material_id", "element_id"}
+"""set: ogs mesh dict-keys"""
+
 MESH_DATA_KEYS = {
     "AXISYMMETRY",
     "CROSS_SECTION",
@@ -104,7 +196,11 @@ MESH_DATA_KEYS = {
     "GEO_NAME",
     "LAYER",
 }
+"""set: ogs mesh data keys"""
+
 ELEMENT_KEYS = set(ELEM_NAMES)
+"""set: ogs element names"""
+
 EMPTY_MSH = {
     "mesh_data": {},
     "nodes": np.empty((0, 3)),
@@ -112,6 +208,8 @@ EMPTY_MSH = {
     "element_id": {},
     "material_id": {},
 }
+"""dict: empty mesh dict"""
+
 # coresponding names for types in meshio
 MESHIO_NAMES = [
     "line",
@@ -122,6 +220,8 @@ MESHIO_NAMES = [
     "wedge",
     "hexahedron",
 ]
+"""list: coresponding element names in meshio"""
+
 # number encoding for element types (obsolete)
 ELEM_TYP = {
     0: "line",
@@ -139,9 +239,15 @@ ELEM_TYP = {
     "pris": 5,
     "hex": 6,
 }
+"""dict: type code per element name"""
+
 # number encoding sorted by dimensionality
 ELEM_TYP1D = {0: "line", "line": 0}
+"""dict: type code per element name"""
+
 ELEM_TYP2D = {1: "tri", 2: "quad", "tri": 1, "quad": 2}
+"""dict: type code per element name"""
+
 ELEM_TYP3D = {
     3: "tet",
     4: "pyra",
@@ -152,6 +258,8 @@ ELEM_TYP3D = {
     "pris": 5,
     "hex": 6,
 }
+"""dict: type code per element name"""
+
 # coresponding vtk-types by their number encoding
 VTK_TYP = {
     3: "line",  # vtk.VTK_LINE == 3
@@ -169,6 +277,8 @@ VTK_TYP = {
     "pris": 13,
     "hex": 12,
 }
+"""dict: vtk type codes per element name"""
+
 # number of nodes per element-type (sorted by name and number-encoding)
 NODE_NO = {
     0: 2,
@@ -186,6 +296,8 @@ NODE_NO = {
     "pris": 6,
     "hex": 8,
 }
+"""dict: Node numbers per element name"""
+
 # all pcs types supported by OGS5
 # https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pcs/s_pcs_type
 PCS_TYP = [
@@ -208,8 +320,12 @@ PCS_TYP = [
     "DEFORMATION_SINGLEFLOW_MONO",  # ...used in Benchmarks
     "MULTI_COMPONENTIAL_FLOW",  # ...used in Benchmarks
 ]
+"""list: PCS types"""
+
 # file extensions by pcs type (and the unspecified case "")
 PCS_EXT = [""] + ["_" + pcs for pcs in PCS_TYP[1:]]
+"""list: PCS file extensions with _"""
+
 # all PRIMARY_VARIABLE types supported by OGS5 (sorted by PCS_TYP)
 PRIM_VAR = [
     [""],
@@ -231,7 +347,11 @@ PRIM_VAR = [
     [""],
     [""],
 ]
+"""list: primary variables"""
+
 PRIM_VAR_BY_PCS = {}
+"""dict: primary variables per PCS"""
+
 for i, pcs in enumerate(PCS_TYP):
     PRIM_VAR_BY_PCS[pcs] = PRIM_VAR[i]
 # file extensions of ogs5 input files (without mpd, gli_ext, rfr files)
@@ -259,3 +379,4 @@ OGS_EXT = [
     ".st",  # Source Term
     ".tim",  # Time settings
 ]
+"""list: all ogs file extensions"""

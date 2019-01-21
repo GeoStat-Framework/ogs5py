@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 """
 script creation for ogs5py
+
+.. currentmodule:: ogs5py.tools.script
+
+Generator
+^^^^^^^^^
+
+.. autosummary::
+   gen_script
+
+Helpers
+^^^^^^^
+
+.. autosummary::
+   formater
+   get_line
+   tab
+   add_block_file
+   add_load_file
+   add_list_file
+
+----
 """
 from __future__ import division, print_function, absolute_import
 import os

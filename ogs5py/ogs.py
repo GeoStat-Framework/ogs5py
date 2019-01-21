@@ -1,5 +1,15 @@
 """
-Class for an OGS5 run.
+Base Class for an OGS5 run.
+
+.. currentmodule:: ogs5py.ogs
+
+OGS Class
+^^^^^^^^^
+
+.. autosummary::
+   OGS
+
+----
 """
 from __future__ import absolute_import, division, print_function
 import os
@@ -63,26 +73,17 @@ class OGS(object):
     Parameters
     ----------
     task_root : :class:`str`, optional
-        Path to the destiny folder. Default is the current working dir
+        Path to the destiny model folder.
+        Default: cwd+"ogs5model"
     task_id : :class:`str`, optional
-        Name for the ogs task. Default: "model"
-    output_dir : :class:`str`, optional
-        Path to the output directory. Default is the task_root folder.
+        Name for the ogs task.
+        Default: "model"
+    output_dir : :class:`str` or :class:`None`, optional
+        Path to the output directory.
+        Default: :class:`None`
 
     Notes
     -----
-    Attributes
-        task_root : :class:`str`
-            Path to the destiny folder.
-        task_id : :class:`str`
-            Name for the ogs task.
-        output_dir : :class:`str` or None
-            Path to the output directory.
-        top_com : :class:`str`
-            Comment at the top of the written files
-        bot_com : :class:`str`
-            Comment at the bottom of the written files
-
     The following Classes are present as attributes
         bc  : Boundary Condition
             Information of the Boundary Conditions for the model.
@@ -591,10 +592,12 @@ class OGS(object):
         This method will search for all known OGS5 file-extensions in the
         given path (task_root).
         Additional files from:
+
             - GLI (POINT_VECTOR + TIN)
             - MMP (distributed media properties)
             - IC (RESTART)
             - GEM (GEM3SK init file)
+
         will be read automatically.
 
         If you get an ``UnicodeDecodeError`` try loading with:
@@ -835,8 +838,8 @@ class OGS(object):
         timeout : int or None, optional
             Time to wait for OGS5 to finish in seconds. Default: None
 
-        Return
-        ------
+        Returns
+        -------
         success : bool
             State if OGS5 returned, that it terminated 'normally'.
         """

@@ -1,7 +1,7 @@
-ogs5py.reader
-=============
+ogs5py.tools.types
+==================
 
-.. automodule:: ogs5py.reader
+.. automodule:: ogs5py.tools.types
    :members:
    :undoc-members:
    :show-inheritance:

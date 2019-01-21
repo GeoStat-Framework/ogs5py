@@ -34,8 +34,8 @@ class DDC(BlockFile):
     Standard block:
         None
 
-    Info
-    ----
+    See Also
+    --------
     See: ``add_block``
 
     https://github.com/ufz/ogs5/blob/master/FEM/par_ddc.cpp

@@ -1,6 +1,50 @@
+# -*- coding: utf-8 -*-
 """
-OGS Python Package
-File classes
+ogs5py subpackage providing the file classes
+
+.. currentmodule:: ogs5py.fileclasses
+
+Subpackages
+^^^^^^^^^^^
+
+.. autosummary::
+    base
+
+File Classes
+^^^^^^^^^^^^
+Classes for all OGS5 Files
+
+.. autosummary::
+   ASC
+   BC
+   CCT
+   DDC
+   FCT
+   GEM
+   GEMinit
+   GLI
+   GLIext
+   IC
+   RFR
+   KRC
+   MCP
+   MFP
+   MMP
+   MPD
+   MSH
+   MSP
+   NUM
+   OUT
+   PCS
+   PCT
+   PQC
+   PQCdat
+   REI
+   RFD
+   ST
+   TIM
+
+----
 """
 from __future__ import absolute_import
 

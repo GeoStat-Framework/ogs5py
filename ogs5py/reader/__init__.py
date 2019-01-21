@@ -1,8 +1,18 @@
 """
-ogs5py.reader
--------------
+ogs5py subpackage providing reader for the ogs5 output
 
-ogs5py subpackage to read the OGS5 output.
+.. currentmodule:: ogs5py.reader
+
+Reader
+^^^^^^
+
+.. autosummary::
+   readvtk
+   readpvd
+   readtec_point
+   readtec_polyline
+
+----
 """
 from __future__ import absolute_import
 

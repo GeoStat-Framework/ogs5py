@@ -79,14 +79,14 @@ def readvtk_single(infile):
 
 
 def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    """
+    r"""
     a genearal reader for OGS vtk outputfiles
     give a dictionary containing their data
 
     the Filename of the pvd is structured the following way:
     {task_id}[_{PCS}]xxxx.vtk
     thereby the "_{PCS}" is optional and just present if a PCS_TYPE is
-    specified in the *.out file
+    specified in the \*.out file
 
     Parameters
     ----------
@@ -99,10 +99,22 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
     pcs : string or None, optional
         specify the PCS type that should be collected
         Possible values are:
-            None/"" (no PCS_TYPE specified in *.out), "NO_PCS",
-            "GROUNDWATER_FLOW", "LIQUID_FLOW", "RICHARDS_FLOW", "AIR_FLOW",
-            "MULTI_PHASE_FLOW", "PS_GLOBAL", "HEAT_TRANSPORT", "DEFORMATION",
-            "MASS_TRANSPORT", "OVERLAND_FLOW", "FLUID_MOMENTUM", "RANDOM_WALK"
+
+            - None/"" (no PCS_TYPE specified in \*.out)
+            - "NO_PCS"
+            - "GROUNDWATER_FLOW"
+            - "LIQUID_FLOW"
+            - "RICHARDS_FLOW"
+            - "AIR_FLOW"
+            - "MULTI_PHASE_FLOW"
+            - "PS_GLOBAL"
+            - "HEAT_TRANSPORT"
+            - "DEFORMATION"
+            - "MASS_TRANSPORT"
+            - "OVERLAND_FLOW"
+            - "FLUID_MOMENTUM"
+            - "RANDOM_WALK"
+
         You can get a list with all known PCS-types by setting PCS="ALL"
         Default : None
     single_file : string or None, optional
@@ -224,14 +236,14 @@ def readpvd_single(infile):
 
 
 def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    """
+    r"""
     read a paraview pvd file and convert all concerned files
     to a dictionary containing their data
 
     the Filename of the pvd is structured the following way:
     {task_id}[_{PCS}].pvd
     thereby the "_{PCS}" is optional and just present if a PCS_TYPE is
-    specified in the *.out file
+    specified in the \*.out file
 
     Parameters
     ----------
@@ -244,10 +256,22 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
     pcs : string or None, optional
         specify the PCS type that should be collected
         Possible values are:
-            None/"" (no PCS_TYPE specified in *.out), "NO_PCS",
-            "GROUNDWATER_FLOW", "LIQUID_FLOW", "RICHARDS_FLOW", "AIR_FLOW",
-            "MULTI_PHASE_FLOW", "PS_GLOBAL", "HEAT_TRANSPORT", "DEFORMATION",
-            "MASS_TRANSPORT", "OVERLAND_FLOW", "FLUID_MOMENTUM", "RANDOM_WALK"
+
+            - None/"" (no PCS_TYPE specified in \*.out)
+            - "NO_PCS"
+            - "GROUNDWATER_FLOW"
+            - "LIQUID_FLOW"
+            - "RICHARDS_FLOW"
+            - "AIR_FLOW"
+            - "MULTI_PHASE_FLOW"
+            - "PS_GLOBAL"
+            - "HEAT_TRANSPORT"
+            - "DEFORMATION"
+            - "MASS_TRANSPORT"
+            - "OVERLAND_FLOW"
+            - "FLUID_MOMENTUM"
+            - "RANDOM_WALK"
+
         You can get a list with all known PCS-types by setting PCS="ALL"
         Default : None
     single_file : string or None, optional
@@ -325,13 +349,13 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 
 def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
-    """
+    r"""
     collect TECPLOT point output from OGS5
 
     the Filenames are structured the following way:
     {task_id}_time_{NAME}[_{PCS+extra}].tec
     thereby the "_{PCS}" is optional and just present if a PCS_TYPE is
-    specified in the *.out file
+    specified in the \*.out file
     the "extra" will not be recognized and will destroy the search-process
 
     Parameters
@@ -345,10 +369,22 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
     pcs : string or None, optional
         specify the PCS type that should be collected
         Possible values are:
-            None/"" (no PCS_TYPE specified in *.out), "NO_PCS",
-            "GROUNDWATER_FLOW", "LIQUID_FLOW", "RICHARDS_FLOW", "AIR_FLOW",
-            "MULTI_PHASE_FLOW", "PS_GLOBAL", "HEAT_TRANSPORT", "DEFORMATION",
-            "MASS_TRANSPORT", "OVERLAND_FLOW", "FLUID_MOMENTUM", "RANDOM_WALK"
+
+            - None/"" (no PCS_TYPE specified in \*.out)
+            - "NO_PCS"
+            - "GROUNDWATER_FLOW"
+            - "LIQUID_FLOW"
+            - "RICHARDS_FLOW"
+            - "AIR_FLOW"
+            - "MULTI_PHASE_FLOW"
+            - "PS_GLOBAL"
+            - "HEAT_TRANSPORT"
+            - "DEFORMATION"
+            - "MASS_TRANSPORT"
+            - "OVERLAND_FLOW"
+            - "FLUID_MOMENTUM"
+            - "RANDOM_WALK"
+
         You can get a list with all known PCS-types by setting PCS="ALL"
         Default : None
     single_file : string or None, optional
@@ -396,13 +432,13 @@ def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
 def readtec_polyline(
     task_root=".", task_id=None, pcs="ALL", single_file=None, trim=True
 ):
-    """
+    r"""
     collect TECPLOT polyline output from OGS5
 
     the Filenames are structured the following way:
     {task_id}_ply_{NAME}_t{ply_id}[_{PCS}].tec
     thereby the "_{PCS}" is optional and just present if a PCS_TYPE is
-    specified in the *.out file
+    specified in the \*.out file
 
     Parameters
     ----------
@@ -415,10 +451,22 @@ def readtec_polyline(
     pcs : string or None, optional
         specify the PCS type that should be collected
         Possible values are:
-            None/"" (no PCS_TYPE specified in *.out), "NO_PCS",
-            "GROUNDWATER_FLOW", "LIQUID_FLOW", "RICHARDS_FLOW", "AIR_FLOW",
-            "MULTI_PHASE_FLOW", "PS_GLOBAL", "HEAT_TRANSPORT", "DEFORMATION",
-            "MASS_TRANSPORT", "OVERLAND_FLOW", "FLUID_MOMENTUM", "RANDOM_WALK"
+
+            - None/"" (no PCS_TYPE specified in \*.out)
+            - "NO_PCS"
+            - "GROUNDWATER_FLOW"
+            - "LIQUID_FLOW"
+            - "RICHARDS_FLOW"
+            - "AIR_FLOW"
+            - "MULTI_PHASE_FLOW"
+            - "PS_GLOBAL"
+            - "HEAT_TRANSPORT"
+            - "DEFORMATION"
+            - "MASS_TRANSPORT"
+            - "OVERLAND_FLOW"
+            - "FLUID_MOMENTUM"
+            - "RANDOM_WALK"
+
         You can get a list with all known PCS-types by setting pcs="ALL"
         Default : None
     single_file : string or None, optional

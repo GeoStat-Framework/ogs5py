@@ -1,34 +1,79 @@
 """
-ogs5py Python Package
+Purpose
+=======
 
-Get help on each function by typing
+ogs5py is A python-API for the OpenGeoSys 5 scientific modeling package.
 
->>> import ogs5py
->>> help(ogs5py.function)
+The following functionalities are directly provided on module-level.
 
-BC  - Boundary Condition
-CCT - Communication Table
-FCT - Function
-GEM - geochemical thermodynamic modeling coupling
-GLI - Geometry
-IC  - Initial Condition
-KRC - Kinetric Reaction
-MCP - reactive components for modelling chemical processes
-MFP - Fluid Properties
-MMP - Medium Properties
-MPD - Distributed Properties
-MSH - Mesh
-MSP - Solid Properties
-NUM - Settings for the numerical solver
-OUT - Output Settings
-PCS - Process settings
-PQC - Phreqqc coupling (just a line-wise file with no comfort)
-REI - Reaction Interface
-RFD - definition of time-curves for variing BCs or STs
-ST  - Source Term
-TIM - Time settings
+Subpackages
+===========
+
+.. autosummary::
+    fileclasses
+    reader
+    tools
+
+Classes
+=======
+
+OGS model Base Class
+^^^^^^^^^^^^^^^^^^^^
+Class to setup an ogs model
+
+.. currentmodule:: ogs5py.ogs
+
+.. autosummary::
+   OGS
+
+File Classes
+^^^^^^^^^^^^
+Classes for all OGS5 Files
+
+.. currentmodule:: ogs5py.fileclasses
+
+.. autosummary::
+   ASC
+   BC
+   CCT
+   DDC
+   FCT
+   GEM
+   GEMinit
+   GLI
+   GLIext
+   IC
+   RFR
+   KRC
+   MCP
+   MFP
+   MMP
+   MPD
+   MSH
+   MSP
+   NUM
+   OUT
+   PCS
+   PCT
+   PQC
+   PQCdat
+   REI
+   RFD
+   ST
+   TIM
+
+Functions
+=========
+
+Searching
+^^^^^^^^^
+Routine to search for a valid ogs id in a directory
+
+.. currentmodule:: ogs5py.tools.tools
+
+.. autosummary::
+   search_task_id
 """
-
 from __future__ import absolute_import
 
 from ogs5py._version import __version__

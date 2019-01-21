@@ -44,8 +44,8 @@ class IC(BlockFile):
         :GEO_TYPE: "DOMAIN"
         :DIS_TYPE: ["CONSTANT", 0.0]
 
-    Info
-    ----
+    See Also
+    --------
     See: ``add_block``
 
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/ic

@@ -2,7 +2,51 @@
 """
 tools for the ogs5py package
 
-@author: sebastian
+.. currentmodule:: ogs5py.tools.tools
+
+Classes
+^^^^^^^
+
+.. autosummary::
+   Output
+
+File related
+^^^^^^^^^^^^
+
+.. autosummary::
+   search_mkw
+   uncomment
+   is_key
+   is_mkey
+   is_skey
+   get_key
+   format_dict
+   format_content
+   format_content_line
+   guess_type
+   search_task_id
+   split_file_path
+   is_str_array
+
+Geometric tools
+^^^^^^^^^^^^^^^
+
+.. autosummary::
+   rotate_points
+   shift_points
+   transform_points
+   hull_deform
+   rotation_matrix
+   volume
+
+Array tools
+^^^^^^^^^^^
+
+.. autosummary::
+   unique_rows
+   replace
+
+----
 """
 from __future__ import division, print_function, absolute_import
 import os
@@ -261,8 +305,8 @@ def search_task_id(task_root, search_ext=None):
     search_ext : str
         OGS extension that should be searched for. Default: All known.
 
-    Return
-    ------
+    Returns
+    -------
     found_ids : list of str
         List of all found task_ids.
     """
@@ -312,8 +356,8 @@ def is_str_array(array):
     array : iterable
         array to check
 
-    Return
-    ------
+    Returns
+    -------
     bool
     """
     array = np.asanyarray(array)
@@ -385,7 +429,7 @@ def shift_points(points, vector):
 
 
 def transform_points(points, xyz_func, **kwargs):
-    """
+    r"""
     Transform points with a given function "xyz_func".
     kwargs will be forwarded to "xyz_func".
 
@@ -395,7 +439,7 @@ def transform_points(points, xyz_func, **kwargs):
         Array with all points postions.
     xyz_func : function
         the function transforming the points
-        x_new, y_new, z_new = f(x_old, y_old, z_old, **kwargs)
+        x_new, y_new, z_new = f(x_old, y_old, z_old, \**kwargs)
 
     Returns
     -------

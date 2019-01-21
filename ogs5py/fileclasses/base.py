@@ -1,7 +1,18 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Base Classes for the OGS Files
+
+.. currentmodule:: ogs5py.fileclasses.base
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   File
+   LineFile
+   BlockFile
+
+----
 """
 from __future__ import print_function, division, absolute_import
 import os
