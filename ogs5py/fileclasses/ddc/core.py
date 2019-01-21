@@ -48,13 +48,6 @@ class DDC(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        """
-        Input
-        -----
-
-        OGS_Config dictonary
-
-        """
         super(DDC, self).__init__(**OGS_Config)
         self.file_ext = ".ddc"
 
