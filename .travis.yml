@@ -12,16 +12,6 @@ matrix:
         - CIBW_BUILD="cp27-*"
         - COVER="off"
 
-    - name: "Linux py35"
-      sudo: required
-      language: python
-      python: 3.5
-      services: docker
-      env:
-        - PIP=pip
-        - CIBW_BUILD="cp35-*"
-        - COVER="off"
-
     - name: "Linux py36"
       sudo: required
       language: python
@@ -32,37 +22,9 @@ matrix:
         - CIBW_BUILD="cp36-*"
         - COVER="on"
 
-    - name: "MacOS py27"
-      os: osx
-      language: generic
-      env:
-        - PIP=pip2
-        - CIBW_BUILD="cp27-*"
-        - COVER="off"
-
-    - name: "MacOS py35"
-      os: osx
-      language: generic
-      env:
-        - PIP=pip2
-        - CIBW_BUILD="cp35-*"
-        - COVER="off"
-
-    - name: "MacOS py36"
-      os: osx
-      language: generic
-      env:
-        - PIP=pip2
-        - CIBW_BUILD="cp36-*"
-        - COVER="off"
-
 env:
   global:
     - TWINE_USERNAME=geostatframework
-    # - CIBW_BEFORE_BUILD="pip install numpy==1.13.0 cython==0.26"
-    # - CIBW_TEST_REQUIRES=pytest-cov
-    # inplace cython build and test run
-    # - CIBW_TEST_COMMAND="cd {project} && python setup.py build_ext --inplace && py.test --cov gstools --cov-report term-missing -v {project}/tests"
 
 script:
   # create wheels
