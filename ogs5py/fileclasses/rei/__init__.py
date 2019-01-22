@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs REACTION_INTERFACE file.
+
+.. currentmodule:: ogs5py.fileclasses.rei
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   REI
+
+----
 """
 from __future__ import absolute_import
 

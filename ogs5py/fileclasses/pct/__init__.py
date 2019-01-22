@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs PARTICLE DEFINITION file for RANDOM_WALK.
+
+.. currentmodule:: ogs5py.fileclasses.pct
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   PCT
+
+----
 """
 from __future__ import absolute_import
 

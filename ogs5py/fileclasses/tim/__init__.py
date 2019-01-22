@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs TIME_STEPPING file.
+
+.. currentmodule:: ogs5py.fileclasses.tim
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   TIM
+
+----
 """
 from __future__ import absolute_import
 

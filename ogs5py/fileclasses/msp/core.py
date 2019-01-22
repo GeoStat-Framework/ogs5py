@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Class for the ogs SOLID_PROPERTIES file.
 """

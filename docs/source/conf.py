@@ -76,7 +76,7 @@ numpydoc_show_class_members = True
 # class members have no separate file, so they are not in a toctree
 numpydoc_class_members_toctree = False
 # for the covmodels alot of classmembers show up...
-numpydoc_show_inherited_class_members = False
+numpydoc_show_inherited_class_members = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 

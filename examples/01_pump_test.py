@@ -40,13 +40,6 @@ model.num.add_block(  # numerical solver
     PCS_TYPE='GROUNDWATER_FLOW',
     LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
 )
-model.out.add_block(  # domain output
-    PCS_TYPE='GROUNDWATER_FLOW',
-    NOD_VALUES='HEAD',
-    GEO_TYPE='DOMAIN',
-    DAT_TYPE='PVD',
-    TIM_TYPE=['STEPS', 1],
-)
 model.out.add_block(  # point observation
     PCS_TYPE='GROUNDWATER_FLOW',
     NOD_VALUES='HEAD',

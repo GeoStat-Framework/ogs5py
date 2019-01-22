@@ -1,5 +1,17 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs PHREEQC interface file.
+
+.. currentmodule:: ogs5py.fileclasses.pqc
+
+File Classes
+^^^^^^^^^^^^
+
+.. autosummary::
+   PQC
+   PQCdat
+
+----
 """
 from __future__ import absolute_import
 

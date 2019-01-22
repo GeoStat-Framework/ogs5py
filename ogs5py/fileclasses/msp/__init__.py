@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs SOLID_PROPERTIES file.
+
+.. currentmodule:: ogs5py.fileclasses.msp
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   MSP
+
+----
 """
 from __future__ import absolute_import
 

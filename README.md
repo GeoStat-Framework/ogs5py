@@ -17,12 +17,21 @@ ogs5py is A python-API for the [OpenGeoSys 5][ogs5_link] scientific modeling pac
 
 You can install the latest version with the following command:
 
-    pip install https://github.com/GeoStat-Framework/ogs5py/archive/master.zip
+    pip install ogs5py
 
 
 ## Documentation for ogs5py
 
 You can find the documentation under [geostat-framework.readthedocs.io][doc_link].
+
+
+### Further Information
+
+- General homepage: https://www.opengeosys.org/ogs-5
+- OGS5 Repository: https://github.com/ufz/ogs5
+- Keyword documentation: https://ogs5-keywords.netlify.com
+- OGS5 Benchmarks: https://github.com/ufz/ogs5-benchmarks
+- ogs5py Benchmarks: https://github.com/GeoStat-Framework/ogs5py_benchmarks
 
 
 ### Tutorials and Examples
@@ -72,13 +81,6 @@ model.num.add_block(  # numerical solver
     PCS_TYPE='GROUNDWATER_FLOW',
     LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
 )
-model.out.add_block(  # domain output
-    PCS_TYPE='GROUNDWATER_FLOW',
-    NOD_VALUES='HEAD',
-    GEO_TYPE='DOMAIN',
-    DAT_TYPE='PVD',
-    TIM_TYPE=['STEPS', 1],
-)
 model.out.add_block(  # point observation
     PCS_TYPE='GROUNDWATER_FLOW',
     NOD_VALUES='HEAD',
@@ -125,24 +127,32 @@ It comes along with a set of handy readers for almost all output formats:
 
 * VTK Domain output
 
-        ogs5py.reader.readvtk
+    ```python
+    from ogs5py.reader import readvtk
+    ```
 
 * PVD Domain output
 
-        ogs5py.reader.readpvd
+    ```python
+    from ogs5py.reader import readpvd
+    ```
 
 * TECPLOT point output
 
-        ogs5py.reader.readtec_point
+    ```python
+    from ogs5py.reader import readtec_point
+    ```
 
 * TECPLOT polyline output
 
-        ogs5py.reader.readtec_polyline
+    ```python
+    from ogs5py.reader import readtec_polyline
+    ```
 
 
 ### OGS5 executable
 
-The OGS5 executable needs to be in your sys-path under ``ogs``.
+The OGS5 executable needs to be in your sys-path under ``ogs[.exe]``.
 Otherwise you need to specify the path to the executable within the run command:
 
     ogs.run_model(ogs_root="path/to/ogs")

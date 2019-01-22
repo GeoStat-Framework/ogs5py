@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 ogs5py subpackage providing reader for the ogs5 output
 

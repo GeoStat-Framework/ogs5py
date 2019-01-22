@@ -18,8 +18,17 @@ Python and pip running.
 
 .. code-block:: none
 
-    pip install https://github.com/GeoStat-Framework/ogs5py/archive/master.zip
+    pip install ogs5py
 
+
+Further Information
+===================
+
+- General homepage: https://www.opengeosys.org/ogs-5
+- OGS5 Repository: https://github.com/ufz/ogs5
+- Keyword documentation: https://ogs5-keywords.netlify.com
+- OGS5 Benchmarks: https://github.com/ufz/ogs5-benchmarks
+- ogs5py Benchmarks: https://github.com/GeoStat-Framework/ogs5py_benchmarks
 
 
 Pumping Test Example
@@ -70,13 +79,6 @@ The point output at the observation well is plotted afterwards.
     model.num.add_block(  # numerical solver
         PCS_TYPE='GROUNDWATER_FLOW',
         LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
-    )
-    model.out.add_block(  # domain output
-        PCS_TYPE='GROUNDWATER_FLOW',
-        NOD_VALUES='HEAD',
-        GEO_TYPE='DOMAIN',
-        DAT_TYPE='PVD',
-        TIM_TYPE=['STEPS', 1],
     )
     model.out.add_block(  # point observation
         PCS_TYPE='GROUNDWATER_FLOW',
@@ -135,7 +137,7 @@ It comes along with a set of handy readers for almost all output formats:
 OGS5 executable
 ===============
 
-The OGS5 executable needs to be in your sys-path under ``ogs``.
+The OGS5 executable needs to be in your sys-path under ``ogs[.exe]``.
 Otherwise you need to specify the path to the executable within the run command:
 
 .. code-block:: python

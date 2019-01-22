@@ -1,5 +1,17 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs INITIAL_CONDITION file.
+
+.. currentmodule:: ogs5py.fileclasses.ic
+
+File Classes
+^^^^^^^^^^^^
+
+.. autosummary::
+   IC
+   RFR
+
+----
 """
 from __future__ import absolute_import
 

@@ -385,9 +385,13 @@ class BlockFile(File):
     """
 
     MKEYS = []
+    """:class:`list`: Main Keywords of this OGS-BlockFile"""
+
     SKEYS = []
+    """:class:`list`: Sub Keywords of this OGS-BlockFile"""
 
     STD = {}
+    """:class:`dict`: Standard Block OGS-BlockFile"""
 
     def __init__(
         self,

@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs MEDIUM_PROPERTIES file.
+
+.. currentmodule:: ogs5py.fileclasses.mmp
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   MMP
+
+----
 """
 from __future__ import absolute_import
 

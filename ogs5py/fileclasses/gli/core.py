@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 core module for the ogs5py GLI file.
 Containing the classes for the OGS5 GLI files.

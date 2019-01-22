@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Base Class for an OGS5 run.
 

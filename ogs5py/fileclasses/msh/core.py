@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 core module for the ogs5py-mesh package.
 Containing the classes for the OGS5 mesh files.

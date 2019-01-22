@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs DOMAIN DECOMPOSITION file.
+
+.. currentmodule:: ogs5py.fileclasses.ddc
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   DDC
+
+----
 """
 from __future__ import absolute_import
 

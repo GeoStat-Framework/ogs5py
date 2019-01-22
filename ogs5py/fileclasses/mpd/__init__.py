@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file.
+
+.. currentmodule:: ogs5py.fileclasses.mpd
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   MPD
+
+----
 """
 from __future__ import absolute_import
 

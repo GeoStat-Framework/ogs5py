@@ -1,5 +1,17 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
+
+.. currentmodule:: ogs5py.fileclasses.gem
+
+File Classes
+^^^^^^^^^^^^
+
+.. autosummary::
+   GEM
+   GEMinit
+
+----
 """
 from __future__ import absolute_import
 

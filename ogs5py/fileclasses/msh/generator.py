@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Different generators from ogs5py-mesh
+Different generators for an ogs5 mesh
 
 @author: Sebastian Mueller
 """

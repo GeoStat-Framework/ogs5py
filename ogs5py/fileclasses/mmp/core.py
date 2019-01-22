@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Class for the ogs MEDIUM_PROPERTIES file.
 """

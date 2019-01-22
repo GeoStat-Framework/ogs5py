@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs SOURCE_TERM file.
+
+.. currentmodule:: ogs5py.fileclasses.st
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   ST
+
+----
 """
 from __future__ import absolute_import
 

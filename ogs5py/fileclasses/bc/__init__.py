@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs BOUNDARY CONDITION file.
+
+.. currentmodule:: ogs5py.fileclasses.bc
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   BC
+
+----
 """
 from __future__ import absolute_import
 

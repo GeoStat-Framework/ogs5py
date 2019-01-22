@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs OUTPUT file.
+
+.. currentmodule:: ogs5py.fileclasses.out
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   OUT
+
+----
 """
 from __future__ import absolute_import
 

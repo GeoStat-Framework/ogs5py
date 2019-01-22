@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs NUMERICS file.
+
+.. currentmodule:: ogs5py.fileclasses.num
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   NUM
+
+----
 """
 from __future__ import absolute_import
 

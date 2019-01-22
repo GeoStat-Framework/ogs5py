@@ -1,5 +1,16 @@
+# -*- coding: utf-8 -*-
 """
-OGS5 File class
+Class for the ogs PROCESS file.
+
+.. currentmodule:: ogs5py.fileclasses.pcs
+
+File Class
+^^^^^^^^^^
+
+.. autosummary::
+   PCS
+
+----
 """
 from __future__ import absolute_import
 
