@@ -46,13 +46,15 @@ class TIM(BlockFile):
         :TIME_END: 1000
         :TIME_STEPS: [10, 100]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/tim
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_tim_new.cpp#L161
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/tim
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_tim_new.cpp#L161
+    add_block
     """
 
     MKEYS = ["TIME_STEPPING"]

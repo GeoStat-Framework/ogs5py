@@ -50,21 +50,25 @@ def load_ogs5msh(
     -------
     out : list of dictionaries
         each dictionary contains one ``#FEM_MSH`` block of the mesh file
-        with the following information
-            mesh_data : dictionary containing information about
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
                 - AXISYMMETRY (bool)
                 - CROSS_SECTION (bool)
                 - PCS_TYPE (str)
                 - GEO_TYPE (str)
                 - GEO_NAME (str)
                 - LAYER (int)
+
             nodes : ndarray
                 Array with all node postions
-            elements : dictionary
+            elements : dict
                 contains nodelists for elements sorted by element types
-            material_id : dictionary
+            material_id : dict
                 contains material ids for each element sorted by element types
-            element_id : dictionary
+            element_id : dict
                 contains element ids for each element sorted by element types
 
     Notes
@@ -278,16 +282,25 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
     -------
     out : dict
         dictionary contains one '#FEM_MSH' block of the mesh file
-        with the following information
+        with the following information (sorted by keys):
+
             mesh_data : dict
-                empty for old mesh type
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
             nodes : ndarray
                 Array with all node postions
-            elements : dictionary
+            elements : dict
                 contains nodelists for elements sorted by element types
-            material_id : dictionary
+            material_id : dict
                 contains material ids for each element sorted by element types
-            element_id : dictionary
+            element_id : dict
                 contains element ids for each element sorted by element types
     """
     import pandas as pd
@@ -374,25 +387,30 @@ def save_ogs5msh(
     Parameters
     ----------
     filepath : string
-        path to the '*.msh' OGS5 mesh file to save
+        path to the '\*.msh' OGS5 mesh file to save
     mesh : list of dictionaries or single dict
         each dictionary contains one '#FEM_MSH' block of the mesh file
-        with the following information
-            mesh_data : dictionary containing information about
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
                 - AXISYMMETRY (bool)
                 - CROSS_SECTION (bool)
                 - PCS_TYPE (str)
                 - GEO_TYPE (str)
                 - GEO_NAME (str)
                 - LAYER (int)
+
             nodes : ndarray
                 Array with all node postions
-            elements : dictionary
-                contains array of nodelists for elements sorted by element type
-            material_id : dictionary
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
                 contains material ids for each element sorted by element types
-            element_id : dictionary
+            element_id : dict
                 contains element ids for each element sorted by element types
+
     top_com : str, optional
         Comment to be added as header to the file, Default: None
         (The MSH file doesn't allow comments as header)

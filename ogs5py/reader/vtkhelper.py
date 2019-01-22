@@ -155,7 +155,7 @@ def _poly_data_read(obj):
 
 def _rect_grid_read(obj):
     """
-    a reader for vtk rectengular grid objects
+    a reader for vtk rectangular grid objects
     """
     output = {}
     output["dimensions"] = np.array(obj.GetDimensions())

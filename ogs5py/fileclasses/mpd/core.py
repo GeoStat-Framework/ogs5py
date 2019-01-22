@@ -44,13 +44,15 @@ class MPD(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L5260
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L5260
+    add_block
     """
 
     MKEYS = ["MEDIUM_PROPERTIES_DISTRIBUTED"]

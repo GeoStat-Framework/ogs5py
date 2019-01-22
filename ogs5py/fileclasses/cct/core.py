@@ -35,13 +35,15 @@ class CCT(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/cct
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/fct_mpi.cpp#L27
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/cct
-
-    https://github.com/ufz/ogs5/blob/master/FEM/fct_mpi.cpp#L27
+    add_block
     """
 
     MKEYS = ["COMMUNICATION_TABLE"]

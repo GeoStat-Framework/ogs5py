@@ -55,15 +55,18 @@ class OUT(BlockFile):
         :DAT_TYPE: "PVD"
         :TIM_TYPE: ["STEPS", 1]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/out
+
+    Reading routines:
+
+        https://github.com/ufz/ogs5/blob/master/FEM/Output.cpp#L194
+
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_out_new.cpp
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/out
-
-    https://github.com/ufz/ogs5/blob/master/FEM/Output.cpp#L194
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_out_new.cpp
+    add_block
     """
 
     MKEYS = ["OUTPUT", "VERSION"]

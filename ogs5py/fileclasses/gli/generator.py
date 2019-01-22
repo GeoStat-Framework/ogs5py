@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Different generators from ogs5py GLI files
+Generators for the ogs GEOMETRY file.
 
-@author: Sebastian Mueller
+.. currentmodule:: ogs5py.fileclasses.gli.generator
+
+Generators
+^^^^^^^^^^
+These generators can be called with :any:`GLI.generate`
+
+.. autosummary::
+   rectangular
+   radial
+
+----
 """
 from __future__ import division, print_function, absolute_import
 
@@ -11,11 +21,11 @@ import numpy as np
 from ogs5py.fileclasses.gli.core import GLI as gli
 
 
-def rectengular(
+def rectangular(
     dim=2, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"
 ):
     """
-    generate a rectengular boundary for a grid in 2D or 3D as gli.
+    generate a rectangular boundary for a grid in 2D or 3D as gli.
 
     Parameters
     ----------

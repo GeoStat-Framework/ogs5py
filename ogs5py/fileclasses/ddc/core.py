@@ -35,11 +35,15 @@ class DDC(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        None
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/par_ddc.cpp
+
     See Also
     --------
-    See: ``add_block``
-
-    https://github.com/ufz/ogs5/blob/master/FEM/par_ddc.cpp
+    add_block
     """
 
     MKEYS = ["DOMAIN"]

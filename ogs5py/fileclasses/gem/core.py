@@ -53,13 +53,15 @@ class GEM(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/gem
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_REACT_GEM.cpp#L2644
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/gem
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_REACT_GEM.cpp#L2644
+    add_block
     """
 
     MKEYS = ["GEM_PROPERTIES"]
@@ -307,8 +309,8 @@ class GEMinit(object):
         path : str
             path to the file
 
-        Note
-        ----
+        Notes
+        -----
         This also reads the given files in the lst-file. (dch, ipm, dbr)
         """
         # in python3 open was replaced with io.open
@@ -374,24 +376,10 @@ class GEMinit(object):
             self.save(f_path)
 
     def __repr__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         out_str = "-t"
         for file_name in self.file_names:
             out_str += ' "' + file_name + '"'
         return out_str
 
     def __str__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         return self.__repr__()

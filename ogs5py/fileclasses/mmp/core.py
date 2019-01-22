@@ -83,13 +83,15 @@ class MMP(BlockFile):
         :PERMEABILITY_TENSOR: ["ISOTROPIC", 1.0e-4],
         :POROSITY: [1, 0.2]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L281
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mmp
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_mmp_new.cpp#L281
+    add_block
     """
 
     MKEYS = ["MEDIUM_PROPERTIES"]

@@ -40,6 +40,7 @@ class GLI(File):
     gli_dict : :class:`dict` or :class:`None`, optional
         dictionary containing the gli file
         Includes the following information (sorted by keys):
+
             points : ndarray
                 Array with all point postions
             point_names : ndarray (of strings)
@@ -47,7 +48,9 @@ class GLI(File):
             point_md : ndarray
                 Array with all Material-densities at the points
                 if point_md should be undefined it takes the value -np.inf
-            polylines : list of dict, each containing information about
+            polylines : list of dict
+                each containing information about
+
                 - ``ID`` (int or None)
                 - ``NAME`` (str)
                 - ``POINTS`` (ndarray)
@@ -55,7 +58,10 @@ class GLI(File):
                 - ``TYPE`` (int or None)
                 - ``MAT_GROUP`` (int or None)
                 - ``POINT_VECTOR`` (str or None)
-            surfaces : list of dict, each containing information about
+
+            surfaces : list of dict
+                each containing information about
+
                 - ``ID`` (int or None)
                 - ``NAME`` (str)
                 - ``POLYLINES`` (list of str)
@@ -63,12 +69,16 @@ class GLI(File):
                 - ``TYPE`` (int or None)
                 - ``MAT_GROUP`` (int or None)
                 - ``TIN`` (str or None)
-            volumes : list of dict, each containing information about
+
+            volumes : list of dict
+                each containing information about
+
                 - ``NAME`` (str)
                 - ``SURFACES`` (list of str)
                 - ``TYPE`` (int or None)
                 - ``MAT_GROUP`` (int or None)
                 - ``LAYER`` (int or None)
+
         Default: :class:`None`
     task_root : :class:`str`, optional
         Path to the destiny model folder.
@@ -104,13 +114,7 @@ class GLI(File):
     #######################
     @property
     def POINTS(self):
-        """
-        Get and set the POINTS of the gli.
-
-        Info
-        ----
-        Type : ndarray of shape (n,3)
-            Each point is defined by its xyz-coordinates.
+        """ndarray: POINTS (n,3) of the gli, defined by xyz-coordinates.
         """
         return self.__dict["points"]
 
@@ -133,13 +137,7 @@ class GLI(File):
     #######################
     @property
     def POINT_NO(self):
-        """
-        Get the number of POINTS of the gli.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of POINTS of the gli."""
         if self.POINTS is None:
             return 0
         return self.POINTS.shape[0]
@@ -149,14 +147,7 @@ class GLI(File):
     #######################
     @property
     def POINT_NAMES(self):
-        """
-        Get and set the names of POINTS of the gli.
-
-        Info
-        ----
-        Type : ndarray of shape (n)
-            For unspecified MD the value is set to ""
-        """
+        """ndarray: names of POINTS of the gli."""
         return self.__dict["point_names"]
 
     @POINT_NAMES.setter
@@ -177,14 +168,7 @@ class GLI(File):
     #######################
     @property
     def POINT_MD(self):
-        """
-        Get and set the material density values of POINTS of the gli.
-
-        Info
-        ----
-        Type : ndarray of shape (n)
-            For unspecified MD the value is set to -np.inf
-        """
+        """ndarray: material density values of POINTS of the gli."""
         return self.__dict["point_md"]
 
     @POINT_MD.setter
@@ -205,13 +189,7 @@ class GLI(File):
     #######################
     @property
     def POLYLINES(self):
-        """
-        Get the POLYLINES of the gli.
-
-        Info
-        ----
-        Type : list of dict
-        """
+        """list of dict: POLYLINES of the gli."""
         return self.__dict["polylines"]
 
     #######################
@@ -219,13 +197,7 @@ class GLI(File):
     #######################
     @property
     def POLYLINE_NAMES(self):
-        """
-        Get the names of POLYLINES of the gli.
-
-        Info
-        ----
-        Type : list of str
-        """
+        """list of str: names of POLYLINES of the gli."""
         ply_names = []
         for ply in self.POLYLINES:
             ply_names.append(ply["NAME"])
@@ -236,13 +208,7 @@ class GLI(File):
     #######################
     @property
     def POLYLINE_NO(self):
-        """
-        Get the number of POLYLINES of the gli.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of POLYLINES of the gli."""
         return len(self.POLYLINES)
 
     #######################
@@ -250,13 +216,7 @@ class GLI(File):
     #######################
     @property
     def SURFACES(self):
-        """
-        Get the SURFACES of the gli.
-
-        Info
-        ----
-        Type : list of dict
-        """
+        """list of dict: SURFACES of the gli."""
         return self.__dict["surfaces"]
 
     #######################
@@ -264,13 +224,7 @@ class GLI(File):
     #######################
     @property
     def SURFACE_NAMES(self):
-        """
-        Get the names of SURFACES of the gli.
-
-        Info
-        ----
-        Type : list of str
-        """
+        """list of str: names of SURFACES of the gli."""
         srf_names = []
         for srf in self.SURFACES:
             srf_names.append(srf["NAME"])
@@ -281,13 +235,7 @@ class GLI(File):
     #######################
     @property
     def SURFACE_NO(self):
-        """
-        Get the number of SURFACES of the gli.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of SURFACES of the gli."""
         return len(self.SURFACES)
 
     #######################
@@ -295,13 +243,7 @@ class GLI(File):
     #######################
     @property
     def VOLUMES(self):
-        """
-        Get the VOLUMES of the gli.
-
-        Info
-        ----
-        Type : list of dict
-        """
+        """list of dict: VOLUMES of the gli."""
         return self.__dict["volumes"]
 
     #######################
@@ -309,13 +251,7 @@ class GLI(File):
     #######################
     @property
     def VOLUME_NAMES(self):
-        """
-        Get the names of VOLUMES of the gli.
-
-        Info
-        ----
-        Type : list of str
-        """
+        """list of str: names of VOLUMES of the gli."""
         vol_names = []
         for vol in self.VOLUMES:
             vol_names.append(vol["NAME"])
@@ -326,13 +262,7 @@ class GLI(File):
     #######################
     @property
     def VOLUME_NO(self):
-        """
-        Get the number of VOLUMES of the gli.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of VOLUMES of the gli."""
         return len(self.VOLUMES)
 
     #######################
@@ -352,7 +282,7 @@ class GLI(File):
         Parameters
         ----------
         filepath : string
-            path to the '*.msh' OGS5 mesh file to load
+            path to the '\*.gli' OGS5 gli file to load
         verbose : bool, optional
             Print information of the reading process. Default: True
         """
@@ -373,7 +303,7 @@ class GLI(File):
         Parameters
         ----------
         path : string
-            path to the '*.msh' OGS5 mesh file to load
+            path to the '\*.gli' OGS5 gli file to load
         encoding : str or None, optional
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
@@ -389,9 +319,10 @@ class GLI(File):
 
         Parameters
         ----------
-        gli_dict : dict
-            dictionary contains block from the gli file
-            with the following information
+        gli_dict : :class:`dict`
+            dictionary containing the gli file
+            Includes the following information (sorted by keys):
+
                 points : ndarray
                     Array with all point postions
                 point_names : ndarray (of strings)
@@ -399,28 +330,36 @@ class GLI(File):
                 point_md : ndarray
                     Array with all Material-densities at the points
                     if point_md should be undefined it takes the value -np.inf
-                polylines : list of dict, each containing information about
-                    "ID" (int or None)
-                    "NAME" (str)
-                    "POINTS" (ndarray)
-                    "EPSILON" (float or None)
-                    "TYPE" (int or None)
-                    "MAT_GROUP" (int or None)
-                    "POINT_VECTOR" (str or None)
-                surfaces : list of dict, each containing information about
-                    "ID" (int or None)
-                    "NAME" (str)
-                    "POLYLINES" (list of str)
-                    "EPSILON" (float or None)
-                    "TYPE" (int or None)
-                    "MAT_GROUP" (int or None)
-                    "TIN" (str or None)
-                volumes : list of dict, each containing information about
-                    "NAME" (str)
-                    "SURFACES" (list of str)
-                    "TYPE" (int or None)
-                    "MAT_GROUP" (int or None)
-                    "LAYER" (int or None)
+                polylines : list of dict
+                    each containing information about
+
+                    - ``ID`` (int or None)
+                    - ``NAME`` (str)
+                    - ``POINTS`` (ndarray)
+                    - ``EPSILON`` (float or None)
+                    - ``TYPE`` (int or None)
+                    - ``MAT_GROUP`` (int or None)
+                    - ``POINT_VECTOR`` (str or None)
+
+                surfaces : list of dict
+                    each containing information about
+
+                    - ``ID`` (int or None)
+                    - ``NAME`` (str)
+                    - ``POLYLINES`` (list of str)
+                    - ``EPSILON`` (float or None)
+                    - ``TYPE`` (int or None)
+                    - ``MAT_GROUP`` (int or None)
+                    - ``TIN`` (str or None)
+
+                volumes : list of dict
+                    each containing information about
+
+                    - ``NAME`` (str)
+                    - ``SURFACES`` (list of str)
+                    - ``TYPE`` (int or None)
+                    - ``MAT_GROUP`` (int or None)
+                    - ``LAYER`` (int or None)
         """
         if check_gli_dict(gli_dict):
             self.__dict = gli_dict
@@ -435,7 +374,7 @@ class GLI(File):
         Parameters
         ----------
         path : string
-            path to the '*.gli' OGS5 gli file to save
+            path to the '\*.gli' OGS5 gli file to save
         verbose : bool, optional
             Print information of the writing process. Default: True
         """
@@ -505,20 +444,18 @@ class GLI(File):
         """
         self.POINTS = shift_points(self.POINTS, vector)
 
-    def generate(self, generator="rectengular", **kwargs):
+    def generate(self, generator="rectangular", **kwargs):
         """
-        Use a mesh-generator from the generator module
+        Use a gli-generator from the generator module
 
-        See: ogs5py.fileclasses.gli.generator
+        See: :any:`ogs5py.fileclasses.gli.generator`
 
         Parameters
         ----------
         generator : str
             set the generator from the generator module
-
-        Info
-        ----
-        kwargs will be forwarded to the generator
+        **kwargs
+            kwargs will be forwarded to the generator in use
         """
         from ogs5py.fileclasses.gli import generator as gen
 
@@ -961,9 +898,10 @@ class GLI(File):
         """
         Return a copy of the underlying dictionary of the gli.
 
-        Info
-        ----
-        Type : dict
+        Returns
+        -------
+        Mesh : dict
+            dictionary representation of the mesh
         """
         return dcp(self.__dict)
 

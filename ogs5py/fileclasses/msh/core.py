@@ -89,13 +89,7 @@ class MSHsgl(File):
     # this is a workaround to make multi-layer and single-layer meshes usable
     @property
     def _meshlist(self):
-        """
-        Get and set the mesh as list of dicts
-
-        Info
-        ----
-        Type : list
-        """
+        """list: mesh as list of dicts"""
         return [self._dict]
 
     @_meshlist.setter
@@ -108,13 +102,6 @@ class MSHsgl(File):
 
     @property
     def _dict(self):
-        """
-        Get the actual mesh block as dict
-
-        Info
-        ----
-        Type : int
-        """
         return self.__dict
 
     @_dict.setter
@@ -126,13 +113,7 @@ class MSHsgl(File):
     #######################
     @property
     def AXISYMMETRY(self):
-        """
-        Get and set the AXISYMMETRY attribute.
-
-        Info
-        ----
-        Type : bool
-        """
+        """bool: AXISYMMETRY attribute."""
         if "AXISYMMETRY" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["AXISYMMETRY"]
         return None
@@ -154,13 +135,7 @@ class MSHsgl(File):
     #######################
     @property
     def CROSS_SECTION(self):
-        """
-        Get and set the CROSS_SECTION attribute.
-
-        Info
-        ----
-        Type : bool
-        """
+        """bool: CROSS_SECTION attribute."""
         if "CROSS_SECTION" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["CROSS_SECTION"]
         return None
@@ -182,13 +157,7 @@ class MSHsgl(File):
     #######################
     @property
     def PCS_TYPE(self):
-        """
-        Get and set the PCS_TYPE attribute.
-
-        Info
-        ----
-        Type : str
-        """
+        """str: PCS_TYPE"""
         if "PCS_TYPE" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["PCS_TYPE"]
         return None
@@ -212,13 +181,7 @@ class MSHsgl(File):
     #######################
     @property
     def GEO_NAME(self):
-        """
-        Get and set the GEO_NAME attribute.
-
-        Info
-        ----
-        Type : str
-        """
+        """str: GEO_NAME"""
         if "GEO_NAME" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["GEO_NAME"]
         return None
@@ -243,13 +206,7 @@ class MSHsgl(File):
     #######################
     @property
     def GEO_TYPE(self):
-        """
-        Get and set the GEO_TYPE attribute.
-
-        Info
-        ----
-        Type : str
-        """
+        """str: GEO_TYPE"""
         if "GEO_TYPE" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["GEO_TYPE"]
         return None
@@ -273,13 +230,7 @@ class MSHsgl(File):
     #######################
     @property
     def LAYER(self):
-        """
-        Get and set the LAYER attribute.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: LAYER"""
         if "LAYER" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["LAYER"]
         return None
@@ -301,14 +252,7 @@ class MSHsgl(File):
     #######################
     @property
     def NODES(self):
-        """
-        Get and set the NODES of the mesh.
-
-        Info
-        ----
-        Type : ndarray of shape (n,3)
-            Each Node is defined by its xyz-coordinates.
-        """
+        """ndarray: (n,3) NODES of the mesh by its xyz-coordinates"""
         return self._dict["nodes"]
 
     @NODES.setter
@@ -330,10 +274,11 @@ class MSHsgl(File):
         """
         Get and set the ELEMENTS of the mesh.
 
-        Info
-        ----
+        Notes
+        -----
         Type : dict of ndarrays
             The elements are a dictionary sorted by their element-type
+
                 "line" : ndarray of shape (n_line,2)
                     1D element with 2 nodes
                 "tri" : ndarray of shape (n_tri,3)
@@ -369,11 +314,12 @@ class MSHsgl(File):
         """
         Get and set the MATERIAL_IDs of the mesh.
 
-        Info
-        ----
+        Notes
+        -----
         Type : dict of ndarrays
             The material IDs are a dictionary containing ints
             sorted by their element-type
+
                 "line" : ndarray of shape (n_line,)
                     1D element with 2 nodes
                 "tri" : ndarray of shape (n_tri,)
@@ -411,10 +357,11 @@ class MSHsgl(File):
         This flattend MATERIAL_IDs are a stacked version of MATERIAL_ID, to get
         one continous array. They are stacked in order of the ELEMENT_IDs.
         Standard stack order is given by:
+
             "line" "tri" "quad" "tet" "pyra" "pris" "hex"
 
-        Info
-        ----
+        Notes
+        -----
         Type : ndarray
             The centroids are a list containing xyz-coordiantes
         """
@@ -435,13 +382,15 @@ class MSHsgl(File):
         """
         Get and set the ELEMENT_IDs of the mesh.
         Standard element id order is given by:
+
             "line" "tri" "quad" "tet" "pyra" "pris" "hex"
 
-        Info
-        ----
+        Notes
+        -----
         Type : dict of ndarrays
             The element IDs are a dictionary containing ints
             sorted by their element-type
+
                 "line" : ndarray of shape (n_line,)
                     1D element with 2 nodes
                 "tri" : ndarray of shape (n_tri,)
@@ -472,13 +421,7 @@ class MSHsgl(File):
     #######################
     @property
     def ELEMENT_NO(self):
-        """
-        Get the number of ELEMENTS of the mesh.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of ELEMENTS"""
         return no_of_elements(self._dict)
 
     #######################
@@ -486,13 +429,7 @@ class MSHsgl(File):
     #######################
     @property
     def NODE_NO(self):
-        """
-        Get the number of NODES of the mesh.
-
-        Info
-        ----
-        Type : int
-        """
+        """int: number of NODES"""
         if self.NODES is None:
             return 0
         return self.NODES.shape[0]
@@ -505,11 +442,12 @@ class MSHsgl(File):
         """
         Get the centroids of the mesh.
 
-        Info
-        ----
+        Notes
+        -----
         Type : dict of ndarrays
             The centroids are a dictionary containing xyz-coordiantes
             sorted by their element-type
+
                 "line" : ndarray of shape (n_line,3)
                     1D element with 2 nodes
                 "tri" : ndarray of shape (n_tri,3)
@@ -536,10 +474,11 @@ class MSHsgl(File):
         This flattend centroids are a stacked version of centroids, to get
         one continous array. They are stacked in order of the element ids.
         Standard stack order is given by:
+
             "line" "tri" "quad" "tet" "pyra" "pris" "hex"
 
-        Info
-        ----
+        Notes
+        -----
         Type : ndarray
             The centroids are a list containing xyz-coordiantes
         """
@@ -560,11 +499,12 @@ class MSHsgl(File):
         """
         Get the volumes of the mesh-elements.
 
-        Info
-        ----
+        Notes
+        -----
         Type : dict of ndarrays
             The volumes are a dictionary containing the n-dimension volumes
             sorted by their element-type
+
                 "line" : ndarray of shape (n_line,3)
                     1D element with 2 nodes
                 "tri" : ndarray of shape (n_tri,3)
@@ -590,10 +530,11 @@ class MSHsgl(File):
         This flattend volumes are a stacked version of centroids, to get
         one continous array. They are stacked in order of the element ids.
         Standard stack order is given by:
+
             "line" "tri" "quad" "tet" "pyra" "pris" "hex"
 
-        Info
-        ----
+        Notes
+        -----
         Type : ndarray
             The volumes are a list containing the n-dimensional element volume
         """
@@ -624,7 +565,7 @@ class MSHsgl(File):
         Parameters
         ----------
         filepath : string
-            path to the '*.msh' OGS5 mesh file to load
+            path to the '\*.msh' OGS5 mesh file to load
         verbose : bool, optional
             Print information of the reading process. Default: True
         ignore_unknown : bool, optional
@@ -669,7 +610,7 @@ class MSHsgl(File):
         Parameters
         ----------
         path : str
-            path to the '*.msh' OGS5 mesh file to load
+            path to the '\*.msh' OGS5 mesh file to load
         encoding : str or None, optional
             encoding of the given file. If ``None`` is given, the system
             standard is used. Default: ``None``
@@ -688,22 +629,27 @@ class MSHsgl(File):
         Parameters
         ----------
         mesh_dict : dict or None, optional
-            Contains one '#FEM_MSH' block of an OGS5 mesh file with
-            the following information:
+            Contains one '#FEM_MSH' block of an OGS5 mesh file
+            with the following information (sorted by keys):
+
                 mesh_data : dict
-                    contains information about
-                        AXISYMMETRY (bool)
-                        CROSS_SECTION (bool)
-                        PCS_TYPE (str)
-                        GEO_NAME (str)
-                        GEO_TYPE (str)
-                        LAYER (int)
+                    dictionary containing information about
+
+                    - AXISYMMETRY (bool)
+                    - CROSS_SECTION (bool)
+                    - PCS_TYPE (str)
+                    - GEO_TYPE (str)
+                    - GEO_NAME (str)
+                    - LAYER (int)
+
                 nodes : ndarray
                     Array with all node postions
-                elements : dictionary
-                    contains arrays of nodelists sorted by element type
-                material_id : dictionary
-                    contains material ids sorted by element type
+                elements : dict
+                    contains nodelists for elements sorted by element types
+                material_id : dict
+                    contains material ids for each element sorted by element types
+                element_id : dict
+                    contains element ids for each element sorted by element types
         """
         if check_mesh_dict(mesh_dict):
             self._dict = mesh_dict
@@ -718,7 +664,7 @@ class MSHsgl(File):
         Parameters
         ----------
         path : string
-            path to the '*.msh' OGS5 mesh file to save
+            path to the '\*.msh' OGS5 mesh file to save
         verbose : bool, optional
             Print information of the writing process. Default: True
         """
@@ -872,9 +818,11 @@ class MSHsgl(File):
         ----------
         mesh : single dict
             dictionary containing
-            at least the following keyword
+            at least the following keyword:
+
                 nodes : ndarray
                     Array with all node postions.
+
         angle : float
             rotation angle given in radial length
         rotation_axis : array_like, optional
@@ -892,9 +840,11 @@ class MSHsgl(File):
         ----------
         mesh : single dict
             dictionary containing
-            at least the following keyword
+            at least the following keyword:
+
                 nodes : ndarray
                     Array with all node postions.
+
         vector : ndarray
             array containing the shifting vector
         """
@@ -910,8 +860,10 @@ class MSHsgl(File):
         mesh : single dict
             dictionary containing
             at least the following keyword
+
                 nodes : ndarray
                     Array with all node postions.
+
         xyz_func : function
             the function transforming the points:
             ``x_new, y_new, z_new = f(x_old, y_old, z_old, **kwargs)``
@@ -929,18 +881,18 @@ class MSHsgl(File):
         """
         remove_dim(self._dict, remove=remove)
 
-    def generate(self, generator="rectengular", **kwargs):
+    def generate(self, generator="rectangular", **kwargs):
         """
         Use a mesh-generator from the generator module
+
+        See: :any:`ogs5py.fileclasses.msh.generator`
 
         Parameters
         ----------
         generator : str
             set the generator from the generator module
-
-        Info
-        ----
-        kwargs will be forwarded to the generator
+        **kwargs
+            kwargs will be forwarded to the generator in use
         """
         self._dict = getattr(gen, generator)(**kwargs)
 
@@ -967,13 +919,6 @@ class MSHsgl(File):
     # Special methods
     #######################
     def __call__(self):
-        """
-        Return a copy of the underlying dictionary of the mesh.
-
-        Info
-        ----
-        Type : dict
-        """
         return dcp(self._dict)
 
     def __repr__(self):
@@ -1021,21 +966,27 @@ class MSH(MSHsgl):
     ----------
     mesh_list : list of dict or None, optional
         each dictionary contains one '#FEM_MSH' block of the mesh file with
-        the following information (sorted by keys):
-            - mesh_data : dictionary
-                contains information about (sorted by keys):
-                    - AXISYMMETRY: bool (just true, otherwise not present)
-                    - CROSS_SECTION: bool (just true, otherwise not present)
-                    - PCS_TYPE: string
-                    - GEO_TYPE: str
-                    - GEO_NAME: string
-                    - LAYER: int
-            - nodes : ndarray
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
                 Array with all node postions
-            - elements : dictionary
-                contains array of nodelists for elements sorted by element type
-            - material_id : dictionary
-                contains material ids for each element sorted by element type
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
+
     task_root : str, optional
         Path to the destiny model folder.
         Default: cwd+"ogs5model"
@@ -1056,13 +1007,6 @@ class MSH(MSHsgl):
     # meshlist (override the property of MSHsgl) #    @property
     @MSHsgl._meshlist.getter
     def _meshlist(self):
-        """
-        Get and set the mesh as list of dicts
-
-        Info
-        ----
-        Type : list
-        """
         return self.__meshlist
 
     @_meshlist.setter
@@ -1079,13 +1023,6 @@ class MSH(MSHsgl):
     # override the _dict property
     @MSHsgl._dict.getter
     def _dict(self):
-        """
-        Get the actual mesh block as dict
-
-        Info
-        ----
-        Type : int
-        """
         return self.__meshlist[self.block]
 
     @_dict.setter
@@ -1095,9 +1032,7 @@ class MSH(MSHsgl):
     # select the block to be edited
     @property
     def block(self):
-        """
-        :class:`int`: The actual block to access in the file.
-        """
+        """:class:`int`: The actual block to access in the file."""
         return self._block
 
     @block.setter

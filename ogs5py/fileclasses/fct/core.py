@@ -39,13 +39,15 @@ class FCT(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/fct
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_fct.cpp#L82
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/fct
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_fct.cpp#L82
+    add_block
     """
 
     MKEYS = ["FUNCTION"]

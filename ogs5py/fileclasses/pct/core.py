@@ -106,13 +106,6 @@ class PCT(File):
         self.data = np.loadtxt(path, skiprows=2)
 
     def __repr__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         out = str(self.s_flag) + "\n"
         out += str(self.data.shape[0]) + "\n"
         out += str(self.data)

@@ -45,13 +45,15 @@ class IC(BlockFile):
         :GEO_TYPE: "DOMAIN"
         :DIS_TYPE: ["CONSTANT", 0.0]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/ic
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_ic_new.cpp#L222
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/ic
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_ic_new.cpp#L222
+    add_block
     """
 
     MKEYS = ["INITIAL_CONDITION"]
@@ -200,13 +202,6 @@ class RFR(File):
         self.data = np.loadtxt(path, skiprows=4)[:, 1]
 
     def __repr__(self):
-        """
-        Return a formatted representation of the file.
-
-        Info
-        ----
-        Type : str
-        """
         out = ""
         for line in self.line1_4:
             out += line + "\n"

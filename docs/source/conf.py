@@ -67,6 +67,9 @@ autoclass_content = "class"
 autodoc_member_order = "groupwise"
 # autodoc_member_order = 'bysource'
 
+# don't add full path to module
+add_module_names = False
+
 # Notes in boxes
 napoleon_use_admonition_for_notes = True
 # Attributes like parameters

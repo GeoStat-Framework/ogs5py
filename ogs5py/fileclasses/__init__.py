@@ -8,41 +8,43 @@ Subpackages
 ^^^^^^^^^^^
 
 .. autosummary::
-    base
+   base
+   gli
+   msh
 
 File Classes
 ^^^^^^^^^^^^
 Classes for all OGS5 Files
 
 .. autosummary::
-   ASC
-   BC
-   CCT
-   DDC
-   FCT
-   GEM
-   GEMinit
-   GLI
-   GLIext
-   IC
-   RFR
-   KRC
-   MCP
-   MFP
-   MMP
-   MPD
-   MSH
-   MSP
-   NUM
-   OUT
-   PCS
-   PCT
-   PQC
-   PQCdat
-   REI
-   RFD
-   ST
-   TIM
+   asc.ASC
+   bc.BC
+   cct.CCT
+   ddc.DDC
+   fct.FCT
+   gem.GEM
+   gem.GEMinit
+   gli.GLI
+   gli.GLIext
+   ic.IC
+   ic.RFR
+   krc.KRC
+   mcp.MCP
+   mfp.MFP
+   mmp.MMP
+   mpd.MPD
+   msh.MSH
+   msp.MSP
+   num.NUM
+   out.OUT
+   pcs.PCS
+   pct.PCT
+   pqc.PQC
+   pqc.PQCdat
+   rei.REI
+   rfd.RFD
+   st.ST
+   tim.TIM
 
 ----
 """

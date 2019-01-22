@@ -24,13 +24,14 @@ class PQC(LineFile):
     -----
     This is just handled as a line-wise file. You can access the data by line
     with:
+
         PQC.lines
 
-    See Also
-    --------
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pqc
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pqc
 
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_react.cpp#L2136
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_react.cpp#L2136
     """
 
     def __init__(self, **OGS_Config):
@@ -63,6 +64,7 @@ class PQCdat(LineFile):
     -----
     This is just handled as a line-wise file. You can access the data by line
     with:
+
         PQCdat.lines
 
     See Also

@@ -4,8 +4,8 @@ Base Classes for the OGS Files
 
 .. currentmodule:: ogs5py.fileclasses.base
 
-File Class
-^^^^^^^^^^
+File Classes
+^^^^^^^^^^^^
 
 .. autosummary::
    File
@@ -240,19 +240,6 @@ class LineFile(File):
     task_id : str, optional
         Name for the ogs task. (a place holder)
         Default: "model"
-
-    Attributes
-    ----------
-    lines : list of str
-        content of the file as a list of lines
-    file_name : str
-        name of the file without extension
-    file_ext : str
-        extension of the file (with leading dot ".txt")
-    task_root : str
-        Path to the destiny folder.
-    task_id : str
-        Name for the ogs task. (a place holder)
     """
 
     def __init__(

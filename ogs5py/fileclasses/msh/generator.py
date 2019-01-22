@@ -1,8 +1,23 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
-Different generators for an ogs5 mesh
+Generators for the ogs MESH file.
 
-@author: Sebastian Mueller
+.. currentmodule:: ogs5py.fileclasses.msh.generator
+
+Generators
+^^^^^^^^^^
+These generators can be called with :any:`MSH.generate`
+
+.. autosummary::
+   rectangular
+   radial
+   grid_adapter2D
+   grid_adapter3D
+   block_adapter3D
+   generate_gmsh
+
+----
 """
 from __future__ import division, print_function, absolute_import
 
@@ -22,14 +37,14 @@ from ogs5py.fileclasses.msh.gmsh import (
 )
 
 
-def rectengular(
+def rectangular(
     dim=2,
     mesh_origin=(0.0, 0.0, 0.0),
     element_no=(10, 10, 10),
     element_size=(1.0, 1.0, 1.0),
 ):
     """
-    generate a rectengular grid in 2D or 3D
+    generate a rectangular grid in 2D or 3D
 
     Parameters
     ----------
@@ -45,19 +60,27 @@ def rectengular(
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-                In this case either "quad" (dim=2) or "hex" (dim=3)
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
     """
     x_no = element_no[0]
     dx = element_size[0]
@@ -83,7 +106,7 @@ def rectengular(
         node_per_elem = 8
         element_no = x_no * y_no * z_no
     else:
-        raise ValueError("generator.rectengular: dim has to be either 2 or 3")
+        raise ValueError("generator.rectangular: dim has to be either 2 or 3")
 
     node_arr = np.zeros((node_no, 3))
     element_arr = np.zeros((element_no, node_per_elem), dtype=int)
@@ -164,18 +187,27 @@ def radial(
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
     """
 
     if z_arr is not None and dim > 2:
@@ -356,24 +388,33 @@ def grid_adapter2D(
     out_mat : integer
         Material-ID of the outer block
     fill : bool, optional
-        State if the inner block should be filled with a rectengular mesh.
+        State if the inner block should be filled with a rectangular mesh.
         Default: False.
 
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
 
     """
     import pygmsh as pg
@@ -392,7 +433,7 @@ def grid_adapter2D(
 
     if fill:
         element_no = [int(in_dim[0] / in_res[0]), int(in_dim[1] / in_res[1])]
-        mesh_in = rectengular(
+        mesh_in = rectangular(
             dim=2,
             mesh_origin=in_pos + (z_pos,),
             element_no=element_no,
@@ -444,24 +485,33 @@ def grid_adapter3D(
     out_mat : integer
         Material-ID of the outer block
     fill : bool, optional
-        State if the inner block should be filled with a rectengular mesh.
+        State if the inner block should be filled with a rectangular mesh.
         Default: False.
 
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
 
     """
     import pygmsh as pg
@@ -479,7 +529,7 @@ def grid_adapter3D(
             int(in_dim[1] / in_res[1]),
             int(abs(z_dim) / in_res[2]),
         ]
-        mesh_in = rectengular(
+        mesh_in = rectangular(
             dim=3,
             mesh_origin=in_pos + (z_pos + min(z_dim, 0.0),),
             element_no=element_no,
@@ -509,18 +559,27 @@ def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
     """
     import pygmsh as pg
 
@@ -545,18 +604,27 @@ def generate_gmsh(path_or_code, import_dim=(1, 2, 3)):
     Returns
     -------
     result : dictionary
-        Result contains one '#FEM_MSH' block of the OGS mesh file with
-        the following information:
-            mesh_data: dictionary
-                Is empty by default and can be filled later.
-            nodes: ndarray
-                Array with all node postions.
-            elements: dictionary
-                Contains nodelists for elements sorted by element types.
-            material_id: dictionary
-                contains material ids for each element (by default 0)
-            element_id : dictionary
-                contains element ids elements (defaul: sorted by element types)
+        Result contains one '#FEM_MSH' block of the OGS mesh file
+        with the following information (sorted by keys):
+
+            mesh_data : dict
+                dictionary containing information about
+
+                - AXISYMMETRY (bool)
+                - CROSS_SECTION (bool)
+                - PCS_TYPE (str)
+                - GEO_TYPE (str)
+                - GEO_NAME (str)
+                - LAYER (int)
+
+            nodes : ndarray
+                Array with all node postions
+            elements : dict
+                contains nodelists for elements sorted by element types
+            material_id : dict
+                contains material ids for each element sorted by element types
+            element_id : dict
+                contains element ids for each element sorted by element types
     """
     import pygmsh as pg
 

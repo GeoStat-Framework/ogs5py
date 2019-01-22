@@ -52,13 +52,15 @@ class ST(BlockFile):
         :GEO_TYPE: ["POINT", "WELL"]
         :DIS_TYPE: ["CONSTANT_NEUMANN", -1.0e-03]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/st
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_st_new.cpp#L221
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/st
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_st_new.cpp#L221
+    add_block
     """
 
     MKEYS = ["SOURCE_TERM"]

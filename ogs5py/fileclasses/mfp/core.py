@@ -54,13 +54,15 @@ class MFP(BlockFile):
         :DENSITY: [1, 1.0e+03]
         :VISCOSITY: [1, 1.0e-03]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mfp
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_mfp_new.cpp#L140
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mfp
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_mfp_new.cpp#L140
+    add_block
     """
 
     MKEYS = ["FLUID_PROPERTIES"]

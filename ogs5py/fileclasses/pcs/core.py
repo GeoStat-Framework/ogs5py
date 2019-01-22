@@ -66,13 +66,15 @@ class PCS(BlockFile):
         :PCS_TYPE: "GROUNDWATER_FLOW"
         :NUM_TYPE: "NEW"
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pcs
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_pcs.cpp#L1803
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pcs
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_pcs.cpp#L1803
+    add_block
     """
 
     MKEYS = ["PROCESS"]

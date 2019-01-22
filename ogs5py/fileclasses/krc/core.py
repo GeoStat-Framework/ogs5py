@@ -113,22 +113,24 @@ class KRC(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/krc
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp
+
+        MICROBE_PROPERTIES :
+            https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L232
+        REACTION :
+            https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L1549
+        BLOB_PROPERTIES :
+            https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L2622
+        KINREACTIONDATA :
+            https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L3185
+
     See Also
     --------
-    See : ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/krc
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp
-
-    MICROBE_PROPERTIES :
-        https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L232
-    REACTION :
-        https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L1549
-    BLOB_PROPERTIES :
-        https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L2622
-    KINREACTIONDATA :
-        https://github.com/ufz/ogs5/blob/master/FEM/rf_kinreact.cpp#L3185
+    add_block
     """
 
     MKEYS = [

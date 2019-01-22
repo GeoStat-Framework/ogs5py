@@ -53,13 +53,15 @@ class NUM(BlockFile):
         :PCS_TYPE: "GROUNDWATER_FLOW"
         :LINEAR_SOLVER: [2, 5, 1.0e-14, 1000, 1.0, 100, 4]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/num
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_num_new.cpp#L346
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/num
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_num_new.cpp#L346
+    add_block
     """
 
     MKEYS = ["NUMERICS"]

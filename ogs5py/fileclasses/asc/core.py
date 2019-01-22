@@ -30,6 +30,7 @@ class ASC(LineFile):
     -----
     This is just handled as a line-wise file. You can access the data by line
     with:
+
         ASC.lines
 
     This file type comes either from .tim .pcs or .gem

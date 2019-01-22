@@ -55,13 +55,15 @@ class MCP(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mcp
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rfmat_cp.cpp#L269
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/mcp
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rfmat_cp.cpp#L269
+    add_block
     """
 
     MKEYS = ["COMPONENT_PROPERTIES"]

@@ -52,13 +52,15 @@ class MSP(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/msp
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_msp_new.cpp#L65
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/msp
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_msp_new.cpp#L65
+    add_block
     """
 
     MKEYS = ["SOLID_PROPERTIES"]

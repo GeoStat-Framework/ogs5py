@@ -52,13 +52,15 @@ class REI(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/rei
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_react_int.cpp#L173
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/rei
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_react_int.cpp#L173
+    add_block
     """
 
     MKEYS = ["REACTION_INTERFACE"]

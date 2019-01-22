@@ -33,13 +33,15 @@ class RFD(BlockFile):
     Standard block:
         None
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/rfd
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/files0.cpp#L370
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/rfd
-
-    https://github.com/ufz/ogs5/blob/master/FEM/files0.cpp#L370
+    add_block
     """
 
     MKEYS = [

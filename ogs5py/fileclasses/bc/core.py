@@ -51,13 +51,15 @@ class BC(BlockFile):
         :DIS_TYPE: ["CONSTANT", 0.0]
         :GEO_TYPE: ["POLYLINE", "boundary"]
 
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/bc
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_bc_new.cpp#L228
+
     See Also
     --------
-    See: ``add_block``
-
-    https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/bc
-
-    https://github.com/ufz/ogs5/blob/master/FEM/rf_bc_new.cpp#L228
+    add_block
     """
 
     MKEYS = ["BOUNDARY_CONDITION"]

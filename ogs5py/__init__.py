@@ -29,11 +29,12 @@ Class to setup an ogs model
 
 File Classes
 ^^^^^^^^^^^^
-Classes for all OGS5 Files
+Classes for all OGS5 Files. See: :any:`ogs5py.fileclasses`
 
 .. currentmodule:: ogs5py.fileclasses
 
 .. autosummary::
+
    ASC
    BC
    CCT
