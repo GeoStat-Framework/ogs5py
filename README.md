@@ -1,5 +1,7 @@
 # Welcome to ogs5py
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2546767.svg)](https://doi.org/10.5281/zenodo.2546767)
+[![PyPI version](https://badge.fury.io/py/ogs5py.svg)](https://badge.fury.io/py/ogs5py)
 [![Build Status](https://travis-ci.org/GeoStat-Framework/ogs5py.svg?branch=master)](https://travis-ci.org/GeoStat-Framework/ogs5py)
 [![Documentation Status](https://readthedocs.org/projects/ogs5py/badge/?version=latest)](https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -155,7 +157,9 @@ It comes along with a set of handy readers for almost all output formats:
 The OGS5 executable needs to be in your sys-path under ``ogs[.exe]``.
 Otherwise you need to specify the path to the executable within the run command:
 
-    ogs.run_model(ogs_root="path/to/ogs")
+```python
+model.run_model(ogs_root="path/to/ogs")
+```
 
 
 ## Requirements:
