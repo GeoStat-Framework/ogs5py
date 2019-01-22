@@ -22,12 +22,13 @@ import time
 from ogs5py.tools.tools import (
     format_content_line,
     format_content,
-    search_mkw,
+    search_mkey,
     uncomment,
     get_key,
     is_key,
     is_mkey,
     is_skey,
+    find_key_in_list,
 )
 from ogs5py._version import __version__ as version
 
@@ -527,11 +528,11 @@ class BlockFile(File):
             # workaround for main keywords with directly connected content
             main_block = set(block) & set(self.MKEYS)
             if main_block:
-                for mkw in self.MKEYS:
-                    if mkw not in main_block:
+                for mkey in self.MKEYS:
+                    if mkey not in main_block:
                         continue
-                    self.add_main_keyword(mkw, main_index=index)
-                    self.add_multi_content(block[mkw], main_index=index)
+                    self.add_main_keyword(mkey, main_index=index)
+                    self.add_multi_content(block[mkey], main_index=index)
                 return
             # for regular block take the first main keyword
             if self.MKEYS:
@@ -567,11 +568,11 @@ class BlockFile(File):
         # since the kwargs dict doesn't prevent the order of the input
         # this can lead to errors, if the keywords are not added in the right
         # order (for example MMP with PERMEABILITY_TENSOR and _DISTRIBUTION)
-        for skw in self.SKEYS[mindex]:
-            if skw not in block:
+        for skey in self.SKEYS[mindex]:
+            if skey not in block:
                 continue
-            self.add_sub_keyword(skw, main_index=index)
-            self.add_multi_content(block[skw], main_index=index)
+            self.add_sub_keyword(skey, main_index=index)
+            self.add_multi_content(block[skey], main_index=index)
 
     def add_main_keyword(self, key, main_index=None):
         """
@@ -838,9 +839,9 @@ class BlockFile(File):
 
         with open(path, "r", encoding=encoding) as fin:
             # serach first main keyword
-            mkw = search_mkw(fin)
+            mkey = search_mkey(fin)
             # if no main keyword is found, the file is corrupted
-            if not mkw:
+            if not mkey:
                 if verbose:
                     print(
                         "ogs5py "
@@ -850,7 +851,7 @@ class BlockFile(File):
                     )
                 return
             subkw_found = False
-            stop_found = mkw.startswith("STOP")
+            stop_found = mkey.startswith("STOP")
             # if the STOP keyword is found first, the file is corrupted
             if stop_found:
                 if verbose:
@@ -862,16 +863,12 @@ class BlockFile(File):
                     )
                 return
             # add the found keyword
-            valid_mkey = False
-            for key in self.MKEYS:
-                if mkw.startswith(key):
-                    valid_mkey = True
-                    self.add_main_keyword(key)
-                    break
-            if not valid_mkey:
-                raise ValueError(path + ": Unknown main_key: " + mkw)
-            else:
-                main_index = self.MKEYS.index(key)
+            key = find_key_in_list(mkey, self.MKEYS)
+            if key is None:
+                raise ValueError(path + ": Unknown main-key: " + mkey)
+            main_index = self.MKEYS.index(key)
+            self.add_main_keyword(key)
+            # loop over lines
             for line in fin:
                 # remove comments and split line
                 sline = uncomment(line)
@@ -884,36 +881,30 @@ class BlockFile(File):
                     self.add_sub_keyword("")
                     subkw_found = True
                     self.add_content(sline)
-                # check if given line is a key
+                # check if given line is a main-key
                 elif is_mkey(sline):
                     # if STOP is found, stop the reading
                     if get_key(sline).startswith("STOP"):
                         stop_found = True
                         self._update_in()
                         return
-                    mkw = get_key(sline)
-                    valid_mkey = False
-                    for key in self.MKEYS:
-                        if mkw.startswith(key):
-                            valid_mkey = True
-                            self.add_main_keyword(key)
-                            break
-                    if not valid_mkey:
-                        raise ValueError(path + ": Unknown main_key: " + mkw)
-                    else:
-                        main_index = self.MKEYS.index(key)
+                    # else add new main-key
+                    mkey = get_key(sline)
+                    key = find_key_in_list(mkey, self.MKEYS)
+                    if key is None:
+                        raise ValueError(path + ": Unknown main-key: " + mkey)
+                    main_index = self.MKEYS.index(key)
+                    self.add_main_keyword(key)
                     subkw_found = False
+                # check if given line is a sub-key
                 elif is_skey(sline):
                     skey = get_key(sline)
-                    valid_skey = False
-                    for key in self.SKEYS[main_index]:
-                        if skey.startswith(key):
-                            valid_skey = True
-                            self.add_sub_keyword(key)
-                            break
-                    if not valid_skey:
-                        raise ValueError(path + ": Unknown subkey: " + skey)
+                    key = find_key_in_list(skey, self.SKEYS[main_index])
+                    if key is None:
+                        raise ValueError(path + ": Unknown sub-key: " + skey)
+                    self.add_sub_keyword(key)
                     subkw_found = True
+                # add content if it's not a key
                 else:
                     self.add_content(sline)
 
@@ -965,13 +956,13 @@ class BlockFile(File):
             if self.top_com:
                 print(self.top_com, end=lend, file=fout)
             # iterate over the main keywords
-            for i, mkw in enumerate(self.mainkw):
-                print("#" + mkw, end=lend, file=fout)
+            for i, mkey in enumerate(self.mainkw):
+                print("#" + mkey, end=lend, file=fout)
                 # iterate over the subkeywords
-                for j, skw in enumerate(self.subkw[i]):
-                    # check if skw is not "" (as in the exception-case)
-                    if skw:
-                        print(SUB_IND + "$" + skw, end=lend, file=fout)
+                for j, skey in enumerate(self.subkw[i]):
+                    # check if skey is not "" (as in the exception-case)
+                    if skey:
+                        print(SUB_IND + "$" + skey, end=lend, file=fout)
                     # iterate over the content
                     for con in self.cont[i][j]:
                         # if content is empty (eg ""), skip it
@@ -980,8 +971,8 @@ class BlockFile(File):
                         # bug in OGS5 ... mpd files need tab as separator
                         # and no initial indentation
                         if (
-                            mkw == "MEDIUM_PROPERTIES_DISTRIBUTED"
-                            and skw == "DATA"
+                            mkey == "MEDIUM_PROPERTIES_DISTRIBUTED"
+                            and skey == "DATA"
                         ):
                             print(
                                 *con,
@@ -1011,13 +1002,13 @@ class BlockFile(File):
         from ogs5py import SUB_IND, CON_IND
 
         out = ""
-        for i, mkw in enumerate(self.mainkw):
-            out += "#" + mkw + "\n"
+        for i, mkey in enumerate(self.mainkw):
+            out += "#" + mkey + "\n"
             # iterate over the subkeywords
-            for j, skw in enumerate(self.subkw[i]):
-                # check if skw is not "" (as in the exception-case)
-                if skw:
-                    out += SUB_IND + "$" + skw + "\n"
+            for j, skey in enumerate(self.subkw[i]):
+                # check if skey is not "" (as in the exception-case)
+                if skey:
+                    out += SUB_IND + "$" + skey + "\n"
                 # iterate over the content
                 for con in self.cont[i][j][:3]:
                     out += CON_IND + " ".join(con) + "\n"

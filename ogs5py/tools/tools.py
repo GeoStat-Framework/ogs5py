@@ -14,12 +14,13 @@ File related
 ^^^^^^^^^^^^
 
 .. autosummary::
-   search_mkw
+   search_mkey
    uncomment
    is_key
    is_mkey
    is_skey
    get_key
+   find_key_in_list
    format_dict
    format_content
    format_content_line
@@ -109,7 +110,7 @@ class Output(object):
             self.close()
 
 
-def search_mkw(fin):
+def search_mkey(fin):
     """
     Search for the first main keyword in a given file-stream.
 
@@ -118,16 +119,16 @@ def search_mkw(fin):
     fin : stream
         given opened file
     """
-    mkw = ""
+    mkey = ""
     for line in fin:
         # remove comments
         sline = uncomment(line)
         if not sline:
             continue
         if is_mkey(sline):
-            mkw = get_key(sline)
+            mkey = get_key(sline)
             break
-    return mkw
+    return mkey
 
 
 def uncomment(line):
@@ -196,6 +197,37 @@ def get_key(sline):
     while key.startswith("#") or key.startswith("$"):
         key = key[1:]
     return key
+
+
+def find_key_in_list(key, key_list):
+    """
+    Look for the right corresponding key in a list.
+
+    key has to start with an given key from the list and the longest key
+    will be returned.
+
+    Parameters
+    ----------
+    key : str
+        Given key.
+    key_list : list of str
+        Valid keys to be checked against.
+
+    Returns
+    -------
+    found_key : :class:`str` or :class:`None`
+        The best match. None if nothing was found.
+    """
+    found = []
+    for try_key in key_list:
+        if key.startswith(try_key):
+            found.append(try_key)
+    if found:
+        found_key = max(found, key=len)
+        # "" would be allowed for any given key
+        if found_key:
+            return found_key
+    return None
 
 
 def format_dict(dict_in):
