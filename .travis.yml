@@ -2,7 +2,7 @@ language: python
 
 matrix:
   include:
-    # use macOS for py2 since building pandas wheels takes ages on linux
+    # use macOS since building pandas wheels takes ages on linux
     - name: "MacOS py27"
       os: osx
       language: generic
@@ -11,13 +11,11 @@ matrix:
         - CIBW_BUILD="cp27-*"
         - COVER="off"
 
-    - name: "Linux py36"
-      sudo: required
-      language: python
-      python: 3.6
-      services: docker
+    - name: "MacOS py36"
+      os: osx
+      language: generic
       env:
-        - PIP=pip
+        - PIP=pip2
         - CIBW_BUILD="cp36-*"
         - COVER="on"
 
@@ -27,7 +25,7 @@ env:
 
 script:
   # create wheels
-  - $PIP install https://github.com/joerick/cibuildwheel/archive/c6f4f017320cc1ad6163dde9d35c496fa5cc16ae.zip
+  - sudo $PIP install cibuildwheel==0.10.1
   - cibuildwheel --output-dir wheelhouse
   # create source dist for pypi and create coverage (only once for linux py3.6)
   - |

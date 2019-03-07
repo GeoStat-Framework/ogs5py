@@ -73,7 +73,7 @@ setup(
     platforms=["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
     include_package_data=True,
     install_requires=[
-        "numpy >=1.13.0",
+        "numpy>=1.13.0",
         "whichcraft",  # search for ogs
         "pandas>=0.23.0",  # read-routines and formatting
         "meshio",  # import/export external meshes
