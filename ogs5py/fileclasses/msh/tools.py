@@ -24,6 +24,9 @@ from ogs5py.tools.tools import (
 )
 
 
+### IO routines
+
+
 def load_ogs5msh(
     filepath, verbose=True, ignore_unknown=False, max_node_no=8, encoding=None
 ):
@@ -776,6 +779,9 @@ def remove_dim(mesh, remove):
         mesh["element_id"] = gen_std_elem_id(mesh["elements"])
 
 
+### modifying routines
+
+
 def combine(mesh_1, mesh_2, decimals=4, fast=True):
     """
     Combine mesh_1 and mesh_2 to one single mesh. The node list will be
@@ -926,6 +932,9 @@ def unique_nodes(mesh, decimals=3):
     mesh = combine(mesh, EMPTY_MSH, decimals)
 
 
+### geometric routines
+
+
 def get_centroids(mesh):
     """
     calculate the centroids of the given elements
@@ -1072,6 +1081,7 @@ def rotate_mesh(
     shift_mesh(mesh, -1.0 * np.array(rotation_point))
     mesh["nodes"] = np.inner(rot, mesh["nodes"]).T
     shift_mesh(mesh, rotation_point)
+    return mesh
 
 
 def shift_mesh(mesh, vector):
@@ -1090,6 +1100,7 @@ def shift_mesh(mesh, vector):
     """
     for i in range(3):
         mesh["nodes"][:, i] += vector[i]
+    return mesh
 
 
 def transform_mesh(mesh, xyz_func, **kwargs):
@@ -1112,6 +1123,10 @@ def transform_mesh(mesh, xyz_func, **kwargs):
         mesh["nodes"][:, 0], mesh["nodes"][:, 1], mesh["nodes"][:, 2], **kwargs
     )
     mesh["nodes"] = np.array(trans).T
+    return mesh
+
+
+### misc
 
 
 def no_of_elements(mesh):
