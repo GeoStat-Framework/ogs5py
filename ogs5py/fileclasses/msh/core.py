@@ -79,13 +79,16 @@ class MSHsgl(File):
                     self.__dict = mesh_dict
                 else:
                     print("given mesh is not valid")
+        self._block = 0
 
     # Pretend that there is a main keyword in the standard BASE-FORMAT
     @property
     def is_empty(self):
         return not bool(self._meshlist[0]["elements"])
 
-    # meshlist
+    #######################
+    ### meshlist
+    #######################
     # this is a workaround to make multi-layer and single-layer meshes usable
     @property
     def _meshlist(self):
@@ -109,7 +112,7 @@ class MSHsgl(File):
         self.__dict = value
 
     #######################
-    # AXISYMMETRY
+    ### AXISYMMETRY
     #######################
     @property
     def AXISYMMETRY(self):
@@ -131,7 +134,7 @@ class MSHsgl(File):
             del self._dict["mesh_data"]["AXISYMMETRY"]
 
     #######################
-    # CROSS_SECTION
+    ### CROSS_SECTION
     #######################
     @property
     def CROSS_SECTION(self):
@@ -153,7 +156,7 @@ class MSHsgl(File):
             del self._dict["mesh_data"]["CROSS_SECTION"]
 
     #######################
-    # PCS_TYPE
+    ### PCS_TYPE
     #######################
     @property
     def PCS_TYPE(self):
@@ -177,7 +180,7 @@ class MSHsgl(File):
             del self._dict["mesh_data"]["PCS_TYPE"]
 
     #######################
-    # GEO_NAME
+    ### GEO_NAME
     #######################
     @property
     def GEO_NAME(self):
@@ -202,7 +205,7 @@ class MSHsgl(File):
             del self.GEO_TYPE
 
     #######################
-    # GEO_TYPE
+    ### GEO_TYPE
     #######################
     @property
     def GEO_TYPE(self):
@@ -226,7 +229,7 @@ class MSHsgl(File):
             del self._dict["mesh_data"]["GEO_TYPE"]
 
     #######################
-    # LAYER
+    ### LAYER
     #######################
     @property
     def LAYER(self):
@@ -248,7 +251,7 @@ class MSHsgl(File):
             del self._dict["mesh_data"]["LAYER"]
 
     #######################
-    # NODES
+    ### NODES
     #######################
     @property
     def NODES(self):
@@ -267,7 +270,7 @@ class MSHsgl(File):
         del self.ELEMENT_ID
 
     #######################
-    # ELEMENTS
+    ### ELEMENTS
     #######################
     @property
     def ELEMENTS(self):
@@ -307,7 +310,7 @@ class MSHsgl(File):
         del self.ELEMENT_ID
 
     #######################
-    # MATERIAL_ID
+    ### MATERIAL_ID
     #######################
     @property
     def MATERIAL_ID(self):
@@ -375,7 +378,7 @@ class MSHsgl(File):
         return out
 
     #######################
-    # ELEMENT_ID
+    ### ELEMENT_ID
     #######################
     @property
     def ELEMENT_ID(self):
@@ -417,7 +420,7 @@ class MSHsgl(File):
         self._dict["element_id"] = gen_std_elem_id(self.ELEMENTS)
 
     #######################
-    # ELEMENT_NO
+    ### ELEMENT_NO
     #######################
     @property
     def ELEMENT_NO(self):
@@ -425,7 +428,7 @@ class MSHsgl(File):
         return no_of_elements(self._dict)
 
     #######################
-    # NODE_NO
+    ### NODE_NO
     #######################
     @property
     def NODE_NO(self):
@@ -435,7 +438,7 @@ class MSHsgl(File):
         return self.NODES.shape[0]
 
     #######################
-    # centroids
+    ### centroids
     #######################
     @property
     def centroids(self):
@@ -492,7 +495,7 @@ class MSHsgl(File):
         return out
 
     #######################
-    # centroids
+    ### volumes
     #######################
     @property
     def volumes(self):
@@ -548,7 +551,7 @@ class MSHsgl(File):
         return out
 
     #######################
-    # Class methods
+    ### Class methods
     #######################
     def reset(self):
         """
@@ -916,7 +919,7 @@ class MSHsgl(File):
         show_mesh(self._dict, show_element_id=show_element_id)
 
     #######################
-    # Special methods
+    ### Special methods
     #######################
     def __call__(self):
         return dcp(self._dict)
@@ -1002,7 +1005,6 @@ class MSH(MSHsgl):
             self.__meshlist = [EMPTY_MSH]
         else:
             self.__meshlist = mesh_list
-        self._block = 0
 
     # meshlist (override the property of MSHsgl) #    @property
     @MSHsgl._meshlist.getter
@@ -1040,6 +1042,8 @@ class MSH(MSHsgl):
         value = int(value)
         if 0 <= value < len(self.__meshlist):
             self._block = value
+        if -len(self.__meshlist) <= value < 0:
+            self._block = len(self.__meshlist) - value
         if value == len(self.__meshlist):
             self._block = value
             self.__meshlist.append(EMPTY_MSH)
