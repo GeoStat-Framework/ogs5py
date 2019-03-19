@@ -368,8 +368,7 @@ class GEMinit(object):
         Its path is given by "task_root+task_id+file_ext".
         """
         # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
+        os.makedirs(self.task_root, exist_ok=True)
         f_path = os.path.join(self.task_root, self.lst_name)
         # save the data
         if not self.is_empty:

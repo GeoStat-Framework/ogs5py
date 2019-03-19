@@ -35,7 +35,7 @@ from ogs5py._version import __version__ as version
 # current working directory
 CWD = os.getcwd()
 # Top Comment for io-files
-TOP_COM = "|-------------- Written with ogs5py --------------|"
+TOP_COM = "|------------------ Written with ogs5py ------------------|"
 # Bottom Comment for io-files
 BOT_COM = (
     "|-- Written with ogs5py ("
@@ -168,8 +168,7 @@ class File(object):
         # update the content
         self._update_out()
         # create the file path
-        if not os.path.exists(self.task_root):
-            os.makedirs(self.task_root)
+        os.makedirs(self.task_root, exist_ok=True)
         f_path = self.file_path
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:
