@@ -119,7 +119,7 @@ class MSHsgl(File):
         """bool: AXISYMMETRY attribute."""
         if "AXISYMMETRY" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["AXISYMMETRY"]
-        return None
+        return False
 
     @AXISYMMETRY.setter
     def AXISYMMETRY(self, value):
@@ -141,7 +141,7 @@ class MSHsgl(File):
         """bool: CROSS_SECTION attribute."""
         if "CROSS_SECTION" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["CROSS_SECTION"]
-        return None
+        return False
 
     @CROSS_SECTION.setter
     def CROSS_SECTION(self, value):
