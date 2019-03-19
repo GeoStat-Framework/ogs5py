@@ -223,7 +223,7 @@ class OGS(object):
         """
         Get and set the bottom comment for the ogs files.
         """
-        return self._top_com
+        return self._bot_com
 
     @bot_com.setter
     def bot_com(self, value):
