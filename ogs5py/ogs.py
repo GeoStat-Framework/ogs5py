@@ -873,7 +873,8 @@ class OGS(object):
                     os.path.abspath(self.task_root), output_dir
                 )
             # create the outputdir
-            os.makedirs(output_dir, exist_ok=True)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
             # append the outputdir to the ogs-command
             args.append("--output-directory")
             args.append(output_dir)

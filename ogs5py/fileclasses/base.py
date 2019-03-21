@@ -168,7 +168,8 @@ class File(object):
         # update the content
         self._update_out()
         # create the file path
-        os.makedirs(self.task_root, exist_ok=True)
+        if not os.path.exists(self.task_root):
+            os.makedirs(self.task_root)
         f_path = self.file_path
         # check if we can copy the file or if we need to write it from data
         if self.copy_file is None:

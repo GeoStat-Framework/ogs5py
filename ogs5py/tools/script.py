@@ -235,7 +235,8 @@ def gen_script(
         task_root = ogs_class.task_root
     if task_id is None:
         task_id = ogs_class.task_id
-    os.makedirs(script_dir, exist_ok=True)
+    if not os.path.exists(script_dir):
+        os.makedirs(script_dir)
     path = os.path.join(script_dir, script_name)
     # temporarily overwrite the task_root
     original_root = ogs_class.task_root
