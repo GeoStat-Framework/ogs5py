@@ -65,6 +65,15 @@ def readvtk_single(infile):
     # read in the vtk object
     vtk_reader = reader[0]()
     vtk_reader.SetFileName(infile)
+    if not is_xml:
+        # https://stackoverflow.com/a/35018175/6696397
+        vtk_reader.ReadAllScalarsOn()
+        vtk_reader.ReadAllVectorsOn()
+        vtk_reader.ReadAllNormalsOn()
+        vtk_reader.ReadAllTensorsOn()
+        vtk_reader.ReadAllColorScalarsOn()
+        vtk_reader.ReadAllTCoordsOn()
+        vtk_reader.ReadAllFieldsOn()
     vtk_reader.Update()
     file_obj = vtk_reader.GetOutput()
 

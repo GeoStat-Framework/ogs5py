@@ -69,7 +69,8 @@ def _get_cells(obj):
             continue
         cell_name = VTK_TYP[typ]
         n_no = NODE_NO[cell_name]
-        loc_i = loc[np.where(types == typ)[0]]
+        cell_loc_i = np.where(types == typ)[0]
+        loc_i = loc[cell_loc_i]
         # if there are no cells of the actual type continue
         if len(loc_i) == 0:
             # if not loc_i:
@@ -80,7 +81,7 @@ def _get_cells(obj):
         cells[cell_name] = arr_i
         cell_data_i = {}
         for data_i in data:
-            cell_data_i[data_i] = data[data_i][loc_i]
+            cell_data_i[data_i] = data[data_i][cell_loc_i]
         if cell_data_i != {}:
             cell_data[cell_name] = cell_data_i
 
