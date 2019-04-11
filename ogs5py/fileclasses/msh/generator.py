@@ -422,13 +422,13 @@ def grid_adapter2D(
     geo = gmsh_grid_adapt2D(
         out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos
     )
-    points, cells, __, __, __ = pg.generate_mesh(
+    mesh = pg.generate_mesh(
         geo,
         #        num_lloyd_steps=0,
         #        num_quad_lloyd_steps=0,
         dim=2,
     )
-    out = convert_meshio(points, cells, import_dim=2)
+    out = convert_meshio(mesh.points, mesh.cells, import_dim=2)
     out["material_id"] = gen_std_mat_id(out["elements"], out_mat)
 
     if fill:
@@ -519,8 +519,8 @@ def grid_adapter3D(
     geo = gmsh_grid_adapt3D(
         out_dim, in_dim, z_dim, out_res, in_res, out_pos, in_pos, z_pos
     )
-    points, cells, __, __, __ = pg.generate_mesh(geo)
-    out = convert_meshio(points, cells, import_dim=3)
+    mesh = pg.generate_mesh(geo)
+    out = convert_meshio(mesh.points, mesh.cells, import_dim=3)
     out["material_id"] = gen_std_mat_id(out["elements"], out_mat)
 
     if fill:
@@ -584,8 +584,8 @@ def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
     import pygmsh as pg
 
     geo = gmsh_block_adapt3D(xy_dim, z_dim, in_res)
-    points, cells, __, __, __ = pg.generate_mesh(geo)
-    out = convert_meshio(points, cells, import_dim=3)
+    mesh = pg.generate_mesh(geo)
+    out = convert_meshio(mesh.points, mesh.cells, import_dim=3)
     return out
 
 
@@ -629,6 +629,6 @@ def generate_gmsh(path_or_code, import_dim=(1, 2, 3)):
     import pygmsh as pg
 
     geo = gmsh_code(path_or_code)
-    points, cells, __, __, __ = pg.generate_mesh(geo)
-    out = convert_meshio(points, cells, import_dim=import_dim)
+    mesh = pg.generate_mesh(geo)
+    out = convert_meshio(mesh.points, mesh.cells, import_dim=import_dim)
     return out
