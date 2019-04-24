@@ -422,12 +422,7 @@ def grid_adapter2D(
     geo = gmsh_grid_adapt2D(
         out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos
     )
-    mesh = pg.generate_mesh(
-        geo,
-        #        num_lloyd_steps=0,
-        #        num_quad_lloyd_steps=0,
-        dim=2,
-    )
+    mesh = pg.generate_mesh(geo, dim=2)
     out = convert_meshio(mesh.points, mesh.cells, import_dim=2)
     out["material_id"] = gen_std_mat_id(out["elements"], out_mat)
 
