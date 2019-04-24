@@ -857,6 +857,20 @@ class OGS(object):
                 return False
             else:
                 ogs_root = check_ogs
+        else:
+            if sys.platform == "win32" and ogs_root[-4:] == ".lnk":
+                print("Don't use file links under windows...")
+                return False
+            elif os.path.islink(ogs_root):
+                ogs_root = os.path.realpath(ogs_root)
+            if os.path.exists(ogs_root):
+                if not os.path.isfile(ogs_root):
+                    ogs_root = os.path.join(ogs_root, ogs_name)
+            else:
+                print("The given ogs_root does not exist...")
+                return False
+        # use absolute path since we change the cwd in the ogs call
+        ogs_root = os.path.abspath(ogs_root)
 
         # create the command to call ogs
         args = [ogs_root, self.task_id]
@@ -879,7 +893,7 @@ class OGS(object):
             args.append("--output-directory")
             args.append(output_dir)
         else:
-            output_dir = self.task_root
+            output_dir = os.path.abspath(self.task_root)
 
         # prevent eraising files...
         if not save_log:
