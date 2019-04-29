@@ -819,13 +819,6 @@ class MSHsgl(File):
 
         Parameters
         ----------
-        mesh : single dict
-            dictionary containing
-            at least the following keyword:
-
-                nodes : ndarray
-                    Array with all node postions.
-
         angle : float
             rotation angle given in radial length
         rotation_axis : array_like, optional
@@ -841,13 +834,6 @@ class MSHsgl(File):
 
         Parameters
         ----------
-        mesh : single dict
-            dictionary containing
-            at least the following keyword:
-
-                nodes : ndarray
-                    Array with all node postions.
-
         vector : ndarray
             array containing the shifting vector
         """
@@ -860,13 +846,6 @@ class MSHsgl(File):
 
         Parameters
         ----------
-        mesh : single dict
-            dictionary containing
-            at least the following keyword
-
-                nodes : ndarray
-                    Array with all node postions.
-
         xyz_func : function
             the function transforming the points:
             ``x_new, y_new, z_new = f(x_old, y_old, z_old, **kwargs)``
@@ -896,6 +875,20 @@ class MSHsgl(File):
             set the generator from the generator module
         **kwargs
             kwargs will be forwarded to the generator in use
+
+        Notes
+        -----
+        .. currentmodule:: ogs5py.fileclasses.msh.generator
+
+        The following generators are available:
+
+        .. autosummary::
+           rectangular
+           radial
+           grid_adapter2D
+           grid_adapter3D
+           block_adapter3D
+           generate_gmsh
         """
         self._dict = getattr(gen, generator)(**kwargs)
 
