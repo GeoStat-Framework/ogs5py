@@ -67,8 +67,8 @@ class PQCdat(LineFile):
 
         PQCdat.lines
 
-    See Also
-    --------
+    Notes
+    -----
     https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/pqc
 
     https://github.com/ufz/ogs5/blob/master/FEM/rf_react.cpp#L2136

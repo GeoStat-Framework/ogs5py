@@ -125,8 +125,8 @@ class GEMinit(object):
         Name for the ogs task.
         Default: "model"
 
-    See Also
-    --------
+    Notes
+    -----
     http://gems.web.psi.ch/GEMS3/index.html
 
     http://gems.web.psi.ch/GEMS3K/
