@@ -46,6 +46,7 @@ Array tools
 .. autosummary::
    unique_rows
    replace
+   by_id
 
 ----
 """
@@ -723,6 +724,32 @@ def unique_rows(data, decimals=4, fast=True):
     ixrsort = replace(i_xr, sort, np.arange(len(i_x)))
 
     return out[sort], ixsort, ixrsort
+
+
+def by_id(array, ids=None):
+    """
+    Return a flattend array side-by-side with the array-element ids
+
+    Parameters
+    ----------
+    array : array-like
+        Input data. will be flattened.
+    ids : None or array-like
+        You can provide specific ids if needed. As default, the array-ids are
+        used. Default: None
+
+    Returns
+    -------
+    zipped (id, array) object
+    """
+    array = np.ravel(array)
+    if ids is None:
+        ids = np.arange(array.shape[0], dtype=int)
+    else:
+        ids = np.ravel(ids)
+        if ids.shape[0] != array.shape[0]:
+            raise ValueError("array and ids don't have the same length")
+    return zip(ids, array)
 
 
 def unique_rows_old(data, decimals=4):

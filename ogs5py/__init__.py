@@ -67,14 +67,21 @@ Classes for all OGS5 Files. See: :any:`ogs5py.fileclasses`
 Functions
 =========
 
+.. currentmodule:: ogs5py.tools.tools
+
 Searching
 ^^^^^^^^^
 Routine to search for a valid ogs id in a directory
 
-.. currentmodule:: ogs5py.tools.tools
-
 .. autosummary::
    search_task_id
+
+Formatting
+^^^^^^^^^^
+Routines to format data in the right way for the input
+
+.. autosummary::
+   by_id
 """
 from __future__ import absolute_import
 
@@ -110,7 +117,7 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
-from ogs5py.tools.tools import search_task_id
+from ogs5py.tools.tools import search_task_id, by_id
 from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
 
 # from ogs5py.reader import (readvtk,
@@ -154,7 +161,7 @@ __all__ += [
     "ST",
     "TIM",
 ]
-__all__ += ["search_task_id"]
+__all__ += ["search_task_id", "by_id"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 __all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]
