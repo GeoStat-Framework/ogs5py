@@ -158,10 +158,8 @@ class OGS(object):
     ):
         self._task_root = os.path.normpath(task_root)
         self._task_id = task_id
-        if output_dir is None:
-            self.output_dir = None
-        else:
-            self.output_dir = os.path.normpath(output_dir)
+        self._output_dir = None
+        self.output_dir = output_dir
 
         self.bc = BC(task_root=task_root, task_id=task_id)
         self.cct = CCT(task_root=task_root, task_id=task_id)
@@ -273,6 +271,32 @@ class OGS(object):
         self._task_id = value
         for ext in OGS_EXT:
             getattr(self, ext[1:]).task_id = value
+
+    @property
+    def output_dir(self):
+        """
+        :class:`str`: output directory path of the ogs model.
+        """
+        return self._output_dir
+
+    @output_dir.setter
+    def output_dir(self, value):
+        if value is None:
+            self._output_dir = None
+        else:
+            self._output_dir = os.path.normpath(value)
+            if not os.path.isabs(self._output_dir):
+                # if not, put the outputfolder in the task_root
+                self._output_dir = os.path.join(
+                    os.path.abspath(self.task_root), self._output_dir
+                )
+
+    @property
+    def has_output_dir(self):
+        """
+        :class:`bool`: State if the model has a separate output directory.
+        """
+        return self.output_dir is not None
 
     def add_copy_file(self, path):
         """
@@ -443,6 +467,27 @@ class OGS(object):
         else:
             print("OGS.del_rfr: given index is not valid.")
 
+    def reset(self):
+        """
+        Delete every content.
+        """
+        for ext in OGS_EXT:
+            # workaround to get access to class-members by name
+            getattr(self, ext[1:]).reset()
+        self.pqcdat.reset()
+        self.mpd = []
+        self.gli_ext = []
+        self.rfr = []
+        self.gem_init = []
+        self.asc = []
+        self.copy_files = []
+
+        # reset to initial attributes
+        self.task_root = self._task_root
+        self.task_id = self._task_id
+        self.top_com = self._top_com
+        self.bot_com = self._bot_com
+
     def write_input(self):
         """
         method to call all write_file() methods that are initialized
@@ -478,27 +523,6 @@ class OGS(object):
         for copy_file in self.copy_files:
             base = os.path.basename(copy_file)
             shutil.copyfile(copy_file, os.path.join(self.task_root, base))
-
-    def reset(self):
-        """
-        Delete every content.
-        """
-        for ext in OGS_EXT:
-            # workaround to get access to class-members by name
-            getattr(self, ext[1:]).reset()
-        self.pqcdat.reset()
-        self.mpd = []
-        self.gli_ext = []
-        self.rfr = []
-        self.gem_init = []
-        self.asc = []
-        self.copy_files = []
-
-        # reset to initial attributes
-        self.task_root = self._task_root
-        self.task_id = self._task_id
-        self.top_com = self._top_com
-        self.bot_com = self._bot_com
 
     def gen_script(
         self,
@@ -618,10 +642,8 @@ class OGS(object):
             raise ValueError(
                 "ogs5py.OGS.laod_model - nothing was found at: " + task_root
             )
-            return False
-        else:
-            if verbose:
-                print("ogs5py.OGS.laod_model - found ids: " + str(found_ids))
+        if verbose:
+            print("ogs5py.OGS.laod_model - found ids: " + str(found_ids))
         # take the first found task_id
         if task_id is None:
             # take the first found task_id
@@ -634,7 +656,6 @@ class OGS(object):
                 + ") at: "
                 + task_root
             )
-            return False
         if verbose:
             print("ogs5py.OGS.laod_model - use id: " + task_id)
         # overwrite the task_root
@@ -804,6 +825,207 @@ class OGS(object):
 
         return True
 
+    def readvtk(self, pcs="ALL", output_dir=None):
+        r"""
+        Reader for vtk outputfiles of this OGS5 model
+
+        Parameters
+        ----------
+        pcs : string or None, optional
+            specify the PCS type that should be collected
+            Possible values are:
+
+                - None/"" (no PCS_TYPE specified in \*.out)
+                - "NO_PCS"
+                - "GROUNDWATER_FLOW"
+                - "LIQUID_FLOW"
+                - "RICHARDS_FLOW"
+                - "AIR_FLOW"
+                - "MULTI_PHASE_FLOW"
+                - "PS_GLOBAL"
+                - "HEAT_TRANSPORT"
+                - "DEFORMATION"
+                - "MASS_TRANSPORT"
+                - "OVERLAND_FLOW"
+                - "FLUID_MOMENTUM"
+                - "RANDOM_WALK"
+
+            You can get a list with all known PCS-types by setting PCS="ALL"
+            Default : None
+        output_dir : :any:'None' or :class:'str', optional
+            Sometimes OGS5 doesn't put the output in the right directory.
+            You can specify a separate output directory here in this case.
+            Default: :any:'None'
+
+        Returns
+        -------
+        result : dict
+            keys are the point names and the items are the data from the
+            corresponding files
+            if pcs="ALL", the output is a dictionary with the PCS-types as keys
+        """
+        from ogs5py.reader import readvtk as read
+        if output_dir is not None:
+            root = output_dir
+        elif self.has_output_dir:
+            root = self.output_dir
+        else:
+            root = self.task_root
+        return read(task_root=root, task_id=self.task_id, pcs=pcs)
+
+    def readpvd(self, pcs="ALL", output_dir=None):
+        r"""
+        read the paraview pvd files of this OGS5 model
+
+        All concerned files are converted to a dictionary containing their data
+
+        Parameters
+        ----------
+        pcs : string or None, optional
+            specify the PCS type that should be collected
+            Possible values are:
+
+                - None/"" (no PCS_TYPE specified in \*.out)
+                - "NO_PCS"
+                - "GROUNDWATER_FLOW"
+                - "LIQUID_FLOW"
+                - "RICHARDS_FLOW"
+                - "AIR_FLOW"
+                - "MULTI_PHASE_FLOW"
+                - "PS_GLOBAL"
+                - "HEAT_TRANSPORT"
+                - "DEFORMATION"
+                - "MASS_TRANSPORT"
+                - "OVERLAND_FLOW"
+                - "FLUID_MOMENTUM"
+                - "RANDOM_WALK"
+
+            You can get a list with all known PCS-types by setting PCS="ALL"
+            Default : "ALL"
+        output_dir : :any:'None' or :class:'str', optional
+            Sometimes OGS5 doesn't put the output in the right directory.
+            You can specify a separate output directory here in this case.
+            Default: :any:'None'
+
+        Returns
+        -------
+        result : dict
+            keys are the point names and the items are the data from the
+            corresponding files
+            if pcs="ALL", the output is a dictionary with the PCS-types as keys
+        """
+        from ogs5py.reader import readpvd as read
+        if output_dir is not None:
+            root = output_dir
+        elif self.has_output_dir:
+            root = self.output_dir
+        else:
+            root = self.task_root
+        return read(task_root=root, task_id=self.task_id, pcs=pcs)
+
+    def readtec_point(self, pcs="ALL", output_dir=None):
+        r"""
+        collect TECPLOT point output from this OGS5 model
+
+        Parameters
+        ----------
+        pcs : string or None, optional
+            specify the PCS type that should be collected
+            Possible values are:
+
+                - None/"" (no PCS_TYPE specified in \*.out)
+                - "NO_PCS"
+                - "GROUNDWATER_FLOW"
+                - "LIQUID_FLOW"
+                - "RICHARDS_FLOW"
+                - "AIR_FLOW"
+                - "MULTI_PHASE_FLOW"
+                - "PS_GLOBAL"
+                - "HEAT_TRANSPORT"
+                - "DEFORMATION"
+                - "MASS_TRANSPORT"
+                - "OVERLAND_FLOW"
+                - "FLUID_MOMENTUM"
+                - "RANDOM_WALK"
+
+            You can get a list with all known PCS-types by setting PCS="ALL"
+            Default : "ALL"
+        output_dir : :any:'None' or :class:'str', optional
+            Sometimes OGS5 doesn't put the output in the right directory.
+            You can specify a separate output directory here in this case.
+            Default: :any:'None'
+
+        Returns
+        -------
+        result : dict
+            keys are the point names and the items are the data from the
+            corresponding files
+            if pcs="ALL", the output is a dictionary with the PCS-types as keys
+        """
+        from ogs5py.reader import readtec_point as read
+        if output_dir is not None:
+            root = output_dir
+        elif self.has_output_dir:
+            root = self.output_dir
+        else:
+            root = self.task_root
+        return read(task_root=root, task_id=self.task_id, pcs=pcs)
+
+    def readtec_polyline(self, pcs="ALL", trim=True, output_dir=None):
+        r"""
+        collect TECPLOT polyline output from this OGS5 model
+
+        Parameters
+        ----------
+        pcs : string or None, optional
+            specify the PCS type that should be collected
+            Possible values are:
+
+                - None/"" (no PCS_TYPE specified in \*.out)
+                - "NO_PCS"
+                - "GROUNDWATER_FLOW"
+                - "LIQUID_FLOW"
+                - "RICHARDS_FLOW"
+                - "AIR_FLOW"
+                - "MULTI_PHASE_FLOW"
+                - "PS_GLOBAL"
+                - "HEAT_TRANSPORT"
+                - "DEFORMATION"
+                - "MASS_TRANSPORT"
+                - "OVERLAND_FLOW"
+                - "FLUID_MOMENTUM"
+                - "RANDOM_WALK"
+
+            You can get a list with all known PCS-types by setting pcs="ALL"
+            Default : "ALL"
+        output_dir : :any:'None' or :class:'str', optional
+            Sometimes OGS5 doesn't put the output in the right directory.
+            You can specify a separate output directory here in this case.
+            Default: :any:'None'
+        trim : Bool, optional
+            if the ply_ids are not continuous, there will be "None" values in
+            the output list. If trim is "True" these values will be eliminated.
+            If there is just one output for a polyline, the list will
+            be eliminated and the output will be the single dict.
+            Default : True
+
+        Returns
+        -------
+        result : dict
+            keys are the Polyline names and the items are lists sorted by the
+            ply_id (it is assumed, that the ply_ids are continuous, if not, the
+            corresponding list entries are "None")
+            if pcs="ALL", the output is a dictionary with the PCS-types as keys
+        """
+        from ogs5py.reader import readtec_polyline as read
+        if output_dir is not None:
+            root = output_dir
+        elif self.has_output_dir:
+            root = self.output_dir
+        else:
+            root = self.task_root
+        return read(task_root=root, task_id=self.task_id, pcs=pcs, trim=trim)
+
     def run_model(
         self,
         ogs_root=None,
@@ -855,13 +1077,12 @@ class OGS(object):
                 )
                 print("Or provide the path to your executable")
                 return False
-            else:
-                ogs_root = check_ogs
+            ogs_root = check_ogs
         else:
             if sys.platform == "win32" and ogs_root[-4:] == ".lnk":
                 print("Don't use file links under windows...")
                 return False
-            elif os.path.islink(ogs_root):
+            if os.path.islink(ogs_root):
                 ogs_root = os.path.realpath(ogs_root)
             if os.path.exists(ogs_root):
                 if not os.path.isfile(ogs_root):
