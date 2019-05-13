@@ -1098,7 +1098,7 @@ class OGS(object):
         # add optional output directory
         # check if output directory is an absolute path with os.path.isabs
         # otherwise set it in the task_root directory
-        if self.output_dir is not None:
+        if self.has_output_dir:
             # format the outputdir
             output_dir = os.path.normpath(self.output_dir)
             # check if outputdir is given as absolut path
