@@ -723,6 +723,20 @@ class BlockFile(File):
             # self.add_content(con[con != None], main_index, sub_index)
             self.add_content(con, main_index, sub_index)
 
+    def del_block(self, index=None, del_all=False):
+        """
+        Delete a block by its index
+
+        Parameters
+        ----------
+        index : int or None, optional
+            Positional index of the block of interest. As default, the last
+            one is returned. Default: None
+        del_all: bool, optional
+            State, if all blocks shall be deleted. Default: False
+        """
+        self.del_main_keyword(main_index=index, del_all=del_all)
+
     def del_main_keyword(self, main_index=None, del_all=False):
         """
         Delete a main keyword (#key) by its position
@@ -968,7 +982,7 @@ class BlockFile(File):
                         # if content is empty (eg ""), skip it
                         if not con or (len(con) == 1 and con[0] == ""):
                             continue
-                        # bug in OGS5 ... mpd files need tab as separator
+                        # bug in OGS5 ... mpd files need tab as separator (?)
                         # and no initial indentation
                         if (
                             mkey == "MEDIUM_PROPERTIES_DISTRIBUTED"
@@ -1011,7 +1025,7 @@ class BlockFile(File):
                     out += SUB_IND + "$" + skey + "\n"
                 # iterate over the content
                 for con in self.cont[i][j][:3]:
-                    out += CON_IND + " ".join(con) + "\n"
+                    out += CON_IND + " ".join(map(str, con)) + "\n"
                 if len(self.cont[i][j]) > 3:
                     out += CON_IND + " ...\n"
         if self.mainkw:
