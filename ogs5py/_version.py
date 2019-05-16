@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 """Provide a central version"""
-__version__ = "0.6.4"
+__version__ = "0.6.5.dev0"
