@@ -9,7 +9,12 @@ import os
 import glob
 import xml.etree.ElementTree as ET
 import numpy as np
-from vtk import vtkDataReader, vtkXMLFileReadTester
+from vtk import (
+    vtkDataReader,
+    vtkXMLFileReadTester,
+    vtkStringOutputWindow,
+    vtkOutputWindow,
+)
 from ogs5py.tools.types import PCS_TYP
 from ogs5py.reader.vtkhelper import vtkreader_dict, XMLreader_dict
 from ogs5py.reader.techelper import (
@@ -19,6 +24,11 @@ from ogs5py.reader.techelper import (
     readtec_multi_table,
 )
 from ogs5py.tools.tools import split_file_path
+
+# redirect VTK error to a string
+VTK_ERR = vtkStringOutputWindow()
+VTK_STD_OUT = vtkOutputWindow()
+VTK_STD_OUT.SetInstance(VTK_ERR)
 
 
 ###############################################################################
