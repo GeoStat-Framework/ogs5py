@@ -865,6 +865,7 @@ class OGS(object):
             if pcs="ALL", the output is a dictionary with the PCS-types as keys
         """
         from ogs5py.reader import readvtk as read
+
         if output_dir is not None:
             root = output_dir
         elif self.has_output_dir:
@@ -915,6 +916,7 @@ class OGS(object):
             if pcs="ALL", the output is a dictionary with the PCS-types as keys
         """
         from ogs5py.reader import readpvd as read
+
         if output_dir is not None:
             root = output_dir
         elif self.has_output_dir:
@@ -963,6 +965,7 @@ class OGS(object):
             if pcs="ALL", the output is a dictionary with the PCS-types as keys
         """
         from ogs5py.reader import readtec_point as read
+
         if output_dir is not None:
             root = output_dir
         elif self.has_output_dir:
@@ -1018,6 +1021,7 @@ class OGS(object):
             if pcs="ALL", the output is a dictionary with the PCS-types as keys
         """
         from ogs5py.reader import readtec_polyline as read
+
         if output_dir is not None:
             root = output_dir
         elif self.has_output_dir:
