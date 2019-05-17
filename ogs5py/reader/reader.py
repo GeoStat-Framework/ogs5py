@@ -27,6 +27,8 @@ from ogs5py.tools.tools import split_file_path
 
 # redirect VTK error to a string
 VTK_ERR = vtkStringOutputWindow()
+"""VTK Error output. Accessible with ``VTK_ERR.GetOutput()``"""
+
 VTK_STD_OUT = vtkOutputWindow()
 VTK_STD_OUT.SetInstance(VTK_ERR)
 
