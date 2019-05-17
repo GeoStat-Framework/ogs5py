@@ -1024,6 +1024,11 @@ class MSH(MSHsgl):
     def _dict(self, value):
         self.__meshlist[self.block] = value
 
+    @property
+    def block_no(self):
+        """:class:`int`: The number of blocks in the file."""
+        return len(self.__meshlist)
+
     # select the block to be edited
     @property
     def block(self):
