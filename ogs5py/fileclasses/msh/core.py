@@ -808,6 +808,42 @@ class MSHsgl(File):
         """
         return check_mesh_list(self._meshlist, verbose=verbose)
 
+    def swap_axis(self, axis1="y", axis2="z"):
+        """
+        Swap axis of the coordinate system
+
+        Parameters
+        ----------
+        axis1 : :class:`str` or :class:`int`, optional
+            First selected Axis.
+            Either in ["x", "y", "z"] or in [0, 1, 2]. Default: "y"
+        axis2 : :class:`str` or :class:`int`, optional
+            Second selected Axis.
+            Either in ["x", "y", "z"] or in [0, 1, 2]. Default: "z"
+        """
+        axis = ["x", "y", "z"]
+        if axis1 in range(3):
+            axis1 = axis[axis1]
+        if axis2 in range(3):
+            axis2 = axis[axis2]
+        if axis1 not in axis or axis2 not in axis:
+            raise ValueError(
+                "MSH.swap_axis: axis need to be 'x', 'y' or 'z': "
+                + str(axis1)
+                + ", "
+                + str(axis2)
+            )
+        if axis1 == axis2:
+            raise ValueError(
+                "MSH.swap_axis: please select distict axis: "
+                + str(axis1)
+                + " = "
+                + str(axis2)
+            )
+        ax1 = axis.index(axis1)
+        ax2 = axis.index(axis2)
+        self.NODES[:, [ax1, ax2]] = self.NODES[:, [ax2, ax1]]
+
     def rotate(
         self,
         angle,
