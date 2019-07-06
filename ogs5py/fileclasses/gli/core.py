@@ -681,10 +681,7 @@ class GLI(File):
             }
         # add by coordinates
         elif (
-            np.issubdtype(points.dtype, np.floating)
-            and points.ndim == 2
-            and points.shape[0] >= 2
-            and points.shape[1] == 3
+            points.ndim == 2 and points.shape[0] >= 2 and points.shape[1] == 3
         ):
             if closed:
                 points = np.vstack((points, points[0]))
