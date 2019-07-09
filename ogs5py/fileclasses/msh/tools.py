@@ -384,7 +384,7 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
 def save_ogs5msh(
     filepath, mesh, top_com=None, bot_com=None, verbose=True, **kwargs
 ):
-    """
+    r"""
     save a given OGS5 mesh file
 
     Parameters
@@ -531,7 +531,7 @@ def import_mesh(
     filepath, file_format=None, ignore_unknown=False, import_dim=(1, 2, 3)
 ):
     """
-    import an external unstructured mesh from diffrent file-formats
+    Import an external unstructured mesh from diffrent file-formats.
 
     Parameters
     ----------
@@ -568,9 +568,8 @@ def import_mesh(
     and converts the output (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
     """
-
     mesh = mio.read(filepath, file_format=file_format)
-    out = convert_meshio(mesh.points, mesh.cells, ignore_unknown, import_dim)
+    out = convert_meshio(mesh, ignore_unknown, import_dim)
 
     return out
 
@@ -580,10 +579,13 @@ def export_mesh(
     mesh,
     file_format=None,
     export_material_id=True,
-    add_data_by_id=None,
+    export_element_id=True,
+    cell_data_by_id=None,
+    point_data=None,
+    field_data=None,
 ):
     """
-    export an ogs mesh to diffrent file-formats
+    Export an ogs mesh to diffrent file-formats.
 
     Parameters
     ----------
@@ -613,8 +615,19 @@ def export_mesh(
     export_material_id : bool, optional
         Here you can specify if the material_id should be exported.
         Default: True
-    add_data_by_id : ndarray or dict, optional
-        Here you can specify additional element data sorted by their IDs.
+    export_element_id : bool, optional
+        Here you can specify if the element_id should be exported.
+        Default: True
+    cell_data_by_id : ndarray or dict, optional
+        Here you can specify additional element/cell data sorted by their IDs.
+        It can be a dictionary with data-name as key and the ndarray as value.
+        Default: None
+    point_data : ndarray or dict, optional
+        Here you can specify additional point data sorted by their IDs.
+        It can be a dictionary with data-name as key and the ndarray as value.
+        Default: None
+    field_data : ndarray or dict, optional
+        Here you can specify additional field data of the mesh.
         It can be a dictionary with data-name as key and the ndarray as value.
         Default: None
 
@@ -627,8 +640,9 @@ def export_mesh(
     cells = {}
     cell_data = {}
     # assure we have a dict for the additional data
-    if add_data_by_id is not None and not isinstance(add_data_by_id, dict):
-        add_data_by_id = {"add_data": add_data_by_id}
+    if cell_data_by_id is not None and not isinstance(cell_data_by_id, dict):
+        cell_data_by_id = {"add_data": cell_data_by_id}
+
     for elemi, eleme in enumerate(ELEM_NAMES):
         # skip elements not present in the mesh
         if eleme not in mesh["elements"]:
@@ -640,45 +654,70 @@ def export_mesh(
             cell_data[MESHIO_NAMES[elemi]] = {
                 "material_id": dcp(mesh["material_id"][eleme])
             }
+        # export element ID if stated
+        if export_element_id:
+            if MESHIO_NAMES[elemi] in cell_data:
+                cell_data[MESHIO_NAMES[elemi]]["element_id"] = dcp(
+                    mesh["element_id"][eleme]
+                )
+            else:
+                cell_data[MESHIO_NAMES[elemi]] = {
+                    "element_id": dcp(mesh["element_id"][eleme])
+                }
         # write additional data
-        if add_data_by_id is not None:
+        if cell_data_by_id is not None:
             # if material ID was written, the dictionary already exists
             if MESHIO_NAMES[elemi] in cell_data:
-                for data in add_data_by_id:
-                    cell_data[MESHIO_NAMES[elemi]][data] = add_data_by_id[
+                for data in cell_data_by_id:
+                    cell_data[MESHIO_NAMES[elemi]][data] = cell_data_by_id[
                         data
                     ][mesh["element_id"][eleme]]
             # if material ID was not written, create a dictionary
             else:
-                for data in add_data_by_id:
+                for data in cell_data_by_id:
                     cell_data[MESHIO_NAMES[elemi]] = {
-                        data: add_data_by_id[data][mesh["element_id"][eleme]]
+                        data: cell_data_by_id[data][mesh["element_id"][eleme]]
                     }
 
-    if not export_material_id and add_data_by_id is None:
+    if not cell_data:
         cell_data = None
+    print(cell_data)
 
     mesh_out = mio.Mesh(
-        points, cells, point_data=None, cell_data=cell_data, field_data=None
+        points=points,
+        cells=cells,
+        point_data=point_data,
+        cell_data=cell_data,
+        field_data=field_data,
     )
     mio.write(filepath, mesh_out, file_format=file_format)
 
 
-def convert_meshio(points, cells, ignore_unknown=False, import_dim=(1, 2, 3)):
+def convert_meshio(
+    mesh,
+    ignore_unknown=False,
+    import_dim=(1, 2, 3),
+    material_id_name="material_id",
+    element_id_name="element_id",
+):
     """
-    convert points and cells from meshio to ogs format
+    Convert points and cells from meshio to ogs format.
 
     Parameters
     ----------
-    points : ndarray
-        points as given by meshio
-    cells : dict
-        cells as given by meshio
+    mesh : meshio mesh class
+        The given mesh by meshio
     ignore_unknown : bool, optional
         Unknown data in the file will be ignored. Default: False
     import_dim : iterable of int or single int, optional
         State which elements should be imported by dimensionality.
         Default: (1, 2, 3)
+    element_id_name : str, optional
+        The name of the cell-data containing the element IDs if present.
+        Default: "element_id"
+    material_id_name : str, optional
+        The name of the cell-data containing the material IDs if present.
+        Default: "material_id"
 
     Returns
     -------
@@ -702,6 +741,9 @@ def convert_meshio(points, cells, ignore_unknown=False, import_dim=(1, 2, 3)):
     (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
     """
+    nodes = mesh.points
+    cells = mesh.cells
+    cell_data = mesh.cell_data
     if not isinstance(import_dim, (set, list, tuple)):
         import_dim = [import_dim]
 
@@ -723,17 +765,28 @@ def convert_meshio(points, cells, ignore_unknown=False, import_dim=(1, 2, 3)):
             raise ValueError("import_mesh: Unsupported element types")
 
     elements = {}
+    material_id = {}
+    element_id = {}
     for elm_i, elm_e in enumerate(MESHIO_NAMES):
         if elm_e not in cells:
             continue
         elements[ELEM_NAMES[elm_i]] = cells[elm_e]
+        if material_id_name in cell_data[elm_e]:
+            material_id[ELEM_NAMES[elm_i]] = cell_data[elm_e][material_id_name]
+        if element_id_name in cell_data[elm_e]:
+            element_id[ELEM_NAMES[elm_i]] = cell_data[elm_e][element_id_name]
+
+    if not material_id:
+        material_id = gen_std_mat_id(elements)
+    if not element_id:
+        element_id = gen_std_elem_id(elements)
 
     out = {
         "mesh_data": {},
-        "nodes": points,
+        "nodes": nodes,
         "elements": elements,
-        "material_id": gen_std_mat_id(elements),
-        "element_id": gen_std_elem_id(elements),
+        "material_id": material_id,
+        "element_id": element_id,
     }
 
     rem_dim = {1, 2, 3} - set(import_dim)
@@ -762,11 +815,13 @@ def remove_dim(mesh, remove):
 
     Notes
     -----
-    This will reset the element ids to default (ordered by element types)
+    This will keep the element ids order.
     """
     if not isinstance(remove, (set, list, tuple)):
         remove = [remove]
     edited = False
+    ele_no = no_of_elements(mesh)
+    removed_ele_id = []
     for i in remove:
         if i not in range(1, 4):
             continue
@@ -774,9 +829,19 @@ def remove_dim(mesh, remove):
             if elem in mesh["elements"]:
                 edited = True
                 del mesh["elements"][elem]
+                removed_ele_id.append(mesh["element_id"][elem])
+                del mesh["element_id"][elem]
                 del mesh["material_id"][elem]
     if edited:
-        mesh["element_id"] = gen_std_elem_id(mesh["elements"])
+        removed_ele_id = np.concatenate(removed_ele_id)
+        ids = np.arange(ele_no)
+        del_id = np.setdiff1d(np.arange(ele_no), removed_ele_id)
+        new_id = np.argsort(del_id)
+        # trick: replace old IDs with new ones
+        ids[del_id] = new_id
+        for elem in mesh["element_id"]:
+            mesh["element_id"][elem] = ids[mesh["element_id"][elem]]
+        # mesh["element_id"] = gen_std_elem_id(mesh["elements"])
 
 
 ### modifying routines
