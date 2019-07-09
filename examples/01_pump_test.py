@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from ogs5py import OGS
-from ogs5py.reader import readtec_point
 from matplotlib import pyplot as plt
 
-model = OGS(task_root="pump_test", task_id="model")
+model = OGS(task_root="pump_test1", task_id="model")
 
 # generate a radial mesh
 model.msh.generate("radial", dim=2, rad=range(51))
@@ -47,6 +46,13 @@ model.out.add_block(  # point observation
     DAT_TYPE='TECPLOT',
     TIM_TYPE=['STEPS', 1],
 )
+model.out.add_block(  # domain observation
+    PCS_TYPE='GROUNDWATER_FLOW',
+    NOD_VALUES='HEAD',
+    GEO_TYPE=['DOMAIN'],
+    DAT_TYPE='PVD',
+    TIM_TYPE=['STEPS', 1],
+)
 model.pcs.add_block(  # set the process type
     PCS_TYPE='GROUNDWATER_FLOW',
     NUM_TYPE='NEW',
@@ -63,11 +69,7 @@ model.tim.add_block(  # set the timesteps
 model.write_input()
 success = model.run_model()
 
-point = readtec_point(
-    task_root="pump_test",
-    task_id="model",
-    pcs='GROUNDWATER_FLOW',
-)
+point = model.readtec_point(pcs='GROUNDWATER_FLOW')
 time = point['owell']["TIME"]
 head = point['owell']["HEAD"]
 

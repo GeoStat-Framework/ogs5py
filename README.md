@@ -43,7 +43,6 @@ The point output at the observation well is plotted afterwards.
 
 ```python
 from ogs5py import OGS
-from ogs5py.reader import readtec_point
 from matplotlib import pyplot as plt
 
 model = OGS(task_root="pump_test", task_id="model")
@@ -106,11 +105,7 @@ model.tim.add_block(  # set the timesteps
 model.write_input()
 success = model.run_model()
 
-point = readtec_point(
-    task_root="pump_test",
-    task_id="model",
-    pcs='GROUNDWATER_FLOW',
-)
+point = model.readtec_point(pcs='GROUNDWATER_FLOW')
 time = point['owell']["TIME"]
 head = point['owell']["HEAD"]
 
