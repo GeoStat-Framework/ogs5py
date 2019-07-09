@@ -689,7 +689,8 @@ class MSHsgl(File):
 
     def import_mesh(self, filepath, **kwargs):
         """
-        import an external unstructured mesh from diffrent file-formats
+        Import an external unstructured mesh from diffrent file-formats.
+
         kwargs will be forwarded to "tools.import_mesh"
 
         Parameters
@@ -721,7 +722,8 @@ class MSHsgl(File):
 
     def export_mesh(self, filepath, verbose=False, **kwargs):
         """
-        export the mesh to an unstructured mesh in diffrent file-formats
+        Export the mesh to an unstructured mesh in diffrent file-formats.
+
         kwargs will be forwarded to "tools.export_mesh"
 
         Parameters
@@ -731,13 +733,26 @@ class MSHsgl(File):
         file_format : str, optional
             Here you can specify the fileformat. If 'None' it will be
             determined by file extension. Default: None
-        verbose : bool, optional
-            Print information for the executed checks. Default: True
         export_material_id : bool, optional
             Here you can specify if the material_id should be exported.
             Default: True
-        add_data_by_id : ndarray, optional
+        export_element_id : bool, optional
+            Here you can specify if the element_id should be exported.
+            Default: True
+        cell_data_by_id : ndarray or dict, optional
             Here you can specify additional element data sorted by their IDs.
+            It can be a dictionary with data-name as key and
+            the ndarray as value.
+            Default: None
+        point_data : ndarray or dict, optional
+            Here you can specify additional point data sorted by their IDs.
+            It can be a dictionary with data-name as key and
+            the ndarray as value.
+            Default: None
+        field_data : ndarray or dict, optional
+            Here you can specify additional field data of the mesh.
+            It can be a dictionary with data-name as key and
+            the ndarray as value.
             Default: None
 
         Notes
@@ -752,7 +767,9 @@ class MSHsgl(File):
 
     def combine_mesh(self, ext_mesh, **kwargs):
         """
-        Combine this mesh with an external mesh. The node list will be
+        Combine this mesh with an external mesh.
+
+        The node list will be
         updated to eliminate duplicates.
         Element intersections are not checked.
         kwargs will be forwarded to "tools.combine"
@@ -791,8 +808,9 @@ class MSHsgl(File):
 
     def check(self, verbose=True):
         """
-        Check if the mesh is valid in the sence, that the
-        contained data is consistent.
+        Check if the mesh is valid.
+
+        Checked in the sence, that the contained data is consistent.
         Checks for correct element definitions or Node duplicates
         are not carried out.
 
@@ -810,7 +828,7 @@ class MSHsgl(File):
 
     def swap_axis(self, axis1="y", axis2="z"):
         """
-        Swap axis of the coordinate system
+        Swap axis of the coordinate system.
 
         Parameters
         ----------
@@ -878,6 +896,7 @@ class MSHsgl(File):
     def transform(self, xyz_func, **kwargs):
         """
         Transform a given mesh with a given function "xyz_func".
+
         kwargs will be forwarded to "xyz_func".
 
         Parameters
@@ -901,7 +920,7 @@ class MSHsgl(File):
 
     def generate(self, generator="rectangular", **kwargs):
         """
-        Use a mesh-generator from the generator module
+        Use a mesh-generator from the generator module.
 
         See: :any:`ogs5py.fileclasses.msh.generator`
 
@@ -992,7 +1011,7 @@ class MSHsgl(File):
 
 class MSH(MSHsgl):
     """
-    Class for a multi layer mesh file that contains multiple '#FEM_MSH' Blocks
+    Class for a multi layer mesh file that contains multiple '#FEM_MSH' Blocks.
 
     Parameters
     ----------
