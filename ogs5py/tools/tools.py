@@ -942,8 +942,14 @@ def centroid(typ, *pnt):
 
     Returns
     -------
-    Volume : ndarray
+    centroid : ndarray
         Array containing the Centroids of the give elements.
+
+    Notes
+    -----
+    The calculation is performed by geometric decomposition of the elements.
+
+    https://en.wikipedia.org/wiki/Centroid#By_geometric_decomposition
     """
     # if the pntinates are stacked, divide them
     if len(pnt) == 1:
