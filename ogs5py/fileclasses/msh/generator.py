@@ -24,11 +24,11 @@ from __future__ import division, print_function, absolute_import
 import numpy as np
 
 from ogs5py.fileclasses.msh.tools import (
-    convert_meshio,
     combine,
     gen_std_elem_id,
     gen_std_mat_id,
 )
+from ogs5py.fileclasses.msh.msh_io import convert_meshio
 from ogs5py.fileclasses.msh.gmsh import (
     gmsh_grid_adapt2D,
     gmsh_grid_adapt3D,

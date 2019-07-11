@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-core module for the ogs5py-mesh package.
+Core module for the ogs5py-mesh package.
+
 Containing the classes for the OGS5 mesh files.
 """
 
@@ -11,20 +12,22 @@ from ogs5py.fileclasses.msh import generator as gen
 from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
 from ogs5py.fileclasses.msh.checker import check_mesh_list, check_mesh_dict
 from ogs5py.fileclasses.msh.tools import (
-    load_ogs5msh,
-    save_ogs5msh,
-    import_mesh,
-    export_mesh,
     combine,
     get_centroids,
     get_volumes,
-    remove_dim,
     gen_std_elem_id,
     gen_std_mat_id,
     rotate_mesh,
     shift_mesh,
     transform_mesh,
     no_of_elements,
+)
+from ogs5py.fileclasses.msh.msh_io import (
+    load_ogs5msh,
+    save_ogs5msh,
+    import_mesh,
+    export_mesh,
+    remove_dim,
 )
 from ogs5py.fileclasses.base import File
 
