@@ -987,10 +987,8 @@ def _cent_tri(*pnt):
 
 def _cent_quad(*pnt):
     return (
-        _cent_tri(pnt[0], pnt[1], pnt[2])
-        * _vol_tri(pnt[0], pnt[1], pnt[2])
-        + _cent_tri(pnt[2], pnt[3], pnt[0])
-        * _vol_tri(pnt[2], pnt[3], pnt[0])
+        _cent_tri(pnt[0], pnt[1], pnt[2]) * _vol_tri(pnt[0], pnt[1], pnt[2])
+        + _cent_tri(pnt[2], pnt[3], pnt[0]) * _vol_tri(pnt[2], pnt[3], pnt[0])
     ) / _vol_quad(*pnt)
 
 
