@@ -21,6 +21,7 @@ from ogs5py.tools.tools import (
     rotation_matrix,
     uncomment,
     volume,
+    centroid,
 )
 
 
@@ -1033,7 +1034,11 @@ def get_centroids(mesh):
             if elem not in mesh_i["elements"]:
                 continue
             points = mesh_i["nodes"][mesh_i["elements"][elem]]
-            out[elem] = np.mean(points, axis=1)
+            # node number needs to be first for "centroid()"
+            points = np.swapaxes(points, 0, 1)
+            out[elem] = centroid(elem, points)
+            # this was just the centroid of the element nodes
+            # out[elem] = np.mean(points, axis=1)
         result.append(out)
 
     if single:
