@@ -39,6 +39,7 @@ Geometric tools
    hull_deform
    rotation_matrix
    volume
+   centroid
 
 Array tools
 ^^^^^^^^^^^
@@ -992,10 +993,20 @@ def _cent_tri(*pnt):
 
 
 def _cent_quad(*pnt):
-    return (
-        _cent_tri(pnt[0], pnt[1], pnt[2]) * _vol_tri(pnt[0], pnt[1], pnt[2])
-        + _cent_tri(pnt[2], pnt[3], pnt[0]) * _vol_tri(pnt[2], pnt[3], pnt[0])
-    ) / _vol_quad(*pnt)
+    return np.einsum(
+        "ij,i->ij",
+        np.einsum(
+            "ij,i->ij",
+            _cent_tri(pnt[0], pnt[1], pnt[2]),
+            _vol_tri(pnt[0], pnt[1], pnt[2]),
+        )
+        + np.einsum(
+            "ij,i->ij",
+            _cent_tri(pnt[2], pnt[3], pnt[0]),
+            _vol_tri(pnt[2], pnt[3], pnt[0]),
+        ),
+        _vol_quad(*pnt) ** -1,
+    )
 
 
 def _cent_tet(*pnt):
@@ -1003,27 +1014,51 @@ def _cent_tet(*pnt):
 
 
 def _cent_pyra(*pnt):
-    return (
-        _cent_tet(pnt[0], pnt[1], pnt[2], pnt[4])
-        * _vol_tet(pnt[0], pnt[1], pnt[2], pnt[4])
-        + _cent_tet(pnt[0], pnt[2], pnt[3], pnt[4])
-        * _vol_tet(pnt[0], pnt[2], pnt[3], pnt[4])
-    ) / _vol_pyra(*pnt)
+    return np.einsum(
+        "ij,i->ij",
+        np.einsum(
+            "ij,i->ij",
+            _cent_tet(pnt[0], pnt[1], pnt[2], pnt[4]),
+            _vol_tet(pnt[0], pnt[1], pnt[2], pnt[4]),
+        )
+        + np.einsum(
+            "ij,i->ij",
+            _cent_tet(pnt[0], pnt[2], pnt[3], pnt[4]),
+            _vol_tet(pnt[0], pnt[2], pnt[3], pnt[4]),
+        ),
+        _vol_pyra(*pnt) ** -1,
+    )
 
 
 def _cent_pris(*pnt):
-    return (
-        _cent_pyra(pnt[0], pnt[3], pnt[4], pnt[1], pnt[2])
-        * _vol_pyra(pnt[0], pnt[3], pnt[4], pnt[1], pnt[2])
-        + _cent_tet(pnt[3], pnt[4], pnt[5], pnt[2])
-        * _vol_tet(pnt[3], pnt[4], pnt[5], pnt[2])
-    ) / _vol_pris(*pnt)
+    return np.einsum(
+        "ij,i->ij",
+        np.einsum(
+            "ij,i->ij",
+            _cent_pyra(pnt[0], pnt[3], pnt[4], pnt[1], pnt[2]),
+            _vol_pyra(pnt[0], pnt[3], pnt[4], pnt[1], pnt[2]),
+        )
+        + np.einsum(
+            "ij,i->ij",
+            _cent_tet(pnt[3], pnt[4], pnt[5], pnt[2]),
+            _vol_tet(pnt[3], pnt[4], pnt[5], pnt[2]),
+        ),
+        _vol_pris(*pnt) ** -1,
+    )
 
 
 def _cent_hex(*pnt):
-    return (
-        _cent_pris(pnt[0], pnt[1], pnt[2], pnt[4], pnt[5], pnt[6])
-        * _vol_pris(pnt[0], pnt[1], pnt[2], pnt[4], pnt[5], pnt[6])
-        + _cent_pris(pnt[0], pnt[2], pnt[3], pnt[4], pnt[5], pnt[6], pnt[7])
-        * _vol_pris(pnt[0], pnt[2], pnt[3], pnt[4], pnt[5], pnt[6], pnt[7])
-    ) / _vol_hex(*pnt)
+    return np.einsum(
+        "ij,i->ij",
+        np.einsum(
+            "ij,i->ij",
+            _cent_pris(pnt[0], pnt[1], pnt[2], pnt[4], pnt[5], pnt[6]),
+            _vol_pris(pnt[0], pnt[1], pnt[2], pnt[4], pnt[5], pnt[6]),
+        )
+        + np.einsum(
+            "ij,i->ij",
+            _cent_pris(pnt[0], pnt[2], pnt[3], pnt[4], pnt[5], pnt[6], pnt[7]),
+            _vol_pris(pnt[0], pnt[2], pnt[3], pnt[4], pnt[5], pnt[6], pnt[7]),
+        ),
+        _vol_hex(*pnt) ** -1,
+    )
