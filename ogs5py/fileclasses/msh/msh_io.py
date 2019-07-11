@@ -680,7 +680,6 @@ def export_mesh(
 
     if not cell_data:
         cell_data = None
-    print(cell_data)
 
     mesh_out = mio.Mesh(
         points=points,
