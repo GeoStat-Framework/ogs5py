@@ -66,3 +66,12 @@ All notable changes to **ogs5py** will be documented in this file.
 ## [0.6.0] - 2019-01-22
 
 First release of ogs5py.
+
+
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.5...HEAD
+[0.6.5]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.4...v0.6.5
+[0.6.4]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.3...v0.6.4
+[0.6.3]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.2...v0.6.3
+[0.6.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/GeoStat-Framework/ogs5py/releases/tag/v0.0.1
