@@ -74,4 +74,4 @@ First release of ogs5py.
 [0.6.3]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/GeoStat-Framework/ogs5py/releases/tag/v0.0.1
+[0.6.0]: https://github.com/GeoStat-Framework/ogs5py/releases/tag/v0.6.0
