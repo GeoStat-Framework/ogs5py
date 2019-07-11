@@ -356,27 +356,27 @@ for i, pcs in enumerate(PCS_TYP):
     PRIM_VAR_BY_PCS[pcs] = PRIM_VAR[i]
 # file extensions of ogs5 input files (without mpd, gli_ext, rfr files)
 OGS_EXT = [
-    ".bc",  # Boundary Condition
-    ".cct",  # Communication Table
-    ".ddc",  # MPI domain decomposition
-    ".fct",  # Function
-    ".gem",  # geochemical thermodynamic modeling coupling
-    ".gli",  # Geometry
-    ".ic",  # Initial Condition
-    ".krc",  # Kinetric Reaction
-    ".mcp",  # reactive components for modelling chemical processes
-    ".mfp",  # Fluid Properties
-    ".mmp",  # Medium Properties
     ".msh",  # Mesh
-    ".msp",  # Solid Properties
-    ".num",  # Settings for the numerical solver
-    ".out",  # Output Settings
+    ".gli",  # Geometry
+    ".ddc",  # MPI domain decomposition
     ".pcs",  # Process settings
-    ".pct",  # Particle Definition for RANDOM_WALK
+    ".rfd",  # definition of time-curves for variing BCs or STs
+    ".cct",  # Communication Table
+    ".fct",  # Function
+    ".bc",  # Boundary Condition
+    ".ic",  # Initial Condition
+    ".st",  # Source Term
+    ".mmp",  # Medium Properties
+    ".msp",  # Solid Properties
+    ".mfp",  # Fluid Properties
+    ".mcp",  # reactive components for modelling chemical processes
+    ".gem",  # geochemical thermodynamic modeling coupling
+    ".krc",  # Kinetric Reaction
     ".pqc",  # Phreqqc coupling
     ".rei",  # Reaction Interface
-    ".rfd",  # definition of time-curves for variing BCs or STs
-    ".st",  # Source Term
+    ".pct",  # Particle Definition for RANDOM_WALK
+    ".num",  # Settings for the numerical solver
     ".tim",  # Time settings
+    ".out",  # Output Settings
 ]
 """list: all ogs file extensions"""
