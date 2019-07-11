@@ -2,7 +2,7 @@
 from ogs5py import OGS
 from matplotlib import pyplot as plt
 
-model = OGS(task_root="pump_test1", task_id="model")
+model = OGS(task_root="pump_test", task_id="model")
 
 # generate a radial mesh
 model.msh.generate("radial", dim=2, rad=range(51))
@@ -44,13 +44,6 @@ model.out.add_block(  # point observation
     NOD_VALUES='HEAD',
     GEO_TYPE=['POINT', "owell"],
     DAT_TYPE='TECPLOT',
-    TIM_TYPE=['STEPS', 1],
-)
-model.out.add_block(  # domain observation
-    PCS_TYPE='GROUNDWATER_FLOW',
-    NOD_VALUES='HEAD',
-    GEO_TYPE=['DOMAIN'],
-    DAT_TYPE='PVD',
     TIM_TYPE=['STEPS', 1],
 )
 model.pcs.add_block(  # set the process type
