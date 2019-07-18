@@ -174,7 +174,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[GPL][gpl_link] © 2018-2019 (inspired by Falk Hesse and Miao Jing)
+[MIT][gpl_link] © 2018-2019 (inspired by Falk Hesse and Miao Jing)
 
 [gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/

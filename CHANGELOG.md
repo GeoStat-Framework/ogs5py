@@ -18,7 +18,7 @@ All notable changes to **ogs5py** will be documented in this file.
 
 ### Changes
 * ``MSH.export_mesh`` argument ``add_data_by_id`` renamed to ``cell_data_by_id``: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
-
+* ``ogs5py`` is now licensed under the MIT license
 
 ## [0.6.5] - 2019-07-05
 
