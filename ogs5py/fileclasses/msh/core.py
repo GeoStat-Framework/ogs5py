@@ -950,7 +950,7 @@ class MSHsgl(File):
         """
         self._dict = getattr(gen, generator)(**kwargs)
 
-    def show(self, show_element_id=True):
+    def show(self, show_material_id=True):
         """
         Display the mesh colored by its material ID.
 
@@ -967,7 +967,7 @@ class MSHsgl(File):
         """
         from ogs5py.fileclasses.msh.viewer import show_mesh
 
-        show_mesh(self._dict, show_element_id=show_element_id)
+        show_mesh(self._dict, show_material_id=show_material_id)
 
     #######################
     ### Special methods

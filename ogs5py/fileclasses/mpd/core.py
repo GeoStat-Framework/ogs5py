@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file.
-"""
+"""Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file."""
 
 from __future__ import absolute_import, division, print_function
 import os

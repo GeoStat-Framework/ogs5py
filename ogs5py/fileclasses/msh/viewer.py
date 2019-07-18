@@ -8,7 +8,7 @@ from __future__ import division, print_function, absolute_import
 import os
 import tempfile
 import numpy as np
-from ogs5py.fileclasses.msh.tools import export_mesh
+from ogs5py.fileclasses.msh.msh_io import export_mesh
 
 os.environ["QT_API"] = "pyqt"
 os.environ["ETS_TOOLKIT"] = "qt4"
@@ -20,7 +20,7 @@ except ImportError:
     MAYA_AVAIL = False
 
 
-def show_mesh(mesh, show_element_id=True):
+def show_mesh(mesh, show_material_id=True):
     """
     Display a given mesh colored by its material ID.
 
@@ -44,7 +44,7 @@ def show_mesh(mesh, show_element_id=True):
                 contains material ids for each element sorted by element types
             element_id : dictionary
                 contains element ids for each element sorted by element types
-    show_element_id : bool, optional
+    show_material_id : bool, optional
         Here you can specify if the mesh should be colored by material_id.
         Default: True
 
@@ -72,9 +72,9 @@ def show_mesh(mesh, show_element_id=True):
         max_id = np.max((max_id, np.max(mesh["material_id"][matid])))
     id_no = int(max_id - min_id + 1)
     # create a temp-file which contains a vtk version of the mesh
-    vtkfile = tempfile.NamedTemporaryFile(suffix=".vtk")
+    vtkfile = tempfile.NamedTemporaryFile(suffix=".vtu")
     # export the mesh to the temp vtk file
-    export_mesh(vtkfile.name, mesh, export_material_id=show_element_id)
+    export_mesh(vtkfile.name, mesh, export_material_id=show_material_id)
     print("temp vtk file for mayavi:")
     print(vtkfile.name)
     # load the vtk file to mayavi's mlab
@@ -87,7 +87,9 @@ def show_mesh(mesh, show_element_id=True):
     surface.actor.property.interpolation = "flat"
     # settings for the material ID
     #    surface.parent.scalar_lut_manager.lut_mode = "Set1"
-    if show_element_id:
+    if show_material_id:
+        surface.parent.parent._cell_scalars_name_changed("material_id")
+        surface.parent.parent.update()
         surface.parent.scalar_lut_manager.use_default_range = False
         surface.parent.scalar_lut_manager.data_range = [min_id, max_id]
         surface.parent.scalar_lut_manager.number_of_colors = max(id_no, 2)
@@ -97,7 +99,6 @@ def show_mesh(mesh, show_element_id=True):
         surface.parent.scalar_lut_manager.shadow = True
         surface.parent.scalar_lut_manager.show_scalar_bar = True
         surface.parent.scalar_lut_manager.scalar_bar.label_format = "%.0f"
-    #        mlab.colorbar(surface, orientation='vertical', label_fmt='%.0f')
     # give it a name
     surface.name = "OGS mesh"
     # show it
