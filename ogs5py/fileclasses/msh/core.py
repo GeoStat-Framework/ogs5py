@@ -87,6 +87,7 @@ class MSHsgl(File):
     # Pretend that there is a main keyword in the standard BASE-FORMAT
     @property
     def is_empty(self):
+        """State if file is empty."""
         return not bool(self._meshlist[0]["elements"])
 
     #######################
@@ -95,7 +96,7 @@ class MSHsgl(File):
     # this is a workaround to make multi-layer and single-layer meshes usable
     @property
     def _meshlist(self):
-        """list: mesh as list of dicts"""
+        """list: mesh as list of dicts."""
         return [self._dict]
 
     @_meshlist.setter
@@ -163,7 +164,7 @@ class MSHsgl(File):
     #######################
     @property
     def PCS_TYPE(self):
-        """str: PCS_TYPE"""
+        """str: PCS_TYPE."""
         if "PCS_TYPE" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["PCS_TYPE"]
         return None
@@ -187,7 +188,7 @@ class MSHsgl(File):
     #######################
     @property
     def GEO_NAME(self):
-        """str: GEO_NAME"""
+        """str: GEO_NAME."""
         if "GEO_NAME" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["GEO_NAME"]
         return None
@@ -212,7 +213,7 @@ class MSHsgl(File):
     #######################
     @property
     def GEO_TYPE(self):
-        """str: GEO_TYPE"""
+        """str: GEO_TYPE."""
         if "GEO_TYPE" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["GEO_TYPE"]
         return None
@@ -236,7 +237,7 @@ class MSHsgl(File):
     #######################
     @property
     def LAYER(self):
-        """int: LAYER"""
+        """int: LAYER."""
         if "LAYER" in self._dict["mesh_data"]:
             return self._dict["mesh_data"]["LAYER"]
         return None
@@ -258,7 +259,7 @@ class MSHsgl(File):
     #######################
     @property
     def NODES(self):
-        """ndarray: (n,3) NODES of the mesh by its xyz-coordinates"""
+        """ndarray: (n,3) NODES of the mesh by its xyz-coordinates."""
         return self._dict["nodes"]
 
     @NODES.setter
@@ -271,6 +272,16 @@ class MSHsgl(File):
         del self.ELEMENTS
         del self.MATERIAL_ID
         del self.ELEMENT_ID
+
+    #######################
+    ### NODE_NO
+    #######################
+    @property
+    def NODE_NO(self):
+        """int: number of NODES."""
+        if self.NODES is None:
+            return 0
+        return self.NODES.shape[0]
 
     #######################
     ### ELEMENTS
@@ -311,6 +322,71 @@ class MSHsgl(File):
         self._dict["elements"] = {}
         del self.MATERIAL_ID
         del self.ELEMENT_ID
+
+    #######################
+    ### ELEMENT_TYPES
+    #######################
+    @property
+    def ELEMENT_TYPES(self):
+        """:class:`set`: ELEMENT types of the mesh."""
+        out = []
+        for elem in ELEM_NAMES:
+            if elem not in self.ELEMENTS:
+                continue
+            out.append(elem)
+        # return set(self.ELEMENTS)
+        return out
+
+    #######################
+    ### ELEMENT_ID
+    #######################
+    @property
+    def ELEMENT_ID(self):
+        """
+        Get and set the ELEMENT_IDs of the mesh.
+
+        Standard element id order is given by:
+
+            "line" "tri" "quad" "tet" "pyra" "pris" "hex"
+
+        Notes
+        -----
+        Type : dict of ndarrays
+            The element IDs are a dictionary containing ints
+            sorted by their element-type
+
+                "line" : ndarray of shape (n_line,)
+                    1D element with 2 nodes
+                "tri" : ndarray of shape (n_tri,)
+                    2D element with 3 nodes
+                "quad" : ndarray of shape (n_quad,)
+                    2D element with 4 nodes
+                "tet" : ndarray of shape (n_tet,)
+                    3D element with 4 nodes
+                "pyra" : ndarray of shape (n_pyra,)
+                    3D element with 5 nodes
+                "pris" : ndarray of shape (n_pris,)
+                    3D element with 6 nodes
+                "hex" : ndarray of shape (n_hex,)
+                    3D element with 8 nodes
+        """
+        return self._dict["element_id"]
+
+    @ELEMENT_ID.setter
+    def ELEMENT_ID(self, value):
+        self._dict["element_id"] = value
+
+    @ELEMENT_ID.deleter
+    def ELEMENT_ID(self):
+        self._dict["element_id"] = gen_std_elem_id(self.ELEMENTS)
+
+    #######################
+    ### ELEMENT_NO
+    #######################
+    @property
+    def ELEMENT_NO(self):
+        """int: number of ELEMENTS."""
+        return no_of_elements(self._dict)
 
     #######################
     ### MATERIAL_ID
@@ -371,74 +447,12 @@ class MSHsgl(File):
         Type : ndarray
             The centroids are a list containing xyz-coordiantes
         """
-        # just call centroids once
-        tmp = dcp(self.MATERIAL_ID)
         out = np.empty(self.ELEMENT_NO, dtype=int)
         for elem in ELEM_NAMES:
             if elem not in self.ELEMENTS:
                 continue
-            out[self.ELEMENT_ID[elem]] = tmp[elem]
+            out[self.ELEMENT_ID[elem]] = self.MATERIAL_ID[elem]
         return out
-
-    #######################
-    ### ELEMENT_ID
-    #######################
-    @property
-    def ELEMENT_ID(self):
-        """
-        Get and set the ELEMENT_IDs of the mesh.
-        Standard element id order is given by:
-
-            "line" "tri" "quad" "tet" "pyra" "pris" "hex"
-
-        Notes
-        -----
-        Type : dict of ndarrays
-            The element IDs are a dictionary containing ints
-            sorted by their element-type
-
-                "line" : ndarray of shape (n_line,)
-                    1D element with 2 nodes
-                "tri" : ndarray of shape (n_tri,)
-                    2D element with 3 nodes
-                "quad" : ndarray of shape (n_quad,)
-                    2D element with 4 nodes
-                "tet" : ndarray of shape (n_tet,)
-                    3D element with 4 nodes
-                "pyra" : ndarray of shape (n_pyra,)
-                    3D element with 5 nodes
-                "pris" : ndarray of shape (n_pris,)
-                    3D element with 6 nodes
-                "hex" : ndarray of shape (n_hex,)
-                    3D element with 8 nodes
-        """
-        return self._dict["element_id"]
-
-    @ELEMENT_ID.setter
-    def ELEMENT_ID(self, value):
-        self._dict["element_id"] = value
-
-    @ELEMENT_ID.deleter
-    def ELEMENT_ID(self):
-        self._dict["element_id"] = gen_std_elem_id(self.ELEMENTS)
-
-    #######################
-    ### ELEMENT_NO
-    #######################
-    @property
-    def ELEMENT_NO(self):
-        """int: number of ELEMENTS"""
-        return no_of_elements(self._dict)
-
-    #######################
-    ### NODE_NO
-    #######################
-    @property
-    def NODE_NO(self):
-        """int: number of NODES"""
-        if self.NODES is None:
-            return 0
-        return self.NODES.shape[0]
 
     #######################
     ### centroids
@@ -557,15 +571,14 @@ class MSHsgl(File):
     ### Class methods
     #######################
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         self._block = 0
         self._meshlist = [EMPTY_MSH]
 
     def load(self, filepath, **kwargs):
-        """
+        r"""
         Load an OGS5 mesh from file.
+
         kwargs will be forwarded to "tools.load_ogs5msh"
 
         Parameters
@@ -610,7 +623,7 @@ class MSHsgl(File):
             raise ValueError("MSH: " + filepath + ": given mesh is not valid")
 
     def read_file(self, path, encoding=None, verbose=False):
-        """
+        r"""
         Load an OGS5 mesh from file.
 
         Parameters
@@ -630,6 +643,7 @@ class MSHsgl(File):
     def set_dict(self, mesh_dict):
         """
         Set an mesh as returned by tools methods or generators.
+
         Mesh will be checked for validity.
 
         Parameters
@@ -663,8 +677,9 @@ class MSHsgl(File):
             print("given mesh is not valid")
 
     def save(self, path, **kwargs):
-        """
+        r"""
         Save the mesh to an OGS5 mesh file.
+
         kwargs will be forwarded to "tools.save_ogs5msh"
 
         Parameters
@@ -956,7 +971,7 @@ class MSHsgl(File):
 
         Parameters
         ----------
-        show_element_id : bool, optional
+        show_material_id : bool, optional
             Here you can specify if the mesh should be colored by material_id.
             Default: True
 
@@ -968,6 +983,60 @@ class MSHsgl(File):
         from ogs5py.fileclasses.msh.viewer import show_mesh
 
         show_mesh(self._dict, show_material_id=show_material_id)
+
+    def set_material_id(
+        self, material_id=0, element_id=None, element_mask=None
+    ):
+        """
+        Set material IDs by the corresponding element IDs.
+
+        Parameters
+        ----------
+        material_id : :class:`int` or ndarray, optional
+            The new material IDs. Either one value or an array.
+            Default: 0
+        element_id : ndarray or None, optional
+            The corresponding element IDs, where to set the material IDs.
+            If None, all elements are assumed and the material IDs are added
+            by their index.
+            Default: None
+        element_mask : ndarray or None, optional
+            Instead of the element IDs, one can specify a mask to select the
+            element IDs.
+            Default: None
+        """
+        if (
+            isinstance(material_id, int)
+            and element_id is None
+            and element_mask is None
+        ):
+            self.MATERIAL_ID = material_id
+        else:
+            if element_id is None and element_mask is None:
+                element_id = np.arange(self.ELEMENT_NO, dtype=int)
+            else:
+                if element_mask is None:
+                    element_id = np.array(element_id, ndmin=1, dtype=int)
+                else:
+                    element_mask = np.array(element_mask, ndmin=1, dtype=bool)
+                    assert len(element_mask) == self.ELEMENT_NO, "Wrong mask."
+                    element_id = np.nonzero(element_mask)[0]
+                assert (
+                    np.max(element_id) < self.ELEMENT_NO
+                ), "Element ID out of range."
+                assert np.max(element_id) >= 0, "Element ID out of range."
+                assert len(element_id) == len(
+                    np.unique(element_id)
+                ), "Element IDs not unique."
+            if not isinstance(material_id, int):
+                material_id = np.array(material_id, ndmin=1, dtype=int)
+                assert len(element_id) == len(
+                    material_id
+                ), "Different number of material and element IDs."
+            mat_id = self.MATERIAL_ID_flat
+            mat_id[element_id] = material_id
+            for elem in self.ELEMENT_TYPES:
+                self._dict["material_id"][elem] = mat_id[self.ELEMENT_ID[elem]]
 
     #######################
     ### Special methods
