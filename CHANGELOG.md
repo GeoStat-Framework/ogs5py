@@ -8,11 +8,13 @@ All notable changes to **ogs5py** will be documented in this file.
 ### Bugfixes
 * ``GLI.add_polyline`` now allows integer coordinates for points: https://github.com/GeoStat-Framework/ogs5py/commit/bf5d684a2c01f2b6eb4e13098cfc77711c05d35d
 * ``MSH.centroids`` are now calculated as center of mass instead of center of element nodes: https://github.com/GeoStat-Framework/ogs5py/commit/b0708a69bd290d613d663385193a3a9ff69ee625
+* ``MSH.show`` was not working: https://github.com/GeoStat-Framework/ogs5py/commit/6a0489bc1675b909946e1a870459fc7f7ddf7629
 
 ### Additions
-*  ``MSH.import_mesh`` now allows the import of material_id and element_id if given as cell_data in the external mesh: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
-*  ``MSH.export_mesh`` now automatically exports material_id (already the case before) and element_id.
+* ``MSH.import_mesh`` now allows the import of material_id and element_id if given as cell_data in the external mesh: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
+* ``MSH.export_mesh`` now automatically exports material_id (already the case before) and element_id.
   Also you can now export additional ``point_data`` and ``field_data``: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
+* New method ``MSH.set_material_id`` to set the material IDs for specific elements: https://github.com/GeoStat-Framework/ogs5py/commit/4b11c6a70164565a8ab0b58d56b084b27ea781f1
 
 ### Changes
 * ``MSH.export_mesh`` argument ``add_data_by_id`` renamed to ``cell_data_by_id``: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
