@@ -9,6 +9,8 @@ All notable changes to **ogs5py** will be documented in this file.
 * ``GLI.add_polyline`` now allows integer coordinates for points: https://github.com/GeoStat-Framework/ogs5py/commit/bf5d684a2c01f2b6eb4e13098cfc77711c05d35d
 * ``MSH.centroids`` are now calculated as center of mass instead of center of element nodes: https://github.com/GeoStat-Framework/ogs5py/commit/b0708a69bd290d613d663385193a3a9ff69ee625
 * ``MSH.show`` was not working: https://github.com/GeoStat-Framework/ogs5py/commit/6a0489bc1675b909946e1a870459fc7f7ddf7629
+* ``OGS.run_model`` has now a better check for OGS success: https://github.com/GeoStat-Framework/ogs5py/commit/143d0ab56e63f9e5cc1688bc621788ad42be67e9
+* ``GMSH`` interface was updated to new meshio-API: https://github.com/GeoStat-Framework/ogs5py/commit/d3e05941a7a76a6d6fdf53a148af7b196fede66a
 
 ### Additions
 * ``MSH.import_mesh`` now allows the import of material_id and element_id if given as cell_data in the external mesh: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
