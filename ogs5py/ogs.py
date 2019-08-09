@@ -1144,14 +1144,15 @@ class OGS(object):
             " ".join(args),
             timeout=timeout,
             logfile=out,
+            encoding=out.encoding,
             cwd=os.path.abspath(self.task_root),
         )
         # wait for ogs to finish
         child.expect(pexpect.EOF)
+        child.close()
+        success = child.exitstatus == 0
         # close the output stream
         out.close()
-
-        success = "Simulation time" in out.last_line
 
         if not save_log:
             os.remove(log)
