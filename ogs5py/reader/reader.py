@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Reader for the OGS5 Output.
-"""
+"""Reader for the OGS5 Output."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -39,9 +37,7 @@ VTK_STD_OUT.SetInstance(VTK_ERR)
 
 
 def readvtk_single(infile):
-    """
-    read an arbitrary vtk/vtkXML file to a dictionary containing its data
-    """
+    """Read an arbitrary vtk/vtkXML file to a dictionary wtih its data."""
     xml_checker = vtkXMLFileReadTester()
     xml_checker.SetFileName(infile)
     is_xml = bool(xml_checker.TestReadFile())
@@ -101,7 +97,8 @@ def readvtk_single(infile):
 
 def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
     r"""
-    a genearal reader for OGS vtk outputfiles
+    A genearal reader for OGS vtk outputfiles.
+
     give a dictionary containing their data
 
     the Filename of the pvd is structured the following way:
@@ -228,8 +225,9 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 def readpvd_single(infile):
     """
-    read a paraview pvd file and convert all concerned files
-    to a dictionary containing their data
+    Read a paraview pvd file.
+
+    Convert all concerned files to a dictionary containing their data.
     """
     output = {}
     # read the pvd file as XML and extract the needed file infos
@@ -258,8 +256,9 @@ def readpvd_single(infile):
 
 def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
     r"""
-    read a paraview pvd file and convert all concerned files
-    to a dictionary containing their data
+    Read a paraview pvd file.
+
+    Convert all concerned files to a dictionary containing their data.
 
     the Filename of the pvd is structured the following way:
     {task_id}[_{PCS}].pvd
@@ -371,7 +370,7 @@ def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
 
 def readtec_point(task_root=".", task_id=None, pcs="ALL", single_file=None):
     r"""
-    collect TECPLOT point output from OGS5
+    Collect TECPLOT point output from OGS5.
 
     the Filenames are structured the following way:
     {task_id}_time_{NAME}[_{PCS+extra}].tec
@@ -454,7 +453,7 @@ def readtec_polyline(
     task_root=".", task_id=None, pcs="ALL", single_file=None, trim=True
 ):
     r"""
-    collect TECPLOT polyline output from OGS5
+    Collect TECPLOT polyline output from OGS5.
 
     the Filenames are structured the following way:
     {task_id}_ply_{NAME}_t{ply_id}[_{PCS}].tec
@@ -558,9 +557,10 @@ def readtec_polyline(
 
 def readtec_domain():
     """
-    This is a dummy for the TECPLOT-domain output of OGS which is not
-    implemented because the output is separated by element types where
-    VTK works out much better.
+    A dummy for the TECPLOT-domain output of OGS.
+
+    It is not implemented, because the output is separated by element types,
+    where VTK works out much better.
     """
     raise NotImplementedError(
         "Reader for Tecplot domain "

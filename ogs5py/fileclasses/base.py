@@ -80,7 +80,7 @@ class File(object):
         return cls.__name__
 
     def get_file_type(self):
-        """Get the OGS file class name"""
+        """Get the OGS file class name."""
         return self._get_clsname()
 
     @property

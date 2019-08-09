@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Helper functions for the tecplot readers in ogs5py
-"""
+"""Helper functions for the tecplot readers in ogs5py."""
 from __future__ import division, print_function, absolute_import
 import os
 import re
@@ -46,7 +44,8 @@ def split_pnt_path(
     guess_PCS=False,
 ):
     """
-    retrive ogs-infos from filename for tecplot-polyline output
+    Retrive ogs-infos from filename for tecplot-polyline output.
+
     {id}_time_{pnt}[_{PCS+extra}].tec
     """
     # create a workaround for empty PCS string (which is valid)
@@ -215,7 +214,8 @@ def split_ply_path(
     infile, task_id=None, line_name=None, PCS_name=None, split_extra=False
 ):
     """
-    retrive ogs-infos from filename for tecplot-polyline output
+    Retrive ogs-infos from filename for tecplot-polyline output.
+
     {id}_ply_{line}_t{n}[_{PCS+extra}].tec
     """
     # remove the directory-part from the filepath to get the basename
@@ -285,14 +285,9 @@ def split_ply_path(
 
 
 class inspect_tecplot(object):
-    """
-    a simple inspector for multiblock data tecplot files
-    """
+    """A simple inspector for multiblock data tecplot files."""
 
     def __init__(self, infile, get_zone_sizes=True):
-        """
-        a simple inspector for multiblock data tecplot files
-        """
         self.infile = infile
         # get metainfo with vtk
         reader = vtkTecplotReader()
@@ -320,9 +315,7 @@ class inspect_tecplot(object):
             self._get_zone_sizes()
 
     def _get_zone_ct(self):
-        """
-        Get number and names of zones in file
-        """
+        """Get number and names of zones in file."""
         self.zone_ct = 0
         self.zone_names = []
         with open(self.infile, "r") as f:
@@ -337,6 +330,7 @@ class inspect_tecplot(object):
     def _get_zone_sizes(self):
         """
         Get positions of the zones within the tecplot file.
+
         Only necessary for table/data tecplot files, since they are not
         supported by the vtk-package before version 7.0.
         """
@@ -401,9 +395,7 @@ class inspect_tecplot(object):
                 )
 
     def get_zone_table_data(self):
-        """
-        read the zone data by hand from the tecplot table file
-        """
+        """Read the zone data by hand from the tecplot table file."""
         zone_data = []
         # read all zones to numpy arrays
         with open(self.infile, "r") as f:
@@ -421,9 +413,7 @@ class inspect_tecplot(object):
         return zone_data
 
     def get_zone_block_data(self):
-        """
-        read the zone mesh-data with the aid of VTK from the tecplot file
-        """
+        """Read the zone mesh-data with the aid of VTK from the tec-file."""
         zone_data = []
         reader = vtkTecplotReader()
         reader.SetFileName(self.infile)
@@ -455,9 +445,7 @@ class inspect_tecplot(object):
 
 
 def readtec_single_table(infile):
-    """
-    Reader for a single ZONE tecplot table file containing ogs point output.
-    """
+    """Reader for a single ZONE tecplot table file with ogs point output."""
     # inspect the tecplot file
     info = inspect_tecplot(infile)
     zone_data = info.get_zone_table_data()[0]
@@ -470,9 +458,7 @@ def readtec_single_table(infile):
 
 
 def readtec_multi_table(infile):
-    """
-    Reader for a multi ZONE tecplot table file containing ogs polyline output.
-    """
+    """Reader for a multi ZONE tecplot table file with ogs polyline output."""
     # inspect the tecplot file
     info = inspect_tecplot(infile)
     zone_data = info.get_zone_table_data()
@@ -491,9 +477,7 @@ def readtec_multi_table(infile):
 
 
 def readtec_block(infile):
-    """
-    read a vtk-compatible tecplot file to a dictionary containing its data
-    """
+    """Read a vtk-compatible tecplot file to a dictionary with its data."""
     # inspect the tecplot file
     info = inspect_tecplot(infile, get_zone_sizes=False)
     zone_data = info.get_zone_block_data()
