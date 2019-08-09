@@ -114,7 +114,7 @@ class RFR(File):
         line1_4=None,
         file_name=None,
         file_ext=".rfr",
-        task_root=os.path.join(CWD, "ogs5model"),
+        task_root=None,
         task_id="model",
     ):
         super(RFR, self).__init__(task_root, task_id, file_ext)

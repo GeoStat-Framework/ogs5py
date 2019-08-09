@@ -150,12 +150,9 @@ class OGS(object):
             Files that should be copied to the destiny folder.
     """
 
-    def __init__(
-        self,
-        task_root=os.path.join(CWD, "ogs5model"),
-        task_id="model",
-        output_dir=None,
-    ):
+    def __init__(self, task_root=None, task_id="model", output_dir=None):
+        if task_root is None:
+            task_root = os.path.join(CWD, "ogs5model")
         self._task_root = os.path.normpath(task_root)
         self._task_id = task_id
         self._output_dir = None

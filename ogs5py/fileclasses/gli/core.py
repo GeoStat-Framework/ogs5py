@@ -972,7 +972,7 @@ class GLIext(File):
         data=None,
         file_name=None,
         file_ext=None,
-        task_root=os.path.join(CWD, "ogs5model"),
+        task_root=None,
         task_id="model",
     ):
         super(GLIext, self).__init__(task_root, task_id)

@@ -61,12 +61,9 @@ class File(object):
         Default: ".std"
     """
 
-    def __init__(
-        self,
-        task_root=os.path.join(CWD, "ogs5model"),
-        task_id="model",
-        file_ext=".std",
-    ):
+    def __init__(self, task_root=None, task_id="model", file_ext=".std"):
+        if task_root is None:
+            task_root = os.path.join(CWD, "ogs5model")
         self.task_root = task_root
         self.task_id = task_id
         self.top_com = TOP_COM
@@ -248,7 +245,7 @@ class LineFile(File):
         lines=None,
         file_name="textfile",
         file_ext=".txt",
-        task_root=os.path.join(CWD, "ogs5model"),
+        task_root=None,
         task_id="model",
     ):
         super(LineFile, self).__init__(task_root, task_id, file_ext)
@@ -381,12 +378,7 @@ class BlockFile(File):
     STD = {}
     """:class:`dict`: Standard Block OGS-BlockFile"""
 
-    def __init__(
-        self,
-        task_root=os.path.join(CWD, "ogs5model"),
-        task_id="model",
-        file_ext=".std",
-    ):
+    def __init__(self, task_root=None, task_id="model", file_ext=".std"):
         super(BlockFile, self).__init__(task_root, task_id, file_ext)
 
         # list of main keywords indicated by "#"

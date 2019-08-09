@@ -140,11 +140,11 @@ class GEMinit(object):
         dch=None,
         ipm=None,
         dbr=None,
-        task_root=os.path.join(CWD, "ogs5model"),
+        task_root=None,
         task_id="model",
     ):
-        """
-        """
+        if task_root is None:
+            task_root = os.path.join(CWD, "ogs5model")
         self._task_root = task_root
         self.task_id = task_id
         self.lst_name = lst_name

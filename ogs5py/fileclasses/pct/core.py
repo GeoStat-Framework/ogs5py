@@ -8,8 +8,6 @@ import os
 import numpy as np
 from ogs5py.fileclasses.base import File
 
-CWD = os.getcwd()
-
 
 class PCT(File):
     """
@@ -31,7 +29,7 @@ class PCT(File):
         Default: "model"
     """
 
-    def __init__(self, data=None, s_flag=1, task_root=CWD, task_id="model"):
+    def __init__(self, data=None, s_flag=1, task_root=None, task_id="model"):
         super(PCT, self).__init__(task_root, task_id)
         self.s_flag = s_flag
         self.file_ext = ".pct"
