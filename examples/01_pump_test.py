@@ -61,6 +61,7 @@ model.tim.add_block(  # set the timesteps
 )
 model.write_input()
 success = model.run_model()
+print("success", success)
 
 point = model.readtec_point(pcs='GROUNDWATER_FLOW')
 time = point['owell']["TIME"]
