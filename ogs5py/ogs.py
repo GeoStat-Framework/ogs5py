@@ -157,6 +157,7 @@ class OGS(object):
         self._task_id = task_id
         self._output_dir = None
         self.output_dir = output_dir
+        self.exitstatus = None
 
         self.bc = BC(task_root=task_root, task_id=task_id)
         self.cct = CCT(task_root=task_root, task_id=task_id)
@@ -1147,7 +1148,8 @@ class OGS(object):
         # wait for ogs to finish
         child.expect(pexpect.EOF)
         child.close()
-        success = child.exitstatus == 0
+        self.exitstatus = child.exitstatus
+        success = self.exitstatus == 0
         # close the output stream
         out.close()
 
