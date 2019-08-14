@@ -95,7 +95,10 @@ class Output(object):
 
     def write(self, data):
         """Write data to both channels."""
-        self.last_line = data.decode(self.encoding)
+        try:
+            self.last_line = data.decode(self.encoding)
+        except AttributeError:
+            self.last_line = data
         self.file.write(self.last_line)
         if self.print_log:
             sys.stdout.write(self.last_line)
