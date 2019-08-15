@@ -13,6 +13,7 @@ All notable changes to **ogs5py** will be documented in this file.
 * ``GMSH`` interface was updated to new meshio-API: https://github.com/GeoStat-Framework/ogs5py/commit/d3e05941a7a76a6d6fdf53a148af7b196fede66a
 
 ### Additions
+* ``download_ogs`` downloads a system dependent OGS5 executable: https://github.com/GeoStat-Framework/ogs5py/commit/ede32e411785b51cdd0983a924c3c7ea117ab026
 * ``MSH.import_mesh`` now allows the import of material_id and element_id if given as cell_data in the external mesh: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
 * ``MSH.export_mesh`` now automatically exports material_id (already the case before) and element_id.
   Also you can now export additional ``point_data`` and ``field_data``: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27

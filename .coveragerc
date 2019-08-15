@@ -1,0 +1,18 @@
+[run]
+source = ogs5py
+omit = 
+    *docs*
+    *examples*
+    *tests*
+    ogs5py/reader/*
+    ogs5py/fileclasses/msh/gmsh.py
+    ogs5py/fileclasses/msh/viewer.py
+    ogs5py/fileclasses/msh/checker.py
+    ogs5py/fileclasses/gli/checker.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == '__main__':
+    def __repr__
+    def __str__

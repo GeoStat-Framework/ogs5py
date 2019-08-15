@@ -83,6 +83,9 @@ class TestOGS(unittest.TestCase):
         self.assertTrue(len(self.time) == len(self.head) == 16)
         self.assertAlmostEqual(self.head[-1], -0.55744648, places=3)
 
+        self.model.gen_script(os.path.join(self.ogs_path, "script"))
+        self.model.load_model(self.model.task_root)
+
 
 if __name__ == "__main__":
     unittest.main()
