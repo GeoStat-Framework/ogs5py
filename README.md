@@ -177,6 +177,9 @@ You can contact us via <info@geostat-framework.org>.
 
 [MIT][gpl_link] © 2018-2019 (inspired by Falk Hesse and Miao Jing)
 
+This project is based on [OGSPY][ogspy_link].
+
+[ogspy_link]: https://github.com/fhesze/OGSPY
 [gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
 [doc_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/
