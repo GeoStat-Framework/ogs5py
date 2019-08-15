@@ -25,14 +25,14 @@ Options:
 # Default arguments
 
 journal="joss"
-doi="10.5281/zenodo.2587158"
+doi="10.5281/zenodo.2546767"
 volume=""
 issue=""
 page=""
 submitted=""
 published=""
 review=""
-repository="https://github.com/GeoStat-Framework/pentapy"
+repository="https://github.com/GeoStat-Framework/ogs5py"
 
 # Get command line arguments
 
