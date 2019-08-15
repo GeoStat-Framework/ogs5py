@@ -35,7 +35,7 @@ def find_version(*file_paths):
 DOCLINES = __doc__.split("\n")
 README = open("README.md").read()
 CLASSIFIERS = [
-    "Development Status :: 1 - Stable",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",

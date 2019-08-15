@@ -10,5 +10,6 @@ Subpackages
 .. autosummary::
     tools
     script
+    download
     types
 """

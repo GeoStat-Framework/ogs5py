@@ -7,6 +7,8 @@ Downloader for ogs5.
 Downloader
 ^^^^^^^^^^
 
+A downloading routine to get the OSG5 executable.
+
 .. autosummary::
    download_ogs
 
