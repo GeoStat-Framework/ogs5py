@@ -25,7 +25,7 @@ env:
 
 script:
   # create wheels
-  - sudo $PIP install cibuildwheel==0.10.1
+  - sudo $PIP install cibuildwheel==0.10.2
   - cibuildwheel --output-dir wheelhouse
   # create source dist for pypi and create coverage (only once for linux py3.6)
   - |
@@ -42,8 +42,8 @@ script:
 after_success:
   # pypi upload (test allways and official on TAG)
   - python -m pip install twine
-  - python -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*.whl
-  - python -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
+  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*.whl
+  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
   - |
     if [[ $TRAVIS_TAG ]]; then
       python -m twine upload --skip-existing wheelhouse/*.whl
