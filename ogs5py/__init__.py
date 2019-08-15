@@ -82,6 +82,16 @@ Routines to format data in the right way for the input
 
 .. autosummary::
    by_id
+
+Downloading
+^^^^^^^^^^^
+
+.. currentmodule:: ogs5py.tools.download
+
+Routine to download OGS5.
+
+.. autosummary::
+   download_ogs
 """
 from __future__ import absolute_import
 
@@ -119,11 +129,8 @@ from ogs5py.fileclasses import (
 )
 from ogs5py.tools.tools import search_task_id, by_id
 from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
+from ogs5py.tools.download import download_ogs
 
-# from ogs5py.reader import (readvtk,
-#                            readpvd,
-#                            readtec_point,
-#                            readtec_polyline)
 # indentation of subkeywords
 SUB_IND = "  "
 # indentation of content
@@ -161,7 +168,7 @@ __all__ += [
     "ST",
     "TIM",
 ]
-__all__ += ["search_task_id", "by_id"]
+__all__ += ["search_task_id", "by_id", "download_ogs"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 __all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]
