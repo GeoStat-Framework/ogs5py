@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-script creation for ogs5py
+Script generator for ogs5py.
 
 .. currentmodule:: ogs5py.tools.script
 
@@ -33,7 +33,7 @@ from ogs5py.fileclasses.base import BlockFile
 
 def formater(val):
     """
-    format values as string
+    Format values as string.
 
     Parameters
     ----------
@@ -48,7 +48,7 @@ def formater(val):
 
 def get_line(cont_line):
     """
-    create content line for the script
+    Create content line for the script.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ def get_line(cont_line):
 
 def tab(num):
     """
-    tab indentation
+    Get tab indentation.
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def tab(num):
 
 def add_block_file(block_file, script, ogs_cls_name="model"):
     """
-    add block-file creation to script
+    Add block-file creation to script.
 
     Parameters
     ----------
@@ -128,7 +128,7 @@ def add_block_file(block_file, script, ogs_cls_name="model"):
 
 def add_load_file(load_file, script, ogs_cls_name="model"):
     """
-    add a file to be loaded from a script
+    Add a file to be loaded from a script.
 
     Parameters
     ----------
@@ -152,7 +152,7 @@ def add_load_file(load_file, script, ogs_cls_name="model"):
 
 def add_list_file(list_file, script, base, cls_name, ogs_cls_name="model"):
     """
-    add a listed file to be loaded from a script
+    Add a listed file to be loaded from a script.
 
     Parameters
     ----------
@@ -202,7 +202,7 @@ def gen_script(
     separate_files=None,
 ):
     """
-    Generate a python script for the given model
+    Generate a python script for the given model.
 
     Parameters
     ----------
