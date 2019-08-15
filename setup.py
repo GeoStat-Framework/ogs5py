@@ -35,7 +35,7 @@ def find_version(*file_paths):
 DOCLINES = __doc__.split("\n")
 README = open("README.md").read()
 CLASSIFIERS = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 1 - Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
@@ -65,8 +65,8 @@ setup(
     description=DOCLINES[0],
     long_description=README,
     long_description_content_type="text/markdown",
-    author="Sebastian Mueller",
-    author_email="sebastian.mueller@ufz.de",
+    author="Sebastian Mueller, Falk Hesse",
+    author_email="info@geostat-framework.org",
     url="https://github.com/GeoStat-Framework/ogs5py",
     license="MIT",
     classifiers=CLASSIFIERS,
@@ -85,6 +85,7 @@ setup(
         # "reader": ["vtk"],  # optional for reading output
         "gmsh": ["pygmsh"],  # optional for creating gmesh based meshes
         "show": ["mayavi"],  # optional to view a mesh
+        "all": ["pygmsh", "mayavi"],  # everything
     },
     packages=find_packages(exclude=["tests*", "docs*"]),
 )
