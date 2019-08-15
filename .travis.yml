@@ -3,13 +3,13 @@ language: python
 matrix:
   include:
     # use macOS since building pandas wheels takes ages on linux
-    - name: "MacOS py27"
-      os: osx
-      language: generic
-      env:
-        - PIP=pip2
-        - CIBW_BUILD="cp27-*"
-        - COVER="off"
+    # - name: "MacOS py27"
+    #   os: osx
+    #   language: generic
+    #   env:
+    #     - PIP=pip2
+    #     - CIBW_BUILD="cp27-*"
+    #     - COVER="off"
 
     - name: "MacOS py36"
       os: osx
@@ -31,7 +31,12 @@ script:
   - |
     if [[ $COVER == "on" ]]; then
       rm -rf dist
+      python -m pip install -U setuptools
+      python -m pip install pytest-cov coveralls
+      python -m pip install -r docs/requirements.txt
       python setup.py sdist
+      python -m pytest --cov ogs5py --cov-report term-missing -v tests/
+      python -m coveralls
     fi
 
 after_success:
