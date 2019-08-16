@@ -56,6 +56,7 @@ from ogs5py.fileclasses import (
 from ogs5py.tools.types import OGS_EXT
 from ogs5py.tools.tools import search_task_id, Output
 from ogs5py.tools.script import gen_script
+from ogs5py.tools.download import OGS5PY_CONFIG
 from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
 
 # pexpect.spawn just runs on unix-like systems
@@ -1033,7 +1034,9 @@ class OGS(object):
         ----------
         ogs_root : str or None, optional
             path to the ogs executable. If ``None`` is given, the default sys
-            path will be searched with ``which``. Default: None
+            path will be searched with ``which``.
+            It will first look in the :any:`OGS5PY_CONFIG` folder.
+            Default: None
         ogs_name : str or None, optional
             Name of to the ogs executable to search for.
             Just used if ,ogs_root is ``None``. Default: ``"ogs"``
@@ -1059,7 +1062,7 @@ class OGS(object):
         """
         # look for the standard ogs executable in the standard-path
         if ogs_root is None:
-            check_ogs = which(ogs_name)
+            check_ogs = which(ogs_name, path=OGS5PY_CONFIG) or which(ogs_name)
             if check_ogs is None:
                 print(
                     "Please put the ogs executable in the default sys path: "
