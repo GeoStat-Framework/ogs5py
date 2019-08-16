@@ -7,8 +7,8 @@ from gstools import SRF, Gaussian
 cov_model = Gaussian(dim=3, var=2, len_scale=10, anis=[1, 0.2])
 srf = SRF(model=cov_model, mean=-9, seed=1000)
 # ogs base class
-model = OGS(task_root="test_het_3D", task_id="model", output_dir="out")
-# generate a radial 3D mesh and  conductivity field
+model = OGS(task_root="test_het_3D2", task_id="model", output_dir="out")
+# generate a radial 3D mesh and conductivity field
 model.gli.generate("radial", dim=3, angles=64, rad_out=100, z_size=-10)
 model.gli.add_polyline("pwell", [[0, 0, 0], [0, 0, -10]])
 model.msh.generate(
@@ -57,7 +57,6 @@ model.out.add_block(  # set the outputformat
     NOD_VALUES="HEAD",
     GEO_TYPE="DOMAIN",
     DAT_TYPE="PVD",
-    TIM_TYPE=["STEPS", 1],
 )
 model.pcs.add_block(  # set the process type
     PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
