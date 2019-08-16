@@ -482,7 +482,7 @@ class GLI(File):
 
     def generate(self, generator="rectangular", **kwargs):
         """
-        Use a gli-generator from the generator module
+        Use a gli-generator from the generator module.
 
         See: :any:`ogs5py.fileclasses.gli.generator`
 
@@ -492,6 +492,16 @@ class GLI(File):
             set the generator from the generator module
         **kwargs
             kwargs will be forwarded to the generator in use
+
+        Notes
+        -----
+        .. currentmodule:: ogs5py.fileclasses.gli.generator
+
+        The following generators are available:
+
+        .. autosummary::
+           rectangular
+           radial
         """
         from ogs5py.fileclasses.gli import generator as gen
 
@@ -634,11 +644,11 @@ class GLI(File):
             return
         # add by id
         if (
-            np.issubdtype(points.dtype, np.integer)
-            and points.ndim == 1
+            points.ndim == 1
             and points.shape[0] >= 2
             and np.min(points) >= 0
             and np.max(points) < self.POINT_NO
+            and np.issubdtype(points.dtype, np.integer)
         ):
             if closed:
                 points = np.hstack((points, points[0]))
