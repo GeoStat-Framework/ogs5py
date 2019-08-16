@@ -7,15 +7,12 @@ from __future__ import division, absolute_import, print_function
 import os
 import unittest
 from ogs5py import OGS, download_ogs
-from ogs5py.ogs import OGS_NAME
 
 
 class TestOGS(unittest.TestCase):
     def setUp(self):
         self.ogs_path = os.getcwd()
-        self.ogs_name = OGS_NAME
-        self.ogs_root = os.path.join(self.ogs_path, self.ogs_name)
-        download_ogs(path=self.ogs_path, name=self.ogs_name)
+        self.ogs_root = download_ogs(path=self.ogs_path)
 
     def test_pump(self):
         self.model = OGS(task_root=os.path.join(self.ogs_path, "pump_test"))
