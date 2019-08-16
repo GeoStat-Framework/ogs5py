@@ -217,6 +217,48 @@ def get_centroids(mesh):
     return result
 
 
+def get_node_centroids(mesh):
+    """
+    Calculate the node centroids of the given elements.
+
+    Parameters
+    ----------
+    mesh : list of dicts or single dict
+        each dict containing
+        at least the following keywords
+            nodes : ndarray
+                Array with all node postions.
+            elements : dict of ndarrays
+                Contains array of nodes for elements sorted by element types.
+
+    Returns
+    -------
+    result : list of dictionaries or single dict of ndarrays (like 'mesh')
+        Centroids of elements sorted by element types.
+    """
+    single = False
+    if not isinstance(mesh, (list, tuple)):
+        tmp_mesh = [mesh]
+        single = True
+    else:
+        tmp_mesh = mesh
+
+    result = []
+    for mesh_i in tmp_mesh:
+        out = {}
+        for elem in ELEM_NAMES:
+            if elem not in mesh_i["elements"]:
+                continue
+            points = mesh_i["nodes"][mesh_i["elements"][elem]]
+            out[elem] = np.mean(points, axis=1)
+        result.append(out)
+
+    if single:
+        result = result[0]
+
+    return result
+
+
 def get_volumes(mesh):
     """
     Calculate the volumes of the given elements.

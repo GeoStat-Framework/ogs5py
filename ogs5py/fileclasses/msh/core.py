@@ -14,6 +14,7 @@ from ogs5py.fileclasses.msh.checker import check_mesh_list, check_mesh_dict
 from ogs5py.fileclasses.msh.tools import (
     combine,
     get_centroids,
+    get_node_centroids,
     get_volumes,
     gen_std_elem_id,
     gen_std_mat_id,
@@ -504,6 +505,60 @@ class MSHsgl(File):
         """
         # just call centroids once
         tmp = dcp(self.centroids)
+        out = np.empty((self.ELEMENT_NO, 3), dtype=float)
+        for elem in ELEM_NAMES:
+            if elem not in self.ELEMENTS:
+                continue
+            out[self.ELEMENT_ID[elem]] = tmp[elem]
+        return out
+
+    @property
+    def node_centroids(self):
+        """
+        Get the node centroids of the mesh.
+
+        Notes
+        -----
+        Type : dict of ndarrays
+            The centroids are a dictionary containing xyz-coordiantes
+            sorted by their element-type
+
+                "line" : ndarray of shape (n_line,3)
+                    1D element with 2 nodes
+                "tri" : ndarray of shape (n_tri,3)
+                    2D element with 3 nodes
+                "quad" : ndarray of shape (n_quad,3)
+                    2D element with 4 nodes
+                "tet" : ndarray of shape (n_tet,3)
+                    3D element with 4 nodes
+                "pyra" : ndarray of shape (n_pyra,3)
+                    3D element with 5 nodes
+                "pris" : ndarray of shape (n_pris,3)
+                    3D element with 6 nodes
+                "hex" : ndarray of shape (n_hex,3)
+                    3D element with 8 nodes
+        """
+        return get_node_centroids(self._dict)
+
+    @property
+    def node_centroids_flat(self):
+        """
+        Get flat version of the node centroids of the mesh.
+
+        See the "mesh.get_centroids" method.
+        This flattend centroids are a stacked version of centroids, to get
+        one continous array. They are stacked in order of the element ids.
+        Standard stack order is given by:
+
+            "line" "tri" "quad" "tet" "pyra" "pris" "hex"
+
+        Notes
+        -----
+        Type : ndarray
+            The centroids are a list containing xyz-coordiantes
+        """
+        # just call centroids once
+        tmp = dcp(self.node_centroids)
         out = np.empty((self.ELEMENT_NO, 3), dtype=float)
         for elem in ELEM_NAMES:
             if elem not in self.ELEMENTS:
