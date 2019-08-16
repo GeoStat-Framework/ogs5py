@@ -11,6 +11,8 @@ A downloading routine to get the OSG5 executable.
 
 .. autosummary::
    download_ogs
+   reset_download
+   OGS5PY_CONFIG
 
 ----
 """
@@ -25,6 +27,16 @@ except ImportError:  # PY2
     from urllib import urlretrieve
 import tempfile
 import platform
+
+
+# https://stackoverflow.com/a/53222876/6696397
+OGS5PY_CONFIG = os.path.join(
+    os.environ.get("APPDATA")
+    or os.environ.get("XDG_CONFIG_HOME")
+    or os.path.join(os.environ["HOME"], ".config"),
+    "ogs5py",
+)
+"""str: Standard config path for ogs5py."""
 
 
 # TemporaryDirectory not avialable in python2
@@ -72,7 +84,7 @@ URLS = {
 }
 
 
-def download_ogs(version="5.7", system=None, path=None, name=None):
+def download_ogs(version="5.7", system=None, path=OGS5PY_CONFIG, name=None):
     """
     Download the OGS5 executable.
 
@@ -83,9 +95,15 @@ def download_ogs(version="5.7", system=None, path=None, name=None):
     system : :class:`str`, optional
         Target system (Linux, Windows, Darwin). Default: platform.system()
     path : :class:`str`, optional
-        Destination path. Default: os.getcwd()
+        Destination path. Default: :any:`OGS5PY_CONFIG`
     name : :class:`str`, optional
         Destination file name. Default "ogs[.exe]"
+
+    Returns
+    -------
+    dest : :class:`str`
+        If an OGS5 executable was successfully downloaded, the file-path
+        is returned.
 
     Notes
     -----
@@ -94,7 +112,6 @@ def download_ogs(version="5.7", system=None, path=None, name=None):
     Taken from : https://www.opengeosys.org/ogs-5/
     """
     system = platform.system() if system is None else system
-    path = os.getcwd() if path is None else path
     path = os.path.abspath(path)
     if not os.path.exists(path):
         os.makedirs(path)
@@ -102,7 +119,7 @@ def download_ogs(version="5.7", system=None, path=None, name=None):
     ext = ".tar.gz" if ogs_url.endswith(".tar.gz") else ".zip"
     if name is None:
         name = "ogs.exe" if system == "Windows" else "ogs"
-
+    dest = os.path.join(path, name)
     with TemporaryDirectory() as tmpdirname:
         data_filename = os.path.join(tmpdirname, "data" + ext)
         urlretrieve(ogs_url, data_filename)
@@ -113,10 +130,18 @@ def download_ogs(version="5.7", system=None, path=None, name=None):
         else:
             z_file = zipfile.ZipFile(data_filename)
             names = z_file.namelist()
-        file = ""
+        found = False
         for file in names:
             if os.path.basename(file).startswith("ogs"):
+                found = True
                 break
-        z_file.extract(member=file, path=tmpdirname)
+        if found:
+            z_file.extract(member=file, path=tmpdirname)
+            shutil.copy(os.path.join(tmpdirname, file), dest)
         z_file.close()
-        shutil.copy(os.path.join(tmpdirname, file), os.path.join(path, name))
+    return dest if found else None
+
+
+def reset_download():
+    """Reset all downloads in :any:`OGS5PY_CONFIG`."""
+    shutil.rmtree(OGS5PY_CONFIG, ignore_errors=True)

@@ -92,6 +92,18 @@ Routine to download OGS5.
 
 .. autosummary::
    download_ogs
+   reset_download
+   OGS5PY_CONFIG
+
+Information
+^^^^^^^^^^^
+
+.. currentmodule:: ogs5py.tools.types
+
+.. autosummary::
+   OGS_EXT
+   PCS_TYP
+   PRIM_VAR_BY_PCS
 """
 from __future__ import absolute_import
 
@@ -129,12 +141,14 @@ from ogs5py.fileclasses import (
 )
 from ogs5py.tools.tools import search_task_id, by_id
 from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
-from ogs5py.tools.download import download_ogs
+from ogs5py.tools.download import download_ogs, reset_download, OGS5PY_CONFIG
 
 # indentation of subkeywords
 SUB_IND = "  "
+"""str: Indentation of subkeys."""
 # indentation of content
 CON_IND = "   "
+"""str: Indentation of content."""
 
 __all__ = ["__version__"]
 __all__ += ["OGS"]
@@ -168,7 +182,8 @@ __all__ += [
     "ST",
     "TIM",
 ]
-__all__ += ["search_task_id", "by_id", "download_ogs"]
+__all__ += ["search_task_id", "by_id"]
+__all__ += ["download_ogs", "reset_download", "OGS5PY_CONFIG"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 __all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]
