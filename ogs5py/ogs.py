@@ -1019,7 +1019,7 @@ class OGS(object):
 
     def run_model(
         self,
-        ogs_root=None,
+        ogs_exe=None,
         ogs_name=OGS_NAME,
         print_log=True,
         save_log=True,
@@ -1032,14 +1032,15 @@ class OGS(object):
 
         Parameters
         ----------
-        ogs_root : str or None, optional
+        ogs_exe : str or None, optional
             path to the ogs executable. If ``None`` is given, the default sys
             path will be searched with ``which``.
+            Can be a folder containing the exe with basename: ogs_name.
             It will first look in the :any:`OGS5PY_CONFIG` folder.
             Default: None
         ogs_name : str or None, optional
             Name of to the ogs executable to search for.
-            Just used if ,ogs_root is ``None``. Default: ``"ogs"``
+            Just used if ,ogs_exe is ``None``. Default: ``"ogs"``
         print_log : bool, optional
             state if the ogs output should be displayed in the terminal.
             Default: True
@@ -1061,7 +1062,7 @@ class OGS(object):
             State if OGS5 terminated 'normally'.
         """
         # look for the standard ogs executable in the standard-path
-        if ogs_root is None:
+        if ogs_exe is None:
             check_ogs = which(ogs_name, path=OGS5PY_CONFIG) or which(ogs_name)
             if check_ogs is None:
                 print(
@@ -1070,24 +1071,24 @@ class OGS(object):
                 )
                 print("Or provide the path to your executable")
                 return False
-            ogs_root = check_ogs
+            ogs_exe = check_ogs
         else:
-            if sys.platform == "win32" and ogs_root[-4:] == ".lnk":
+            if sys.platform == "win32" and ogs_exe[-4:] == ".lnk":
                 print("Don't use file links under windows...")
                 return False
-            if os.path.islink(ogs_root):
-                ogs_root = os.path.realpath(ogs_root)
-            if os.path.exists(ogs_root):
-                if not os.path.isfile(ogs_root):
-                    ogs_root = os.path.join(ogs_root, ogs_name)
+            if os.path.islink(ogs_exe):
+                ogs_exe = os.path.realpath(ogs_exe)
+            if os.path.exists(ogs_exe):
+                if not os.path.isfile(ogs_exe):
+                    ogs_exe = os.path.join(ogs_exe, ogs_name)
             else:
-                print("The given ogs_root does not exist...")
+                print("The given ogs_exe does not exist...")
                 return False
         # use absolute path since we change the cwd in the ogs call
-        ogs_root = os.path.abspath(ogs_root)
+        ogs_exe = os.path.abspath(ogs_exe)
 
         # create the command to call ogs
-        args = [ogs_root, self.task_id]
+        args = [ogs_exe, self.task_id]
         # add optional output directory
         # check if output directory is an absolute path with os.path.isabs
         # otherwise set it in the task_root directory
