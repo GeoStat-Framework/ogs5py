@@ -1020,15 +1020,28 @@ class MSHsgl(File):
         """
         self._dict = getattr(gen, generator)(**kwargs)
 
-    def show(self, show_material_id=True):
+    def show(
+        self,
+        show_cell_data=None,
+        show_material_id=False,
+        show_element_id=False,
+    ):
         """
         Display the mesh colored by its material ID.
 
         Parameters
         ----------
+        show_cell_data : ndarray or dict, optional
+            Here you can specify additional
+            element/cell data sorted by their IDs.
+            It can be a dictionary with data-name as key
+            and the ndarray as value. Default: None
         show_material_id : bool, optional
-            Here you can specify if the mesh should be colored by material_id.
-            Default: True
+            Here you can specify if the material_id should be shown.
+            Default: False
+        show_element_id : bool, optional
+            Here you can specify if the element_id should be shown.
+            Default: False
 
         Notes
         -----
@@ -1037,7 +1050,9 @@ class MSHsgl(File):
         """
         from ogs5py.fileclasses.msh.viewer import show_mesh
 
-        show_mesh(self._dict, show_material_id=show_material_id)
+        show_mesh(
+            self._dict, show_cell_data, show_material_id, show_element_id
+        )
 
     def set_material_id(
         self, material_id=0, element_id=None, element_mask=None
