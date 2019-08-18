@@ -222,7 +222,22 @@ def download_ogs(
 
 
 def add_exe(ogs_exe, dest_name=None):
-    """Add an OGS5 exe to :any:`OGS5PY_CONFIG`."""
+    """
+    Add an OGS5 exe to :any:`OGS5PY_CONFIG`.
+
+    Parameters
+    ----------
+    ogs_exe : :class:`str`
+        Path to the ogs executable to be copied.
+    dest_name : :class:`str`, optional
+        Destination file name. Default: basename of ogs_exe
+
+    Returns
+    -------
+    dest : :class:`str`
+        If an OGS5 executable was successfully copied, the file-path
+        is returned.
+    """
     if platform.system == "Windows" and ogs_exe[-4:] == ".lnk":
         print("Don't use file links under windows...")
         return None
