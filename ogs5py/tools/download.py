@@ -72,7 +72,6 @@ BUILD = "https://jenkins.opengeosys.org/job/ufz/job/ogs5/job/master/"
 STABLE = BUILD + "lastStableBuild/"
 SUCCESS = BUILD + "lastSuccessfulBuild/"
 
-
 # https://stackoverflow.com/a/53222876/6696397
 OGS5PY_CONFIG = os.path.join(
     os.environ.get("APPDATA")
@@ -82,7 +81,6 @@ OGS5PY_CONFIG = os.path.join(
 )
 """str: Standard config path for ogs5py."""
 
-
 URLS = {
     "5.7": {
         "Linux": (
@@ -90,6 +88,12 @@ URLS = {
         ),
         "Windows": RELEASE + "ogs-5.7.0-Windows-6.1.7601-x64.zip",
         "Darwin": RELEASE + "ogs-5.7.0-Darwin-15.2.0-x64.tar.gz",
+    },
+    "5.7.1": {
+        "Windows": (
+            "https://github.com/ufz/ogs5/releases/download/"
+            + "5.7.1/ogs-5.7.1-Windows-x64.zip"
+        )
     },
     "5.8": {
         "Linux": (
