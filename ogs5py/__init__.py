@@ -96,6 +96,16 @@ Routine to download OGS5.
    reset_download
    OGS5PY_CONFIG
 
+Plotting
+^^^^^^^^
+
+.. currentmodule:: ogs5py.tools.vtk_viewer
+
+Routine to download OGS5.
+
+.. autosummary::
+   show_vtk
+
 Information
 ^^^^^^^^^^^
 
@@ -148,6 +158,7 @@ from ogs5py.tools.download import (
     reset_download,
     OGS5PY_CONFIG,
 )
+from ogs5py.tools.vtk_viewer import show_vtk
 
 # indentation of subkeywords
 SUB_IND = "  "
@@ -190,6 +201,7 @@ __all__ += [
 ]
 __all__ += ["search_task_id", "by_id"]
 __all__ += ["download_ogs", "add_exe", "reset_download", "OGS5PY_CONFIG"]
+__all__ += ["show_vtk"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
 __all__ += ["SUB_IND", "CON_IND"]
 # __all__ += ["readvtk", "readpvd", "readtec_point", "readtec_polyline"]
