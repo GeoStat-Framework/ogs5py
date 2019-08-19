@@ -95,6 +95,8 @@ def show_mesh(
         surface.parent.parent._cell_scalars_name_changed(cell_data_name)
         surface.parent.parent.update()
         surface.parent.scalar_lut_manager.shadow = True
+        surface.actor.property.edge_visibility = False
+        surface.parent.scalar_lut_manager.lut_mode = "RdYlBu"
         surface.parent.scalar_lut_manager.show_scalar_bar = True
     elif show_material_id:
         # set the bounds for the color range
@@ -132,3 +134,4 @@ def show_mesh(
     mlab.show()
     # close the temp file and delete it
     vtkfile.close()
+    return surface
