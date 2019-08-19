@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function
 
 import os
 import glob
-import xml.etree.ElementTree as ET
 import numpy as np
 from vtk import (
     vtkDataReader,
@@ -15,12 +14,8 @@ from vtk import (
 )
 from ogs5py.tools.types import PCS_TYP
 from ogs5py.reader.vtkhelper import vtkreader_dict, XMLreader_dict
-from ogs5py.reader.techelper import (
-    split_ply_path,
-    split_pnt_path,
-    readtec_single_table,
-    readtec_multi_table,
-)
+from ogs5py.tools.output import split_ply_path, split_pnt_path, readpvd_single
+from ogs5py.reader.techelper import readtec_single_table, readtec_multi_table
 from ogs5py.tools.tools import split_file_path
 
 # redirect VTK error to a string
@@ -221,37 +216,6 @@ def readvtk(task_root=".", task_id=None, pcs="ALL", single_file=None):
 ###############################################################################
 # pvd readers
 ###############################################################################
-
-
-def readpvd_single(infile):
-    """
-    Read a paraview pvd file.
-
-    Convert all concerned files to a dictionary containing their data.
-    """
-    output = {}
-    # read the pvd file as XML and extract the needed file infos
-    if not os.path.isfile(infile):
-        return output
-    info_root = ET.parse(infile).getroot()
-    pvd_info = info_root.attrib
-    files = []
-    infos = []
-    # iterate through the data collection
-    for dataset in info_root[0]:
-        files.append(dataset.attrib["file"])
-        infos.append(dataset.attrib)
-        del infos[-1]["file"]
-        if "timestep" in infos[-1]:
-            infos[-1]["timestep"] = float(infos[-1]["timestep"])
-        if "part" in infos[-1]:
-            infos[-1]["part"] = int(infos[-1]["part"])
-
-    output["pvd_info"] = pvd_info
-    output["files"] = files
-    output["infos"] = infos
-
-    return output
 
 
 def readpvd(task_root=".", task_id=None, pcs="ALL", single_file=None):
