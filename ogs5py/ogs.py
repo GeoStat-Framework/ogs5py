@@ -1017,6 +1017,50 @@ class OGS(object):
             root = self.task_root
         return read(task_root=root, task_id=self.task_id, pcs=pcs, trim=trim)
 
+    def output_files(self, pcs=None, typ="VTK", element=None, output_dir=None):
+        r"""
+        Get a list of output file paths.
+
+        Parameters
+        ----------
+        pcs : string or None, optional
+            specify the PCS type that should be collected
+            Possible values are:
+
+                - None/"" (no PCS_TYPE specified in *.out)
+                - "NO_PCS"
+                - "GROUNDWATER_FLOW"
+                - "LIQUID_FLOW"
+                - "RICHARDS_FLOW"
+                - "AIR_FLOW"
+                - "MULTI_PHASE_FLOW"
+                - "PS_GLOBAL"
+                - "HEAT_TRANSPORT"
+                - "DEFORMATION"
+                - "MASS_TRANSPORT"
+                - "OVERLAND_FLOW"
+                - "FLUID_MOMENTUM"
+                - "RANDOM_WALK"
+
+            Default : None
+        typ : string, optional
+            Type of the output ("VTK", "PVD", "TEC_POINT" or "TEC_POLYLINE").
+            Default : "VTK"
+        element : string or None, optional
+            For tecplot output you can specify the name of the output element.
+            (Point-name of Line-name from GLI file)
+            Default: None
+        """
+        from ogs5py.tools.output import get_output_files as read
+
+        if output_dir is not None:
+            root = output_dir
+        elif self.has_output_dir:
+            root = self.output_dir
+        else:
+            root = self.task_root
+        return read(root, self.task_id, pcs, typ, element)
+
     def run_model(
         self,
         ogs_exe=None,
