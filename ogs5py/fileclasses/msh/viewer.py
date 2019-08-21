@@ -17,7 +17,11 @@ except ImportError:
 
 
 def show_mesh(
-    mesh, show_cell_data=None, show_material_id=False, show_element_id=False
+    mesh,
+    show_cell_data=None,
+    show_material_id=False,
+    show_element_id=False,
+    log_scale=False,
 ):
     """
     Display a given mesh colored by its material ID.
@@ -51,6 +55,9 @@ def show_mesh(
         Default: False
     show_element_id : bool, optional
         Here you can specify if the element_id should be shown.
+        Default: False
+    log_scale : bool, optional
+        State if the cell_data should be shown in log scale.
         Default: False
 
     Notes
@@ -98,6 +105,8 @@ def show_mesh(
         surface.actor.property.edge_visibility = False
         surface.parent.scalar_lut_manager.lut_mode = "RdYlBu"
         surface.parent.scalar_lut_manager.show_scalar_bar = True
+        if log_scale:
+            surface.parent.scalar_lut_manager.lut.scale = "log10"
     elif show_material_id:
         # set the bounds for the color range
         min_id = np.inf

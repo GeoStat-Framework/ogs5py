@@ -1025,6 +1025,7 @@ class MSHsgl(File):
         show_cell_data=None,
         show_material_id=False,
         show_element_id=False,
+        log_scale=False,
     ):
         """
         Display the mesh colored by its material ID.
@@ -1042,6 +1043,9 @@ class MSHsgl(File):
         show_element_id : bool, optional
             Here you can specify if the element_id should be shown.
             Default: False
+        log_scale : bool, optional
+            State if the cell_data should be shown in log scale.
+            Default: False
 
         Notes
         -----
@@ -1051,7 +1055,11 @@ class MSHsgl(File):
         from ogs5py.fileclasses.msh.viewer import show_mesh
 
         show_mesh(
-            self._dict, show_cell_data, show_material_id, show_element_id
+            self._dict,
+            show_cell_data,
+            show_material_id,
+            show_element_id,
+            log_scale,
         )
 
     def set_material_id(

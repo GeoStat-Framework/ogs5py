@@ -13,7 +13,7 @@ except ImportError:
     MAYA_AVAIL = False
 
 
-def show_vtk(vtkfile):
+def show_vtk(vtkfile, log_scale=False):
     """
     Display a given mesh colored by its material ID.
 
@@ -21,6 +21,9 @@ def show_vtk(vtkfile):
     ----------
     vtkfile : :class:`str`
         Path to the vtk/vtu file to show.
+    log_scale : bool, optional
+        State if the data should be shown in log scale.
+        Default: False
 
     Notes
     -----
@@ -46,6 +49,8 @@ def show_vtk(vtkfile):
         surface.parent.scalar_lut_manager.lut_mode = "viridis"
         surface.parent.scalar_lut_manager.shadow = True
         surface.parent.scalar_lut_manager.show_scalar_bar = True
+        if log_scale:
+            surface.parent.scalar_lut_manager.lut.scale = "log10"
     except:
         pass
     # give it a name
