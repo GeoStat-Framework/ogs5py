@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ogs5py import OGS, MPD, by_id, show_vtk
+from ogs5py import OGS, by_id, show_vtk
 from gstools import SRF, Gaussian
 
 # covariance model for conductivity field
@@ -15,14 +15,13 @@ model.msh.generate(
     "radial", dim=3, angles=64, rad=np.arange(101), z_arr=-np.arange(11)
 )
 cond = np.exp(srf.mesh(model.msh))
-mpd = MPD(model.task_id)
-mpd.add_block(
+model.mpd.add()  # add distributed medium properties
+model.mpd.add_block(  # edit recent mpd file
     MSH_TYPE="GROUNDWATER_FLOW",
     MMP_TYPE="PERMEABILITY",
     DIS_TYPE="ELEMENT",
     DATA=by_id(cond),
 )
-model.add_mpd(mpd)
 for srf in model.gli.SURFACE_NAMES:  # set boundary condition
     model.bc.add_block(
         PCS_TYPE="GROUNDWATER_FLOW",
@@ -39,7 +38,7 @@ model.st.add_block(  # set pumping condition at the pumpingwell
 model.mmp.add_block(  # permeability, storage and porosity
     GEOMETRY_DIMENSION=3,
     STORAGE=[1, 1.0e-4],
-    PERMEABILITY_DISTRIBUTION=model.task_id + ".mpd",
+    PERMEABILITY_DISTRIBUTION=model.mpd.name,
     POROSITY=0.2,
 )
 model.num.add_block(  # numerical solver
@@ -55,8 +54,8 @@ model.out.add_block(  # set the outputformat
 model.pcs.add_block(  # set the process type
     PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
 )
-# model.write_input()
-# success = model.run_model()
+model.write_input()
+success = model.run_model()
 
 model.msh.show(show_cell_data={"Conductivity": cond}, log_scale=True)
 files = model.output_files(pcs="GROUNDWATER_FLOW", typ="VTK")
