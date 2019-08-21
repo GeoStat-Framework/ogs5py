@@ -75,6 +75,20 @@ class TestOGS(unittest.TestCase):
         self.head = self.point["owell"]["HEAD"]
         self.assertTrue(len(self.time) == len(self.head) == 16)
         self.assertAlmostEqual(self.head[-1], -0.55744648, places=3)
+        self.pnt = self.model.output_files(
+            pcs="GROUNDWATER_FLOW", typ="TEC_POINT"
+        )
+        self.ply = self.model.output_files(
+            pcs="GROUNDWATER_FLOW", typ="TEC_POLYLINE"
+        )
+        self.vtk = self.model.output_files(
+            pcs="GROUNDWATER_FLOW", typ="VTK"
+        )
+        self.pvd = self.model.output_files(
+            pcs="GROUNDWATER_FLOW", typ="VTK"
+        )
+        self.assertTrue(len(self.ply) == len(self.vtk) == len(self.pvd) == 0)
+        self.assertTrue(len(self.pnt) == 1)
 
         self.model.gen_script(os.path.join(self.ogs_path, "script"))
         self.model.load_model(self.model.task_root)
