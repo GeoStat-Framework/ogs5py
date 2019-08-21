@@ -9,8 +9,6 @@ srf = SRF(model=cov_model, mean=-9, seed=1000)
 # ogs base class
 model = OGS(task_root="test_het_3D", task_id="model", output_dir="out")
 # generate a radial 3D mesh and conductivity field
-model.gli.generate("radial", dim=3, angles=64, rad_out=100, z_size=-10)
-model.gli.add_polyline("pwell", [[0, 0, 0], [0, 0, -10]])
 model.msh.generate(
     "radial", dim=3, angles=64, rad=np.arange(101), z_arr=-np.arange(11)
 )
@@ -22,6 +20,8 @@ model.mpd.add_block(  # edit recent mpd file
     DIS_TYPE="ELEMENT",
     DATA=by_id(cond),
 )
+model.gli.generate("radial", dim=3, angles=64, rad_out=100, z_size=-10)
+model.gli.add_polyline("pwell", [[0, 0, 0], [0, 0, -10]])
 for srf in model.gli.SURFACE_NAMES:  # set boundary condition
     model.bc.add_block(
         PCS_TYPE="GROUNDWATER_FLOW",
@@ -36,10 +36,7 @@ model.st.add_block(  # set pumping condition at the pumpingwell
     DIS_TYPE=["CONSTANT_NEUMANN", 1.0e-3],
 )
 model.mmp.add_block(  # permeability, storage and porosity
-    GEOMETRY_DIMENSION=3,
-    STORAGE=[1, 1.0e-4],
-    PERMEABILITY_DISTRIBUTION=model.mpd.name,
-    POROSITY=0.2,
+    GEOMETRY_DIMENSION=3, PERMEABILITY_DISTRIBUTION=model.mpd.name
 )
 model.num.add_block(  # numerical solver
     PCS_TYPE="GROUNDWATER_FLOW",
