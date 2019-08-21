@@ -1,6 +1,6 @@
 [run]
 source = ogs5py
-omit = 
+omit =
     *docs*
     *examples*
     *tests*
@@ -15,5 +15,6 @@ omit =
 exclude_lines =
     pragma: no cover
     if __name__ == '__main__':
+    if verbose:
     def __repr__
     def __str__

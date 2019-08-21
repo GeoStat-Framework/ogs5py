@@ -199,7 +199,7 @@ def load_ogs5msh(
                     pos_ele = 3  # skip the "-1" entry (What is that?!)
                 check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
                 if not np.all(check_elem):
-                    if verbose or True:
+                    if verbose:
                         print(filepath + ": unsupported cell-types found:")
                         print(np.unique(tmp[np.invert(check_elem), pos_ele]))
                     if not ignore_unknown:
