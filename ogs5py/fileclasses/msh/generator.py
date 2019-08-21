@@ -268,7 +268,7 @@ def radial(
         element_arr[:, 3] += (np.arange(element_no) % angles + 1) % angles
         element_arr[:, 2] = element_arr[:, 3] + angles
         element_arr[:, 1] = element_arr[:, 0] + angles
-        element_dict = {"quad": element_arr}
+        element_dict = {"quad": element_arr} if len(rad) > 1 else {}
         if closed:
             elem_mid_arr[:, 0] = np.arange(angles)
             elem_mid_arr[:, 1] = (np.arange(angles) + 1) % angles
@@ -320,7 +320,7 @@ def radial(
                         no3 + lay_no,
                         no4 + lay_no,
                     ]
-        element_dict = {"hex": element_arr}
+        element_dict = {"hex": element_arr} if len(rad) > 1 else {}
 
         # add the center pris
         if closed:
