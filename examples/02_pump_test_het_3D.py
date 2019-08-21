@@ -60,4 +60,4 @@ success = model.run_model()
 
 model.msh.show(show_cell_data={"Conductivity": cond})
 files = model.output_files(pcs="GROUNDWATER_FLOW", typ="VTK")
-show_vtk(files[-1])
+show_vtk(files[-1])  # show the last time-step
