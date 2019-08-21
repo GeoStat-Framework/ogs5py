@@ -31,8 +31,8 @@ def show_vtk(vtkfile):
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
         return
-    # close all mayavi scenes
-    mlab.close(all=True)
+    # new mayavi scenes
+    mlab.figure()
     # load the vtk file to mayavi's mlab
     data_source = mlab.pipeline.open(vtkfile)
     # create a surface out of the vtk source
@@ -41,6 +41,13 @@ def show_vtk(vtkfile):
     surface.actor.property.edge_visibility = False
     surface.actor.property.line_width = 1.0
     surface.actor.property.interpolation = "flat"
+    # show legend
+    try:
+        surface.parent.scalar_lut_manager.lut_mode = "viridis"
+        surface.parent.scalar_lut_manager.shadow = True
+        surface.parent.scalar_lut_manager.show_scalar_bar = True
+    except:
+        pass
     # give it a name
     surface.name = "VTK-File"
     # show it

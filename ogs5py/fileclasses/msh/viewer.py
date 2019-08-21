@@ -69,8 +69,8 @@ def show_mesh(
         else:
             cell_data_name = list(show_cell_data)[0]
 
-    # close all mayavi scenes
-    mlab.close(all=True)
+    # new mayavi scenes
+    mlab.figure()
     # create a temp-file which contains a vtk version of the mesh
     vtkfile = tempfile.NamedTemporaryFile(suffix=".vtu")
     # export the mesh to the temp vtk file
