@@ -6,7 +6,8 @@ from __future__ import division, absolute_import, print_function
 
 import os
 import unittest
-from ogs5py import OGS, download_ogs, MSH, GLI
+import numpy as np
+from ogs5py import OGS, download_ogs, MSH, GLI, hull_deform
 
 
 class TestOGS(unittest.TestCase):
@@ -110,6 +111,12 @@ class TestOGS(unittest.TestCase):
         self.msh.generate(generator="radial", dim=3)
         self.msh.generate(generator="radial", dim=3, rad=range(1, 11))
         self.msh.combine_mesh(self.msh2)
+        self.msh.transform(
+            hull_deform,
+            niv_top=0,
+            niv_bot=-1,
+            func_top=lambda x, y: np.cos(np.sqrt(x**2 + y**2)) + 1
+        )
         self.gli.generate(generator="rectangular", dim=2)
         self.gli.generate(generator="rectangular", dim=3)
         self.gli.generate(generator="radial", dim=2)
@@ -124,6 +131,7 @@ class TestOGS(unittest.TestCase):
         self.msh.export_mesh("test.vtk")
         self.msh.import_mesh("test.vtk")
         self.gli.swap_axis()
+        self.gli.swap_axis(axis1=0, axis2=2)
         self.gli.rotate(0.1)
         self.gli.shift((1, 1, 1))
 
