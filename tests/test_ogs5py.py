@@ -6,7 +6,7 @@ from __future__ import division, absolute_import, print_function
 
 import os
 import unittest
-from ogs5py import OGS, download_ogs
+from ogs5py import OGS, download_ogs, MSH, GLI
 
 
 class TestOGS(unittest.TestCase):
@@ -92,7 +92,32 @@ class TestOGS(unittest.TestCase):
 
         self.model.gen_script(os.path.join(self.ogs_path, "script"))
         self.model.load_model(self.model.task_root)
+        self.model.task_root = "new_root"
+        self.model.task_id = "new_id"
         self.model.reset()
+
+    def test_mesh(self):
+        self.msh = MSH()
+        self.gli = GLI()
+        self.msh.generate(generator="rectangular", dim=2)
+        self.msh.generate(generator="rectangular", dim=3)
+        self.msh.generate(generator="radial", dim=2)
+        self.msh.generate(generator="radial", dim=2, rad=range(1, 11))
+        self.msh.generate(generator="radial", dim=3)
+        self.msh.generate(generator="radial", dim=3, rad=range(1, 11))
+        self.gli.generate(generator="rectangular", dim=2)
+        self.gli.generate(generator="rectangular", dim=3)
+        self.gli.generate(generator="radial", dim=2)
+        self.gli.generate(generator="radial", dim=2, rad_in=1)
+        self.gli.generate(generator="radial", dim=3)
+        self.gli.generate(generator="radial", dim=3, rad_in=1)
+        self.msh.swap_axis()
+        self.msh.rotate(0.1)
+        self.msh.shift((1, 1, 1))
+        self.msh.export_mesh("test.vtk")
+        self.gli.swap_axis()
+        self.gli.rotate(0.1)
+        self.gli.shift((1, 1, 1))
 
 
 if __name__ == "__main__":
