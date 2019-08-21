@@ -16,6 +16,7 @@ class TestOGS(unittest.TestCase):
 
     def test_pump(self):
         self.model = OGS(task_root=os.path.join(self.ogs_path, "pump_test"))
+        self.model.output_dir = "out"
         # generate a radial mesh
         self.model.msh.generate("radial", dim=2, rad=range(51))
         # generate a radial outer boundary
@@ -99,25 +100,42 @@ class TestOGS(unittest.TestCase):
     def test_mesh(self):
         self.msh = MSH()
         self.gli = GLI()
+        self.msh2 = MSH()
+        self.msh2.generate(generator="radial", dim=3, rad=[0, 1])
+
         self.msh.generate(generator="rectangular", dim=2)
         self.msh.generate(generator="rectangular", dim=3)
         self.msh.generate(generator="radial", dim=2)
         self.msh.generate(generator="radial", dim=2, rad=range(1, 11))
         self.msh.generate(generator="radial", dim=3)
         self.msh.generate(generator="radial", dim=3, rad=range(1, 11))
+        self.msh.combine_mesh(self.msh2)
         self.gli.generate(generator="rectangular", dim=2)
         self.gli.generate(generator="rectangular", dim=3)
         self.gli.generate(generator="radial", dim=2)
         self.gli.generate(generator="radial", dim=2, rad_in=1)
         self.gli.generate(generator="radial", dim=3)
         self.gli.generate(generator="radial", dim=3, rad_in=1)
+
         self.msh.swap_axis()
+        self.msh.swap_axis(axis1=0, axis2=2)
         self.msh.rotate(0.1)
         self.msh.shift((1, 1, 1))
         self.msh.export_mesh("test.vtk")
+        self.msh.import_mesh("test.vtk")
         self.gli.swap_axis()
         self.gli.rotate(0.1)
         self.gli.shift((1, 1, 1))
+
+        self.cen = self.msh.centroids_flat
+        self.mat = self.msh.MATERIAL_ID_flat
+        self.vol = self.msh.volumes_flat
+        self.nod = self.msh.node_centroids_flat
+        self.msh.center
+
+        self.assertTrue(
+            len(self.cen) == len(self.mat) == len(self.vol) == len(self.nod)
+        )
 
 
 if __name__ == "__main__":
