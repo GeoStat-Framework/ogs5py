@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ogs5py import OGS, MPD, by_id
+from ogs5py import OGS, MPD, by_id, show_vtk
 from gstools import SRF, Gaussian
 
 # covariance model for conductivity field
@@ -34,7 +34,7 @@ model.st.add_block(  # set pumping condition at the pumpingwell
     PCS_TYPE="GROUNDWATER_FLOW",
     PRIMARY_VARIABLE="HEAD",
     GEO_TYPE=["POLYLINE", "pwell"],
-    DIS_TYPE=["CONSTANT_NEUMANN", -1.0e-3],
+    DIS_TYPE=["CONSTANT_NEUMANN", 1.0e-3],
 )
 model.mmp.add_block(  # permeability, storage and porosity
     GEOMETRY_DIMENSION=3,
@@ -50,10 +50,14 @@ model.out.add_block(  # set the outputformat
     PCS_TYPE="GROUNDWATER_FLOW",
     NOD_VALUES="HEAD",
     GEO_TYPE="DOMAIN",
-    DAT_TYPE="PVD",
+    DAT_TYPE="VTK",
 )
 model.pcs.add_block(  # set the process type
     PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
 )
 model.write_input()
 success = model.run_model()
+
+model.msh.show(show_cell_data={"Conductivity": cond})
+files = model.output_files(pcs="GROUNDWATER_FLOW", typ="VTK")
+show_vtk(files[-1])
