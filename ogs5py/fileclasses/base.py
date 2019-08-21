@@ -1068,7 +1068,7 @@ class MultiFile(object):
 
     def __delitem__(self, item):
         """Delete Files."""
-        del self._list[item]
+        self.delete(item)
 
     def __iter__(self):
         """Iterate over Files."""
@@ -1082,15 +1082,14 @@ class MultiFile(object):
     def __getattr__(self, attr):
         """Pretend to be actual File."""
         if self._id is not None:
-            return getattr(self._list[self._id], attr)
+            return getattr(self[self.id], attr)
         return None
 
     def add(self, *args, **kwargs):
-        """Add a new instance of the base class."""
+        """Add a new instance of the base class with *args and **kwargs."""
         kw = copy.deepcopy(self.standard)
         kw.update(kwargs)
-        self._list.append(self._base(*args, **kw))
-        self.id = 0 if self.id is None else self.id + 1
+        self.append(self._base(*args, **kw))
 
     def append(self, file):
         """Append a new file to the list."""
@@ -1123,7 +1122,7 @@ class MultiFile(object):
         if 0 <= value < len(self):
             self._id = value
         else:
-            print("ID out  of range.")
+            print("ID out of range.")
 
     def __str__(self):
         return self.__repr__()
