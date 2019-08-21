@@ -53,11 +53,11 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
-from ogs5py.tools.types import OGS_EXT
+from ogs5py.tools.types import OGS_EXT, MULTI_FILES
 from ogs5py.tools.tools import search_task_id, Output
 from ogs5py.tools.script import gen_script
 from ogs5py.tools.download import OGS5PY_CONFIG
-from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD
+from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD, MultiFile
 
 # pexpect.spawn just runs on unix-like systems
 if sys.platform == "win32":
@@ -185,15 +185,17 @@ class OGS(object):
         self.tim = TIM(task_root=task_root, task_id=task_id)
 
         # create a list for mpd files
-        self.mpd = []
+        self.mpd = MultiFile(MPD, task_root=task_root, task_id=task_id)
         # create a list for external Geometry definition (TIN and POINT_VECTOR)
-        self.gli_ext = []
+        self.gli_ext = MultiFile(GLIext, task_root=task_root, task_id=task_id)
         # create a list for RESTART files in the INITIAL_CONDITION
-        self.rfr = []
+        self.rfr = MultiFile(RFR, task_root=task_root, task_id=task_id)
         # create a list for GEMS3K input files (lst file)
-        self.gem_init = []
+        self.gem_init = MultiFile(
+            GEMinit, task_root=task_root, task_id=task_id
+        )
         # create a list for ASC files
-        self.asc = []
+        self.asc = MultiFile(ASC, task_root=task_root, task_id=task_id)
         # create a list of arbitrary files to be copied (names will be same)
         self.copy_files = []
         # store the Top Comment
@@ -236,16 +238,10 @@ class OGS(object):
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).task_root = value
-        for i in range(len(self.mpd)):
-            self.mpd[i].task_root = value
-        for i in range(len(self.gli_ext)):
-            self.gli_ext[i].task_root = value
-        for i in range(len(self.rfr)):
-            self.rfr[i].task_root = value
-        for i in range(len(self.gem_init)):
-            self.gem_init[i].task_root = value
-        for i in range(len(self.asc)):
-            self.asc[i].task_root = value
+        for ext in MULTI_FILES:
+            getattr(self, ext).standard["task_root"] = value
+            for i in range(len(getattr(self, ext))):
+                getattr(self, ext)[i].task_root = value
         self.pqcdat.task_root = value
 
     @property
@@ -262,6 +258,8 @@ class OGS(object):
         self._task_id = value
         for ext in OGS_EXT:
             getattr(self, ext[1:]).task_id = value
+        for ext in MULTI_FILES:
+            getattr(self, ext).standard["task_id"] = value
 
     @property
     def output_dir(self):
@@ -337,7 +335,7 @@ class OGS(object):
             mpd-files are deleted. Default: None
         """
         if index is None:
-            self.mpd = []
+            self.mpd.reset_all()
         elif -len(self.mpd) <= index < len(self.mpd):
             del self.mpd[index]
         else:
@@ -367,7 +365,7 @@ class OGS(object):
             If None, all external gli files are deleted. Default: None
         """
         if index is None:
-            self.gli_ext = []
+            self.gli_ext.reset_all()
         elif -len(self.gli_ext) <= index < len(self.gli_ext):
             del self.gli_ext[index]
         else:
@@ -396,7 +394,7 @@ class OGS(object):
             If None, all RESTART files are deleted. Default: None
         """
         if index is None:
-            self.rfr = []
+            self.rfr.reset_all()
         elif -len(self.rfr) <= index < len(self.rfr):
             del self.rfr[index]
         else:
@@ -425,7 +423,7 @@ class OGS(object):
             If None, all GEMS3K files are deleted. Default: None
         """
         if index is None:
-            self.gem_init = []
+            self.gem_init.reset_all()
         elif -len(self.gem_init) <= index < len(self.gem_init):
             del self.gem_init[index]
         else:
@@ -452,7 +450,7 @@ class OGS(object):
             If None, all ASC files are deleted. Default: None
         """
         if index is None:
-            self.asc = []
+            self.asc.reset_all()
         elif -len(self.asc) <= index < len(self.asc):
             del self.asc[index]
         else:
@@ -463,12 +461,9 @@ class OGS(object):
         for ext in OGS_EXT:
             # workaround to get access to class-members by name
             getattr(self, ext[1:]).reset()
+        for ext in MULTI_FILES:
+            getattr(self, ext).reset_all()
         self.pqcdat.reset()
-        self.mpd = []
-        self.gli_ext = []
-        self.rfr = []
-        self.gem_init = []
-        self.asc = []
         self.copy_files = []
 
         # reset to initial attributes
