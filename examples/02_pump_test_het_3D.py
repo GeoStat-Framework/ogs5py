@@ -55,9 +55,9 @@ model.out.add_block(  # set the outputformat
 model.pcs.add_block(  # set the process type
     PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
 )
-model.write_input()
-success = model.run_model()
+# model.write_input()
+# success = model.run_model()
 
-model.msh.show(show_cell_data={"Conductivity": cond})
+model.msh.show(show_cell_data={"Conductivity": cond}, log_scale=True)
 files = model.output_files(pcs="GROUNDWATER_FLOW", typ="VTK")
-show_vtk(files[-1])  # show the last time-step
+show_vtk(files[-1], log_scale=True)  # show the last time-step
