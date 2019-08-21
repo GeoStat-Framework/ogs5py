@@ -52,6 +52,7 @@ General Constants
    PRIM_VAR
    PRIM_VAR_BY_PCS
    OGS_EXT
+   MULTI_FILES
 
 """
 from __future__ import division, print_function, absolute_import
@@ -380,3 +381,6 @@ OGS_EXT = [
     ".out",  # Output Settings
 ]
 """list: all ogs file extensions"""
+
+MULTI_FILES = ["mpd", "gli_ext", "rfr", "gem_init", "asc"]
+"""list: all ogs files that can occure multiple times"""
