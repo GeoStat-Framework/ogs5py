@@ -11,6 +11,7 @@ File Classes
    File
    LineFile
    BlockFile
+   MultiFile
 
 ----
 """
@@ -18,6 +19,7 @@ from __future__ import print_function, division, absolute_import
 import os
 import shutil
 import time
+import copy
 
 from ogs5py.tools.tools import (
     format_content_line,
@@ -87,6 +89,11 @@ class File(object):
     def file_path(self):
         """:class:`str`: save path of the file"""
         return os.path.join(self.task_root, self.task_id + self.file_ext)
+
+    @property
+    def name(self):
+        """:class:`str`: base name of the file"""
+        return os.path.basename(self.file_path)
 
     @property
     def is_empty(self):
@@ -1023,3 +1030,104 @@ class BlockFile(File):
         if self.mainkw:
             out += "#STOP"
         return out
+
+
+class MultiFile(object):
+    """
+    Class holding mulitple files of the same type.
+
+    Parameters
+    ----------
+    base : :class:`object`
+        Base class for the files
+    **standard
+        Standard keyword arguments for new instances of the Base class.
+    """
+
+    def __init__(self, base, **standard):
+        self._base = base
+        self._list = []
+        self._id = None
+        self.standard = standard
+
+    def __contains__(self, value):
+        """Check for File."""
+        return value in self._list
+
+    def __nonzero__(self):
+        """Check for Files."""
+        return bool(self._list)
+
+    def __getitem__(self, item):
+        """Get Files."""
+        return self._list[item]
+
+    def __setitem__(self, item, value):
+        """Set Files."""
+        self._list[item] = value
+
+    def __delitem__(self, item):
+        """Delete Files."""
+        del self._list[item]
+
+    def __iter__(self):
+        """Iterate over Files."""
+        for item in self._list:
+            yield item
+
+    def __len__(self):
+        """Number of Files."""
+        return len(self._list)
+
+    def __getattr__(self, attr):
+        """Pretend to be actual File."""
+        if self._id is not None:
+            return getattr(self._list[self._id], attr)
+        return None
+
+    def add(self, *args, **kwargs):
+        """Add a new instance of the base class."""
+        kw = copy.deepcopy(self.standard)
+        kw.update(kwargs)
+        self._list.append(self._base(*args, **kw))
+        self.id = 0 if self.id is None else self.id + 1
+
+    def append(self, file):
+        """Append a new file to the list."""
+        self._list.append(file)
+        self.id = 0 if self.id is None else self.id + 1
+
+    def delete(self, file_id=-1):
+        """Delete a certain file."""
+        file_id = int(file_id) if file_id >= 0 else len(self) + int(file_id)
+        if 0 <= file_id < len(self):
+            del self._list[file_id]
+            if self.id == file_id:
+                self.id = -1 if self._list else None
+            elif self.id > file_id:
+                self.id = self.id - 1
+
+    def reset_all(self):
+        """Reset the Multi File."""
+        self._list = []
+        self._id = None
+
+    @property
+    def id(self):
+        """:class:`int`: The current id to access in the file list."""
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        value = int(value) if value >= 0 else len(self) - int(value)
+        if 0 <= value < len(self):
+            self._id = value
+        else:
+            print("ID out  of range.")
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        if self.id is not None:
+            return self._list[self._id].__repr__()
