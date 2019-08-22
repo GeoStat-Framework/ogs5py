@@ -417,6 +417,32 @@ class BlockFile(File):
         """Get the number of blocks in the file."""
         return len(self.mainkw)
 
+    def get_multi_keys(self, index=None):
+        """State if a block has a unique set of sub keywords."""
+        index = len(self.mainkw) - 1 if index is None else int(index)
+        if -len(self.mainkw) <= index < len(self.mainkw):
+            sub_keys = self.subkw[index]
+        else:
+            print(
+                "ogs5py "
+                + self.get_file_type()
+                + ": get_multi_keys index out of bounds - "
+                + str(index)
+            )
+            return {}
+        result = {}
+        for key in sub_keys:
+            if not key:
+                continue
+            count = sub_keys.count(key)
+            if count > 1 and key not in result:
+                result[key] = count
+        return result
+
+    def is_block_unique(self, index=None):
+        """State if a block has a unique set of sub keywords."""
+        return not bool(self.get_multi_keys(index))
+
     def get_block(self, index=None, as_dict=True):
         """
         Get a Block from the actual file.
@@ -433,8 +459,7 @@ class BlockFile(File):
             Default: True
         """
         # set the main keyword index
-        if index is None:
-            index = len(self.mainkw) - 1
+        index = len(self.mainkw) - 1 if index is None else int(index)
 
         if -len(self.mainkw) <= index < len(self.mainkw):
             main_key = self.mainkw[index]
@@ -451,11 +476,18 @@ class BlockFile(File):
                 return {}
             return None, [], []
 
-        if as_dict:
+        if as_dict and self.is_block_unique(index):
             out = {"main_key": main_key}
             for sub, con in zip(sub_key, cont):
                 out[sub] = con
             return out
+        elif as_dict:
+            raise ValueError(
+                "ogs5py "
+                + self.get_file_type()
+                + ": get_block - block has no unique sub-keys and can not be "
+                + "represented as dict."
+            )
 
         return main_key, sub_key, cont
 
@@ -566,6 +598,57 @@ class BlockFile(File):
         # block = format_dict(block)
         if block:
             self.add_main_keyword(main_key, main_index=index)
+        # iterate over sub keywords to prevent order
+        # since the kwargs dict doesn't prevent the order of the input
+        # this can lead to errors, if the keywords are not added in the right
+        # order (for example MMP with PERMEABILITY_TENSOR and _DISTRIBUTION)
+        for skey in self.SKEYS[mindex]:
+            if skey not in block:
+                continue
+            self.add_sub_keyword(skey, main_index=index)
+            self.add_multi_content(block[skey], main_index=index)
+
+    def append_to_block(self, index=None, **block):
+        """
+        Append data to an existing Block in the actual file.
+
+        Keywords are the sub keywords of the actual file type:
+
+        #MAIN_KEY
+         $SUBKEY1
+          content1 ...
+         $SUBKEY2
+          content2 ...
+
+        which looks like the following:
+
+        ``FILE.append_to_block(SUBKEY1=content1, SUBKEY2=content2)``
+
+        Parameters
+        ----------
+        index : int or None, optional
+            Positional index, where to insert the given Block.
+            As default, it will be added at the end. Default: None.
+        **block : keyword dict
+            here the dict-keywords are the ogs-subkeywords and the value is
+            the content that should be added with this ogs-subkeyword
+            If a block should contain content directly connected to a main
+            keyword, use this main keyword as input-keyword and the content as
+            value: ``SUBKEY=content``
+        """
+        if not self.mainkw:
+            raise ValueError("append_to_block: No block present")
+        index = len(self.mainkw) - 1 if index is None else int(index)
+        if index >= len(self.mainkw) or index < -len(self.mainkw):
+            raise ValueError("append_to_block: index out of range")
+        # workaround for main keywords with directly connected content
+        main_block = set(block) & set(self.MKEYS)
+        if main_block:
+            raise ValueError(
+                "append_to_block: Use add_block with: " + str(main_block)
+            )
+        # get the index of the main keyword
+        mindex = self.MKEYS.index(self.mainkw[index])
         # iterate over sub keywords to prevent order
         # since the kwargs dict doesn't prevent the order of the input
         # this can lead to errors, if the keywords are not added in the right
