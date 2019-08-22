@@ -1177,7 +1177,8 @@ class OGS(object):
         )
         # wait for ogs to finish
         child.expect(pexpect.EOF)
-        child.close()
+        if sys.platform != "win32":
+            child.close()
         self.exitstatus = child.exitstatus
         success = self.exitstatus == 0
         # close the output stream
