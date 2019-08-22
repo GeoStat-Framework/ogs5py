@@ -962,7 +962,7 @@ class GLIext(File):
     data : :any:`numpy.ndarray`, optional
         Data for the external geometry definition.
         Default: :class:`None`
-    file_name : str, optional
+    name : str, optional
         File name for the RFR file. If :class:`None`, the task_id is used.
         Default: :class:`None`
     file_ext : :class:`str`, optional
@@ -980,7 +980,7 @@ class GLIext(File):
         self,
         typ="TIN",
         data=None,
-        file_name=None,
+        name=None,
         file_ext=None,
         task_root=None,
         task_id="model",
@@ -990,9 +990,7 @@ class GLIext(File):
         if typ not in ["TIN", "POINT_VECTOR"]:
             raise ValueError("typ needs to be either 'TIN' or 'POINT_VECTOR'")
         self.typ = typ
-        if file_name is None:
-            file_name = task_id
-        self.file_name = file_name
+        self.name = name
         if file_ext is None:
             if typ == "TIN":
                 file_ext = ".tin"
@@ -1013,11 +1011,6 @@ class GLIext(File):
     def is_empty(self):
         """state if the OGS file is empty"""
         return self.data.shape[0] == 0
-
-    @property
-    def file_path(self):
-        """:class:`str`: save path of the file"""
-        return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     def check(self, verbose=True):
         """

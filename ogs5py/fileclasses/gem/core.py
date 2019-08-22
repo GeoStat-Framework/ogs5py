@@ -153,7 +153,7 @@ class GEMinit(object):
             self.dch = dch
         else:
             self.dch = LineFile(
-                file_name=self.task_id + "-dch",
+                name=self.task_id + "-dch",
                 file_ext=".dat",
                 task_root=self.task_root,
             )
@@ -161,7 +161,7 @@ class GEMinit(object):
             self.ipm = ipm
         else:
             self.ipm = LineFile(
-                file_name=self.task_id + "-ipm",
+                name=self.task_id + "-ipm",
                 file_ext=".dat",
                 task_root=self.task_root,
             )
@@ -169,7 +169,7 @@ class GEMinit(object):
             self.dbr = dbr
         else:
             self.dbr = LineFile(
-                file_name=self.task_id + "-dbr",
+                name=self.task_id + "-dbr",
                 file_ext=".dat",
                 task_root=self.task_root,
             )
@@ -193,7 +193,7 @@ class GEMinit(object):
         return out_list
 
     @property
-    def file_name(self):
+    def name(self):
         """
         The name of the lst file.
         """
@@ -213,7 +213,7 @@ class GEMinit(object):
         """
         out_list = []
         for file in self.files:
-            out_list.append(file.file_name + file.file_ext)
+            out_list.append(file.name + file.file_ext)
         return out_list
 
     def __bool__(self):
@@ -250,17 +250,17 @@ class GEMinit(object):
         Delete every content.
         """
         self.dch = LineFile(
-            file_name=self.task_id + "-dch",
+            name=self.task_id + "-dch",
             file_ext=".dat",
             task_root=self.task_root,
         )
         self.ipm = LineFile(
-            file_name=self.task_id + "-ipm",
+            name=self.task_id + "-ipm",
             file_ext=".dat",
             task_root=self.task_root,
         )
         self.dbr = LineFile(
-            file_name=self.task_id + "-dbr",
+            name=self.task_id + "-dbr",
             file_ext=".dat",
             task_root=self.task_root,
         )
@@ -340,21 +340,21 @@ class GEMinit(object):
                 )
         else:
             # hard coded order of files
-            self.dch.file_name = os.path.splitext(file_names[0])[0]
+            self.dch.name = os.path.splitext(file_names[0])[0]
             self.dch.file_ext = os.path.splitext(file_names[0])[1]
             self.dch.read_file(
                 path=os.path.join(root, file_names[0]),
                 encoding=encoding,
                 verbose=verbose,
             )
-            self.ipm.file_name = os.path.splitext(file_names[1])[0]
+            self.ipm.name = os.path.splitext(file_names[1])[0]
             self.ipm.file_ext = os.path.splitext(file_names[1])[1]
             self.ipm.read_file(
                 path=os.path.join(root, file_names[1]),
                 encoding=encoding,
                 verbose=verbose,
             )
-            self.dbr.file_name = os.path.splitext(file_names[2])[0]
+            self.dbr.name = os.path.splitext(file_names[2])[0]
             self.dbr.file_ext = os.path.splitext(file_names[2])[1]
             self.dbr.read_file(
                 path=os.path.join(root, file_names[2]),

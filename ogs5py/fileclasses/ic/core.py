@@ -94,7 +94,7 @@ class RFR(File):
         First four lines of the RFR file. If :class:`None`, a standard header
         is written.
         Default: :class:`None`
-    file_name : str, optional
+    name : str, optional
         File name for the RFR file. If :class:`None`, the task_id is used.
         Default: :class:`None`
     file_ext : :class:`str`, optional
@@ -112,13 +112,14 @@ class RFR(File):
         self,
         data=None,
         line1_4=None,
-        file_name=None,
+        name=None,
         file_ext=".rfr",
         task_root=None,
         task_id="model",
     ):
         super(RFR, self).__init__(task_root, task_id, file_ext)
 
+        self.name = name
         if line1_4 is None:
             line1_4 = [
                 "#0#0#0#1#100000#0"
@@ -128,11 +129,6 @@ class RFR(File):
                 "HEAD, m",
             ]
         self.line1_4 = line1_4
-
-        if file_name is None:
-            file_name = task_id
-        self.file_name = file_name
-
         if data:
             self.data = np.array(data)
         else:
@@ -142,11 +138,6 @@ class RFR(File):
     def is_empty(self):
         """state if the OGS file is empty"""
         return bool(self.data.shape) and self.data.shape[0] > 0
-
-    @property
-    def file_path(self):
-        """:class:`str`: save path of the file"""
-        return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     def check(self, verbose=True):
         """

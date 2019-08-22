@@ -64,6 +64,8 @@ class File(object):
     """
 
     def __init__(self, task_root=None, task_id="model", file_ext=".std"):
+        self._name = None
+        self.name_from_id = True
         if task_root is None:
             task_root = os.path.join(CWD, "ogs5model")
         self.task_root = task_root
@@ -86,13 +88,29 @@ class File(object):
         return self._get_clsname()
 
     @property
-    def file_path(self):
-        """:class:`str`: save path of the file."""
-        return os.path.join(self.task_root, self.task_id + self.file_ext)
+    def name(self):
+        """:class:`str`: name of the file without extension."""
+        if self.name_from_id:
+            return self.task_id
+        return self._name
+
+    @name.setter
+    def name(self, value=None):
+        if value is None:
+            self.name_from_id = True
+            self._name = None
+        else:
+            self._name = str(value)
+            self.name_from_id = False
 
     @property
-    def name(self):
-        """:class:`str`: base name of the file."""
+    def file_path(self):
+        """:class:`str`: save path of the file."""
+        return os.path.join(self.task_root, self.name + self.file_ext)
+
+    @property
+    def file_name(self):
+        """:class:`str`: base name of the file with extension."""
         return os.path.basename(self.file_path)
 
     @property
@@ -229,7 +247,7 @@ class LineFile(File):
     lines : list of str, optional
         content of the file as a list of lines
         Default: None
-    file_name : str, optional
+    name : str, optional
         name of the file without extension
         Default: "textfile"
     file_ext : str, optional
@@ -246,22 +264,14 @@ class LineFile(File):
     def __init__(
         self,
         lines=None,
-        file_name="textfile",
+        name=None,
         file_ext=".txt",
         task_root=None,
         task_id="model",
     ):
         super(LineFile, self).__init__(task_root, task_id, file_ext)
-        if lines is not None:
-            self.lines = lines
-        else:
-            self.lines = []
-        self.file_name = file_name
-
-    @property
-    def file_path(self):
-        """:class:`str`: save path of the file."""
-        return os.path.join(self.task_root, self.file_name + self.file_ext)
+        self.lines = [] if lines is None else lines
+        self.name = name
 
     @property
     def is_empty(self):

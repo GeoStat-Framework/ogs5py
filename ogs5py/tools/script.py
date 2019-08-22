@@ -180,14 +180,14 @@ def add_list_file(list_file, script, base, cls_name, ogs_cls_name="model"):
         add = "add_asc"
 
     list_file.write_file()
-    file_name = list_file.file_name
+    name = list_file.name
     file_ext = list_file.file_ext
-    name = file_name + file_ext
+    file_name = name + file_ext
     print(cls_name + " = " + base + "(", file=script)
-    print(tab(1) + "file_name=" + formater(file_name) + ",", file=script)
+    print(tab(1) + "name=" + formater(name) + ",", file=script)
     print(tab(1) + "file_ext=" + formater(file_ext) + ",", file=script)
     print(")", file=script)
-    print(cls_name + ".read_file(" + formater(name) + ")", file=script)
+    print(cls_name + ".read_file(" + formater(file_name) + ")", file=script)
     print(ogs_cls_name + "." + add + "(" + cls_name + ")", file=script)
 
 

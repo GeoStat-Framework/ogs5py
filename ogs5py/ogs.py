@@ -251,10 +251,9 @@ class OGS(object):
 
     @task_id.setter
     def task_id(self, value):
+        # workaround for asc
         for i in range(len(self.asc)):
-            self.asc[i].file_name = (
-                value + self.asc[i].file_name[len(self._task_id) :]
-            )
+            self.asc[i].name = value + self.asc[i].name[len(self._task_id) :]
         self._task_id = value
         for ext in OGS_EXT:
             getattr(self, ext[1:]).task_id = value
@@ -675,11 +674,11 @@ class OGS(object):
                     # POINT_VECTOR definition of a POLYLINE
                     ext_name = ply["POINT_VECTOR"]
                     if ext_name is not None:
-                        raw_file_name = os.path.basename(ext_name)
-                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        raw_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_name)
                         ext_file = GLIext(
                             typ="POINT_VECTOR",
-                            file_name=f_name,
+                            name=f_name,
                             file_ext=f_ext,
                             task_root=self.task_root,
                         )
@@ -690,11 +689,11 @@ class OGS(object):
                     # Triangulation definition of a SURFACE
                     ext_name = srf["TIN"]
                     if ext_name is not None:
-                        raw_file_name = os.path.basename(ext_name)
-                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        raw_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_name)
                         ext_file = GLIext(
                             typ="TIN",
-                            file_name=f_name,
+                            name=f_name,
                             file_ext=f_ext,
                             task_root=self.task_root,
                         )
@@ -711,10 +710,10 @@ class OGS(object):
                             "PERMEABILITY_DISTRIBUTION"
                         )
                         ext_name = self.mmp.cont[i][index][0][0]
-                        raw_file_name = os.path.basename(ext_name)
-                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        raw_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_name)
                         ext_file = MPD(
-                            file_name=f_name,
+                            name=f_name,
                             file_ext=f_ext,
                             task_root=self.task_root,
                         )
@@ -727,10 +726,10 @@ class OGS(object):
                             "POROSITY_DISTRIBUTION"
                         )
                         ext_name = self.mmp.cont[i][index][0][0]
-                        raw_file_name = os.path.basename(ext_name)
-                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        raw_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_name)
                         ext_file = MPD(
-                            file_name=f_name,
+                            name=f_name,
                             file_ext=f_ext,
                             task_root=self.task_root,
                         )
@@ -742,10 +741,10 @@ class OGS(object):
                         index = self.mmp.subkw[i].index("GEOMETRY_AREA")
                         if self.mmp.cont[i][index][0][0] == "FILE":
                             ext_name = self.mmp.cont[i][index][0][1]
-                            raw_file_name = os.path.basename(ext_name)
-                            f_name, f_ext = os.path.splitext(raw_file_name)
+                            raw_name = os.path.basename(ext_name)
+                            f_name, f_ext = os.path.splitext(raw_name)
                             ext_file = MPD(
-                                file_name=f_name,
+                                name=f_name,
                                 file_ext=f_ext,
                                 task_root=self.task_root,
                             )
@@ -774,10 +773,10 @@ class OGS(object):
                         if self.ic.cont[i][index][0][0] != "RESTART":
                             continue
                         ext_name = self.ic.cont[i][index][0][1]
-                        raw_file_name = os.path.basename(ext_name)
-                        f_name, f_ext = os.path.splitext(raw_file_name)
+                        raw_name = os.path.basename(ext_name)
+                        f_name, f_ext = os.path.splitext(raw_name)
                         ext_file = RFR(
-                            file_name=f_name,
+                            name=f_name,
                             file_ext=f_ext,
                             task_root=self.task_root,
                         )
@@ -795,10 +794,10 @@ class OGS(object):
         # load ASC files
         files = glob.glob(os.path.join(task_root, task_id + "*.asc"))
         for fil in files:
-            raw_file_name = os.path.basename(fil)
-            f_name, f_ext = os.path.splitext(raw_file_name)
+            raw_name = os.path.basename(fil)
+            f_name, f_ext = os.path.splitext(raw_name)
             ext_file = ASC(
-                file_name=self.task_id + f_name[len(task_id) :],
+                name=self.task_id + f_name[len(task_id) :],
                 task_root=self.task_root,
             )
             path = os.path.join(task_root, fil)

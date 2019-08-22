@@ -16,7 +16,7 @@ class ASC(LineFile):
     lines : list of str, optional
         content of the file as a list of lines
         Default: None
-    file_name : str, optional
+    name : str, optional
         name of the file without extension
         Default: "textfile"
     task_root : str, optional

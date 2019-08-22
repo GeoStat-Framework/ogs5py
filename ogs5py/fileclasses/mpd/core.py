@@ -12,7 +12,7 @@ class MPD(BlockFile):
 
     Parameters
     ----------
-    file_name : str, optional
+    name : str, optional
         File name for the MPD file. If :class:`None`, the task_id is used.
         Default: :class:`None`
     file_ext : :class:`str`, optional
@@ -59,11 +59,9 @@ class MPD(BlockFile):
 
     STD = {}
 
-    def __init__(self, file_name=None, file_ext=".mpd", **OGS_Config):
+    def __init__(self, name=None, file_ext=".mpd", **OGS_Config):
         super(MPD, self).__init__(**OGS_Config)
-        if file_name is None:
-            file_name = self.task_id
-        self.file_name = file_name
+        self.name = name
         self.file_ext = file_ext
 
     # no top comment allowed in the MPD file
@@ -75,8 +73,3 @@ class MPD(BlockFile):
     @top_com.setter
     def top_com(self, val):
         pass
-
-    @property
-    def file_path(self):
-        """:class:`str`: save path of the file"""
-        return os.path.join(self.task_root, self.file_name + self.file_ext)
