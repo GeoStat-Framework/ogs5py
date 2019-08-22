@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Viewer for a vtk file."""
 from __future__ import division, print_function, absolute_import
-import os
 
-os.environ["QT_API"] = "pyqt"
-os.environ["ETS_TOOLKIT"] = "qt4"
+# import os
+# os.environ["QT_API"] = "pyqt"
+# os.environ["ETS_TOOLKIT"] = "qt4"
 
 MAYA_AVAIL = True
 try:
@@ -33,7 +33,7 @@ def show_vtk(vtkfile, log_scale=False):
     # stop if mayavi is not installed
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
-        return
+        return None
     # new mayavi scenes
     mlab.figure()
     # load the vtk file to mayavi's mlab

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """Viewer for an ogs5py mesh."""
 from __future__ import division, print_function, absolute_import
-import os
+
+# import os
 import tempfile
 import numpy as np
 from ogs5py.fileclasses.msh.msh_io import export_mesh
 
-os.environ["QT_API"] = "pyqt"
-os.environ["ETS_TOOLKIT"] = "qt4"
+# os.environ["QT_API"] = "pyqt"
+# os.environ["ETS_TOOLKIT"] = "qt4"
 
 MAYA_AVAIL = True
 try:
@@ -68,7 +69,7 @@ def show_mesh(
     # stop if mayavi is not installed
     if not MAYA_AVAIL:
         print("Could not import 'mayavi'!")
-        return
+        return None
 
     if show_cell_data is not None:
         if not isinstance(show_cell_data, dict):
@@ -79,7 +80,7 @@ def show_mesh(
     # new mayavi scenes
     mlab.figure()
     # create a temp-file which contains a vtk version of the mesh
-    vtkfile = tempfile.NamedTemporaryFile(suffix=".vtu")
+    vtkfile = tempfile.NamedTemporaryFile(suffix=".vtk")
     # export the mesh to the temp vtk file
     export_mesh(
         vtkfile.name,
