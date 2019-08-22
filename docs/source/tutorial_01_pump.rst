@@ -6,7 +6,6 @@ This is a minimal example on how to setup a pumping test with ogs5py.
 .. code-block:: python
 
     from ogs5py import OGS
-    from ogs5py.reader import readtec_point
     from matplotlib import pyplot as plt
 
     model = OGS(task_root="pump_test", task_id="model")
@@ -61,25 +60,24 @@ This is a minimal example on how to setup a pumping test with ogs5py.
         PCS_TYPE='GROUNDWATER_FLOW',
         TIME_START=0,
         TIME_END=600,
-        TIME_STEPS=[
-            [10, 30],
-            [5, 60],
-        ],
+        TIME_STEPS=[[10, 30], [5, 60]],
     )
     model.write_input()
     success = model.run_model()
+    print("success", success)
 
-    point = readtec_point(
-        task_root="pump_test",
-        task_id="model",
-        pcs='GROUNDWATER_FLOW',
-    )
+    point = model.readtec_point(pcs='GROUNDWATER_FLOW')
     time = point['owell']["TIME"]
     head = point['owell']["HEAD"]
 
     plt.plot(time, head)
     plt.show()
+    model.msh.show()
 
 .. image:: pics/01_pump_test_drawdown.png
+   :width: 400px
+   :align: center
+
+.. image:: pics/01_pump_test_mesh.png
    :width: 400px
    :align: center

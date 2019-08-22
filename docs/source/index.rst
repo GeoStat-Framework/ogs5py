@@ -40,7 +40,6 @@ The point output at the observation well is plotted afterwards.
 .. code-block:: python
 
     from ogs5py import OGS
-    from ogs5py.reader import readtec_point
     from matplotlib import pyplot as plt
 
     model = OGS(task_root="pump_test", task_id="model")
@@ -95,19 +94,13 @@ The point output at the observation well is plotted afterwards.
         PCS_TYPE='GROUNDWATER_FLOW',
         TIME_START=0,
         TIME_END=600,
-        TIME_STEPS=[
-            [10, 30],
-            [5, 60],
-        ],
+        TIME_STEPS=[[10, 30], [5, 60]],
     )
     model.write_input()
     success = model.run_model()
+    print("success", success)
 
-    point = readtec_point(
-        task_root="pump_test",
-        task_id="model",
-        pcs='GROUNDWATER_FLOW',
-    )
+    point = model.readtec_point(pcs='GROUNDWATER_FLOW')
     time = point['owell']["TIME"]
     head = point['owell']["HEAD"]
 
@@ -137,12 +130,36 @@ It comes along with a set of handy readers for almost all output formats:
 OGS5 executable
 ===============
 
-The OGS5 executable needs to be in your sys-path under ``ogs[.exe]``.
+To obtain an OGS5 executable, ``ogs5py`` brings a download routine:
+
+.. code-block:: python
+
+    from ogs5py import download_ogs
+    download_ogs()
+
+Then a executable is stored in the ogs5py config path and will be called
+when a model is run.
+
+You can pass a ``version`` statement to the ``download_ogs`` routine, to
+obtain a specific version (5.7, 5.7.1 (win only) and 5.8).
+Also "latest" and "stable" are possible.
+For OGS 5.7 there are executables for Windows/Linux and MacOS.
+For "5.8", "latest" and "stable" there are no MacOS pre-builds.
+Have a look at the documentation for all options.
+
+If you have compiled your own OGS5 version, you can add your executable
+to the ogs5py config path with:
+
+.. code-block:: python
+
+    from ogs5py import add_exe
+    add_exe("path/to/your/ogs/exe")
+
 Otherwise you need to specify the path to the executable within the run command:
 
 .. code-block:: python
 
-    model.run_model(ogs_root="path/to/ogs")
+    model.run_model(ogs_exe="path/to/ogs")
 
 
 Requirements
@@ -160,4 +177,4 @@ Requirements
 License
 =======
 
-`GPL <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2018
+`MPI <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2019
