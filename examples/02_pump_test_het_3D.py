@@ -7,13 +7,13 @@ from gstools import SRF, Gaussian
 cov_model = Gaussian(dim=3, var=2, len_scale=10, anis=[1, 0.2])
 srf = SRF(model=cov_model, mean=-9, seed=1000)
 # ogs base class
-model = OGS(task_root="test_het_3D", task_id="model", output_dir="out")
+model = OGS(task_root="test_het_3D3", task_id="model", output_dir="out")
 # generate a radial 3D mesh and conductivity field
 model.msh.generate(
     "radial", dim=3, angles=64, rad=np.arange(101), z_arr=-np.arange(11)
 )
 cond = np.exp(srf.mesh(model.msh))
-model.mpd.add()  # add distributed medium properties
+model.mpd.add(name="conductivity")
 model.mpd.add_block(  # edit recent mpd file
     MSH_TYPE="GROUNDWATER_FLOW",
     MMP_TYPE="PERMEABILITY",
@@ -36,7 +36,7 @@ model.st.add_block(  # set pumping condition at the pumpingwell
     DIS_TYPE=["CONSTANT_NEUMANN", 1.0e-3],
 )
 model.mmp.add_block(  # permeability, storage and porosity
-    GEOMETRY_DIMENSION=3, PERMEABILITY_DISTRIBUTION=model.mpd.name
+    GEOMETRY_DIMENSION=3, PERMEABILITY_DISTRIBUTION=model.mpd.file_name
 )
 model.num.add_block(  # numerical solver
     PCS_TYPE="GROUNDWATER_FLOW",
