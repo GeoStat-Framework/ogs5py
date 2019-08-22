@@ -130,7 +130,7 @@ It comes along with a set of handy readers for almost all output formats:
 OGS5 executable
 ===============
 
-To obtain an OGS5 executable, ``ogs5py`` brings a download routine:
+To obtain an OGS5 executable, ``ogs5py`` brings a download routine :any:`download_ogs`:
 
 .. code-block:: python
 
@@ -148,7 +148,7 @@ For "5.8", "latest" and "stable" there are no MacOS pre-builds.
 Have a look at the documentation for all options.
 
 If you have compiled your own OGS5 version, you can add your executable
-to the ogs5py config path with:
+to the ogs5py config path with :any:`add_exe`:
 
 .. code-block:: python
 
