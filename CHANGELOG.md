@@ -11,6 +11,8 @@ All notable changes to **ogs5py** will be documented in this file.
 * ``MSH.show`` was not working: https://github.com/GeoStat-Framework/ogs5py/commit/6a0489bc1675b909946e1a870459fc7f7ddf7629
 * ``OGS.run_model`` has now a better check for OGS success: https://github.com/GeoStat-Framework/ogs5py/commit/143d0ab56e63f9e5cc1688bc621788ad42be67e9
 * ``GMSH`` interface was updated to new meshio-API: https://github.com/GeoStat-Framework/ogs5py/commit/d3e05941a7a76a6d6fdf53a148af7b196fede66a
+* ``RFR`` file was not written: https://github.com/GeoStat-Framework/ogs5py/commit/41e55f3d585afe6f8cdb9b94317d5166dc51b2e1
+* ``BC`` new sub-key TIME_INTERVAL was missing: https://github.com/GeoStat-Framework/ogs5py/commit/94ec5c500de8877dc462df6ef86af5ae0187625f
 
 ### Additions
 * ``download_ogs`` downloads a system dependent OGS5 executable: https://github.com/GeoStat-Framework/ogs5py/commit/ede32e411785b51cdd0983a924c3c7ea117ab026
@@ -22,14 +24,16 @@ All notable changes to **ogs5py** will be documented in this file.
 * ``MSH.show`` now can show additional cell_data: https://github.com/GeoStat-Framework/ogs5py/commit/ffd76045e0591a00fd51c937ba62c4d5945c3fed
 * New routine ``show_vtk`` to show vtk output with mayavi: https://github.com/GeoStat-Framework/ogs5py/commit/f640c1977d7b9a869c56f61186613c8b9c9ef345
 * New method ``OGS.output_files`` to get a list of output files: https://github.com/GeoStat-Framework/ogs5py/commit/2f5f10237c1b54d21b0b6a01598680e889dc7bf6
-* New attribute ``file_name`` for files: https://github.com/GeoStat-Framework/ogs5py/commit/632c2e7b1ab33ec3b55bd8be6fbbe1f67d5c5651#diff-bc322c8565356d4543aca0a3d0e0a578
+* New attribute ``file_name`` for files: https://github.com/GeoStat-Framework/ogs5py/commit/632c2e7b1ab33ec3b55bd8be6fbbe1f67d5c5651
+* BlockFile: new method ``append_to_block``: https://github.com/GeoStat-Framework/ogs5py/commit/efc9aac16293960f199440d5df3ff924f8d593ff
+* ``OGS.gen_script`` now allowes multiple subkeys: https://github.com/GeoStat-Framework/ogs5py/commit/2cd344b3ad6b6e1d7fcfd9e560854e5fe102b604
 
 ### Changes
 * ``MSH.export_mesh`` argument ``add_data_by_id`` renamed to ``cell_data_by_id``: https://github.com/GeoStat-Framework/ogs5py/commit/00a77fae9d492eb16872443e9be4262d4515da27
 * ``OGS.run_model`` argument ``ogs_root`` renamed to ``ogs_exe``: https://github.com/GeoStat-Framework/ogs5py/commit/6fcdb617b4f61e738240830d637a0718732a66ad
 * Files that can occure multiple times (mpd, rfr, ...) are better handled now: https://github.com/GeoStat-Framework/ogs5py/commit/4a9c9d2a2209e49b336bdb59fd51f3362be44c8f
 * ``ogs5py`` is now licensed under the MIT license: https://github.com/GeoStat-Framework/ogs5py/commit/ae96c0e7a5889632e9c34d0fc4577df587da3164
-* Extra named files now get their name by keyword ``name``: https://github.com/GeoStat-Framework/ogs5py/commit/632c2e7b1ab33ec3b55bd8be6fbbe1f67d5c5651#diff-bc322c8565356d4543aca0a3d0e0a578
+* Extra named files now get their name by keyword ``name``: https://github.com/GeoStat-Framework/ogs5py/commit/632c2e7b1ab33ec3b55bd8be6fbbe1f67d5c5651
 
 ## [0.6.5] - 2019-07-05
 
