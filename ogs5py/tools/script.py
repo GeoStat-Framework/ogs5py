@@ -27,7 +27,7 @@ from __future__ import division, print_function, absolute_import
 import os
 import shutil
 
-from ogs5py.tools.types import STRTYPE, OGS_EXT
+from ogs5py.tools.types import STRTYPE, OGS_EXT, MULTI_FILES
 from ogs5py.fileclasses.base import BlockFile
 
 
@@ -87,43 +87,117 @@ def add_block_file(block_file, script, ogs_cls_name="model"):
     file_type = block_file.get_file_type().lower()
     for i in range(block_no):
         mkey, skeys, cont = block_file.get_block(index=i, as_dict=False)
-        print(ogs_cls_name + "." + file_type + ".add_block(", file=script)
-        if "" not in skeys:
+        if block_file.is_block_unique(i):
+            print(ogs_cls_name + "." + file_type + ".add_block(", file=script)
+            if "" not in skeys:
+                print(tab(1) + "main_key=" + formater(mkey) + ",", file=script)
+            for j, skey in enumerate(skeys):
+                if skey == "":
+                    skey = mkey
+                line_no = len(cont[j])
+                # empty value
+                if (
+                    line_no == 0
+                    or (line_no == 1 and not cont[j][0])
+                    or (
+                        line_no == 1
+                        and len(cont[j][0]) == 1
+                        and cont[j][0][0] == ""
+                    )
+                ):
+                    print(tab(1) + skey + "=[],", file=script)
+                # single value
+                elif line_no == 1 and len(cont[j][0]) == 1:
+                    print(
+                        tab(1) + skey + "=" + formater(cont[j][0][0]) + ",",
+                        file=script,
+                    )
+                # single line
+                elif line_no == 1:
+                    print(
+                        tab(1) + skey + "=" + get_line(cont[j][0]) + ",",
+                        file=script,
+                    )
+                # multiple lines
+                else:
+                    print(tab(1) + skey + "=[", file=script)
+                    for cont_k in cont[j]:
+                        print(tab(2) + get_line(cont_k) + ",", file=script)
+                    print(tab(1) + "],", file=script)
+            print(")", file=script)
+        else:
+            print(ogs_cls_name + "." + file_type + ".add_block(", file=script)
             print(tab(1) + "main_key=" + formater(mkey) + ",", file=script)
-        for j, skey in enumerate(skeys):
-            if skey == "":
-                skey = mkey
-            line_no = len(cont[j])
-            # empty value
+            line_no = len(cont[0])
+            skey = skeys[0]
+            # empty first value
             if (
                 line_no == 0
-                or (line_no == 1 and not cont[j][0])
+                or (line_no == 1 and not cont[0][0])
                 or (
                     line_no == 1
-                    and len(cont[j][0]) == 1
-                    and cont[j][0][0] == ""
+                    and len(cont[0][0]) == 1
+                    and cont[0][0][0] == ""
                 )
             ):
                 print(tab(1) + skey + "=[],", file=script)
-            # single value
-            elif line_no == 1 and len(cont[j][0]) == 1:
+            # single first value
+            elif line_no == 1 and len(cont[0][0]) == 1:
                 print(
-                    tab(1) + skey + "=" + formater(cont[j][0][0]) + ",",
+                    tab(1) + skey + "=" + formater(cont[0][0][0]) + ",",
                     file=script,
                 )
-            # single line
+            # single first line
             elif line_no == 1:
                 print(
-                    tab(1) + skey + "=" + get_line(cont[j][0]) + ",",
+                    tab(1) + skey + "=" + get_line(cont[0][0]) + ",",
                     file=script,
                 )
-            # multiple lines
+            # multiple first lines
             else:
                 print(tab(1) + skey + "=[", file=script)
-                for cont_k in cont[j]:
+                for cont_k in cont[0]:
                     print(tab(2) + get_line(cont_k) + ",", file=script)
                 print(tab(1) + "],", file=script)
-        print(")", file=script)
+            print(")", file=script)
+            # additional lines
+            for j, skey in enumerate(skeys[1:]):
+                j += 1  # get the right content
+                print(
+                    ogs_cls_name + "." + file_type + ".append_to_block(",
+                    file=script,
+                )
+                line_no = len(cont[j])
+                # empty value
+                if (
+                    line_no == 0
+                    or (line_no == 1 and not cont[j][0])
+                    or (
+                        line_no == 1
+                        and len(cont[j][0]) == 1
+                        and cont[j][0][0] == ""
+                    )
+                ):
+                    print(tab(1) + skey + "=[],", file=script)
+                # single value
+                elif line_no == 1 and len(cont[j][0]) == 1:
+                    print(
+                        tab(1) + skey + "=" + formater(cont[j][0][0]) + ",",
+                        file=script,
+                    )
+                # single line
+                elif line_no == 1:
+                    print(
+                        tab(1) + skey + "=" + get_line(cont[j][0]) + ",",
+                        file=script,
+                    )
+                # multiple lines
+                else:
+                    print(tab(1) + skey + "=[", file=script)
+                    for cont_k in cont[j]:
+                        print(tab(2) + get_line(cont_k) + ",", file=script)
+                    print(tab(1) + "],", file=script)
+                print(")", file=script)
 
 
 def add_load_file(load_file, script, ogs_cls_name="model"):
@@ -142,7 +216,7 @@ def add_load_file(load_file, script, ogs_cls_name="model"):
     if load_file.is_empty:
         return
     load_file.write_file()
-    name = load_file.task_id + load_file.file_ext
+    name = load_file.file_name
     file_type = load_file.get_file_type().lower()
     print(
         ogs_cls_name + "." + file_type + ".read_file(" + formater(name) + ")",
@@ -150,7 +224,7 @@ def add_load_file(load_file, script, ogs_cls_name="model"):
     )
 
 
-def add_list_file(list_file, script, base, cls_name, ogs_cls_name="model"):
+def add_list_file(list_file, script, typ, ogs_cls_name="model"):
     """
     Add a listed file to be loaded from a script.
 
@@ -160,35 +234,23 @@ def add_list_file(list_file, script, base, cls_name, ogs_cls_name="model"):
         listed file that should be saved and then loaded from the script
     script : stream
         given opened file for the script
-    base : str
-        Base class of the listed file (MPD, GLIext, RFR, ...)
-    cls_name : str
-        name of the class in the script
+    typ : str
+        typ of the list file
     ogs_cls_name : str
         name of the model within the script
     """
-    if base == "MPD":
-        add = "add_mpd"
-    elif base == "GLIext":
-        add = "add_gli_ext"
-    elif base == "RFR":
-        add = "add_rfr"
-    elif base == "GEMinit":
-        add = "add_gem_init"
-    else:  # ASC as default case
-        base = "ASC"
-        add = "add_asc"
-
     list_file.write_file()
     name = list_file.name
     file_ext = list_file.file_ext
     file_name = name + file_ext
-    print(cls_name + " = " + base + "(", file=script)
+    print(ogs_cls_name + "." + typ + ".add(", file=script)
     print(tab(1) + "name=" + formater(name) + ",", file=script)
     print(tab(1) + "file_ext=" + formater(file_ext) + ",", file=script)
     print(")", file=script)
-    print(cls_name + ".read_file(" + formater(file_name) + ")", file=script)
-    print(ogs_cls_name + "." + add + "(" + cls_name + ")", file=script)
+    print(
+        ogs_cls_name + "." + typ + ".read_file(" + formater(file_name) + ")",
+        file=script,
+    )
 
 
 def gen_script(
@@ -243,16 +305,6 @@ def gen_script(
     ogs_class.task_root = script_dir
     # set the imported classes
     load = ["OGS"]
-    if ogs_class.mpd:
-        load.append("MPD")
-    if ogs_class.gli_ext:
-        load.append("GLIext")
-    if ogs_class.rfr:
-        load.append("RFR")
-    if ogs_class.gem_init:
-        load.append("GEMinit")
-    if ogs_class.asc:
-        load.append("ASC")
     load = ", ".join(load)
     # open the script file
     with open(path, "w") as script:
@@ -282,24 +334,9 @@ def gen_script(
 
         add_load_file(ogs_class.pqcdat, script, ogs_cls_name)
 
-        for mpd_file in ogs_class.mpd:
-            add_list_file(mpd_file, script, "MPD", "mpd_file", ogs_cls_name)
-
-        for gli_ext_file in ogs_class.gli_ext:
-            add_list_file(
-                gli_ext_file, script, "GLIext", "gli_ext_file", ogs_cls_name
-            )
-
-        for rfr_file in ogs_class.rfr:
-            add_list_file(rfr_file, script, "RFR", "rfr_file", ogs_cls_name)
-
-        for gem_init_file in ogs_class.gem_init:
-            add_list_file(
-                gem_init_file, script, "GEMinit", "gem_init_file", ogs_cls_name
-            )
-
-        for asc_file in ogs_class.asc:
-            add_list_file(asc_file, script, "ASC", "asc_file", ogs_cls_name)
+        for typ in MULTI_FILES:
+            for file in getattr(ogs_class, typ):
+                add_list_file(file, script, typ, ogs_cls_name)
 
         for copy_file in ogs_class.copy_files:
             base = os.path.basename(copy_file)
