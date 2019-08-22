@@ -136,13 +136,14 @@ class RFR(File):
 
     @property
     def is_empty(self):
-        """state if the OGS file is empty"""
-        return bool(self.data.shape) and self.data.shape[0] > 0
+        """State if the OGS file is empty."""
+        return not (bool(self.data.shape) and self.data.shape[0] > 0)
 
     def check(self, verbose=True):
         """
-        Check if the external geometry definition is valid in the sence,
-        that the contained data is consistent.
+        Check if the external geometry definition is valid.
+
+        In the sence, that the contained data is consistent.
 
         Parameters
         ----------
