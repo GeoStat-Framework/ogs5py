@@ -12,6 +12,12 @@ All notable changes to **ogs5py** will be documented in this file.
 ### Changes
 
 
+## [1.0.1] - 2019-08-22
+
+### Bugfixes
+* ``download_ogs(version="latest" build="PETSC")`` was not working: https://github.com/GeoStat-Framework/ogs5py/commit/552503b030634465aa324ebf3401fed8805c856b
+
+
 ## [1.0.0] - 2019-08-22
 
 ### Bugfixes
