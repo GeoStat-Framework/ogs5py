@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Base Classes for the OGS Files
+Base Classes for the OGS Files.
 
 .. currentmodule:: ogs5py.fileclasses.base
 
@@ -87,22 +87,22 @@ class File(object):
 
     @property
     def file_path(self):
-        """:class:`str`: save path of the file"""
+        """:class:`str`: save path of the file."""
         return os.path.join(self.task_root, self.task_id + self.file_ext)
 
     @property
     def name(self):
-        """:class:`str`: base name of the file"""
+        """:class:`str`: base name of the file."""
         return os.path.basename(self.file_path)
 
     @property
     def is_empty(self):
-        """state if the OGS file is empty"""
+        """:class:`bool`: state if the OGS file is empty."""
         return False
 
     @property
     def force_writing(self):
-        """:class:`bool`: state if the file is written even if empty"""
+        """:class:`bool`: state if the file is written even if empty."""
         return self._force
 
     @force_writing.setter
@@ -110,13 +110,13 @@ class File(object):
         self._force = bool(force)
 
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         pass
 
     def add_copy_link(self, path, symlink=False):
         """
+        Add a link to copy a file instead of writing.
+
         Instead of writing a file, you can give a path to an existing file,
         that will be copied/linked to the target folder.
 
@@ -141,16 +141,12 @@ class File(object):
             )
 
     def del_copy_link(self):
-        """
-        Remove a former given link to an external file.
-        """
+        """Remove a former given link to an external file."""
         self.copy_file = None
         self.copy_path = None
 
     def read_file(self, path, encoding=None, verbose=False):
-        """
-        Read an existing file
-        """
+        """Read an existing file."""
         pass
 
     def save(self, path, **kwargs):
@@ -167,6 +163,7 @@ class File(object):
     def write_file(self):
         """
         Write the actual OGS input file to the given folder.
+
         Its path is given by "task_root+task_id+file_ext".
         """
         # update the content
@@ -203,24 +200,23 @@ class File(object):
         return True
 
     def _update_in(self):
-        """
-        An update routine to set the file data in the right format after input.
-        """
+        """Update routine to set data in the right format after input."""
         pass
 
     def _update_out(self):
-        """
-        An update routine to set the file data in the right format for output.
-        """
+        """Update routine to set data in the right format for output."""
         pass
 
     def __bool__(self):
+        """Empty check."""
         return not self.is_empty
 
     def __nonzero__(self):
+        """Empty check."""
         return self.__bool__()
 
     def __str__(self):
+        """String output."""
         return self.__repr__()
 
 
@@ -264,12 +260,12 @@ class LineFile(File):
 
     @property
     def file_path(self):
-        """:class:`str`: save path of the file"""
+        """:class:`str`: save path of the file."""
         return os.path.join(self.task_root, self.file_name + self.file_ext)
 
     @property
     def is_empty(self):
-        """:class:`bool`: state if the file is empty"""
+        """:class:`bool`: state if the file is empty."""
         # check if the list of main keywords is empty
         if self.check(False):
             return not bool(self.lines)
@@ -277,9 +273,7 @@ class LineFile(File):
         return True
 
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         self.lines = []
 
     def check(self, verbose=True):
@@ -321,7 +315,7 @@ class LineFile(File):
 
     def read_file(self, path, encoding=None, verbose=False):
         """
-        Read an existing OGS input file
+        Read an existing OGS input file.
 
         Parameters
         ----------
@@ -334,7 +328,7 @@ class LineFile(File):
             Print information of the reading process. Default: False
         """
         # in python3 open was replaced with io.open
-        # so we can use encoding key word in python2
+        # so we can use encoding keyword in python2
         from io import open
 
         self.reset()
@@ -351,6 +345,7 @@ class LineFile(File):
                 )
 
     def __repr__(self):
+        """Representation."""
         out = ""
         for line in self.lines[:5]:
             out += line + "\n"
@@ -399,14 +394,12 @@ class BlockFile(File):
 
     @property
     def is_empty(self):
-        """state if the OGS file is empty"""
+        """State if the OGS file is empty."""
         # check if the list of main keywords is empty
         return not bool(self.mainkw)
 
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         self.del_main_keyword(del_all=True)
         self._update_in()
 
@@ -575,7 +568,7 @@ class BlockFile(File):
 
     def add_main_keyword(self, key, main_index=None):
         """
-        Add a new main keyword (#key) to the actual file
+        Add a new main keyword (#key) to the actual file.
 
         Parameters
         ----------
@@ -593,7 +586,7 @@ class BlockFile(File):
 
     def add_sub_keyword(self, key, main_index=None, sub_index=None):
         """
-        Add a new sub keyword ($key) to the actual file
+        Add a new sub keyword ($key) to the actual file.
 
         Parameters
         ----------
@@ -631,7 +624,7 @@ class BlockFile(File):
         self, content, main_index=None, sub_index=None, line_index=None
     ):
         """
-        Add single-line content to the actual file
+        Add single-line content to the actual file.
 
         Parameters
         ----------
@@ -688,7 +681,7 @@ class BlockFile(File):
 
     def add_multi_content(self, content, main_index=None, sub_index=None):
         """
-        Add multiple content to the actual file
+        Add multiple content to the actual file.
 
         Parameters
         ----------
@@ -724,7 +717,7 @@ class BlockFile(File):
 
     def del_block(self, index=None, del_all=False):
         """
-        Delete a block by its index
+        Delete a block by its index.
 
         Parameters
         ----------
@@ -738,7 +731,7 @@ class BlockFile(File):
 
     def del_main_keyword(self, main_index=None, del_all=False):
         """
-        Delete a main keyword (#key) by its position
+        Delete a main keyword (#key) by its position.
 
         Parameters
         ----------
@@ -761,7 +754,7 @@ class BlockFile(File):
 
     def del_sub_keyword(self, main_index=-1, sub_index=-1, del_all=False):
         """
-        Delete a sub keyword ($key) by its position
+        Delete a sub keyword ($key) by its position.
 
         Parameters
         ----------
@@ -790,7 +783,7 @@ class BlockFile(File):
         self, main_index=-1, sub_index=-1, line_index=-1, del_all=False
     ):
         """
-        Delete content by its position
+        Delete content by its position.
 
         Parameters
         ----------
@@ -832,7 +825,7 @@ class BlockFile(File):
 
     def read_file(self, path, encoding=None, verbose=False):
         """
-        Read an existing OGS input file
+        Read an existing OGS input file.
 
         Parameters
         ----------
@@ -1012,6 +1005,7 @@ class BlockFile(File):
                 print("#STOP", end="", file=fout)
 
     def __repr__(self):
+        """Representation."""
         from ogs5py import SUB_IND, CON_IND
 
         out = ""
@@ -1054,9 +1048,13 @@ class MultiFile(object):
         """Check for File."""
         return value in self._list
 
-    def __nonzero__(self):
+    def __bool__(self):
         """Check for Files."""
         return bool(self._list)
+
+    def __nonzero__(self):
+        """Check for Files."""
+        return self.__bool__()
 
     def __getitem__(self, item):
         """Get Files."""
@@ -1081,7 +1079,7 @@ class MultiFile(object):
 
     def __getattr__(self, attr):
         """Pretend to be actual File."""
-        if self._id is not None:
+        if self.id is not None:
             return getattr(self[self.id], attr)
         return None
 
@@ -1118,15 +1116,17 @@ class MultiFile(object):
 
     @id.setter
     def id(self, value):
-        value = int(value) if value >= 0 else len(self) - int(value)
+        value = int(value) if value >= 0 else len(self) + int(value)
         if 0 <= value < len(self):
             self._id = value
         else:
             print("ID out of range.")
 
     def __str__(self):
+        """String output."""
         return self.__repr__()
 
     def __repr__(self):
+        """Representation."""
         if self.id is not None:
             return self._list[self._id].__repr__()
