@@ -60,7 +60,7 @@ def get_links(url, ext, build=None):
     for link in dom.xpath("//a/@href"):
         if not link or not link.endswith(ext):
             continue  # skip unwanted
-        if build is None or "build_" + build in link:
+        if build is None or "build_" + build + "/" in link:
             sublinks.append(
                 url + link if not link.startswith("http") else link
             )
