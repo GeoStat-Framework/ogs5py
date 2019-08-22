@@ -12,6 +12,13 @@ All notable changes to **ogs5py** will be documented in this file.
 ### Changes
 
 
+## [1.0.2] - 2019-08-22
+
+### Bugfixes
+* Don't fix QT_API for MAYAVI and use vtk for export: https://github.com/GeoStat-Framework/ogs5py/commit/33398adb4f3e1750e037434b8096c8eae7f0f419
+* ``PopenSpawn`` has no close attribute on Windows: https://github.com/GeoStat-Framework/ogs5py/commit/12f05d6bcc5b5992f0d6aeb6feee09a4ca2f11b9
+
+
 ## [1.0.1] - 2019-08-22
 
 ### Bugfixes
@@ -101,7 +108,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.5...v1.0.0
 [0.6.5]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.4...v0.6.5
