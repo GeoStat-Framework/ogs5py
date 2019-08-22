@@ -43,6 +43,7 @@ class BC(BlockFile):
             - PRESSURE_AS_HEAD
             - PRIMARY_VARIABLE
             - TIME_CONTROLLED_ACTIVE
+            - TIME_INTERVAL
             - TIM_TYPE
 
     Standard block:
@@ -76,6 +77,7 @@ class BC(BlockFile):
             "DIS_TYPE_CONDITION",
             "EPSILON",
             "TIME_CONTROLLED_ACTIVE",
+            "TIME_INTERVAL",
             "EXCAVATION",
             "NO_DISP_INCREMENT",
             "COPY_VALUE",
