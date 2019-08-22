@@ -177,4 +177,4 @@ Requirements
 License
 =======
 
-`MPI <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2019
+`MIT <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2019

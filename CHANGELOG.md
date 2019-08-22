@@ -6,6 +6,15 @@ All notable changes to **ogs5py** will be documented in this file.
 ## [Unreleased]
 
 ### Bugfixes
+
+### Additions
+
+### Changes
+
+
+## [1.0.0] - 2019-08-22
+
+### Bugfixes
 * ``GLI.add_polyline`` now allows integer coordinates for points: https://github.com/GeoStat-Framework/ogs5py/commit/bf5d684a2c01f2b6eb4e13098cfc77711c05d35d
 * ``MSH.centroids`` are now calculated as center of mass instead of center of element nodes: https://github.com/GeoStat-Framework/ogs5py/commit/b0708a69bd290d613d663385193a3a9ff69ee625
 * ``MSH.show`` was not working: https://github.com/GeoStat-Framework/ogs5py/commit/6a0489bc1675b909946e1a870459fc7f7ddf7629
@@ -34,6 +43,7 @@ All notable changes to **ogs5py** will be documented in this file.
 * Files that can occure multiple times (mpd, rfr, ...) are better handled now: https://github.com/GeoStat-Framework/ogs5py/commit/4a9c9d2a2209e49b336bdb59fd51f3362be44c8f
 * ``ogs5py`` is now licensed under the MIT license: https://github.com/GeoStat-Framework/ogs5py/commit/ae96c0e7a5889632e9c34d0fc4577df587da3164
 * Extra named files now get their name by keyword ``name``: https://github.com/GeoStat-Framework/ogs5py/commit/632c2e7b1ab33ec3b55bd8be6fbbe1f67d5c5651
+
 
 ## [0.6.5] - 2019-07-05
 
@@ -85,7 +95,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.5...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.5...v1.0.0
 [0.6.5]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.4...v0.6.5
 [0.6.4]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.2...v0.6.3
