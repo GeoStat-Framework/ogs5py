@@ -54,7 +54,6 @@ model.msh.generate("radial", dim=2, rad=range(51))
 model.gli.generate("radial", dim=2, rad_out=50.)
 model.gli.add_points([0., 0., 0.], "pwell")
 model.gli.add_points([1., 0., 0.], "owell")
-
 model.bc.add_block(  # boundary condition
     PCS_TYPE='GROUNDWATER_FLOW',
     PRIMARY_VARIABLE='HEAD',
@@ -77,7 +76,6 @@ model.mmp.add_block(  # medium properties
     GEOMETRY_DIMENSION=2,
     STORAGE=[1, 1.0e-04],
     PERMEABILITY_TENSOR=['ISOTROPIC', 1.0e-4],
-    POROSITY=0.2,
 )
 model.num.add_block(  # numerical solver
     PCS_TYPE='GROUNDWATER_FLOW',
@@ -91,17 +89,13 @@ model.out.add_block(  # point observation
     TIM_TYPE=['STEPS', 1],
 )
 model.pcs.add_block(  # set the process type
-    PCS_TYPE='GROUNDWATER_FLOW',
-    NUM_TYPE='NEW',
+    PCS_TYPE='GROUNDWATER_FLOW', NUM_TYPE='NEW'
 )
 model.tim.add_block(  # set the timesteps
     PCS_TYPE='GROUNDWATER_FLOW',
     TIME_START=0,
     TIME_END=600,
-    TIME_STEPS=[
-        [10, 30],
-        [5, 60],
-    ],
+    TIME_STEPS=[[10, 30], [5, 60]],
 )
 model.write_input()
 success = model.run_model()
@@ -119,42 +113,37 @@ plt.show()
 </p>
 
 
-### Reader
-
-It comes along with a set of handy readers for almost all output formats:
-
-* VTK Domain output
-
-    ```python
-    from ogs5py.reader import readvtk
-    ```
-
-* PVD Domain output
-
-    ```python
-    from ogs5py.reader import readpvd
-    ```
-
-* TECPLOT point output
-
-    ```python
-    from ogs5py.reader import readtec_point
-    ```
-
-* TECPLOT polyline output
-
-    ```python
-    from ogs5py.reader import readtec_polyline
-    ```
-
-
 ### OGS5 executable
 
-The OGS5 executable needs to be in your sys-path under ``ogs[.exe]``.
+To obtain an OGS5 executable, ``ogs5py`` brings a download routine:
+
+```python
+from ogs5py import download_ogs
+download_ogs()
+```
+
+Then a executable is stored in the ogs5py config path and will be called
+when a model is run.
+
+You can pass a ``version`` statement to the ``download_ogs`` routine, to
+obtain a specific version (5.7, 5.7.1 (win only) and 5.8).
+Also "latest" and "stable" are possible.
+For OGS 5.7 there are executables for Windows/Linux and MacOS.
+For "5.8", "latest" and "stable" there are no MacOS pre-builds.
+Have a look at the documentation for all options.
+
+If you have compiled your own OGS5 version, you can add your executable
+to the ogs5py config path with:
+
+```python
+from ogs5py import add_exe
+add_exe("path/to/your/ogs/exe")
+```
+
 Otherwise you need to specify the path to the executable within the run command:
 
 ```python
-model.run_model(ogs_root="path/to/ogs")
+model.run_model(ogs_exe="path/to/ogs")
 ```
 
 
