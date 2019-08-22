@@ -54,10 +54,7 @@ model.tim.add_block(  # set the timesteps
     PCS_TYPE='GROUNDWATER_FLOW',
     TIME_START=0,
     TIME_END=600,
-    TIME_STEPS=[
-        [10, 30],
-        [5, 60],
-    ],
+    TIME_STEPS=[[10, 30], [5, 60]],
 )
 model.write_input()
 success = model.run_model()
@@ -69,3 +66,4 @@ head = point['owell']["HEAD"]
 
 plt.plot(time, head)
 plt.show()
+model.msh.show()
