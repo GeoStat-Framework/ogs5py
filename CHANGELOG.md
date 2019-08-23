@@ -12,6 +12,12 @@ All notable changes to **ogs5py** will be documented in this file.
 ### Changes
 
 
+## [1.0.3] - 2019-08-23
+
+### Bugfixes
+* ``MSH.show`` TempFile was not working on Windows: https://github.com/GeoStat-Framework/ogs5py/commit/c0d0960b02c73237120030d6b1b23082dea085bc
+
+
 ## [1.0.2] - 2019-08-22
 
 ### Bugfixes
@@ -108,7 +114,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.3...HEAD
+[1.0.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v0.6.5...v1.0.0
