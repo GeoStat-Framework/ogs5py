@@ -2,11 +2,10 @@
 """Viewer for an ogs5py mesh."""
 from __future__ import division, print_function, absolute_import
 
-# import os
-import tempfile
+import os
 import numpy as np
 from ogs5py.fileclasses.msh.msh_io import export_mesh
-
+from ogs5py.tools.download import TemporaryDirectory
 # os.environ["QT_API"] = "pyqt"
 # os.environ["ETS_TOOLKIT"] = "qt4"
 
@@ -79,20 +78,20 @@ def show_mesh(
 
     # new mayavi scenes
     mlab.figure()
-    # create a temp-file which contains a vtk version of the mesh
-    vtkfile = tempfile.NamedTemporaryFile(suffix=".vtk")
-    # export the mesh to the temp vtk file
-    export_mesh(
-        vtkfile.name,
-        mesh,
-        export_material_id=show_material_id,
-        export_element_id=show_element_id,
-        cell_data_by_id=show_cell_data,
-    )
-    # load the vtk file to mayavi's mlab
-    data_source = mlab.pipeline.open(vtkfile.name)
-    # create a surface out of the vtk source
-    surface = mlab.pipeline.surface(data_source)
+    with TemporaryDirectory() as tmpdirname:
+        vtkfile = os.path.join(tmpdirname, "data.vtk")
+        # export the mesh to the temp vtk file
+        export_mesh(
+            vtkfile,
+            mesh,
+            export_material_id=show_material_id,
+            export_element_id=show_element_id,
+            cell_data_by_id=show_cell_data,
+        )
+        # load the vtk file to mayavi's mlab
+        data_source = mlab.pipeline.open(vtkfile)
+        # create a surface out of the vtk source
+        surface = mlab.pipeline.surface(data_source)
     # make the edges visible
     surface.actor.property.edge_visibility = True
     surface.actor.property.line_width = 1.0
@@ -125,6 +124,7 @@ def show_mesh(
         surface.parent.scalar_lut_manager.use_default_name = False
         surface.parent.scalar_lut_manager.data_name = "Material ID"
         surface.parent.scalar_lut_manager.shadow = True
+        surface.parent.scalar_lut_manager.lut_mode = "Paired"
         surface.parent.scalar_lut_manager.show_scalar_bar = True
         surface.parent.scalar_lut_manager.scalar_bar.label_format = "%.0f"
     elif show_element_id:
@@ -134,6 +134,7 @@ def show_mesh(
         surface.parent.scalar_lut_manager.use_default_name = False
         surface.parent.scalar_lut_manager.data_name = "Element ID"
         surface.parent.scalar_lut_manager.shadow = True
+        surface.parent.scalar_lut_manager.lut_mode = "RdYlBu"
         surface.parent.scalar_lut_manager.show_scalar_bar = True
         surface.parent.scalar_lut_manager.scalar_bar.label_format = "%.0f"
     else:
@@ -142,6 +143,4 @@ def show_mesh(
     surface.name = "OGS mesh"
     # show it
     mlab.show()
-    # close the temp file and delete it
-    vtkfile.close()
     return surface
