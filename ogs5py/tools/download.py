@@ -101,14 +101,6 @@ URLS = {
         ),
         "Windows": RELEASE + "ogs-5.8-Windows-x64.zip",
     },
-    "latest": {
-        "Linux": get_links(SUCCESS, "tar.gz", build="FEM")[0],
-        "Windows": get_links(SUCCESS, "zip", build=None)[0],
-    },
-    "stable": {
-        "Linux": get_links(STABLE, "tar.gz", build="FEM")[0],
-        "Windows": get_links(STABLE, "zip", build=None)[0],
-    },
 }
 
 
@@ -160,6 +152,14 @@ def download_ogs(
         * https://www.opengeosys.org/ogs-5/
         * https://jenkins.opengeosys.org/job/ufz/job/ogs5/job/master/
     """
+    URLS["latest"] = {
+        "Linux": get_links(SUCCESS, "tar.gz", build="FEM")[0],
+        "Windows": get_links(SUCCESS, "zip", build=None)[0],
+    }
+    URLS["stable"] = {
+        "Linux": get_links(STABLE, "tar.gz", build="FEM")[0],
+        "Windows": get_links(STABLE, "zip", build=None)[0],
+    }
     system = platform.system() if system is None else system
     path = os.path.abspath(path)
     if not os.path.exists(path):
