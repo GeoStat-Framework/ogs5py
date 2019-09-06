@@ -203,15 +203,13 @@ latex_documents = [
         "manual",
     )
 ]
-#latex_use_parts = True
+# latex_use_parts = True
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "ogs5py", "ogs5py Documentation", [author], 1)
-]
+man_pages = [(master_doc, "ogs5py", "ogs5py Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -243,6 +241,6 @@ intersphinx_mapping = {
     "NumPy": ("http://docs.scipy.org/doc/numpy/", None),
     "matplotlib": ("http://matplotlib.org", None),
     "Sphinx": ("http://www.sphinx-doc.org/en/stable/", None),
-#    "hankel": ("https://hankel.readthedocs.io/en/latest/", None),
-#    "emcee": ("http://dfm.io/emcee/current/", None),
+    #    "hankel": ("https://hankel.readthedocs.io/en/latest/", None),
+    #    "emcee": ("http://dfm.io/emcee/current/", None),
 }
