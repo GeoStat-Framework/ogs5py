@@ -83,12 +83,8 @@ class TestOGS(unittest.TestCase):
         self.ply = self.model.output_files(
             pcs="GROUNDWATER_FLOW", typ="TEC_POLYLINE"
         )
-        self.vtk = self.model.output_files(
-            pcs="GROUNDWATER_FLOW", typ="VTK"
-        )
-        self.pvd = self.model.output_files(
-            pcs="GROUNDWATER_FLOW", typ="VTK"
-        )
+        self.vtk = self.model.output_files(pcs="GROUNDWATER_FLOW", typ="VTK")
+        self.pvd = self.model.output_files(pcs="GROUNDWATER_FLOW", typ="PVD")
         self.assertTrue(len(self.ply) == len(self.vtk) == len(self.pvd) == 0)
         self.assertTrue(len(self.pnt) == 1)
 
@@ -115,7 +111,7 @@ class TestOGS(unittest.TestCase):
             hull_deform,
             niv_top=0,
             niv_bot=-1,
-            func_top=lambda x, y: np.cos(np.sqrt(x**2 + y**2)) + 1
+            func_top=lambda x, y: np.cos(np.sqrt(x ** 2 + y ** 2)) + 1,
         )
         self.gli.generate(generator="rectangular", dim=2)
         self.gli.generate(generator="rectangular", dim=3)
