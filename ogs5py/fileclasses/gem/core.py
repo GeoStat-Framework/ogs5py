@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file.
-"""
+"""Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file."""
 
 from __future__ import absolute_import, division, print_function
 import os
@@ -100,7 +98,9 @@ class GEM(BlockFile):
 
 class GEMinit(object):
     """
-    Class for GEMS3K input file (lst file) that contains the names of
+    Class for GEMS3K input file.
+
+    lst file that contains the names of
 
         * the GEMS data file (dch file),
         * the GEMS numerical settings (ipm file)
@@ -175,14 +175,12 @@ class GEMinit(object):
             )
 
     def get_file_type(self):
-        """Get the OGS file class name"""
+        """Get the OGS file class name."""
         return "lst"
 
     @property
     def files(self):
-        """
-        List of the included files: dch, ipm, dbr.
-        """
+        """List of the included files: dch, ipm, dbr."""
         out_list = []
         if self.dch is not None:
             out_list.append(self.dch)
@@ -194,37 +192,33 @@ class GEMinit(object):
 
     @property
     def name(self):
-        """
-        The name of the lst file.
-        """
+        """The name of the lst file."""
         return os.path.splitext(self.lst_name)[0]
 
     @property
     def file_ext(self):
-        """
-        The extension of the lst file.
-        """
+        """The extension of the lst file."""
         return os.path.splitext(self.lst_name)[1]
 
     @property
     def file_names(self):
-        """
-        The names of the included files.
-        """
+        """The names of the included files."""
         out_list = []
         for file in self.files:
             out_list.append(file.name + file.file_ext)
         return out_list
 
     def __bool__(self):
+        """Bool."""
         return not self.is_empty
 
     def __nonzero__(self):
+        """Bool."""
         return self.__bool__()
 
     @property
     def is_empty(self):
-        """state if the file is empty"""
+        """State if the file is empty."""
         # check if the files are empty
         if self.check(False):
             return not any(self.files)
@@ -233,9 +227,7 @@ class GEMinit(object):
 
     @property
     def task_root(self):
-        """
-        Get and set the task_root path of the ogs model.
-        """
+        """Get and set the task_root path of the ogs model."""
         return self._task_root
 
     @task_root.setter
@@ -246,9 +238,7 @@ class GEMinit(object):
         self.dbr.task_root = value
 
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         self.dch = LineFile(
             name=self.task_id + "-dch",
             file_ext=".dat",
@@ -288,6 +278,7 @@ class GEMinit(object):
     def save(self, path):
         """
         Save the actual GEM external file in the given path.
+
         lst file containing: dch, ipm, dbr
 
         Parameters
@@ -365,6 +356,7 @@ class GEMinit(object):
     def write_file(self):
         """
         Write the actual OGS input file to the given folder.
+
         Its path is given by "task_root+task_id+file_ext".
         """
         # create the file path
@@ -376,10 +368,12 @@ class GEMinit(object):
             self.save(f_path)
 
     def __repr__(self):
+        """Representation."""
         out_str = "-t"
         for file_name in self.file_names:
             out_str += ' "' + file_name + '"'
         return out_str
 
     def __str__(self):
+        """Representation."""
         return self.__repr__()

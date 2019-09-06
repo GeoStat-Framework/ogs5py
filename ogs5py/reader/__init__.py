@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ogs5py subpackage providing reader for the ogs5 output
+ogs5py subpackage providing reader for the ogs5 output.
 
 .. currentmodule:: ogs5py.reader
 

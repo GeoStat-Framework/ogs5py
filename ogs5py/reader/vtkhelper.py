@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Helper functions for the vtk readers in ogs5py
-"""
+"""Helper functions for the vtk readers in ogs5py."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -27,9 +25,7 @@ from ogs5py.tools.types import VTK_TYP, NODE_NO
 
 
 def _get_data(data):
-    """
-    extract data as numpy arrays from a vtkObject
-    """
+    """Extract data as numpy arrays from a vtkObject."""
     arr_dict = {}
     no_of_arr = data.GetNumberOfArrays()
     for i in range(no_of_arr):
@@ -40,9 +36,7 @@ def _get_data(data):
 
 
 def _deflat_data(arr):
-    """
-    creat list of arrays from flat numpy-data from a vtkObject
-    """
+    """Creat list of arrays from flat numpy-data from a vtkObject."""
     arr_list = []
     stop_ct = len(arr)
     i = 0
@@ -54,10 +48,7 @@ def _deflat_data(arr):
 
 
 def _get_cells(obj):
-    """
-    extract cells and cell_data from a vtkDataSet
-    and sort it by cell types
-    """
+    """Extract cells and cell_data from a vtkDataSet and sort it by types."""
     cells, cell_data = {}, {}
     data = _get_data(obj.GetCellData())
     arr = vtk2np(obj.GetCells().GetData())
@@ -94,9 +85,7 @@ def _get_cells(obj):
 
 
 def _unst_grid_read(obj):
-    """
-    a reader for vtk unstructured grid objects
-    """
+    """Reader for vtk unstructured grid objects."""
     output = {}
     output["field_data"] = _get_data(obj.GetFieldData())
     output["points"] = vtk2np(obj.GetPoints().GetData())
@@ -106,16 +95,12 @@ def _unst_grid_read(obj):
 
 
 def _stru_grid_read(obj):
-    """
-    a reader for vtk structured grid objects
-    """
+    """Reader for vtk structured grid objects."""
     raise NotImplementedError("Structured Grid Reader not yet implemented")
 
 
 def _stru_point_read(obj):
-    """
-    a reader for vtk structured points objects
-    """
+    """Reader for vtk structured points objects."""
     output = {}
     output["dimensions"] = np.array(obj.GetDimensions())
     output["origin"] = np.array(obj.GetOrigin())
@@ -139,9 +124,7 @@ def _stru_point_read(obj):
 
 
 def _poly_data_read(obj):
-    """
-    a reader for vtk polygonal data objects
-    """
+    """Reader for vtk polygonal data objects."""
     output = {}
     output["points"] = vtk2np(obj.GetPoints().GetData())
     output["verts"] = _deflat_data(vtk2np(obj.GetVerts().GetData()))
@@ -155,9 +138,7 @@ def _poly_data_read(obj):
 
 
 def _rect_grid_read(obj):
-    """
-    a reader for vtk rectangular grid objects
-    """
+    """Reader for vtk rectangular grid objects."""
     output = {}
     output["dimensions"] = np.array(obj.GetDimensions())
     output["x"] = vtk2np(obj.GetXCoordinates())

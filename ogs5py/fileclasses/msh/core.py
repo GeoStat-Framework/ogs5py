@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Core module for the ogs5py-mesh package.
-
-Containing the classes for the OGS5 mesh files.
-"""
+"""Core module for the ogs5py mesh file."""
 
 from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
@@ -731,9 +727,9 @@ class MSHsgl(File):
                 elements : dict
                     contains nodelists for elements sorted by element types
                 material_id : dict
-                    contains material ids for each element sorted by element types
+                    contains material ids for each element sorted by types
                 element_id : dict
-                    contains element ids for each element sorted by element types
+                    contains element ids for each element sorted by types
         """
         if check_mesh_dict(mesh_dict):
             self._dict = mesh_dict
@@ -1129,9 +1125,11 @@ class MSHsgl(File):
     ### Special methods
     #######################
     def __call__(self):
+        """Get a copy of the underlying dictionary."""
         return dcp(self._dict)
 
     def __repr__(self):
+        """Representation."""
         out = "#FEM_MSH\n"
         if self.AXISYMMETRY:
             out += " $AXISYMMETRY\n"
@@ -1265,6 +1263,7 @@ class MSH(MSHsgl):
         self._block = 0
 
     def __repr__(self):
+        """Representation."""
         out = ""
         old_block = self.block
         for i in range(len(self._meshlist)):

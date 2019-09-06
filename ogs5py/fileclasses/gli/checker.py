@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-checking routines for the ogs5py-GLI package
-"""
+"""Checking routines for the ogs5py-GLI package."""
 from __future__ import division, print_function, absolute_import
 import numpy as np
 from ogs5py.tools.types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
@@ -38,8 +36,9 @@ def has_whitespaces(string):
 
 def check_polyline(ply, point_cnt, verbose=True):
     """
-    Check if a given ply dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given ply dictonary is valid.
+
+    In the sence, that the contained data is consistent.
 
     Parameters
     ----------
@@ -183,8 +182,9 @@ def check_polyline(ply, point_cnt, verbose=True):
 
 def check_surface(srf, ply_names, verbose=True):
     """
-    Check if a given surface dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given surface dictonary is valid.
+
+    In the sence, that the contained data is consistent.
     Checks for correct polyline, surface and volume definitions
     Point duplicates are not checked.
 
@@ -312,8 +312,9 @@ def check_surface(srf, ply_names, verbose=True):
 
 def check_volume(vol, srf_names, verbose=True):
     """
-    Check if a given volume dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given volume dictonary is valid.
+
+    In the sence, that the contained data is consistent.
 
     Parameters
     ----------
@@ -418,8 +419,9 @@ def check_volume(vol, srf_names, verbose=True):
 
 def check_gli_dict(gli, verbose=True):
     """
-    Check if a given gli dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given gli dictonary is valid.
+
+    In the sence, that the contained data is consistent.
     Checks for correct polyline, surface and volume definitions.
     Point duplicates are not checked.
 

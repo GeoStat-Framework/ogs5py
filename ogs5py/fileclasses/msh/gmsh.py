@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Simple interface to pygmsh.
-"""
+"""Simple interface to pygmsh."""
 from __future__ import division, print_function, absolute_import
 
 
 def gmsh_code(path_or_code):
-    """
-    Generate mesh with gmsh.
-    """
+    """Generate mesh with gmsh."""
     try:
         from pygmsh import Geometry
     except ImportError:
@@ -29,9 +25,7 @@ def gmsh_code(path_or_code):
 
 
 def gmsh_block_adapt3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
-    """
-    Generate the mesh adapter.
-    """
+    """Generate the mesh adapter."""
     try:
         from pygmsh import Geometry
     except ImportError:
@@ -70,9 +64,7 @@ def gmsh_grid_adapt3D(
     in_pos=(25.0, 25.0),
     z_pos=0.0,
 ):
-    """
-    Generate the mesh adapter.
-    """
+    """Generate the mesh adapter."""
     try:
         from pygmsh import Geometry
     except ImportError:
@@ -221,9 +213,7 @@ def gmsh_grid_adapt2D(
     in_pos=(25.0, 25.0),
     z_pos=0.0,
 ):
-    """
-    Generate the 2D mesh adapter.
-    """
+    """Generate the 2D mesh adapter."""
     try:
         from pygmsh import Geometry
     except ImportError:

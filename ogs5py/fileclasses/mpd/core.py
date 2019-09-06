@@ -2,7 +2,6 @@
 """Class for the ogs MEDIUM_PROPERTIES_DISTRIBUTED file."""
 
 from __future__ import absolute_import, division, print_function
-import os
 from ogs5py.fileclasses.base import BlockFile
 
 
@@ -67,7 +66,7 @@ class MPD(BlockFile):
     # no top comment allowed in the MPD file
     @property
     def top_com(self):
-        """top comment is 'None' for the MPD file"""
+        """Top comment is 'None' for the MPD file."""
         return None
 
     @top_com.setter

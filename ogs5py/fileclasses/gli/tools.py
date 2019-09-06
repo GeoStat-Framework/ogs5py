@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-tools for the ogs5py-gli package
-
-@author: sebastian
-"""
+"""Tools for the ogs5py gli file."""
 from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
@@ -25,7 +21,7 @@ from ogs5py.tools.tools import uncomment
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):
     """
-    load a given OGS5 gli file
+    Load a given OGS5 gli file.
 
     Parameters
     ----------
@@ -263,7 +259,7 @@ def save_ogs5gli(
     filepath, gli, top_com=None, bot_com=None, verbose=True, **kwargs
 ):
     """
-    save a given OGS5 mesh file
+    Save a given OGS5 mesh file.
 
     Parameters
     ----------

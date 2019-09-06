@@ -25,7 +25,7 @@ def rectangular(
     dim=2, ori=(0.0, 0.0, 0.0), size=(10.0, 10.0, 10.0), name="boundary"
 ):
     """
-    generate a rectangular boundary for a grid in 2D or 3D as gli.
+    Generate a rectangular boundary for a grid in 2D or 3D as gli.
 
     Parameters
     ----------
@@ -97,7 +97,7 @@ def radial(
     name_in="well",
 ):
     """
-    generate a radial boundary for a grid in 2D or 3D.
+    Generate a radial boundary for a grid in 2D or 3D.
 
     Parameters
     ----------

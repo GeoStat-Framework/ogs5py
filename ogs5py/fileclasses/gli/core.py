@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-core module for the ogs5py GLI file.
-Containing the classes for the OGS5 GLI files.
-"""
+"""Core module for the ogs5py GLI file."""
 
 from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
@@ -106,7 +103,7 @@ class GLI(File):
     # Pretend that there is a main keyword in the standard BASE-FORMAT
     @property
     def is_empty(self):
-        """:class:`bool`: State if the GLI File is empty"""
+        """:class:`bool`: State if the GLI File is empty."""
         return self.POINTS is None
 
     #######################
@@ -114,8 +111,7 @@ class GLI(File):
     #######################
     @property
     def POINTS(self):
-        """ndarray: POINTS (n,3) of the gli, defined by xyz-coordinates.
-        """
+        """ndarray: POINTS (n,3) of the gli, defined by xyz-coordinates."""
         return self.__dict["points"]
 
     @POINTS.setter
@@ -189,7 +185,7 @@ class GLI(File):
     #######################
     @property
     def POLYLINES(self):
-        """list of dict: POLYLINES of the gli."""
+        """List of dict: POLYLINES of the gli."""
         return self.__dict["polylines"]
 
     #######################
@@ -197,7 +193,7 @@ class GLI(File):
     #######################
     @property
     def POLYLINE_NAMES(self):
-        """list of str: names of POLYLINES of the gli."""
+        """List of str: names of POLYLINES of the gli."""
         ply_names = []
         for ply in self.POLYLINES:
             ply_names.append(ply["NAME"])
@@ -216,7 +212,7 @@ class GLI(File):
     #######################
     @property
     def SURFACES(self):
-        """list of dict: SURFACES of the gli."""
+        """List of dict: SURFACES of the gli."""
         return self.__dict["surfaces"]
 
     #######################
@@ -224,7 +220,7 @@ class GLI(File):
     #######################
     @property
     def SURFACE_NAMES(self):
-        """list of str: names of SURFACES of the gli."""
+        """List of str: names of SURFACES of the gli."""
         srf_names = []
         for srf in self.SURFACES:
             srf_names.append(srf["NAME"])
@@ -243,7 +239,7 @@ class GLI(File):
     #######################
     @property
     def VOLUMES(self):
-        """list of dict: VOLUMES of the gli."""
+        """List of dict: VOLUMES of the gli."""
         return self.__dict["volumes"]
 
     #######################
@@ -251,7 +247,7 @@ class GLI(File):
     #######################
     @property
     def VOLUME_NAMES(self):
-        """list of str: names of VOLUMES of the gli."""
+        """List of str: names of VOLUMES of the gli."""
         vol_names = []
         for vol in self.VOLUMES:
             vol_names.append(vol["NAME"])
@@ -269,14 +265,13 @@ class GLI(File):
     # Class methods
     #######################
     def reset(self):
-        """
-        Delete every content.
-        """
+        """Delete every content."""
         self.__dict = EMPTY_GLI
 
     def load(self, filepath, verbose=False, encoding=None, **kwargs):
-        """
+        r"""
         Load an OGS5 gli from file.
+
         kwargs will be forwarded to "tools.load_ogs5gli"
 
         Parameters
@@ -297,7 +292,7 @@ class GLI(File):
             )
 
     def read_file(self, path, encoding=None, verbose=False):
-        """
+        r"""
         Load an OGS5 gli from file.
 
         Parameters
@@ -315,6 +310,7 @@ class GLI(File):
     def set_dict(self, gli_dict):
         """
         Set a gli dict as returned by tools methods or generators.
+
         Gli will be checked for validity.
 
         Parameters
@@ -367,8 +363,9 @@ class GLI(File):
             print("given gli_dict is not valid")
 
     def save(self, path, **kwargs):
-        """
+        r"""
         Save the gli to an OGS5 gli file.
+
         kwargs will be forwarded to "tools.save_ogs5gli"
 
         Parameters
@@ -395,8 +392,9 @@ class GLI(File):
 
     def check(self, verbose=True):
         """
-        Check if the gli is valid in the sence, that the
-        contained data is consistent.
+        Check if the gli is valid.
+
+        In the sence, that the contained data is consistent.
 
         Parameters
         ----------
@@ -412,7 +410,7 @@ class GLI(File):
 
     def swap_axis(self, axis1="y", axis2="z"):
         """
-        Swap axis of the coordinate system
+        Swap axis of the coordinate system.
 
         Parameters
         ----------
@@ -453,8 +451,7 @@ class GLI(File):
         rotation_point=(0.0, 0.0, 0.0),
     ):
         """
-        Rotate points around a given rotation point and axis
-        with a given angle.
+        Rotate points around a given rotation point and axis with given angle.
 
         Parameters
         ----------
@@ -509,8 +506,10 @@ class GLI(File):
 
     def add_points(self, points, names=None, md=None, decimals=4):
         """
-        Add a list of points (ndarray with shape (n,3)) and keep the
-        pointlist unique. If a named point is added, that was already present,
+        Add a list of points (ndarray with shape (n,3)).
+
+        Keeps the pointlist unique.
+        If a named point is added, that was already present,
         it will be renamed with the new name. Same for md.
         The pointlists of the polylines will be updated.
 
@@ -801,8 +800,10 @@ class GLI(File):
 
     def remove_point(self, id_or_name):
         """
-        Remove a point by its name or ID. If Points are removed, that define
-        polylines, they will be removed. Same for surfaces and volumes.
+        Remove a point by its name or ID.
+
+        If Points are removed, that define polylines,
+        they will be removed. Same for surfaces and volumes.
 
         Parameters
         ----------
@@ -847,8 +848,10 @@ class GLI(File):
 
     def remove_polyline(self, names):
         """
-        Remove a polyline by its name. If Polylines are removed, that define
-        surfaces, they will be removed. Same for volumes.
+        Remove a polyline by its name.
+
+        If Polylines are removed, that define surfaces, they will be removed.
+        Same for volumes.
 
         Parameters
         ----------
@@ -870,8 +873,9 @@ class GLI(File):
 
     def remove_surface(self, names):
         """
-        Remove a surface by its name. If Surfaces are removed, that define
-        Volumes, they will be removed.
+        Remove a surface by its name.
+
+        If Surfaces are removed, that define Volumes, they will be removed.
 
         Parameters
         ----------
@@ -1009,13 +1013,14 @@ class GLIext(File):
 
     @property
     def is_empty(self):
-        """state if the OGS file is empty"""
+        """State if the OGS file is empty."""
         return self.data.shape[0] == 0
 
     def check(self, verbose=True):
         """
-        Check if the external geometry definition is valid in the sence,
-        that the contained data is consistent.
+        Check if the external geometry definition is valid.
+
+        In the sence, that the contained data is consistent.
 
         Parameters
         ----------

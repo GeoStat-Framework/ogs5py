@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-tools for the ogs5py-mesh package
-
-@author: sebastian
-"""
+"""Checker for the ogs5py mesh file."""
 from __future__ import division, print_function, absolute_import
 import numpy as np
 from ogs5py.fileclasses.msh.tools import no_of_elements
@@ -18,8 +14,9 @@ from ogs5py.tools.types import (
 
 def check_mesh_list(meshlist, verbose=True):
     """
-    Check if a given mesh dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given mesh dictonary is valid.
+
+    In the sence, that the contained data is consistent.
     Checks for correct element definitions or Node duplicates
     are not carried out.
 
@@ -64,8 +61,9 @@ def check_mesh_list(meshlist, verbose=True):
 
 def check_mesh_dict(mesh, verbose=True):
     """
-    Check if a given mesh dictonary is valid in the sence, that the
-    contained data is consistent.
+    Check if a given mesh dictonary is valid.
+
+    In the sence, that the contained data is consistent.
     Checks for correct element definitions or Node duplicates
     are not carried out.
 

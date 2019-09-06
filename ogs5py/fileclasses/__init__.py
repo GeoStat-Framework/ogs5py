@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-ogs5py subpackage providing the file classes
+ogs5py subpackage providing the file classes.
 
 .. currentmodule:: ogs5py.fileclasses
 

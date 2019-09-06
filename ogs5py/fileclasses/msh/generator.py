@@ -44,7 +44,7 @@ def rectangular(
     element_size=(1.0, 1.0, 1.0),
 ):
     """
-    generate a rectangular grid in 2D or 3D
+    Generate a rectangular grid in 2D or 3D.
 
     Parameters
     ----------
@@ -168,7 +168,7 @@ def radial(
     z_arr=-np.arange(2),
 ):
     """
-    generate a radial grid in 2D or 3D
+    Generate a radial grid in 2D or 3D.
 
     Parameters
     ----------
@@ -364,7 +364,9 @@ def grid_adapter2D(
     fill=False,
 ):
     """
-    generate a grid adapter in 2D from an outer grid resolution
+    Generate a grid adapter.
+
+    2D adapter from an outer grid resolution
     to an inner grid resolution with gmsh.
 
     Parameters
@@ -455,7 +457,9 @@ def grid_adapter3D(
     fill=False,
 ):
     """
-    generate a grid adapter in 3D from an outer grid resolution
+    Generate a grid adapter.
+
+    3D adapter from an outer grid resolution
     to an inner grid resolution with gmsh.
 
     Parameters
@@ -540,8 +544,9 @@ def grid_adapter3D(
 
 def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
     """
-    generate a block adapter that has a given resolution at the
-    southern side with gmsh.
+    Generate a block adapter.
+
+    It has a given resolution at the southern side with gmsh.
 
     Parameters
     ----------
@@ -587,7 +592,7 @@ def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
 
 def generate_gmsh(path_or_code, import_dim=(1, 2, 3)):
     """
-    generate mesh from gmsh code or gmsh .geo file.
+    Generate mesh from gmsh code or gmsh .geo file.
 
     Parameters
     ----------

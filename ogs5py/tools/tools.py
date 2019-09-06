@@ -268,7 +268,7 @@ def guess_type(string):
     string = str(string)
     try:
         value = ast.literal_eval(string)
-    except:  # SyntaxError or ValueError
+    except Exception:  # SyntaxError or ValueError
         return string
     else:
         return value

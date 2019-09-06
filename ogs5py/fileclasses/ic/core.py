@@ -209,6 +209,7 @@ class RFR(File):
         """
         # in python3 open was replaced with io.open
         from io import open
+
         # TODO: refactor
         with open(path, "r", encoding=encoding) as fin:
             lines = []
