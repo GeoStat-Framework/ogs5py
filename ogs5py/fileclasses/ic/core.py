@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Class for the ogs INITIAL_CONDITION file.
-"""
+"""Class for the ogs INITIAL_CONDITION file."""
 
 from __future__ import absolute_import, division, print_function
 import os
@@ -83,7 +81,7 @@ class IC(BlockFile):
 
 class RFR(File):
     """
-    Class for the ogs RESTART file, if the DIS_TYPE in IC is set to RESTART
+    Class for the ogs RESTART file, if the DIS_TYPE in IC is set to RESTART.
 
     Parameters
     ----------
@@ -106,6 +104,32 @@ class RFR(File):
     task_id : str, optional
         Name for the ogs task.
         Default: "model"
+
+    Notes
+    -----
+    First line (ignored):
+        - #0#0#0#1#100000#0...
+
+    Second line (ignored):
+        - 1 1 4
+
+    Third line (information about Variables):
+        - (No. of Var.) (No of data of 1. Var) (No of data of 2. Var) ...
+        - 1 1 (example: 1 Variable with 1 component)
+        - 2 1 1 (example: 2 Variables with 1 component each)
+
+    Fourth  line (Variable names and units):
+        - (Name1), (Unit1), (Name2), (Unit2), ...
+        - units are ignored
+
+    Data:
+        - (index) (Var1data1) .. (Var1dataN1) (Var2data1) .. (Var2dataN2) ...
+
+    Keyword documentation:
+        https://ogs5-keywords.netlify.com/ogs/wiki/public/doc-auto/by_ext/ic
+
+    Reading routines:
+        https://github.com/ufz/ogs5/blob/master/FEM/rf_ic_new.cpp#L932
     """
 
     def __init__(
@@ -180,20 +204,22 @@ class RFR(File):
     def read_file(self, path, encoding=None):
         """
         Write the actual RFR input file to the given folder.
+
         Its path is given by "task_root+task_id+file_ext".
         """
         # in python3 open was replaced with io.open
         from io import open
-
+        # TODO: refactor
         with open(path, "r", encoding=encoding) as fin:
             lines = []
             for __ in range(4):
-                lines.append(fin.readline().splitlines()[0])
+                lines.append(fin.readline())
 
         self.line1_4 = lines
         self.data = np.loadtxt(path, skiprows=4)[:, 1]
 
     def __repr__(self):
+        """Representation."""
         out = ""
         for line in self.line1_4:
             out += line + "\n"
