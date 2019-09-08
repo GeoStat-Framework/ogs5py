@@ -30,9 +30,9 @@ except ImportError:  # PY2
     from urllib import urlretrieve
     from urllib2 import urlopen
 
-import lxml.html
 import tempfile
 import platform
+import lxml.html
 
 
 # TemporaryDirectory not avialable in python2
@@ -168,15 +168,14 @@ def download_ogs(
         raise ValueError(
             "'{}': unknown version. Use: {}".format(version, list(URLS))
         )
-    else:
-        urls_version = URLS[version]
+    urls_version = URLS[version]
     if system not in urls_version:
         raise ValueError(
             "'{}': unsupported system for version '{}'. Use: {}".format(
                 system, version, list(urls_version)
             )
         )
-    elif system == "Linux" and build is not None:
+    if system == "Linux" and build is not None:
         if version not in ["stable", "latest"]:
             raise ValueError(
                 "Use version 'stable' or 'latest' for specific build."
@@ -213,14 +212,14 @@ def download_ogs(
         else:
             z_file = zipfile.ZipFile(data_filename)
             names = z_file.namelist()
-        found = False
+        found = ""
         for file in names:
             if os.path.basename(file).startswith("ogs"):
-                found = True
+                found = file
                 break
         if found:
-            z_file.extract(member=file, path=tmpdirname)
-            shutil.copy(os.path.join(tmpdirname, file), dest)
+            z_file.extract(member=found, path=tmpdirname)
+            shutil.copy(os.path.join(tmpdirname, found), dest)
         z_file.close()
     return dest if found else None
 
@@ -242,7 +241,7 @@ def add_exe(ogs_exe, dest_name=None):
         If an OGS5 executable was successfully copied, the file-path
         is returned.
     """
-    if platform.system == "Windows" and ogs_exe[-4:] == ".lnk":
+    if platform.system() == "Windows" and ogs_exe[-4:] == ".lnk":
         print("Don't use file links under windows...")
         return None
     if os.path.islink(ogs_exe):
