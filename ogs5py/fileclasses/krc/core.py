@@ -22,9 +22,9 @@ class KRC(BlockFile):
     -----
     Main-Keywords (#):
         - MICROBE_PROPERTIES
-        - KINREACTIONDATA
-        - BLOB_PROPERTIES
         - REACTION
+        - BLOB_PROPERTIES
+        - KINREACTIONDATA
 
     Sub-Keywords ($) per Main-Keyword:
         - MICROBE_PROPERTIES
