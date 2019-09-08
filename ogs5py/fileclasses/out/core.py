@@ -27,21 +27,23 @@ class OUT(BlockFile):
     Sub-Keywords ($) per Main-Keyword:
         - OUTPUT
 
-            - AMPLIFIER
-            - DAT_TYPE
-            - DIS_TYPE
-            - ELE_VALUES
-            - GEO_TYPE
-            - MFP_VALUES
-            - MMP_VALUES
-            - MSH_TYPE
             - NOD_VALUES
             - PCON_VALUES
-            - PCS_TYPE
+            - ELE_VALUES
             - RWPT_VALUES
-            - TECPLOT_ZONE_SHARE
+            - GEO_TYPE
             - TIM_TYPE
+            - DAT_TYPE
             - VARIABLESHARING
+            - AMPLIFIER
+            - PCS_TYPE
+            - DIS_TYPE
+            - MSH_TYPE
+            - MMP_VALUES
+            - MFP_VALUES
+            - TECPLOT_ZONE_SHARE
+            - TECPLOT_ELEMENT_OUTPUT_CELL_CENTERED
+            - TECPLOT_ZONES_FOR_MG
 
         - VERSION
 
@@ -86,6 +88,8 @@ class OUT(BlockFile):
             "MMP_VALUES",
             "MFP_VALUES",
             "TECPLOT_ZONE_SHARE",
+            "TECPLOT_ELEMENT_OUTPUT_CELL_CENTERED",
+            "TECPLOT_ZONES_FOR_MG",
         ],
         [""],  # content directly related to main key "VERSION"
     ]
