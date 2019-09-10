@@ -4,7 +4,9 @@
 from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
+import pandas as pd
 from ogs5py.fileclasses.base import BlockFile, File
+from ogs5py.tools.types import STRTYPE
 
 CWD = os.getcwd()
 
@@ -85,10 +87,18 @@ class RFR(File):
 
     Parameters
     ----------
-    data : :any:`numpy.ndarray`, optional
-        RFR data.
+    variables : :class:`list` of :class:`str`, optional
+        List of variable names.
         Default: :class:`None`
-    line1_4 : str or None, optional
+    data : :any:`numpy.ndarray`, optional
+        RFR data. 2D array,
+        where the first dimension is the number of variables.
+        Default: :class:`None`
+    units: :class:`list` of :class:`str`, optional
+        List of units for the occurring variables. Can be None.
+        OGS5 ignores them anyway.
+        Default: :class:`None`
+    header : str or None, optional
         First four lines of the RFR file. If :class:`None`, a standard header
         is written.
         Default: :class:`None`
@@ -108,21 +118,23 @@ class RFR(File):
     Notes
     -----
     First line (ignored):
-        - #0#0#0#1#100000#0...
+        - #0#0#0#1#100000#0... (don't ask why)
 
     Second line (ignored):
-        - 1 1 4
+        - 1 1 4 (don't ask why)
 
     Third line (information about Variables):
         - (No. of Var.) (No of data of 1. Var) (No of data of 2. Var) ...
         - 1 1 (example: 1 Variable with 1 component)
         - 2 1 1 (example: 2 Variables with 1 component each)
+        - only 1 scalar per Variable allowed (bug in OGS5).
+          See: https://github.com/ufz/ogs5/issues/151
 
     Fourth  line (Variable names and units):
         - (Name1), (Unit1), (Name2), (Unit2), ...
         - units are ignored
 
-    Data:
+    Data (multiple lines):
         - (index) (Var1data1) .. (Var1dataN1) (Var2data1) .. (Var2dataN2) ...
 
     Keyword documentation:
@@ -134,8 +146,10 @@ class RFR(File):
 
     def __init__(
         self,
+        variables=None,
         data=None,
-        line1_4=None,
+        units=None,
+        headers=None,
         name=None,
         file_ext=".rfr",
         task_root=None,
@@ -144,24 +158,103 @@ class RFR(File):
         super(RFR, self).__init__(task_root, task_id, file_ext)
 
         self.name = name
-        if line1_4 is None:
-            line1_4 = [
-                "#0#0#0#1#100000#0"
-                + "#4.2.13 #########################################",
-                "1 1 4",
-                "1 1",
-                "HEAD, m",
-            ]
-        self.line1_4 = line1_4
-        if data:
-            self.data = np.array(data)
-        else:
-            self.data = np.zeros(0)
+        if headers is None:  # Default 2 header lines (ignored by OGS5)
+            headers = ["#0#0#0#1#100000#0#4.2.13 " + 41 * "#", "1 1 4"]
+        self.headers = headers
+        # content
+        self._variables = None
+        self._units = None
+        self._data = None
+        self.variables = variables
+        self.units = units
+        self.data = data
 
     @property
     def is_empty(self):
         """State if the OGS file is empty."""
-        return not (bool(self.data.shape) and self.data.shape[0] > 0)
+        return not ((bool(self.variables)) and self.data.shape[1] > 0)
+
+    @property
+    def variables(self):
+        """List of variables in the RFR file."""
+        return self._variables
+
+    @variables.setter
+    def variables(self, var):
+        if var is None:
+            self._variables = []
+        else:
+            # strings could be detected as iterable, so check this first
+            if isinstance(var, STRTYPE):
+                var = [var]
+            # convert iterators (like zip)
+            try:
+                iter(var)
+            except TypeError:
+                var = [str(var)]
+            else:
+                var = list(map(str, var))
+            self._variables = var
+        self.units = None
+        self.data = None
+
+    @property
+    def units(self):
+        """List of variable-units in the RFR file."""
+        return self._units
+
+    @units.setter
+    def units(self, units):
+        if not self.variables:  # no units without variables
+            units = []
+        # strings could be detected as iterable, so check this first
+        if isinstance(units, STRTYPE):
+            units = [units]
+        # convert iterators (like zip)
+        try:
+            iter(units)
+        except TypeError:
+            units = [str(units)]
+        else:
+            units = list(map(str, units))
+        if len(units) > len(self.variables):
+            raise ValueError("RFR: More units than variables given.")
+        if 1 < len(units) < len(self.variables):
+            raise ValueError("RFR: Too few units given.")
+        # if only 1 unit, use it for all variables
+        if 1 == len(units) <= len(self.variables):
+            units *= len(self.variables)
+        self._units = units
+
+    @property
+    def data(self):
+        """Data in the RFR file."""
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        if data is None:
+            data = np.empty((len(self.variables), 0), dtype=float)
+        else:
+            data = np.array(data, ndmin=2, dtype=float)
+        if data.shape[0] != len(self.variables):
+            raise ValueError("RFR: Number of data not in line with variables.")
+        self._data = data
+
+    @property
+    def var_count(self):
+        """Count of variables in the RFR file (line 3)."""
+        return str(len(self.variables)) + " 1" * len(self.variables)
+
+    @property
+    def var_info(self):
+        """Infos about variables and units in the RFR file (line 4)."""
+        return " ".join(
+            [
+                var + ", " + unit
+                for var, unit in zip(self.variables, self.units)
+            ]
+        )
 
     def check(self, verbose=True):
         """
@@ -179,13 +272,19 @@ class RFR(File):
         result : bool
             Validity of the given gli.
         """
-        if self.data.ndim != 1:
+        if self:
+            if (
+                len(self.variables) == len(self.units) == self.data.shape[0]
+            ) and len(self.data.shape) == 2:
+                if verbose:
+                    print("RFR: valid.")
+                return True
             if verbose:
-                print("RFR: Data shape incorrect")
+                print("RFR: not valid.")
             return False
         return True
 
-    def save(self, path):
+    def save(self, path, **kwargs):
         """
         Save the actual RFR external file in the given path.
 
@@ -194,38 +293,57 @@ class RFR(File):
         path : str
             path to where to file should be saved
         """
-        if self.data.shape[0] >= 1:
+        if self:
             with open(path, "w") as fout:
-                for line in self.line1_4:
+                for line in self.headers:
                     print(line, file=fout)
-                for data_i, data_e in enumerate(self.data):
-                    print(str(data_i) + "\t" + str(data_e), file=fout)
+                print(self.var_count, file=fout)
+                print(self.var_info, file=fout)
+                data = pd.DataFrame(
+                    index=np.arange(self.data.shape[1]),
+                    columns=np.arange(len(self.variables) + 1),
+                )
+                data.loc[:, 0] = np.arange(self.data.shape[1])
+                data.loc[:, 1:] = self.data.T
+                data.to_csv(fout, header=None, index=None, sep=" ", mode="a")
 
-    def read_file(self, path, encoding=None):
-        """
-        Write the actual RFR input file to the given folder.
-
-        Its path is given by "task_root+task_id+file_ext".
-        """
+    def read_file(self, path, encoding=None, verbose=False):
+        """Write the actual RFR input file to the given folder."""
         # in python3 open was replaced with io.open
         from io import open
 
-        # TODO: refactor
+        headers = []
+        variables = []
+        units = []
         with open(path, "r", encoding=encoding) as fin:
-            lines = []
-            for __ in range(4):
-                lines.append(fin.readline())
-
-        self.line1_4 = lines
-        self.data = np.loadtxt(path, skiprows=4)[:, 1]
+            headers.append(fin.readline().splitlines()[0])  # 1. header line
+            headers.append(fin.readline().splitlines()[0])  # 2. header line
+            var_no = int(fin.readline().split()[0])
+            var_info = fin.readline().split()
+            for __ in range(var_no):
+                var = var_info.pop(0)
+                var = var[:-1] if var.endswith(",") else var
+                unit = var_info.pop(0)
+                variables.append(var)
+                units.append(unit)
+        if verbose:
+            print("RFR.read_file: reading was fine.")
+        self.headers = headers
+        self.variables = variables
+        self.units = units
+        self.data = np.loadtxt(path, dtype=float, skiprows=4)[:, 1:].T
+        if verbose:
+            print("RFR.read_file: data conversion was fine.")
 
     def __repr__(self):
         """Representation."""
         out = ""
-        for line in self.line1_4:
+        for line in self.headers:
             out += line + "\n"
-        for data_i, data_e in enumerate(self.data[:10]):
-            out += str(data_i) + " " + str(data_e) + "\n"
-        if len(self.data) > 10:
+        out += self.var_count + "\n"
+        out += self.var_info + "\n"
+        for data_i, data_e in enumerate(self.data[:, :10].T):
+            out += str(data_i) + " " + " ".join(map(str, data_e)) + "\n"
+        if self.data.shape[1] > 10:
             out += "..."
         return out
