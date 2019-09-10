@@ -12,6 +12,19 @@ All notable changes to **ogs5py** will be documented in this file.
 ### Changes
 
 
+## [1.0.4] - 2019-09-10
+
+### Bugfixes
+* ogs5py was not usable offline: https://github.com/GeoStat-Framework/ogs5py/commit/0f98c32213d02b4b46455a5392b3c1c6fc021228
+* ``add_exe`` was not recognizing operation system: https://github.com/GeoStat-Framework/ogs5py/commit/89b07e51df4b4f31b8c42c56e4ad24063c57f845
+
+### Additions
+* new sub-keywords for OUT (added to OGS5 in Aug 19) when using TECPLOT (TECPLOT_ELEMENT_OUTPUT_CELL_CENTERED, TECPLOT_ZONES_FOR_MG): https://github.com/GeoStat-Framework/ogs5py/commit/ebcb22acb9afff83cc4593425d5dcde1bf97b9dc
+
+### Changes
+* RFR Class was refactored to allow multiple variables: https://github.com/GeoStat-Framework/ogs5py/commit/3c1c44533a9640ac1f2c173c321a029141f7aa2b
+
+
 ## [1.0.3] - 2019-08-23
 
 ### Bugfixes
@@ -114,7 +127,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.0...v1.0.1
