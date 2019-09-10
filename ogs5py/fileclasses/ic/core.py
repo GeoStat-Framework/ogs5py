@@ -32,12 +32,12 @@ class IC(BlockFile):
     Sub-Keywords ($) per Main-Keyword:
         - INITIAL_CONDITION
 
-            - COMP_NAME
-            - DIS_TYPE
-            - GEO_TYPE
             - PCS_TYPE
             - PRIMARY_VARIABLE
+            - COMP_NAME
             - STORE_VALUES
+            - DIS_TYPE
+            - GEO_TYPE
 
     Standard block:
         :PCS_TYPE: "GROUNDWATER_FLOW"
@@ -98,7 +98,7 @@ class RFR(File):
         List of units for the occurring variables. Can be None.
         OGS5 ignores them anyway.
         Default: :class:`None`
-    header : str or None, optional
+    headers : str or None, optional
         First four lines of the RFR file. If :class:`None`, a standard header
         is written.
         Default: :class:`None`
