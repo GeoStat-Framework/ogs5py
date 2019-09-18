@@ -6,6 +6,8 @@ All notable changes to **ogs5py** will be documented in this file.
 ## [Unreleased]
 
 ### Bugfixes
+* ``MSH.set_material_id``: better handling of non-int single values: https://github.com/GeoStat-Framework/ogs5py/commit/f34d2e510e7bb340abc19150270b956c407d7ff6
+* ``MSH.show``: better handling of material IDs: https://github.com/GeoStat-Framework/ogs5py/commit/26b46108a14f4fe95e0b7424bb51e4482c75eae9
 
 ### Additions
 
