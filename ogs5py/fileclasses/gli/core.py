@@ -643,11 +643,11 @@ class GLI(File):
             return
         # add by id
         if (
-            points.ndim == 1
+            np.issubdtype(points.dtype, np.integer)
+            and points.ndim == 1
             and points.shape[0] >= 2
             and np.min(points) >= 0
             and np.max(points) < self.POINT_NO
-            and np.issubdtype(points.dtype, np.integer)
         ):
             if closed:
                 points = np.hstack((points, points[0]))
