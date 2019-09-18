@@ -1088,6 +1088,8 @@ class MSHsgl(File):
             element IDs.
             Default: None
         """
+        if np.ndim(np.squeeze(material_id)) == 0:
+            material_id = int(np.squeeze(material_id))
         if (
             isinstance(material_id, int)
             and element_id is None
