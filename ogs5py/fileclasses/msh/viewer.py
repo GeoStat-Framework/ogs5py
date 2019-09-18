@@ -80,7 +80,7 @@ def show_mesh(
     # new mayavi scenes
     mlab.figure()
     with TemporaryDirectory() as tmpdirname:
-        vtkfile = os.path.join(tmpdirname, "data.vtk")
+        vtkfile = os.path.join(tmpdirname, "data.vtu")
         # export the mesh to the temp vtk file
         export_mesh(
             vtkfile,
@@ -97,8 +97,6 @@ def show_mesh(
     surface.actor.property.edge_visibility = True
     surface.actor.property.line_width = 1.0
     surface.actor.property.interpolation = "flat"
-    # settings for the material ID
-    #    surface.parent.scalar_lut_manager.lut_mode = "Set1"
     if show_cell_data is not None:
         surface.parent.parent._cell_scalars_name_changed(cell_data_name)
         surface.parent.parent.update()
@@ -113,19 +111,19 @@ def show_mesh(
         min_id = np.inf
         max_id = 0.0
         for matid in mesh["material_id"]:
-            min_id = np.min((min_id, np.min(mesh["material_id"][matid])))
-            max_id = np.max((max_id, np.max(mesh["material_id"][matid])))
+            min_id = int(np.min((min_id, np.min(mesh["material_id"][matid]))))
+            max_id = int(np.max((max_id, np.max(mesh["material_id"][matid]))))
         id_no = int(max_id - min_id + 1)
         surface.parent.parent._cell_scalars_name_changed("material_id")
         surface.parent.parent.update()
         surface.parent.scalar_lut_manager.use_default_range = False
-        surface.parent.scalar_lut_manager.data_range = [min_id, max_id]
+        surface.parent.scalar_lut_manager.data_range = [min_id, max_id + 1]
         surface.parent.scalar_lut_manager.number_of_colors = max(id_no, 2)
-        surface.parent.scalar_lut_manager.number_of_labels = min(id_no, 64)
+        surface.parent.scalar_lut_manager.number_of_labels = 2
         surface.parent.scalar_lut_manager.use_default_name = False
         surface.parent.scalar_lut_manager.data_name = "Material ID"
         surface.parent.scalar_lut_manager.shadow = True
-        surface.parent.scalar_lut_manager.lut_mode = "Paired"
+        surface.parent.scalar_lut_manager.lut_mode = "rainbow"
         surface.parent.scalar_lut_manager.show_scalar_bar = True
         surface.parent.scalar_lut_manager.scalar_bar.label_format = "%.0f"
     elif show_element_id:
