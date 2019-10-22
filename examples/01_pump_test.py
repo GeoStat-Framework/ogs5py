@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ogs5py import OGS
+import anaflow as ana
 from matplotlib import pyplot as plt
 
 model = OGS(task_root="pump_test", task_id="model")
@@ -53,16 +54,23 @@ model.tim.add_block(  # set the timesteps
     PCS_TYPE="GROUNDWATER_FLOW",
     TIME_START=0,
     TIME_END=600,
-    TIME_STEPS=[[10, 30], [5, 60]],
+    TIME_STEPS=[[12, 5], [18, 30]],
 )
 model.write_input()
 success = model.run_model()
 print("success", success)
-
+# observation
 point = model.readtec_point(pcs="GROUNDWATER_FLOW")
 time = point["owell"]["TIME"]
 head = point["owell"]["HEAD"]
-
-plt.plot(time, head)
+# analytical solution
+head_ana = ana.theis(time, 1.0, 1e-4, 1e-4, rate=-1e-4)
+# comparisson plot
+plt.plot(time, head, label="observations at r=1")
+plt.plot(time, head_ana, label="analytical solution")
+plt.xlabel("time in s")
+plt.ylabel("head in m")
+plt.legend()
 plt.show()
+# show mesh
 model.msh.show()
