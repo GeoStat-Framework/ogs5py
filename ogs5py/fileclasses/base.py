@@ -413,6 +413,11 @@ class BlockFile(File):
         self.del_main_keyword(del_all=True)
         self._update_in()
 
+    @property
+    def block_no(self):
+        """Number of blocks in the file."""
+        return self.get_block_no()
+
     def get_block_no(self):
         """Get the number of blocks in the file."""
         return len(self.mainkw)
