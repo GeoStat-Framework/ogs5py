@@ -14,10 +14,12 @@ matrix:
         - python -m pip install -r requirements.txt
         - python -m pytest --cov ogs5py --cov-report term-missing -v tests/
         - python -m coveralls
-    # universal wheel on macOS (faster)
-    - name: "py2py3 wheel"
-      os: osx
-      language: generic
+    # universal wheel
+    - name: "Linux py36"
+      sudo: required
+      language: python
+      python: 3.6
+      services: docker
 
 env:
   global:
