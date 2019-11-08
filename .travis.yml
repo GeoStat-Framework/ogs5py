@@ -14,12 +14,13 @@ matrix:
         - python -m pip install -r requirements.txt
         - python -m pytest --cov ogs5py --cov-report term-missing -v tests/
         - python -m coveralls
-    # universal wheel
+    # universal wheel on 64bit Linux with py36
     - name: "Linux py36"
       sudo: required
       language: python
       python: 3.6
       services: docker
+      env: CIBW_BUILD="cp36-manylinux_x86_64"
 
 env:
   global:
