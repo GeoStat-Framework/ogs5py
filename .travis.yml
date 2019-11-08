@@ -26,10 +26,10 @@ env:
   global:
     - TWINE_USERNAME=geostatframework
     - CIBW_BEFORE_BUILD="pip install setuptools"
-    - CIBW_TEST_REQUIRES=pytest
     # no "__init__.py" in tests/ to run tests against installed wheel
     # https://doc.pytest.org/en/3.0.4/goodpractices.html#choosing-a-test-layout-import-rules
-    - CIBW_TEST_COMMAND="python -m pytest -v {project}/tests"
+    # - CIBW_TEST_COMMAND="python -m pytest -v {project}/tests"
+    # - CIBW_TEST_REQUIRES=pytest
 
 script:
   # create wheels
