@@ -15,7 +15,7 @@ matrix:
         - python -m pytest --cov ogs5py --cov-report term-missing -v tests/
         - python -m coveralls
     # universal wheel on 64bit Linux with py36
-    - name: "Linux py36"
+    - name: "py2.py3 wheel"
       sudo: required
       language: python
       python: 3.6
@@ -39,10 +39,10 @@ script:
 after_success:
   # pypi upload (test allways and official on TAG)
   - python -m pip install twine
-  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*.whl
+  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*
   - |
     if [[ $TRAVIS_TAG ]]; then
-      python -m twine upload --skip-existing wheelhouse/*.whl
+      python -m twine upload --skip-existing wheelhouse/*
     fi
 
 notifications:
