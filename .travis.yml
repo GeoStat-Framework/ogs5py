@@ -20,7 +20,7 @@ matrix:
       language: python
       python: 3.6
       services: docker
-      env: CIBW_BUILD="cp36-*_x86_64"
+      env: CIBW_BUILD="cp36-*64"
 
 env:
   global:
