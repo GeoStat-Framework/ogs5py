@@ -32,7 +32,8 @@ def find_version(*file_paths):
 ###############################################################################
 
 
-DOCLINES = __doc__.split("\n")
+VERSION = find_version("ogs5py", "_version.py")
+DOCLINE = __doc__.split("\n")[0]
 README = open("README.md").read()
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
@@ -55,14 +56,12 @@ CLASSIFIERS = [
     "Topic :: Utilities",
 ]
 
-VERSION = find_version("ogs5py", "_version.py")
-
 setup(
     name="ogs5py",
     version=VERSION,
     maintainer="Sebastian Mueller",
     maintainer_email="sebastian.mueller@ufz.de",
-    description=DOCLINES[0],
+    description=DOCLINE,
     long_description=README,
     long_description_content_type="text/markdown",
     author="Sebastian Mueller, Falk Hesse",
@@ -74,8 +73,8 @@ setup(
     include_package_data=True,
     install_requires=[
         "numpy>=1.13.0",
-        "whichcraft",  # search for ogs
         "pandas>=0.23.0",  # read-routines and formatting
+        "whichcraft",  # search for ogs
         "meshio",  # import/export external meshes
         "lxml",  # meshio vtu support
         "vtk",  # for the readers

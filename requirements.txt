@@ -1,0 +1,7 @@
+numpy>=1.13
+pandas>=0.23.0
+whichcraft
+meshio
+lxml
+vtk
+pexpect

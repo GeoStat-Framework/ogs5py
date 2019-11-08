@@ -1,9 +1,4 @@
-#required for readthedocs.org
-numpy>=1.13
-pandas>=0.23.0
-whichcraft
-meshio
-lxml
-vtk
-pexpect
+# required for readthedocs.org
 numpydoc
+# https://stackoverflow.com/a/11704396/6696397
+-r ../requirements.txt
