@@ -12,14 +12,14 @@ from setuptools import setup, find_packages
 
 
 def read(*parts):
-    """read file data"""
+    """Read file data."""
     here = os.path.abspath(os.path.dirname(__file__))
     with codecs.open(os.path.join(here, *parts), "r") as fp:
         return fp.read()
 
 
 def find_version(*file_paths):
-    """find version without importing module"""
+    """Find version without importing module."""
     version_file = read(*file_paths)
     version_match = re.search(
         r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
