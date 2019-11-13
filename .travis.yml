@@ -10,7 +10,7 @@ matrix:
       services: docker
       script:
         - python -m pip install -U setuptools pytest-cov coveralls
-        - python setup.py sdist -d wheelhouse
+        - python setup.py sdist -d dist
         - python -m pip install -r requirements.txt
         - python -m pytest --cov ogs5py --cov-report term-missing -v tests/
         - python -m coveralls
@@ -20,32 +20,23 @@ matrix:
       language: python
       python: 3.6
       services: docker
-      env: CIBW_BUILD="cp36-*64"
 
 env:
   global:
     - TWINE_USERNAME=geostatframework
     - CIBW_BEFORE_BUILD="pip install setuptools"
-    # no "__init__.py" in tests/ to run tests against installed wheel
-    # https://doc.pytest.org/en/3.0.4/goodpractices.html#choosing-a-test-layout-import-rules
-    # - CIBW_TEST_COMMAND="python -m pytest -v {project}/tests"
-    # - CIBW_TEST_REQUIRES=pytest
 
 script:
   # create wheels
-  - python -m pip install cibuildwheel==0.12.0
-  - python -m cibuildwheel --output-dir wheelhouse
+  - python -m pip install cibuildwheel==1.0.0
+  - python -m cibuildwheel --output-dir dist
 
 after_success:
-  # pypi upload (test allways and official on TAG)
   - python -m pip install twine
-  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*
-  - |
-    if [[ $TRAVIS_TAG ]]; then
-      python -m twine upload --skip-existing wheelhouse/*
-    fi
+  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*
+  - if [[ $TRAVIS_TAG ]]; then python -m twine upload --verbose --skip-existing dist/*; fi
 
 notifications:
   email:
     recipients:
-    - info@geostat-framework.org
+      - info@geostat-framework.org
