@@ -1021,7 +1021,7 @@ class MSHsgl(File):
            grid_adapter2D
            grid_adapter3D
            block_adapter3D
-           generate_gmsh
+           gmsh
         """
         self._dict = getattr(gen, generator)(**kwargs)
 

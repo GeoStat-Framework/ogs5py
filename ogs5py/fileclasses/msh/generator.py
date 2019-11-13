@@ -15,7 +15,7 @@ These generators can be called with :any:`MSH.generate`
    grid_adapter2D
    grid_adapter3D
    block_adapter3D
-   generate_gmsh
+   gmsh
 
 ----
 """
@@ -419,13 +419,12 @@ def grid_adapter2D(
                 contains element ids for each element sorted by element types
 
     """
-    import pygmsh as pg
-
-    geo = gmsh_grid_adapt2D(
-        out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos
+    out = gmsh(
+        gmsh_grid_adapt2D(
+            out_dim, in_dim, out_res, in_res, out_pos, in_pos, z_pos
+        ),
+        import_dim=2,
     )
-    mesh = pg.generate_mesh(geo, dim=2)
-    out = convert_meshio(mesh, import_dim=2)
     out["material_id"] = gen_std_mat_id(out["elements"], out_mat)
 
     if fill:
@@ -514,13 +513,12 @@ def grid_adapter3D(
                 contains element ids for each element sorted by element types
 
     """
-    import pygmsh as pg
-
-    geo = gmsh_grid_adapt3D(
-        out_dim, in_dim, z_dim, out_res, in_res, out_pos, in_pos, z_pos
+    out = gmsh(
+        gmsh_grid_adapt3D(
+            out_dim, in_dim, z_dim, out_res, in_res, out_pos, in_pos, z_pos
+        ),
+        import_dim=3,
     )
-    mesh = pg.generate_mesh(geo)
-    out = convert_meshio(mesh, import_dim=3)
     out["material_id"] = gen_std_mat_id(out["elements"], out_mat)
 
     if fill:
@@ -582,22 +580,18 @@ def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
             element_id : dict
                 contains element ids for each element sorted by element types
     """
-    import pygmsh as pg
-
-    geo = gmsh_block_adapt3D(xy_dim, z_dim, in_res)
-    mesh = pg.generate_mesh(geo)
-    out = convert_meshio(mesh, import_dim=3)
-    return out
+    return gmsh(gmsh_block_adapt3D(xy_dim, z_dim, in_res), import_dim=3)
 
 
-def generate_gmsh(path_or_code, import_dim=(1, 2, 3)):
+def gmsh(geo_object, import_dim=(1, 2, 3)):
     """
-    Generate mesh from gmsh code or gmsh .geo file.
+    Generate mesh from pygmsh Geometry instance, gmsh code or gmsh .geo file.
 
     Parameters
     ----------
-    path_or_code : str or list of str
-        Either path to the gmsh .geo file or list of codelines for a .geo file.
+    geo_object : str or list of str or Geometry instance from pygmsh
+        Either path to the gmsh .geo file, list of codelines for a .geo file
+        or a pygmsh Geometry instance from pygmsh.
     import_dim : iterable of int or single int, optional
         State which elements should be imported by dimensionality.
         Default: (1, 2, 3)
@@ -629,7 +623,9 @@ def generate_gmsh(path_or_code, import_dim=(1, 2, 3)):
     """
     import pygmsh as pg
 
-    geo = gmsh_code(path_or_code)
+    if hasattr(geo_object, "get_code"):
+        geo = geo_object
+    else:
+        geo = gmsh_code(geo_object)
     mesh = pg.generate_mesh(geo)
-    out = convert_meshio(mesh, import_dim=import_dim)
-    return out
+    return convert_meshio(mesh, import_dim=import_dim)
