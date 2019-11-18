@@ -48,6 +48,8 @@ Array tools
    unique_rows
    replace
    by_id
+   specialrange
+   generate_time
 
 ----
 """
@@ -412,6 +414,113 @@ def is_str_array(array):
         return True
 
     return False
+
+
+def specialrange(val_min, val_max, steps, typ="exp"):
+    """
+    Calculation of special point ranges.
+
+    Parameters
+    ----------
+    val_min : :class:`float`
+        Starting value.
+    val_max : :class:`float`
+        Ending value
+    steps : :class:`int`
+        Number of steps.
+    typ : :class:`str` or :class:`float`, optional
+        Setting the kind of range-distribution. One can choose between
+
+        * ``"exp"``: for exponential behavior
+        * ``"log"``: for logarithmic behavior
+        * ``"geo"``: for geometric behavior
+        * ``"lin"``: for linear behavior
+        * ``"quad"``: for quadratic behavior
+        * ``"cub"``: for cubic behavior
+        * :class:`float`: here you can specifi any exponent ("quad" would be
+          equivalent to 2)
+
+        Default: ``"exp"``
+
+    Returns
+    -------
+    :class:`numpy.ndarray`
+        Array containing the special range
+
+    Examples
+    --------
+    >>> specialrange(1,10,4)
+    array([ 1.        ,  2.53034834,  5.23167968, 10.        ])
+    """
+    if typ in ["exponential", "exp"]:
+        rng = np.expm1(
+            np.linspace(np.log1p(val_min), np.log1p(val_max), steps)
+        )
+    elif typ in ["logarithmic", "log"]:
+        rng = np.log(np.linspace(np.exp(val_min), np.exp(val_max), steps))
+    elif typ in ["geometric", "geo", "geom"]:
+        rng = np.geomspace(val_min, val_max, steps)
+    elif typ in ["linear", "lin"]:
+        rng = np.linspace(val_min, val_max, steps)
+    elif typ in ["quadratic", "quad"]:
+        rng = (np.linspace(np.sqrt(val_min), np.sqrt(val_max), steps)) ** 2
+    elif typ in ["cubic", "cub"]:
+        rng = (
+            np.linspace(
+                np.power(val_min, 1 / 3.0), np.power(val_max, 1 / 3.0), steps
+            )
+        ) ** 3
+    elif isinstance(typ, (float, int)):
+        rng = (
+            np.linspace(
+                np.power(val_min, 1.0 / typ),
+                np.power(val_max, 1.0 / typ),
+                steps,
+            )
+        ) ** typ
+    else:
+        print("specialrange: unknown typ '{}'. Using linear range".format(typ))
+        rng = np.linspace(val_min, val_max, steps)
+
+    return rng
+
+
+def generate_time(time_array, time_start=0, factors=1, is_diff=False):
+    """
+    Return a dictionary for the ".tim" file.
+
+    Parameters
+    ----------
+    time_array : array-like
+        Input time. will be flattened. Either time step sizes for each step,
+        (is_diff=True) or an array of time-points.
+    time_start : float, optional
+        Starting point for time stepping. Default: 0
+    factors : int or array-like, optional
+        Repeating factors for each time step. Default: 1
+    is_diff : bool, optional
+        State if the given time array contains only the step size
+        for each step. Default: False
+
+    Returns
+    -------
+    dict : input dict for ".tim".
+        keys: {"TIME_START", "TIME_END", "TIME_STEPS"}
+    """
+    time_array = np.ravel(time_array)
+    if not is_diff:
+        time_array = time_array[1:] - time_array[:-1]
+    factors = np.ravel(np.array(factors, dtype=int))
+    if factors.size == 1:
+        factors = np.full_like(time_array, factors[0], dtype=int)
+    if factors.size != time_array.size:
+        raise ValueError("array and ids don't have the same length")
+    time_end = np.sum(time_array * factors) + time_start
+    return {
+        "TIME_START": time_start,
+        "TIME_END": time_end,
+        "TIME_STEPS": zip(factors, time_array),
+    }
 
 
 def rotate_points(

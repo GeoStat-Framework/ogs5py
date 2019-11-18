@@ -85,10 +85,12 @@ Routine to search for a valid ogs id in a directory
 
 Formatting
 ^^^^^^^^^^
-Routines to format data in the right way for the input
+Routines to format/generate data in the right way for the input
 
 .. autosummary::
    by_id
+   specialrange
+   generate_time
 
 Downloading
 ^^^^^^^^^^^
@@ -157,7 +159,13 @@ from ogs5py.fileclasses import (
     ST,
     TIM,
 )
-from ogs5py.tools.tools import search_task_id, by_id, hull_deform
+from ogs5py.tools.tools import (
+    search_task_id,
+    by_id,
+    hull_deform,
+    specialrange,
+    generate_time,
+)
 from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
 from ogs5py.tools.download import (
     download_ogs,
@@ -207,6 +215,7 @@ __all__ += [
     "TIM",
 ]
 __all__ += ["search_task_id", "by_id", "hull_deform"]
+__all__ += ["specialrange", "generate_time"]
 __all__ += ["download_ogs", "add_exe", "reset_download", "OGS5PY_CONFIG"]
 __all__ += ["show_vtk"]
 __all__ += ["OGS_EXT", "PCS_TYP", "PRIM_VAR_BY_PCS"]
