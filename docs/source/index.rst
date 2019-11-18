@@ -105,21 +105,6 @@ The point output at the observation well is plotted afterwards.
    :align: center
 
 
-Reader
-======
-
-It comes along with a set of handy readers for almost all output formats:
-
-- VTK Domain output:
-    :any:`ogs5py.reader.readvtk`
-- PVD Domain output:
-    :any:`ogs5py.reader.readpvd`
-- TECPLOT point output:
-    :any:`ogs5py.reader.readtec_point`
-- TECPLOT polyline output:
-    :any:`ogs5py.reader.readtec_polyline`
-
-
 OGS5 executable
 ===============
 
