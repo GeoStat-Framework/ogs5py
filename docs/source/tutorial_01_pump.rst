@@ -26,6 +26,7 @@ is equivalent to:
         ],
     )
 
+The script:
 
 .. code-block:: python
 
@@ -43,6 +44,9 @@ is equivalent to:
     rate = -1e-3
     # model setup
     model = OGS(task_root="pump_test", task_id="model")
+    model.pcs.add_block(  # set the process type
+        PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW"
+    )
     # generate a radial mesh and geometry ("boundary" polyline)
     model.msh.generate("radial", dim=2, rad=rad, angles=angles)
     model.gli.generate("radial", dim=2, rad_out=rad[-1], angles=angles)
@@ -54,17 +58,17 @@ is equivalent to:
         GEO_TYPE=["POLYLINE", "boundary"],
         DIS_TYPE=["CONSTANT", 0.0],
     )
-    model.st.add_block(  # source term
-        PCS_TYPE="GROUNDWATER_FLOW",
-        PRIMARY_VARIABLE="HEAD",
-        GEO_TYPE=["POINT", "pwell"],
-        DIS_TYPE=["CONSTANT_NEUMANN", rate],
-    )
     model.ic.add_block(  # initial condition
         PCS_TYPE="GROUNDWATER_FLOW",
         PRIMARY_VARIABLE="HEAD",
         GEO_TYPE="DOMAIN",
         DIS_TYPE=["CONSTANT", 0.0],
+    )
+    model.st.add_block(  # source term
+        PCS_TYPE="GROUNDWATER_FLOW",
+        PRIMARY_VARIABLE="HEAD",
+        GEO_TYPE=["POINT", "pwell"],
+        DIS_TYPE=["CONSTANT_NEUMANN", rate],
     )
     model.mmp.add_block(  # medium properties
         GEOMETRY_DIMENSION=2,
@@ -73,7 +77,7 @@ is equivalent to:
     )
     model.num.add_block(  # numerical solver
         PCS_TYPE="GROUNDWATER_FLOW",
-        LINEAR_SOLVER=[2, 5, 1e-14, 1000, 1.0, 100, 4],
+        LINEAR_SOLVER=[2, 5, 1e-14, 1000, 1.0, 100, 4]
     )
     model.out.add_block(  # point observation
         PCS_TYPE="GROUNDWATER_FLOW",
@@ -81,12 +85,9 @@ is equivalent to:
         GEO_TYPE=["POINT", "owell"],
         DAT_TYPE="TECPLOT",
     )
-    model.pcs.add_block(  # set the process type
-        PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW"
-    )
     model.tim.add_block(  # set the timesteps
         PCS_TYPE="GROUNDWATER_FLOW",
-        **generate_time(time)
+        **generate_time(time)  # generate input from time-series
     )
     model.write_input()
     success = model.run_model()

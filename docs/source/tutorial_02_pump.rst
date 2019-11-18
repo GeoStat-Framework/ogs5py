@@ -15,8 +15,11 @@ and perform a steady pumping test.
     # covariance model for conductivity field
     cov_model = Gaussian(dim=3, var=2, len_scale=10, anis=[1, 0.2])
     srf = SRF(model=cov_model, mean=-9, seed=1000)
-    # ogs base class
+    # model setup
     model = OGS(task_root="test_het_3D", task_id="model", output_dir="out")
+    model.pcs.add_block(  # set the process type
+        PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
+    )
     # generate a radial 3D mesh and conductivity field
     model.msh.generate(
         "radial", dim=3, angles=64, rad=np.arange(101), z_arr=-np.arange(11)
@@ -28,6 +31,9 @@ and perform a steady pumping test.
         MMP_TYPE="PERMEABILITY",
         DIS_TYPE="ELEMENT",
         DATA=by_id(cond),
+    )
+    model.mmp.add_block(  # permeability, storage and porosity
+        GEOMETRY_DIMENSION=3, PERMEABILITY_DISTRIBUTION=model.mpd.file_name
     )
     model.gli.generate("radial", dim=3, angles=64, rad_out=100, z_size=-10)
     model.gli.add_polyline("pwell", [[0, 0, 0], [0, 0, -10]])
@@ -44,9 +50,6 @@ and perform a steady pumping test.
         GEO_TYPE=["POLYLINE", "pwell"],
         DIS_TYPE=["CONSTANT_NEUMANN", 1.0e-3],
     )
-    model.mmp.add_block(  # permeability, storage and porosity
-        GEOMETRY_DIMENSION=3, PERMEABILITY_DISTRIBUTION=model.mpd.file_name
-    )
     model.num.add_block(  # numerical solver
         PCS_TYPE="GROUNDWATER_FLOW",
         LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
@@ -56,9 +59,6 @@ and perform a steady pumping test.
         NOD_VALUES="HEAD",
         GEO_TYPE="DOMAIN",
         DAT_TYPE="VTK",
-    )
-    model.pcs.add_block(  # set the process type
-        PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW", TIM_TYPE="STEADY"
     )
     model.write_input()
     success = model.run_model()
