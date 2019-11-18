@@ -3,7 +3,7 @@
 All notable changes to **ogs5py** will be documented in this file.
 
 
-## [Unreleased]
+## [1.0.5] - 2019-11-18
 
 ### Bugfixes
 * ``MSH.set_material_id``: better handling of non-int single values: https://github.com/GeoStat-Framework/ogs5py/commit/f34d2e510e7bb340abc19150270b956c407d7ff6
@@ -11,8 +11,9 @@ All notable changes to **ogs5py** will be documented in this file.
 * ``GLI.add_polyline``: Adding polyline by point-names was not possible: https://github.com/GeoStat-Framework/ogs5py/commit/17dd19944f49666f00d09fe2d21e88345439cf4d
 
 ### Additions
-
-### Changes
+* better integration of pygmsh: https://github.com/GeoStat-Framework/ogs5py/commit/570afd9d415c9fa402788c82f4864b7e6ddbf5d9
+* new functions ``specialrange`` and ``generate_time``: https://github.com/GeoStat-Framework/ogs5py/commit/e5f3aba542c41116e0fe0415e0eea6e689a7ccee
+* updated examples
 
 
 ## [1.0.4] - 2019-09-10
@@ -130,7 +131,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.1...v1.0.2
