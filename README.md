@@ -41,71 +41,69 @@ You can find the documentation under [geostat-framework.readthedocs.io][doc_link
 
 In the following a simple transient pumping test is simulated on a radial symmetric mesh.
 The point output at the observation well is plotted afterwards.
+For more details on this example, see: [Tutorial 1][tut1_link]
 
 ```python
-from ogs5py import OGS
+from ogs5py import OGS, specialrange, generate_time
 from matplotlib import pyplot as plt
 
+# discretization and parameters
+time = specialrange(0, 3600, 50, typ="cub")
+rad = specialrange(0, 1000, 100, typ="cub")
+obs = rad[21]
+angles = 32
+storage = 1e-3
+transmissivity = 1e-4
+rate = -1e-3
+# model setup
 model = OGS(task_root="pump_test", task_id="model")
-
-# generate a radial mesh
-model.msh.generate("radial", dim=2, rad=range(51))
-# generate a radial outer boundary
-model.gli.generate("radial", dim=2, rad_out=50.)
-model.gli.add_points([0., 0., 0.], "pwell")
-model.gli.add_points([1., 0., 0.], "owell")
+# generate a radial mesh and geometry ("boundary" polyline)
+model.msh.generate("radial", dim=2, rad=rad, angles=angles)
+model.gli.generate("radial", dim=2, rad_out=rad[-1], angles=angles)
+model.gli.add_points([0.0, 0.0, 0.0], "pwell")
+model.gli.add_points([obs, 0.0, 0.0], "owell")
 model.bc.add_block(  # boundary condition
-    PCS_TYPE='GROUNDWATER_FLOW',
-    PRIMARY_VARIABLE='HEAD',
-    GEO_TYPE=['POLYLINE', "boundary"],
-    DIS_TYPE=['CONSTANT', 0.0],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    PRIMARY_VARIABLE="HEAD",
+    GEO_TYPE=["POLYLINE", "boundary"],
+    DIS_TYPE=["CONSTANT", 0.0],
 )
 model.st.add_block(  # source term
-    PCS_TYPE='GROUNDWATER_FLOW',
-    PRIMARY_VARIABLE='HEAD',
-    GEO_TYPE=['POINT', "pwell"],
-    DIS_TYPE=['CONSTANT_NEUMANN', -1.0e-04],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    PRIMARY_VARIABLE="HEAD",
+    GEO_TYPE=["POINT", "pwell"],
+    DIS_TYPE=["CONSTANT_NEUMANN", rate],
 )
 model.ic.add_block(  # initial condition
-    PCS_TYPE='GROUNDWATER_FLOW',
-    PRIMARY_VARIABLE='HEAD',
-    GEO_TYPE='DOMAIN',
-    DIS_TYPE=['CONSTANT', 0.0],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    PRIMARY_VARIABLE="HEAD",
+    GEO_TYPE="DOMAIN",
+    DIS_TYPE=["CONSTANT", 0.0],
 )
 model.mmp.add_block(  # medium properties
     GEOMETRY_DIMENSION=2,
-    STORAGE=[1, 1.0e-04],
-    PERMEABILITY_TENSOR=['ISOTROPIC', 1.0e-4],
+    STORAGE=[1, storage],
+    PERMEABILITY_TENSOR=["ISOTROPIC", transmissivity],
 )
 model.num.add_block(  # numerical solver
-    PCS_TYPE='GROUNDWATER_FLOW',
-    LINEAR_SOLVER=[2, 5, 1.0e-14, 1000, 1.0, 100, 4],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    LINEAR_SOLVER=[2, 5, 1e-14, 1000, 1.0, 100, 4],
 )
 model.out.add_block(  # point observation
-    PCS_TYPE='GROUNDWATER_FLOW',
-    NOD_VALUES='HEAD',
-    GEO_TYPE=['POINT', "owell"],
-    DAT_TYPE='TECPLOT',
-    TIM_TYPE=['STEPS', 1],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    NOD_VALUES="HEAD",
+    GEO_TYPE=["POINT", "owell"],
+    DAT_TYPE="TECPLOT",
 )
 model.pcs.add_block(  # set the process type
-    PCS_TYPE='GROUNDWATER_FLOW', NUM_TYPE='NEW'
+    PCS_TYPE="GROUNDWATER_FLOW", NUM_TYPE="NEW"
 )
 model.tim.add_block(  # set the timesteps
-    PCS_TYPE='GROUNDWATER_FLOW',
-    TIME_START=0,
-    TIME_END=600,
-    TIME_STEPS=[[10, 30], [5, 60]],
+    PCS_TYPE="GROUNDWATER_FLOW",
+    **generate_time(time)
 )
 model.write_input()
-success = model.run_model()
-
-point = model.readtec_point(pcs='GROUNDWATER_FLOW')
-time = point['owell']["TIME"]
-head = point['owell']["HEAD"]
-
-plt.plot(time, head)
-plt.show()
+model.run_model()
 ```
 
 <p align="center">
@@ -172,3 +170,4 @@ This project is based on [OGSPY][ogspy_link].
 [gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
 [doc_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/
+[tut1_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/tutorial_01_pump.html
