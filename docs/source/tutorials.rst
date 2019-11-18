@@ -9,4 +9,6 @@ explore its whole beauty and power.
    :maxdepth: 1
 
    tutorial_01_pump.rst
+   tutorial_02_pump.rst
+   tutorial_03_gmsh.rst
 
