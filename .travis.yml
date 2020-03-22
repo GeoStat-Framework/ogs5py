@@ -1,5 +1,5 @@
 language: python
-python: 3.8
+python: 3.7
 
 # setuptools-scm needs all tags in order to obtain a proper version
 git:
@@ -39,7 +39,7 @@ script:
   - python3 -m cibuildwheel --output-dir tmp_dist
 
 stages:
-  - test
+  # - test
   - coverage
   - name: deploy
     if: (NOT type IN (pull_request)) AND (repo = GeoStat-Framework/ogs5py)
