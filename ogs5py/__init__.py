@@ -125,8 +125,6 @@ Information
    PCS_TYP
    PRIM_VAR_BY_PCS
 """
-from __future__ import absolute_import
-
 from ogs5py._version import __version__
 from ogs5py.ogs import OGS
 from ogs5py.fileclasses import (

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Simple interface to pygmsh."""
-from __future__ import division, print_function, absolute_import
 
 
 def gmsh_code(path_or_code):

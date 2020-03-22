@@ -2,8 +2,6 @@
 """
 This is the unittest for ogs5py.
 """
-from __future__ import division, absolute_import, print_function
-
 import os
 import unittest
 import numpy as np

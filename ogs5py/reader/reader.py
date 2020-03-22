@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Reader for the OGS5 Output."""
 
-from __future__ import absolute_import, division, print_function
 
 import os
 import glob

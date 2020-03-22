@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Viewer for an ogs5py mesh."""
-from __future__ import division, print_function, absolute_import
-
 import os
 import numpy as np
 from ogs5py.fileclasses.msh.msh_io import export_mesh

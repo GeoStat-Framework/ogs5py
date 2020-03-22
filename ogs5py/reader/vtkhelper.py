@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """Helper functions for the vtk readers in ogs5py."""
-
-from __future__ import absolute_import, division, print_function
-
 from vtk import (
     vtkUnstructuredGridReader,
     vtkStructuredGridReader,

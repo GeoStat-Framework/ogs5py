@@ -17,8 +17,6 @@ A downloading routine to get the OSG5 executable.
 
 ----
 """
-from __future__ import division, print_function, absolute_import
-
 import os
 import shutil
 import tarfile

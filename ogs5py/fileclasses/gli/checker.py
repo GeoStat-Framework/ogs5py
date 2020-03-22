@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Checking routines for the ogs5py-GLI package."""
-from __future__ import division, print_function, absolute_import
 import numpy as np
 from ogs5py.tools.types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
 
