@@ -1095,7 +1095,7 @@ class OGS(object):
         Returns
         -------
         success : bool
-            State if OGS5 terminated 'normally'.
+            State if OGS5 terminated 'normally'. (Allways true on Windows.)
         """
         # look for the standard ogs executable in the standard-path
         if ogs_exe is None:
@@ -1179,8 +1179,11 @@ class OGS(object):
         child.expect(pexpect.EOF)
         if sys.platform != "win32":
             child.close()
-        self.exitstatus = child.exitstatus
-        success = self.exitstatus == 0
+            self.exitstatus = child.exitstatus
+            success = self.exitstatus == 0
+        else:
+            # on windows, this exitstatus is wrongly false
+            success = True
         # close the output stream
         out.close()
 
