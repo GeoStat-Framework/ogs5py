@@ -55,16 +55,10 @@ General Constants
    MULTI_FILES
 
 """
-import sys
 import numpy as np
 
-# stringtype for python 2 and 3
-if sys.version_info[0] == 2:
-    STRTYPE = basestring
-    """type: base string type"""
-else:
-    STRTYPE = str
-    """type: base string type"""
+STRTYPE = str
+"""type: base string type"""
 
 # keylists for the gli entries and templates for entries
 EMPTY_GLI = {

@@ -21,13 +21,7 @@ import os
 import shutil
 import tarfile
 import zipfile
-
-try:  # PY3
-    from urllib.request import urlretrieve, urlopen
-except ImportError:  # PY2
-    from urllib import urlretrieve
-    from urllib2 import urlopen
-
+from urllib.request import urlretrieve, urlopen
 import tempfile
 import platform
 import lxml.html
