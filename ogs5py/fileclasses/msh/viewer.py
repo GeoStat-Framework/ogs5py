@@ -78,7 +78,7 @@ def show_mesh(
     # new mayavi scenes
     mlab.figure()
     with TemporaryDirectory() as tmpdirname:
-        vtkfile = os.path.join(tmpdirname, "data.vtu")
+        vtkfile = os.path.join(tmpdirname, "data.vtk")
         # export the mesh to the temp vtk file
         export_mesh(
             vtkfile,

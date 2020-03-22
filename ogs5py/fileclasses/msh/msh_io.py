@@ -643,6 +643,15 @@ def export_mesh(
     if cell_data_by_id is not None and not isinstance(cell_data_by_id, dict):
         cell_data_by_id = {"add_data": cell_data_by_id}
 
+    # prepare dict
+    if export_material_id:
+        cell_data["material_id"] = []
+    if export_element_id:
+        cell_data["element_id"] = []
+    if cell_data_by_id is not None:
+        for data in cell_data_by_id:
+            cell_data[data] = []
+
     for elemi, eleme in enumerate(ELEM_NAMES):
         # skip elements not present in the mesh
         if eleme not in mesh["elements"]:
@@ -651,36 +660,32 @@ def export_mesh(
         cells[MESHIO_NAMES[elemi]] = dcp(mesh["elements"][eleme])
         # export material ID if stated
         if export_material_id:
-            cell_data[MESHIO_NAMES[elemi]] = {
-                "material_id": dcp(mesh["material_id"][eleme])
-            }
+            cell_data["material_id"].append(
+                np.array(mesh["material_id"][eleme], dtype=np.int32)
+            )
         # export element ID if stated
         if export_element_id:
-            if MESHIO_NAMES[elemi] in cell_data:
-                cell_data[MESHIO_NAMES[elemi]]["element_id"] = dcp(
-                    mesh["element_id"][eleme]
-                )
-            else:
-                cell_data[MESHIO_NAMES[elemi]] = {
-                    "element_id": dcp(mesh["element_id"][eleme])
-                }
+            cell_data["element_id"].append(
+                np.array(mesh["element_id"][eleme], dtype=np.int32)
+            )
         # write additional data
         if cell_data_by_id is not None:
-            # if material ID was written, the dictionary already exists
-            if MESHIO_NAMES[elemi] in cell_data:
-                for data in cell_data_by_id:
-                    cell_data[MESHIO_NAMES[elemi]][data] = cell_data_by_id[
-                        data
-                    ][mesh["element_id"][eleme]]
-            # if material ID was not written, create a dictionary
-            else:
-                for data in cell_data_by_id:
-                    cell_data[MESHIO_NAMES[elemi]] = {
-                        data: cell_data_by_id[data][mesh["element_id"][eleme]]
-                    }
+            for data in cell_data_by_id:
+                cell_data["element_id"].append(
+                    cell_data_by_id[data][mesh["element_id"][eleme]],
+                )
 
     if not cell_data:
         cell_data = None
+    # else:
+    #     # convert cell_data to new meshio standard
+    #     for item in cell_data:
+    #         cell_data[item] = [val for val in cell_data[item].items()]
+    # print(cell_data)
+    # for name, data in cell_data.items():
+    #     print(data)
+    #     for k, values in enumerate(data):
+    #         print(k, values)
 
     mesh_out = mio.Mesh(
         points=points,
@@ -741,8 +746,10 @@ def convert_meshio(
     If there is any "vertex" in the element data, it will be removed.
     """
     nodes = mesh.points
-    cells = mesh.cells
-    cell_data = mesh.cell_data
+    cells = mesh.cells_dict
+    cell_data = mesh.cell_data_dict
+    print(cells)
+    print(cell_data)
     if not isinstance(import_dim, (set, list, tuple)):
         import_dim = [import_dim]
 
@@ -770,10 +777,10 @@ def convert_meshio(
         if elm_e not in cells:
             continue
         elements[ELEM_NAMES[elm_i]] = cells[elm_e]
-        if material_id_name in cell_data[elm_e]:
-            material_id[ELEM_NAMES[elm_i]] = cell_data[elm_e][material_id_name]
-        if element_id_name in cell_data[elm_e]:
-            element_id[ELEM_NAMES[elm_i]] = cell_data[elm_e][element_id_name]
+        if material_id_name in cell_data:
+            material_id[ELEM_NAMES[elm_i]] = cell_data[material_id_name][elm_e]
+        if element_id_name in cell_data:
+            element_id[ELEM_NAMES[elm_i]] = cell_data[element_id_name][elm_e]
 
     if not material_id:
         material_id = gen_std_mat_id(elements)
