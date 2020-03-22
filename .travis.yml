@@ -39,7 +39,7 @@ script:
   - python3 -m pytest --cov ogs5py --cov-report term-missing -v tests/
 
 stages:
-   - test
+  - test
   # - coverage
   - name: deploy
     if: (NOT type IN (pull_request)) AND (repo = GeoStat-Framework/ogs5py)
