@@ -147,8 +147,8 @@ Requirements
 - `Pandas >= 0.23.2 <https://pandas.pydata.org/>`_
 - `meshio >= 4.0.3; <5.0 <https://github.com/nschloe/meshio>`_
 - `lxml >= 4.0; <5.0 <https://github.com/lxml/lxml>`_
-- `vtk >= 4.0; <5.0 <https://vtk.org/>`_
-- `pexpect >= 8.1 <https://github.com/pexpect/pexpect>`_
+- `pexpect >= 4.0; <5.0 <https://github.com/pexpect/pexpect>`_
+- `vtk >= 8.1 <https://vtk.org/>`_
 
 
 License
