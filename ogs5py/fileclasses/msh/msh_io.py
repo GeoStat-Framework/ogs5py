@@ -671,21 +671,12 @@ def export_mesh(
         # write additional data
         if cell_data_by_id is not None:
             for data in cell_data_by_id:
-                cell_data["element_id"].append(
+                cell_data[data].append(
                     cell_data_by_id[data][mesh["element_id"][eleme]],
                 )
 
     if not cell_data:
         cell_data = None
-    # else:
-    #     # convert cell_data to new meshio standard
-    #     for item in cell_data:
-    #         cell_data[item] = [val for val in cell_data[item].items()]
-    # print(cell_data)
-    # for name, data in cell_data.items():
-    #     print(data)
-    #     for k, values in enumerate(data):
-    #         print(k, values)
 
     mesh_out = mio.Mesh(
         points=points,
