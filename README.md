@@ -147,12 +147,12 @@ model.run_model(ogs_exe="path/to/ogs")
 
 ## Requirements:
 
-- [NumPy >= 1.13.0](https://www.numpy.org)
-- [Pandas >= 0.23.0](https://pandas.pydata.org/)
-- [meshio >= 4.0; <5.0](https://github.com/nschloe/meshio)
-- [lxml](https://github.com/lxml/lxml)
-- [vtk](https://vtk.org/)
-- [pexpect](https://github.com/pexpect/pexpect)
+- [NumPy >= 1.14.5](https://www.numpy.org)
+- [Pandas >= 0.23.2](https://pandas.pydata.org/)
+- [meshio >= 4.0.3; <5.0](https://github.com/nschloe/meshio)
+- [lxml >= 4.0; <5.0](https://github.com/lxml/lxml)
+- [pexpect >= 4.0; <5.0](https://github.com/pexpect/pexpect)
+- [vtk >= 8.1](https://vtk.org/)
 
 ## Contact
 
