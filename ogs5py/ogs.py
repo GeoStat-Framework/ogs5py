@@ -1180,10 +1180,9 @@ class OGS(object):
         if sys.platform != "win32":
             child.close()
             self.exitstatus = child.exitstatus
-            success = self.exitstatus == 0
         else:
-            # on windows, this exitstatus is wrongly false
-            success = True
+            self.exitstatus = child.wait()
+        success = self.exitstatus == 0
         # close the output stream
         out.close()
 
