@@ -125,7 +125,6 @@ Information
    PCS_TYP
    PRIM_VAR_BY_PCS
 """
-from ogs5py._version import __version__
 from ogs5py.ogs import OGS
 from ogs5py.fileclasses import (
     ASC,
@@ -172,6 +171,12 @@ from ogs5py.tools.download import (
     OGS5PY_CONFIG,
 )
 from ogs5py.tools.vtk_viewer import show_vtk
+
+try:
+    from ogs5py._version import __version__
+except ImportError:  # pragma: nocover
+    # package is not installed
+    __version__ = "0.0.0.dev0"
 
 # indentation of subkeywords
 SUB_IND = "  "
