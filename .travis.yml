@@ -9,14 +9,6 @@ env:
   global:
     # Note: TWINE_PASSWORD is set in Travis settings
     - TWINE_USERNAME=geostatframework
-    # # on py36 tests
-    # - CIBW_BUILD="cp36-*"
-    # - CIBW_SKIP="*-win32 *-manylinux_i686"
-    # # update setuptools to latest version
-    # - CIBW_BEFORE_BUILD="pip install -U setuptools"
-    # # testing with cibuildwheel
-    # - CIBW_TEST_REQUIRES=pytest
-    # - CIBW_TEST_COMMAND="pytest -v {project}/tests"
 
 notifications:
   email:
@@ -26,7 +18,7 @@ notifications:
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" = windows ]]; then
-        choco install python --version 3.8.0
+        choco install python --version 3.7.1
         export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
         # make sure it's on PATH as 'python3'
         ln -s /c/Python38/python.exe /c/Python38/python3.exe
@@ -40,7 +32,6 @@ script:
 
 stages:
   - test
-  # - coverage
   - name: deploy
     if: (NOT type IN (pull_request)) AND (repo = GeoStat-Framework/ogs5py)
 
@@ -58,14 +49,6 @@ jobs:
       name: Test on Windows
       os: windows
       language: shell
-
-    # - stage: coverage
-    #   name: Coverage on Linux
-    #   services: docker
-    #   install: python3 -m pip install .[test] coveralls
-    #   script:
-    #     - python3 -m pytest --cov ogs5py --cov-report term-missing -v tests/
-    #     - python3 -m coveralls
 
     # Test Deploy source distribution
     - stage: deploy
