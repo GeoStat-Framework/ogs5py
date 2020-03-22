@@ -10,7 +10,7 @@ All notable changes to **ogs5py** will be documented in this file.
 * fixed integer type in exporting meshes with element/material IDs
 
 ### Changes
-* drop of py2.7 support
+* drop py2.7 support
 
 
 ## [1.0.5] - 2019-11-18
