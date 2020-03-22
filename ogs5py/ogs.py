@@ -19,7 +19,6 @@ import sys
 import time
 import warnings
 from copy import deepcopy as dcp
-from whichcraft import which
 import pexpect
 from pexpect.popen_spawn import PopenSpawn
 from ogs5py.fileclasses import (
@@ -1100,7 +1099,9 @@ class OGS(object):
         """
         # look for the standard ogs executable in the standard-path
         if ogs_exe is None:
-            check_ogs = which(ogs_name, path=OGS5PY_CONFIG) or which(ogs_name)
+            check_ogs = shutil.which(
+                ogs_name, path=OGS5PY_CONFIG
+            ) or shutil.which(ogs_name)
             if check_ogs is None:
                 print(
                     "Please put the ogs executable in the default sys path: "
