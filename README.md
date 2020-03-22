@@ -149,7 +149,7 @@ model.run_model(ogs_exe="path/to/ogs")
 
 - [NumPy >= 1.13.0](https://www.numpy.org)
 - [Pandas >= 0.23.0](https://pandas.pydata.org/)
-- [meshio](https://github.com/nschloe/meshio)
+- [meshio >= 4.0; <5.0](https://github.com/nschloe/meshio)
 - [lxml](https://github.com/lxml/lxml)
 - [vtk](https://vtk.org/)
 - [pexpect](https://github.com/pexpect/pexpect)
@@ -168,5 +168,5 @@ This project is based on [OGSPY][ogspy_link].
 [ogspy_link]: https://github.com/fhesze/OGSPY
 [gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
-[doc_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/
-[tut1_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/latest/tutorial_01_pump.html
+[doc_link]: https://ogs5py.readthedocs.io/
+[tut1_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/stable/tutorial_01_pump.html
