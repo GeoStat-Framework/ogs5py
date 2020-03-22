@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Tools for the ogs5py mesh package."""
-from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import numpy as np
 from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH

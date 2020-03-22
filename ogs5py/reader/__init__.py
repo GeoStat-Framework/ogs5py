@@ -16,8 +16,6 @@ Reader
 
 ----
 """
-from __future__ import absolute_import
-
 from ogs5py.reader.reader import (
     readvtk,
     readpvd,

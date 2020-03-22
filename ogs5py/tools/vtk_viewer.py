@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Viewer for a vtk file."""
-from __future__ import division, print_function, absolute_import
-
 # import os
 # os.environ["QT_API"] = "pyqt"
 # os.environ["ETS_TOOLKIT"] = "qt4"

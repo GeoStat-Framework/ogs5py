@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Core module for the ogs5py GLI file."""
-
-from __future__ import division, print_function, absolute_import
 from copy import deepcopy as dcp
 import os
 import numpy as np

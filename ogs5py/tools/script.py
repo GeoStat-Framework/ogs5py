@@ -23,7 +23,6 @@ Helpers
 
 ----
 """
-from __future__ import division, print_function, absolute_import
 import os
 import shutil
 
@@ -309,7 +308,6 @@ def gen_script(
     # open the script file
     with open(path, "w") as script:
         print("# -*- coding: utf-8 -*-", file=script)
-        # print("from __future__ import division, print_function", file=script)
         print("from ogs5py import " + load, file=script)
         print("", file=script)
         print(ogs_cls_name + " = OGS(", file=script)

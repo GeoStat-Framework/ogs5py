@@ -143,16 +143,15 @@ Otherwise you need to specify the path to the executable within the run command:
 Requirements
 ============
 
-- `NumPy >= 1.13.0 <https://www.numpy.org>`_
-- `Pandas >= 0.23.0 <https://pandas.pydata.org/>`_
-- `whichcraft <https://github.com/pydanny/whichcraft>`_
-- `meshio <https://github.com/nschloe/meshio>`_
-- `lxml <https://github.com/lxml/lxml>`_
-- `vtk <https://vtk.org/>`_
-- `pexpect <https://github.com/pexpect/pexpect>`_
+- `NumPy >= 1.14.5 <https://www.numpy.org>`_
+- `Pandas >= 0.23.2 <https://pandas.pydata.org/>`_
+- `meshio >= 4.0.3; <5.0 <https://github.com/nschloe/meshio>`_
+- `lxml >= 4.0; <5.0 <https://github.com/lxml/lxml>`_
+- `pexpect >= 4.0; <5.0 <https://github.com/pexpect/pexpect>`_
+- `vtk >= 8.1 <https://vtk.org/>`_
 
 
 License
 =======
 
-`MIT <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_ © 2019
+`MIT <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_

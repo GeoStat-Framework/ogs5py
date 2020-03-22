@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Tools for the ogs5py.reader package."""
-from __future__ import division, print_function, absolute_import
 
 
 def save_vtk_stru_point(path, vtk_dict, verbose=True):

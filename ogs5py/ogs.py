@@ -12,7 +12,6 @@ OGS Class
 
 ----
 """
-from __future__ import absolute_import, division, print_function
 import os
 import shutil
 import glob
@@ -20,7 +19,6 @@ import sys
 import time
 import warnings
 from copy import deepcopy as dcp
-from whichcraft import which
 import pexpect
 from pexpect.popen_spawn import PopenSpawn
 from ogs5py.fileclasses import (
@@ -1097,11 +1095,13 @@ class OGS(object):
         Returns
         -------
         success : bool
-            State if OGS5 terminated 'normally'.
+            State if OGS5 terminated 'normally'. (Allways true on Windows.)
         """
         # look for the standard ogs executable in the standard-path
         if ogs_exe is None:
-            check_ogs = which(ogs_name, path=OGS5PY_CONFIG) or which(ogs_name)
+            check_ogs = shutil.which(
+                ogs_name, path=OGS5PY_CONFIG
+            ) or shutil.which(ogs_name)
             if check_ogs is None:
                 print(
                     "Please put the ogs executable in the default sys path: "
@@ -1179,7 +1179,9 @@ class OGS(object):
         child.expect(pexpect.EOF)
         if sys.platform != "win32":
             child.close()
-        self.exitstatus = child.exitstatus
+            self.exitstatus = child.exitstatus
+        else:
+            self.exitstatus = child.wait()
         success = self.exitstatus == 0
         # close the output stream
         out.close()

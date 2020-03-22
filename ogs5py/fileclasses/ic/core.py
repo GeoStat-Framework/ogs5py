@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Class for the ogs INITIAL_CONDITION file."""
-
-from __future__ import absolute_import, division, print_function
 import os
 import numpy as np
 import pandas as pd

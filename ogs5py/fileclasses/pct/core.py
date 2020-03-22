@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Class for the ogs PARTICLE DEFINITION file for RANDOM_WALK."""
-
-from __future__ import absolute_import, division, print_function
 import numpy as np
 from ogs5py.fileclasses.base import File
 

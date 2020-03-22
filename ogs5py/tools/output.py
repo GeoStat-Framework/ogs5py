@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Tools for ogs5py output files (independent from VTK package)."""
-from __future__ import division, print_function, absolute_import
 import os
 import glob
 import re

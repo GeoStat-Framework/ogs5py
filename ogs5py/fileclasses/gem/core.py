@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file."""
-
-from __future__ import absolute_import, division, print_function
 import os
 from ogs5py.fileclasses.base import BlockFile, LineFile
 

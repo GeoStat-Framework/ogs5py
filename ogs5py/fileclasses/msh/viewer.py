@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Viewer for an ogs5py mesh."""
-from __future__ import division, print_function, absolute_import
-
 import os
 import numpy as np
 from ogs5py.fileclasses.msh.msh_io import export_mesh
@@ -80,7 +78,7 @@ def show_mesh(
     # new mayavi scenes
     mlab.figure()
     with TemporaryDirectory() as tmpdirname:
-        vtkfile = os.path.join(tmpdirname, "data.vtu")
+        vtkfile = os.path.join(tmpdirname, "data.vtk")
         # export the mesh to the temp vtk file
         export_mesh(
             vtkfile,

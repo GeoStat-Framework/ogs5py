@@ -1,42 +1,68 @@
 language: python
+python: 3.7
 
-matrix:
-  include:
-    # separate sdist and coverage with py36 on linux
-    - name: "sdist and coverage"
-      sudo: required
-      language: python
-      python: 3.6
-      services: docker
-      script:
-        - python -m pip install -U setuptools pytest-cov coveralls
-        - python setup.py sdist -d dist
-        - python -m pip install -r requirements.txt
-        - python -m pytest --cov ogs5py --cov-report term-missing -v tests/
-        - python -m coveralls
-    # universal wheel on 64bit Linux with py36
-    - name: "py2.py3 wheel"
-      sudo: required
-      language: python
-      python: 3.6
-      services: docker
+# setuptools-scm needs all tags in order to obtain a proper version
+git:
+  depth: false
 
 env:
   global:
+    # Note: TWINE_PASSWORD is set in Travis settings
     - TWINE_USERNAME=geostatframework
-    - CIBW_BEFORE_BUILD="pip install setuptools"
-
-script:
-  # create wheels
-  - python -m pip install cibuildwheel==1.0.0
-  - python -m cibuildwheel --output-dir dist
-
-after_success:
-  - python -m pip install twine
-  - python -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*
-  - if [[ $TRAVIS_TAG ]]; then python -m twine upload --verbose --skip-existing dist/*; fi
 
 notifications:
   email:
     recipients:
-      - info@geostat-framework.org
+    - info@geostat-framework.org
+
+# before_install:
+#   - |
+#     if [[ "$TRAVIS_OS_NAME" = windows ]]; then
+#         choco install python --version 3.7.7
+#         export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+#         # make sure it's on PATH as 'python3'
+#         ln -s /c/Python37/python.exe /c/Python37/python3.exe
+#     fi
+
+install:
+  - python3 -m pip install .[test] coveralls
+
+script:
+  - python3 -m pytest --cov ogs5py --cov-report term-missing -v tests/
+
+stages:
+  - test
+  - name: deploy
+    if: (NOT type IN (pull_request)) AND (repo = GeoStat-Framework/ogs5py)
+
+jobs:
+  include:
+    - stage: test
+      name: Test on Linux
+      services: docker
+      after_success: python3 -m coveralls
+    - stage: test
+      name: Test on MacOS
+      os: osx
+      language: generic
+    # skip windows due to a VTK BUG
+    # - stage: test
+    #   name: Test on Windows
+    #   os: windows
+    #   language: shell
+
+    # Test Deploy source distribution
+    - stage: deploy
+      name: Test Deploy
+      install: python3 -m pip install -U setuptools wheel twine
+      script: python3 setup.py sdist --formats=gztar bdist_wheel
+      after_success:
+       - python3 -m twine upload --verbose --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*
+
+    # Deploy source distribution
+    - stage: deploy
+      name: Deploy to PyPI
+      if: tag IS present
+      install: python3 -m pip install -U setuptools wheel twine
+      script: python3 setup.py sdist --formats=gztar bdist_wheel
+      after_success: python3 -m twine upload --verbose --skip-existing dist/*

@@ -19,8 +19,6 @@ These generators can be called with :any:`MSH.generate`
 
 ----
 """
-from __future__ import division, print_function, absolute_import
-
 import numpy as np
 
 from ogs5py.fileclasses.msh.tools import (
