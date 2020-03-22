@@ -31,7 +31,7 @@ from ogs5py.tools.tools import (
     is_skey,
     find_key_in_list,
 )
-from ogs5py._version import __version__ as version
+from ogs5py import __version__ as version
 
 # current working directory
 CWD = os.getcwd()
