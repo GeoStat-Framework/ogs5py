@@ -18,10 +18,10 @@ notifications:
 before_install:
   - |
     if [[ "$TRAVIS_OS_NAME" = windows ]]; then
-        choco install python --version 3.7.4
-        export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+        choco install python --version 3.6.10
+        export PATH="/c/Python36:/c/Python36/Scripts:$PATH"
         # make sure it's on PATH as 'python3'
-        ln -s /c/Python37/python.exe /c/Python37/python3.exe
+        ln -s /c/Python36/python.exe /c/Python36/python3.exe
     fi
 
 install:
