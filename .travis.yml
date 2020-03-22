@@ -15,14 +15,14 @@ notifications:
     recipients:
     - info@geostat-framework.org
 
-before_install:
-  - |
-    if [[ "$TRAVIS_OS_NAME" = windows ]]; then
-        choco install python --version 3.6.8
-        export PATH="/c/Python36:/c/Python36/Scripts:$PATH"
-        # make sure it's on PATH as 'python3'
-        ln -s /c/Python36/python.exe /c/Python36/python3.exe
-    fi
+# before_install:
+#   - |
+#     if [[ "$TRAVIS_OS_NAME" = windows ]]; then
+#         choco install python --version 3.7.7
+#         export PATH="/c/Python37:/c/Python37/Scripts:$PATH"
+#         # make sure it's on PATH as 'python3'
+#         ln -s /c/Python37/python.exe /c/Python37/python3.exe
+#     fi
 
 install:
   - python3 -m pip install .[test] coveralls
@@ -45,10 +45,11 @@ jobs:
       name: Test on MacOS
       os: osx
       language: generic
-    - stage: test
-      name: Test on Windows
-      os: windows
-      language: shell
+    # skip windows due to a VTK BUG
+    # - stage: test
+    #   name: Test on Windows
+    #   os: windows
+    #   language: shell
 
     # Test Deploy source distribution
     - stage: deploy
