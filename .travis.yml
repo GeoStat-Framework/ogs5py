@@ -46,17 +46,17 @@ stages:
 
 jobs:
   include:
-    - stage: test
-      name: Test on Linux
-      services: docker
-    - stage: test
-      name: Test on MacOS
-      os: osx
-      language: generic
-    - stage: test
-      name: Test on Windows
-      os: windows
-      language: shell
+    # - stage: test
+    #   name: Test on Linux
+    #   services: docker
+    # - stage: test
+    #   name: Test on MacOS
+    #   os: osx
+    #   language: generic
+    # - stage: test
+    #   name: Test on Windows
+    #   os: windows
+    #   language: shell
 
     - stage: coverage
       name: Coverage on Linux
