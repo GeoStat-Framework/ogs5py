@@ -174,7 +174,7 @@ from ogs5py.tools.vtk_viewer import show_vtk
 
 try:
     from ogs5py._version import __version__
-except ImportError:  # pragma: nocover
+except (ImportError, ModuleNotFoundError):  # pragma: nocover
     # package is not installed
     __version__ = "0.0.0.dev0"
 
