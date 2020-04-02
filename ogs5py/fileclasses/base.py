@@ -31,7 +31,11 @@ from ogs5py.tools.tools import (
     is_skey,
     find_key_in_list,
 )
-from ogs5py._version import __version__ as version
+try:
+    from ogs5py._version import __version__ as version
+except ImportError:  # pragma: nocover
+    # package is not installed
+    version = "0.0.0.dev0"
 
 # current working directory
 CWD = os.getcwd()
