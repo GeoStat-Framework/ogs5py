@@ -15,6 +15,8 @@ File Classes
 ^^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    GLI
    GLIext
 

@@ -10,6 +10,8 @@ Downloader
 A downloading routine to get the OSG5 executable.
 
 .. autosummary::
+   :toctree: generated
+
    download_ogs
    add_exe
    reset_download

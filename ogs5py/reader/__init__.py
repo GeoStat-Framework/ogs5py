@@ -8,6 +8,8 @@ Reader
 ^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    readvtk
    readpvd
    readtec_point

@@ -8,6 +8,8 @@ File Classes
 ^^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    File
    LineFile
    BlockFile

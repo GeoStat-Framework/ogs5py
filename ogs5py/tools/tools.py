@@ -8,12 +8,16 @@ Classes
 ^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    Output
 
 File related
 ^^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    search_mkey
    uncomment
    is_key
@@ -33,6 +37,8 @@ Geometric tools
 ^^^^^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    rotate_points
    shift_points
    transform_points
@@ -45,6 +51,8 @@ Array tools
 ^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    unique_rows
    replace
    by_id

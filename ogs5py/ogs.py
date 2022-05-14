@@ -8,6 +8,7 @@ OGS Class
 ^^^^^^^^^
 
 .. autosummary::
+
    OGS
 
 ----

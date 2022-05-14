@@ -1,7 +1,8 @@
-ogs5py.fileclasses.st
-=====================
+{{ fullname | escape | underline}}
 
-.. automodule:: ogs5py.fileclasses.st
+.. currentmodule:: {{ module }}
+
+.. autoclass:: {{ objname }}
    :members:
    :undoc-members:
    :inherited-members:
