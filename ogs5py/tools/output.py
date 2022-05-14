@@ -401,5 +401,5 @@ def get_output_files(task_root, task_id, pcs=None, typ="VTK", element=None):
             if file_pcs == pcs and (element is None or element == line_name):
                 files.append(infile)
     else:
-        raise ValueError("Unknown output typ: '{}'".format(typ))
+        raise ValueError(f"Unknown output typ: '{typ}'")
     return files

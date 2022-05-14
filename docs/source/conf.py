@@ -95,7 +95,7 @@ master_doc = "contents"
 # General information about the project.
 curr_year = datetime.datetime.now().year
 project = "ogs5py"
-copyright = "2019 - {}, Sebastian Mueller".format(curr_year)
+copyright = f"2019 - {curr_year}, Sebastian Mueller"
 author = "Sebastian Mueller"
 
 # The version info for the project you're documenting, acts as replacement for

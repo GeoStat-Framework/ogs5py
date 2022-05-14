@@ -68,7 +68,7 @@ head = point["owell"]["HEAD"]
 # analytical solution
 head_ana = ana.theis(time, obs, storage, transmissivity, rate=rate)
 # comparisson plot
-plt.scatter(time, head, color="k", label="simulated, r={:04.2f}m".format(obs))
+plt.scatter(time, head, color="k", label=f"simulated, r={obs:04.2f}m")
 plt.plot(time, head_ana, label="analytical solution")
 plt.xscale("symlog", linthresh=10, subs=range(1, 10))
 plt.xlim([0, 1.1 * time[-1]])

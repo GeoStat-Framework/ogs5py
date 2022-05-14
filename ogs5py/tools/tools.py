@@ -479,7 +479,7 @@ def specialrange(val_min, val_max, steps, typ="exp"):
             )
         ) ** typ
     else:
-        print("specialrange: unknown typ '{}'. Using linear range".format(typ))
+        print(f"specialrange: unknown typ '{typ}'. Using linear range")
         rng = np.linspace(val_min, val_max, steps)
 
     return rng
