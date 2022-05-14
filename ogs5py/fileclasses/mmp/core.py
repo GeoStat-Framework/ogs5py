@@ -150,6 +150,6 @@ class MMP(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        super(MMP, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".mmp"
         self.force_writing = True

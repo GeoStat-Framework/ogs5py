@@ -26,7 +26,7 @@ class PCT(File):
     """
 
     def __init__(self, data=None, s_flag=1, task_root=None, task_id="model"):
-        super(PCT, self).__init__(task_root, task_id)
+        super().__init__(task_root, task_id)
         self.s_flag = s_flag
         self.file_ext = ".pct"
         if data:

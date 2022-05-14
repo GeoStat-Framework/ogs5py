@@ -273,7 +273,7 @@ class LineFile(File):
         task_root=None,
         task_id="model",
     ):
-        super(LineFile, self).__init__(task_root, task_id, file_ext)
+        super().__init__(task_root, task_id, file_ext)
         self.lines = [] if lines is None else lines
         self.name = name
 
@@ -395,7 +395,7 @@ class BlockFile(File):
     """:class:`dict`: Standard Block OGS-BlockFile"""
 
     def __init__(self, task_root=None, task_id="model", file_ext=".std"):
-        super(BlockFile, self).__init__(task_root, task_id, file_ext)
+        super().__init__(task_root, task_id, file_ext)
 
         # list of main keywords indicated by "#"
         self.mainkw = []

@@ -91,5 +91,5 @@ class MSP(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        super(MSP, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".msp"

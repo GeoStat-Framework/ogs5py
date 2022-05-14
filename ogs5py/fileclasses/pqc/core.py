@@ -31,7 +31,7 @@ class PQC(LineFile):
     """
 
     def __init__(self, **OGS_Config):
-        super(PQC, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".pqc"
 
 
@@ -63,6 +63,6 @@ class PQCdat(LineFile):
     """
 
     def __init__(self, **OGS_Config):
-        super(PQCdat, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.name = "phreeqc"
         self.file_ext = ".dat"

@@ -77,7 +77,7 @@ class IC(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        super(IC, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".ic"
 
 
@@ -155,7 +155,7 @@ class RFR(File):
         task_root=None,
         task_id="model",
     ):
-        super(RFR, self).__init__(task_root, task_id, file_ext)
+        super().__init__(task_root, task_id, file_ext)
 
         self.name = name
         if headers is None:  # Default 2 header lines (ignored by OGS5)

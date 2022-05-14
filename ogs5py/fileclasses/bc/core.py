@@ -90,6 +90,6 @@ class BC(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        super(BC, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".bc"
         self.force_writing = True

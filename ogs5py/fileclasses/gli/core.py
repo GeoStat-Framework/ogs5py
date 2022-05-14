@@ -86,7 +86,7 @@ class GLI(File):
     """
 
     def __init__(self, gli_dict=None, **OGS_Config):
-        super(GLI, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".gli"
         self.force_writing = True
 
@@ -989,7 +989,7 @@ class GLIext(File):
         task_root=None,
         task_id="model",
     ):
-        super(GLIext, self).__init__(task_root, task_id)
+        super().__init__(task_root, task_id)
 
         if typ not in ["TIN", "POINT_VECTOR"]:
             raise ValueError("typ needs to be either 'TIN' or 'POINT_VECTOR'")

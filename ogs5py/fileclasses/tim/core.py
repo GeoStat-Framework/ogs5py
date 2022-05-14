@@ -81,6 +81,6 @@ class TIM(BlockFile):
     }
 
     def __init__(self, **OGS_Config):
-        super(TIM, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".tim"
         self.force_writing = True

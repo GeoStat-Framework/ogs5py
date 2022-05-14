@@ -57,7 +57,7 @@ class MPD(BlockFile):
     STD = {}
 
     def __init__(self, name=None, file_ext=".mpd", **OGS_Config):
-        super(MPD, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.name = name
         self.file_ext = file_ext
 
