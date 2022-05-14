@@ -5,10 +5,19 @@ from copy import deepcopy as dcp
 import numpy as np
 
 from ogs5py.tools.tools import uncomment
-from ogs5py.tools.types import (EMPTY_GLI, EMPTY_PLY, EMPTY_SRF, EMPTY_VOL,
-                                GLI_KEY_LIST, PLY_KEY_LIST, PLY_TYPES,
-                                SRF_KEY_LIST, SRF_TYPES, VOL_KEY_LIST,
-                                VOL_TYPES)
+from ogs5py.tools.types import (
+    EMPTY_GLI,
+    EMPTY_PLY,
+    EMPTY_SRF,
+    EMPTY_VOL,
+    GLI_KEY_LIST,
+    PLY_KEY_LIST,
+    PLY_TYPES,
+    SRF_KEY_LIST,
+    SRF_TYPES,
+    VOL_KEY_LIST,
+    VOL_TYPES,
+)
 
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):

@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 """Helper functions for the vtk readers in ogs5py."""
 import numpy as np
-from vtk import (vtkPolyDataReader, vtkRectilinearGridReader,
-                 vtkStructuredGridReader, vtkStructuredPointsReader,
-                 vtkUnstructuredGridReader, vtkXMLPolyDataReader,
-                 vtkXMLRectilinearGridReader, vtkXMLStructuredGridReader,
-                 vtkXMLUnstructuredGridReader)
+from vtk import (
+    vtkPolyDataReader,
+    vtkRectilinearGridReader,
+    vtkStructuredGridReader,
+    vtkStructuredPointsReader,
+    vtkUnstructuredGridReader,
+    vtkXMLPolyDataReader,
+    vtkXMLRectilinearGridReader,
+    vtkXMLStructuredGridReader,
+    vtkXMLUnstructuredGridReader,
+)
 from vtk.util.numpy_support import vtk_to_numpy as vtk2np
 
 from ogs5py.tools.types import NODE_NO, VTK_TYP

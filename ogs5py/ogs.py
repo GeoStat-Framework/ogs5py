@@ -23,10 +23,36 @@ from copy import deepcopy as dcp
 import pexpect
 from pexpect.popen_spawn import PopenSpawn
 
-from ogs5py.fileclasses import (ASC, BC, CCT, DDC, FCT, GEM, GLI, IC, KRC, MCP,
-                                MFP, MMP, MPD, MSH, MSP, NUM, OUT, PCS, PCT,
-                                PQC, REI, RFD, RFR, ST, TIM, GEMinit, GLIext,
-                                PQCdat)
+from ogs5py.fileclasses import (
+    ASC,
+    BC,
+    CCT,
+    DDC,
+    FCT,
+    GEM,
+    GLI,
+    IC,
+    KRC,
+    MCP,
+    MFP,
+    MMP,
+    MPD,
+    MSH,
+    MSP,
+    NUM,
+    OUT,
+    PCS,
+    PCT,
+    PQC,
+    REI,
+    RFD,
+    RFR,
+    ST,
+    TIM,
+    GEMinit,
+    GLIext,
+    PQCdat,
+)
 from ogs5py.fileclasses.base import BOT_COM, CWD, TOP_COM, MultiFile
 from ogs5py.tools.download import OGS5PY_CONFIG
 from ogs5py.tools.script import gen_script
