@@ -1,7 +1,6 @@
-include MANIFEST.in
-include setup.py
-recursive-include ogs5py *.py
-recursive-include tests *.py
-recursive-include docs/source *
-include docs/Makefile docs/requirements.txt
-include LICENSE
+prune *
+graft ogs5py
+graft tests
+
+include LICENSE README.md pyproject.toml setup.cfg
+global-exclude __pycache__ *.py[cod] .*
