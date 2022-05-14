@@ -63,7 +63,7 @@ class DDC(BlockFile):
         update : bool, optional
             state if the content should be updated before saving. Default: True
         """
-        from ogs5py import SUB_IND, CON_IND
+        from ogs5py import CON_IND, SUB_IND
 
         if "update" in kwargs:
             update = bool(kwargs["update"])
@@ -95,7 +95,7 @@ class DDC(BlockFile):
                                 CON_IND[:-1],  # hack to fit with sep=" "
                                 *con,
                                 sep=" ",
-                                file=fout
+                                file=fout,
                             )
                         else:
                             print(*con, sep=" ", file=fout)

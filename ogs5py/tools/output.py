@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Tools for ogs5py output files (independent from VTK package)."""
-import os
 import glob
+import os
 import re
 import xml.etree.ElementTree as ET
-import numpy as np
-from ogs5py.tools.types import PCS_TYP
 
+import numpy as np
+
+from ogs5py.tools.types import PCS_TYP
 
 ###############################################################################
 # retrieve infos from ogs-filenames

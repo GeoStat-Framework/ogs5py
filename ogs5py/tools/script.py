@@ -26,8 +26,8 @@ Helpers
 import os
 import shutil
 
-from ogs5py.tools.types import STRTYPE, OGS_EXT, MULTI_FILES
 from ogs5py.fileclasses.base import BlockFile
+from ogs5py.tools.types import MULTI_FILES, OGS_EXT, STRTYPE
 
 
 def formater(val):

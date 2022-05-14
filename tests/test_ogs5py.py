@@ -4,8 +4,10 @@ This is the unittest for ogs5py.
 """
 import os
 import unittest
+
 import numpy as np
-from ogs5py import OGS, download_ogs, MSH, GLI, hull_deform
+
+from ogs5py import GLI, MSH, OGS, download_ogs, hull_deform
 
 
 class TestOGS(unittest.TestCase):
@@ -109,7 +111,7 @@ class TestOGS(unittest.TestCase):
             hull_deform,
             niv_top=0,
             niv_bot=-1,
-            func_top=lambda x, y: np.cos(np.sqrt(x ** 2 + y ** 2)) + 1,
+            func_top=lambda x, y: np.cos(np.sqrt(x**2 + y**2)) + 1,
         )
         self.gli.generate(generator="rectangular", dim=2)
         self.gli.generate(generator="rectangular", dim=3)

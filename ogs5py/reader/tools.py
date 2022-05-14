@@ -30,11 +30,8 @@ def save_vtk_stru_point(path, vtk_dict, verbose=True):
     All data is assumed to be scalar.
     """
     from numpy import ascontiguousarray as ascont
-    from vtk import (
-        vtkStructuredPoints,
-        vtkStructuredPointsWriter,
-        vtkFieldData,
-    )
+    from vtk import (vtkFieldData, vtkStructuredPoints,
+                     vtkStructuredPointsWriter)
     from vtk.util.numpy_support import numpy_to_vtk as np2vtk
 
     out = vtkStructuredPoints()

@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 """IO routines for the ogs5py mesh package."""
 from copy import deepcopy as dcp
-import numpy as np
+
 import meshio as mio
-from ogs5py.tools.types import (
-    ELEM_NAMES,
-    NODE_NO,
-    MESHIO_NAMES,
-    ELEM_DIM,
-    EMPTY_MSH,
-)
+import numpy as np
+
+from ogs5py.fileclasses.msh.tools import (gen_std_elem_id, gen_std_mat_id,
+                                          no_of_elements)
 from ogs5py.tools.tools import uncomment
-from ogs5py.fileclasses.msh.tools import (
-    no_of_elements,
-    gen_std_mat_id,
-    gen_std_elem_id,
-)
+from ogs5py.tools.types import (ELEM_DIM, ELEM_NAMES, EMPTY_MSH, MESHIO_NAMES,
+                                NODE_NO)
 
 ### IO routines
 
@@ -72,10 +66,10 @@ def load_ogs5msh(
     The $AREA keyword within the Nodes definition is NOT supported
     and will violate the read data if present.
     """
-    import pandas as pd
-
     # in python3 open was replaced with io.open
     from io import open
+
+    import pandas as pd
 
     # initilize the output
     out = []
@@ -299,10 +293,10 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             element_id : dict
                 contains element ids for each element sorted by element types
     """
-    import pandas as pd
-
     # in python3 open was replaced with io.open
     from io import open
+
+    import pandas as pd
 
     # initilize the output
     out = dcp(EMPTY_MSH)
@@ -419,7 +413,8 @@ def save_ogs5msh(
         definition for sub-keys and content
     """
     import pandas as pd
-    from ogs5py import SUB_IND, CON_IND
+
+    from ogs5py import CON_IND, SUB_IND
 
     sub_ind = kwargs.get("sub_ind", SUB_IND)
     con_ind = kwargs.get("con_ind", CON_IND)

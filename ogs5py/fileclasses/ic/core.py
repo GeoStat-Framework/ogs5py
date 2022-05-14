@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """Class for the ogs INITIAL_CONDITION file."""
 import os
+
 import numpy as np
 import pandas as pd
+
 from ogs5py.fileclasses.base import BlockFile, File
 from ogs5py.tools.types import STRTYPE
 

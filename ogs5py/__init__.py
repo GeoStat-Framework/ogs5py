@@ -125,51 +125,16 @@ Information
    PCS_TYP
    PRIM_VAR_BY_PCS
 """
+from ogs5py.fileclasses import (ASC, BC, CCT, DDC, FCT, GEM, GLI, IC, KRC, MCP,
+                                MFP, MMP, MPD, MSH, MSP, NUM, OUT, PCS, PCT,
+                                PQC, REI, RFD, RFR, ST, TIM, GEMinit, GLIext,
+                                PQCdat)
 from ogs5py.ogs import OGS
-from ogs5py.fileclasses import (
-    ASC,
-    BC,
-    CCT,
-    DDC,
-    FCT,
-    GEM,
-    GEMinit,
-    GLI,
-    GLIext,
-    IC,
-    RFR,
-    KRC,
-    MCP,
-    MFP,
-    MMP,
-    MPD,
-    MSH,
-    MSP,
-    NUM,
-    OUT,
-    PCS,
-    PCT,
-    PQC,
-    PQCdat,
-    REI,
-    RFD,
-    ST,
-    TIM,
-)
-from ogs5py.tools.tools import (
-    search_task_id,
-    by_id,
-    hull_deform,
-    specialrange,
-    generate_time,
-)
+from ogs5py.tools.download import (OGS5PY_CONFIG, add_exe, download_ogs,
+                                   reset_download)
+from ogs5py.tools.tools import (by_id, generate_time, hull_deform,
+                                search_task_id, specialrange)
 from ogs5py.tools.types import OGS_EXT, PCS_TYP, PRIM_VAR_BY_PCS
-from ogs5py.tools.download import (
-    download_ogs,
-    add_exe,
-    reset_download,
-    OGS5PY_CONFIG,
-)
 from ogs5py.tools.vtk_viewer import show_vtk
 
 try:

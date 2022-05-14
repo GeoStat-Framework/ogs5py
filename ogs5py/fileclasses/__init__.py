@@ -53,12 +53,9 @@ from ogs5py.fileclasses.bc import BC
 from ogs5py.fileclasses.cct import CCT
 from ogs5py.fileclasses.ddc import DDC
 from ogs5py.fileclasses.fct import FCT
-from ogs5py.fileclasses.gem import GEM
-from ogs5py.fileclasses.gem import GEMinit
-from ogs5py.fileclasses.gli import GLI
-from ogs5py.fileclasses.gli import GLIext
-from ogs5py.fileclasses.ic import IC
-from ogs5py.fileclasses.ic import RFR
+from ogs5py.fileclasses.gem import GEM, GEMinit
+from ogs5py.fileclasses.gli import GLI, GLIext
+from ogs5py.fileclasses.ic import IC, RFR
 from ogs5py.fileclasses.krc import KRC
 from ogs5py.fileclasses.mcp import MCP
 from ogs5py.fileclasses.mfp import MFP
@@ -70,8 +67,7 @@ from ogs5py.fileclasses.num import NUM
 from ogs5py.fileclasses.out import OUT
 from ogs5py.fileclasses.pcs import PCS
 from ogs5py.fileclasses.pct import PCT
-from ogs5py.fileclasses.pqc import PQC
-from ogs5py.fileclasses.pqc import PQCdat
+from ogs5py.fileclasses.pqc import PQC, PQCdat
 from ogs5py.fileclasses.rei import REI
 from ogs5py.fileclasses.rfd import RFD
 from ogs5py.fileclasses.st import ST

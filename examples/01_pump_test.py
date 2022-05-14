@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import anaflow as ana
-from ogs5py import OGS, specialrange, generate_time
 from matplotlib import pyplot as plt
+
+from ogs5py import OGS, generate_time, specialrange
 
 # discretization and parameters
 time = specialrange(0, 3600, 50, typ="cub")
@@ -45,8 +46,7 @@ model.mmp.add_block(  # medium properties
     PERMEABILITY_TENSOR=["ISOTROPIC", transmissivity],
 )
 model.num.add_block(  # numerical solver
-    PCS_TYPE="GROUNDWATER_FLOW",
-    LINEAR_SOLVER=[2, 5, 1e-14, 1000, 1.0, 100, 4]
+    PCS_TYPE="GROUNDWATER_FLOW", LINEAR_SOLVER=[2, 5, 1e-14, 1000, 1.0, 100, 4]
 )
 model.out.add_block(  # point observation
     PCS_TYPE="GROUNDWATER_FLOW",
@@ -56,7 +56,7 @@ model.out.add_block(  # point observation
 )
 model.tim.add_block(  # set the timesteps
     PCS_TYPE="GROUNDWATER_FLOW",
-    **generate_time(time)  # generate input from time-series
+    **generate_time(time),  # generate input from time-series
 )
 model.write_input()
 success = model.run_model()

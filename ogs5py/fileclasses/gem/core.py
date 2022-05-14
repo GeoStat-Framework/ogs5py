@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Class for the ogs GEOCHEMICAL THERMODYNAMIC MODELING COUPLING file."""
 import os
+
 from ogs5py.fileclasses.base import BlockFile, LineFile
 
 # current working directory

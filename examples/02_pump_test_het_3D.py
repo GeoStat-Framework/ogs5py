@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ogs5py import OGS, by_id, show_vtk
 from gstools import SRF, Gaussian
+
+from ogs5py import OGS, by_id, show_vtk
 
 # covariance model for conductivity field
 cov_model = Gaussian(dim=3, var=2, len_scale=10, anis=[1, 0.2])

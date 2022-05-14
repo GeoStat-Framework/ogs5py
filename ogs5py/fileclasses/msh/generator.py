@@ -21,18 +21,11 @@ These generators can be called with :any:`MSH.generate`
 """
 import numpy as np
 
-from ogs5py.fileclasses.msh.tools import (
-    combine,
-    gen_std_elem_id,
-    gen_std_mat_id,
-)
+from ogs5py.fileclasses.msh.gmsh import (gmsh_block_adapt3D, gmsh_code,
+                                         gmsh_grid_adapt2D, gmsh_grid_adapt3D)
 from ogs5py.fileclasses.msh.msh_io import convert_meshio
-from ogs5py.fileclasses.msh.gmsh import (
-    gmsh_grid_adapt2D,
-    gmsh_grid_adapt3D,
-    gmsh_block_adapt3D,
-    gmsh_code,
-)
+from ogs5py.fileclasses.msh.tools import (combine, gen_std_elem_id,
+                                          gen_std_mat_id)
 
 
 def rectangular(

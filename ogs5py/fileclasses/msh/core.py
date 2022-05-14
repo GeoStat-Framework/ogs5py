@@ -1,31 +1,22 @@
 # -*- coding: utf-8 -*-
 """Core module for the ogs5py mesh file."""
 from copy import deepcopy as dcp
+
 import numpy as np
-from ogs5py.fileclasses.msh import generator as gen
-from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
-from ogs5py.fileclasses.msh.checker import check_mesh_list, check_mesh_dict
-from ogs5py.fileclasses.msh.tools import (
-    combine,
-    get_mesh_center,
-    get_centroids,
-    get_node_centroids,
-    get_volumes,
-    gen_std_elem_id,
-    gen_std_mat_id,
-    rotate_mesh,
-    shift_mesh,
-    transform_mesh,
-    no_of_elements,
-)
-from ogs5py.fileclasses.msh.msh_io import (
-    load_ogs5msh,
-    save_ogs5msh,
-    import_mesh,
-    export_mesh,
-    remove_dim,
-)
+
 from ogs5py.fileclasses.base import File
+from ogs5py.fileclasses.msh import generator as gen
+from ogs5py.fileclasses.msh.checker import check_mesh_dict, check_mesh_list
+from ogs5py.fileclasses.msh.msh_io import (export_mesh, import_mesh,
+                                           load_ogs5msh, remove_dim,
+                                           save_ogs5msh)
+from ogs5py.fileclasses.msh.tools import (combine, gen_std_elem_id,
+                                          gen_std_mat_id, get_centroids,
+                                          get_mesh_center, get_node_centroids,
+                                          get_volumes, no_of_elements,
+                                          rotate_mesh, shift_mesh,
+                                          transform_mesh)
+from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
 
 
 class MSHsgl(File):
@@ -758,7 +749,7 @@ class MSHsgl(File):
                 self._meshlist,
                 top_com=None,
                 bot_com=self.bot_com,
-                **kwargs
+                **kwargs,
             )
         else:
             print("the mesh could not be saved since it is not valid")

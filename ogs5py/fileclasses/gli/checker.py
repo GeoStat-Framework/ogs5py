@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Checking routines for the ogs5py-GLI package."""
 import numpy as np
-from ogs5py.tools.types import STRTYPE, GLI_KEYS, PLY_KEYS, SRF_KEYS, VOL_KEYS
+
+from ogs5py.tools.types import GLI_KEYS, PLY_KEYS, SRF_KEYS, STRTYPE, VOL_KEYS
 
 
 def has_whitespaces(string):

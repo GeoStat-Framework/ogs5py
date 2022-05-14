@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 """Tools for the ogs5py mesh package."""
 from copy import deepcopy as dcp
-import numpy as np
-from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
-from ogs5py.tools.tools import (
-    unique_rows,
-    replace,
-    rotation_matrix,
-    volume,
-    centroid,
-)
 
+import numpy as np
+
+from ogs5py.tools.tools import (centroid, replace, rotation_matrix,
+                                unique_rows, volume)
+from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
 
 ### modifying routines
 

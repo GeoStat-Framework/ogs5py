@@ -12,50 +12,26 @@ OGS Class
 
 ----
 """
+import glob
 import os
 import shutil
-import glob
 import sys
 import time
 import warnings
 from copy import deepcopy as dcp
+
 import pexpect
 from pexpect.popen_spawn import PopenSpawn
-from ogs5py.fileclasses import (
-    ASC,
-    BC,
-    CCT,
-    DDC,
-    FCT,
-    GEM,
-    GEMinit,
-    GLI,
-    GLIext,
-    IC,
-    KRC,
-    MCP,
-    MFP,
-    MMP,
-    MPD,
-    MSH,
-    MSP,
-    NUM,
-    OUT,
-    PCS,
-    PCT,
-    PQC,
-    PQCdat,
-    REI,
-    RFD,
-    RFR,
-    ST,
-    TIM,
-)
-from ogs5py.tools.types import OGS_EXT, MULTI_FILES
-from ogs5py.tools.tools import search_task_id, Output
-from ogs5py.tools.script import gen_script
+
+from ogs5py.fileclasses import (ASC, BC, CCT, DDC, FCT, GEM, GLI, IC, KRC, MCP,
+                                MFP, MMP, MPD, MSH, MSP, NUM, OUT, PCS, PCT,
+                                PQC, REI, RFD, RFR, ST, TIM, GEMinit, GLIext,
+                                PQCdat)
+from ogs5py.fileclasses.base import BOT_COM, CWD, TOP_COM, MultiFile
 from ogs5py.tools.download import OGS5PY_CONFIG
-from ogs5py.fileclasses.base import TOP_COM, BOT_COM, CWD, MultiFile
+from ogs5py.tools.script import gen_script
+from ogs5py.tools.tools import Output, search_task_id
+from ogs5py.tools.types import MULTI_FILES, OGS_EXT
 
 # pexpect.spawn just runs on unix-like systems
 if sys.platform == "win32":

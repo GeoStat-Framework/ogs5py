@@ -18,12 +18,13 @@ A downloading routine to get the OSG5 executable.
 ----
 """
 import os
+import platform
 import shutil
 import tarfile
-import zipfile
-from urllib.request import urlretrieve, urlopen
 import tempfile
-import platform
+import zipfile
+from urllib.request import urlopen, urlretrieve
+
 import lxml.html
 
 

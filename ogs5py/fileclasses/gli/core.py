@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
 """Core module for the ogs5py GLI file."""
-from copy import deepcopy as dcp
 import os
+from copy import deepcopy as dcp
+
 import numpy as np
 
-# import ogs5py.fileclasses.gli.generator as gen
-from ogs5py.tools.types import STRTYPE, EMPTY_GLI
-from ogs5py.fileclasses.gli.checker import (
-    check_gli_dict,
-    check_polyline,
-    check_surface,
-    check_volume,
-)
-from ogs5py.fileclasses.gli.tools import load_ogs5gli, save_ogs5gli
-from ogs5py.tools.tools import (
-    is_str_array,
-    rotate_points,
-    shift_points,
-    unique_rows,
-    replace,
-)
 from ogs5py.fileclasses.base import File
+from ogs5py.fileclasses.gli.checker import (check_gli_dict, check_polyline,
+                                            check_surface, check_volume)
+from ogs5py.fileclasses.gli.tools import load_ogs5gli, save_ogs5gli
+from ogs5py.tools.tools import (is_str_array, replace, rotate_points,
+                                shift_points, unique_rows)
+# import ogs5py.fileclasses.gli.generator as gen
+from ogs5py.tools.types import EMPTY_GLI, STRTYPE
 
 # current working directory
 CWD = os.getcwd()
@@ -383,7 +375,7 @@ class GLI(File):
                 self.__dict,
                 top_com=self.top_com,
                 bot_com=self.bot_com,
-                **kwargs
+                **kwargs,
             )
         else:
             print("the mesh could not be saved since it is not valid")

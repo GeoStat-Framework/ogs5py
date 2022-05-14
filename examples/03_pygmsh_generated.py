@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from ogs5py import OGS
 import pygmsh
+
+from ogs5py import OGS
 
 geom = pygmsh.built_in.Geometry()
 poly = geom.add_polygon(

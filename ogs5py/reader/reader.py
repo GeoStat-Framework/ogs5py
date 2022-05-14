@@ -2,20 +2,18 @@
 """Reader for the OGS5 Output."""
 
 
-import os
 import glob
+import os
+
 import numpy as np
-from vtk import (
-    vtkDataReader,
-    vtkXMLFileReadTester,
-    vtkStringOutputWindow,
-    vtkOutputWindow,
-)
-from ogs5py.tools.types import PCS_TYP
-from ogs5py.reader.vtkhelper import vtkreader_dict, XMLreader_dict
-from ogs5py.tools.output import split_ply_path, split_pnt_path, readpvd_single
-from ogs5py.reader.techelper import readtec_single_table, readtec_multi_table
+from vtk import (vtkDataReader, vtkOutputWindow, vtkStringOutputWindow,
+                 vtkXMLFileReadTester)
+
+from ogs5py.reader.techelper import readtec_multi_table, readtec_single_table
+from ogs5py.reader.vtkhelper import XMLreader_dict, vtkreader_dict
+from ogs5py.tools.output import readpvd_single, split_ply_path, split_pnt_path
 from ogs5py.tools.tools import split_file_path
+from ogs5py.tools.types import PCS_TYP
 
 # redirect VTK error to a string
 VTK_ERR = vtkStringOutputWindow()

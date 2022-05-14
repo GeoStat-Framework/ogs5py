@@ -15,22 +15,15 @@ File Classes
 
 ----
 """
+import copy
 import os
 import shutil
 import time
-import copy
 
-from ogs5py.tools.tools import (
-    format_content_line,
-    format_content,
-    search_mkey,
-    uncomment,
-    get_key,
-    is_key,
-    is_mkey,
-    is_skey,
-    find_key_in_list,
-)
+from ogs5py.tools.tools import (find_key_in_list, format_content,
+                                format_content_line, get_key, is_key, is_mkey,
+                                is_skey, search_mkey, uncomment)
+
 try:
     from ogs5py._version import __version__ as version
 except ImportError:  # pragma: nocover
@@ -1037,7 +1030,7 @@ class BlockFile(File):
         update : bool, optional
             state if the content should be updated before saving. Default: True
         """
-        from ogs5py import SUB_IND, CON_IND
+        from ogs5py import CON_IND, SUB_IND
 
         if "update" in kwargs:
             update = bool(kwargs["update"])
@@ -1086,7 +1079,7 @@ class BlockFile(File):
                                 # sep="\t", end="\n", file=fout)
                                 sep=" ",
                                 end=lend,
-                                file=fout
+                                file=fout,
                             )
                         elif CON_IND:
                             print(
@@ -1094,7 +1087,7 @@ class BlockFile(File):
                                 *con,
                                 sep=" ",
                                 end=lend,
-                                file=fout
+                                file=fout,
                             )
                         else:
                             print(*con, sep=" ", end=lend, file=fout)
@@ -1107,7 +1100,7 @@ class BlockFile(File):
 
     def __repr__(self):
         """Representation."""
-        from ogs5py import SUB_IND, CON_IND
+        from ogs5py import CON_IND, SUB_IND
 
         out = ""
         for i, mkey in enumerate(self.mainkw):

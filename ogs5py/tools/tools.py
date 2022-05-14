@@ -53,16 +53,17 @@ Array tools
 
 ----
 """
+import ast
+import collections
+import glob
+import itertools
 import os
 import sys
-import glob
-import collections
-import ast
-import itertools
 from copy import deepcopy as dcp
+
 import numpy as np
 
-from ogs5py.tools.types import STRTYPE, OGS_EXT
+from ogs5py.tools.types import OGS_EXT, STRTYPE
 
 
 class Output(object):

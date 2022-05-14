@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 """Tools for the ogs5py gli file."""
 from copy import deepcopy as dcp
+
 import numpy as np
-from ogs5py.tools.types import (
-    PLY_KEY_LIST,
-    PLY_TYPES,
-    SRF_KEY_LIST,
-    SRF_TYPES,
-    VOL_KEY_LIST,
-    VOL_TYPES,
-    GLI_KEY_LIST,
-    EMPTY_GLI,
-    EMPTY_PLY,
-    EMPTY_SRF,
-    EMPTY_VOL,
-)
+
 from ogs5py.tools.tools import uncomment
+from ogs5py.tools.types import (EMPTY_GLI, EMPTY_PLY, EMPTY_SRF, EMPTY_VOL,
+                                GLI_KEY_LIST, PLY_KEY_LIST, PLY_TYPES,
+                                SRF_KEY_LIST, SRF_TYPES, VOL_KEY_LIST,
+                                VOL_TYPES)
 
 
 def load_ogs5gli(filepath, verbose=True, encoding=None):
@@ -306,7 +299,7 @@ def save_ogs5gli(
         These can contain ``sub_ind`` and ``con_ind`` for indentation
         definition for sub-keys and content
     """
-    from ogs5py import SUB_IND, CON_IND
+    from ogs5py import CON_IND, SUB_IND
 
     if "sub_ind" in kwargs:
         sub_ind = kwargs["sub_ind"]

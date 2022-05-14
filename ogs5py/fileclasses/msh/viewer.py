@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Viewer for an ogs5py mesh."""
 import os
+
 import numpy as np
+
 from ogs5py.fileclasses.msh.msh_io import export_mesh
 from ogs5py.tools.download import TemporaryDirectory
 
