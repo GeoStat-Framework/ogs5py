@@ -70,7 +70,7 @@ head_ana = ana.theis(time, obs, storage, transmissivity, rate=rate)
 # comparisson plot
 plt.scatter(time, head, color="k", label="simulated, r={:04.2f}m".format(obs))
 plt.plot(time, head_ana, label="analytical solution")
-plt.xscale("symlog", linthreshx=10, subsx=range(1, 10))
+plt.xscale("symlog", linthresh=10, subs=range(1, 10))
 plt.xlim([0, 1.1 * time[-1]])
 plt.xlabel("time in s")
 plt.ylabel("head in m")
