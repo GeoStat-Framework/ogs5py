@@ -11,7 +11,6 @@ ogs5py API
 .. toctree::
    :hidden:
 
-   ogs.rst
    fileclasses.rst
    reader.rst
    tools.rst

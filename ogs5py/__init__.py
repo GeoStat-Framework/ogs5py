@@ -25,6 +25,8 @@ Class to setup an ogs model
 .. currentmodule:: ogs5py.ogs
 
 .. autosummary::
+   :toctree: generated
+
    OGS
 
 File Classes
