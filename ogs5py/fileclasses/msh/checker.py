@@ -3,8 +3,13 @@
 import numpy as np
 
 from ogs5py.fileclasses.msh.tools import no_of_elements
-from ogs5py.tools.types import (ELEMENT_KEYS, MESH_DATA_KEYS, MESH_KEYS,
-                                NODE_NO, STRTYPE)
+from ogs5py.tools.types import (
+    ELEMENT_KEYS,
+    MESH_DATA_KEYS,
+    MESH_KEYS,
+    NODE_NO,
+    STRTYPE,
+)
 
 
 def check_mesh_list(meshlist, verbose=True):

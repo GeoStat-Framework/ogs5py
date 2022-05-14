@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 """Helper functions for the tecplot readers in ogs5py."""
 import numpy as np
-from vtk import (vtkPolyDataReader, vtkRectilinearGridReader,
-                 vtkStructuredGridReader, vtkStructuredPointsReader,
-                 vtkTecplotReader, vtkUnstructuredGridReader)
+from vtk import (
+    vtkPolyDataReader,
+    vtkRectilinearGridReader,
+    vtkStructuredGridReader,
+    vtkStructuredPointsReader,
+    vtkTecplotReader,
+    vtkUnstructuredGridReader,
+)
 
-from ogs5py.reader.vtkhelper import (_poly_data_read, _rect_grid_read,
-                                     _stru_grid_read, _stru_point_read,
-                                     _unst_grid_read)
+from ogs5py.reader.vtkhelper import (
+    _poly_data_read,
+    _rect_grid_read,
+    _stru_grid_read,
+    _stru_point_read,
+    _unst_grid_read,
+)
 
 tecreader_dict = {
     "vtkUnstructuredGrid": (vtkUnstructuredGridReader, _unst_grid_read),

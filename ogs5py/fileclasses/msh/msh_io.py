@@ -5,11 +5,19 @@ from copy import deepcopy as dcp
 import meshio as mio
 import numpy as np
 
-from ogs5py.fileclasses.msh.tools import (gen_std_elem_id, gen_std_mat_id,
-                                          no_of_elements)
+from ogs5py.fileclasses.msh.tools import (
+    gen_std_elem_id,
+    gen_std_mat_id,
+    no_of_elements,
+)
 from ogs5py.tools.tools import uncomment
-from ogs5py.tools.types import (ELEM_DIM, ELEM_NAMES, EMPTY_MSH, MESHIO_NAMES,
-                                NODE_NO)
+from ogs5py.tools.types import (
+    ELEM_DIM,
+    ELEM_NAMES,
+    EMPTY_MSH,
+    MESHIO_NAMES,
+    NODE_NO,
+)
 
 ### IO routines
 
