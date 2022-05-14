@@ -22,8 +22,6 @@ OGS model Base Class
 ^^^^^^^^^^^^^^^^^^^^
 Class to setup an ogs model
 
-.. currentmodule:: ogs5py.ogs
-
 .. autosummary::
    :toctree: generated
 
