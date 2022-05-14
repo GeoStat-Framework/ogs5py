@@ -52,7 +52,7 @@ BOT_COM = (
 )
 
 
-class File(object):
+class File:
     """
     File class with minimal functionality.
 
@@ -1128,7 +1128,7 @@ class BlockFile(File):
         return out
 
 
-class MultiFile(object):
+class MultiFile:
     """
     Class holding mulitple files of the same type.
 

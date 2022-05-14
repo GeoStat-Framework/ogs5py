@@ -95,7 +95,7 @@ class GEM(BlockFile):
         self.file_ext = ".gem"
 
 
-class GEMinit(object):
+class GEMinit:
     """
     Class for GEMS3K input file.
 

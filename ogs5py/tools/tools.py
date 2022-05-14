@@ -66,7 +66,7 @@ import numpy as np
 from ogs5py.tools.types import OGS_EXT, STRTYPE
 
 
-class Output(object):
+class Output:
     """A class to duplicate an output stream to stdout.
 
     Parameters

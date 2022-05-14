@@ -68,7 +68,7 @@ else:
     CmdRun = pexpect.spawn
 
 
-class OGS(object):
+class OGS:
     """Class for an OGS5 model.
 
     In this class everything for an OGS5 model can be specified.
