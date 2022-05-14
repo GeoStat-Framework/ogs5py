@@ -6,12 +6,8 @@ import glob
 import os
 
 import numpy as np
-from vtk import (
-    vtkDataReader,
-    vtkOutputWindow,
-    vtkStringOutputWindow,
-    vtkXMLFileReadTester,
-)
+from vtk import (vtkDataReader, vtkOutputWindow, vtkStringOutputWindow,
+                 vtkXMLFileReadTester)
 
 from ogs5py.reader.techelper import readtec_multi_table, readtec_single_table
 from ogs5py.reader.vtkhelper import XMLreader_dict, vtkreader_dict

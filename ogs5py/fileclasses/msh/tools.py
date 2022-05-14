@@ -4,13 +4,8 @@ from copy import deepcopy as dcp
 
 import numpy as np
 
-from ogs5py.tools.tools import (
-    centroid,
-    replace,
-    rotation_matrix,
-    unique_rows,
-    volume,
-)
+from ogs5py.tools.tools import (centroid, replace, rotation_matrix,
+                                unique_rows, volume)
 from ogs5py.tools.types import ELEM_NAMES, EMPTY_MSH
 
 ### modifying routines

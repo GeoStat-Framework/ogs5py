@@ -20,17 +20,9 @@ import os
 import shutil
 import time
 
-from ogs5py.tools.tools import (
-    find_key_in_list,
-    format_content,
-    format_content_line,
-    get_key,
-    is_key,
-    is_mkey,
-    is_skey,
-    search_mkey,
-    uncomment,
-)
+from ogs5py.tools.tools import (find_key_in_list, format_content,
+                                format_content_line, get_key, is_key, is_mkey,
+                                is_skey, search_mkey, uncomment)
 
 try:
     from ogs5py._version import __version__ as version

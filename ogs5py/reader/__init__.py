@@ -16,13 +16,8 @@ Reader
 
 ----
 """
-from ogs5py.reader.reader import (
-    VTK_ERR,
-    readpvd,
-    readtec_point,
-    readtec_polyline,
-    readvtk,
-)
+from ogs5py.reader.reader import (VTK_ERR, readpvd, readtec_point,
+                                  readtec_polyline, readvtk)
 
 __all__ = [
     "readvtk",

@@ -6,21 +6,11 @@ from copy import deepcopy as dcp
 import numpy as np
 
 from ogs5py.fileclasses.base import File
-from ogs5py.fileclasses.gli.checker import (
-    check_gli_dict,
-    check_polyline,
-    check_surface,
-    check_volume,
-)
+from ogs5py.fileclasses.gli.checker import (check_gli_dict, check_polyline,
+                                            check_surface, check_volume)
 from ogs5py.fileclasses.gli.tools import load_ogs5gli, save_ogs5gli
-from ogs5py.tools.tools import (
-    is_str_array,
-    replace,
-    rotate_points,
-    shift_points,
-    unique_rows,
-)
-
+from ogs5py.tools.tools import (is_str_array, replace, rotate_points,
+                                shift_points, unique_rows)
 # import ogs5py.fileclasses.gli.generator as gen
 from ogs5py.tools.types import EMPTY_GLI, STRTYPE
 
