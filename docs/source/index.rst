@@ -154,4 +154,4 @@ Requirements
 License
 =======
 
-`MIT <https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE>`_
+`MIT <https://github.com/GeoStat-Framework/ogs5py/blob/main/LICENSE>`_

@@ -2,13 +2,13 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2546767.svg)](https://doi.org/10.5281/zenodo.2546767)
 [![PyPI version](https://badge.fury.io/py/ogs5py.svg)](https://badge.fury.io/py/ogs5py)
-[![Build Status](https://travis-ci.com/GeoStat-Framework/ogs5py.svg?branch=master)](https://travis-ci.org/GeoStat-Framework/ogs5py)
-[![Coverage Status](https://coveralls.io/repos/github/GeoStat-Framework/ogs5py/badge.svg?branch=master)](https://coveralls.io/github/GeoStat-Framework/ogs5py?branch=master)
+[![Continuous Integration](https://github.com/GeoStat-Framework/ogs5py/actions/workflows/main.yml/badge.svg)](https://github.com/GeoStat-Framework/ogs5py/actions/workflows/main.yml)
+[![Coverage Status](https://coveralls.io/repos/github/GeoStat-Framework/ogs5py/badge.svg?branch=main)](https://coveralls.io/github/GeoStat-Framework/ogs5py?branch=main)
 [![Documentation Status](https://readthedocs.org/projects/ogs5py/badge/?version=stable)](https://geostat-framework.readthedocs.io/projects/ogs5py/en/stable/?badge=stable)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/pics/OGS.png" alt="ogs5py-LOGO" width="251px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/main/docs/source/pics/OGS.png" alt="ogs5py-LOGO" width="251px"/>
 </p>
 
 ## Purpose
@@ -107,7 +107,7 @@ model.run_model()
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/master/docs/source/pics/01_pump_test_drawdown.png" alt="Drawdown" width="600px"/>
+<img src="https://raw.githubusercontent.com/GeoStat-Framework/ogs5py/main/docs/source/pics/01_pump_test_drawdown.png" alt="Drawdown" width="600px"/>
 </p>
 
 
@@ -166,7 +166,7 @@ You can contact us via <info@geostat-framework.org>.
 This project is based on [OGSPY][ogspy_link].
 
 [ogspy_link]: https://github.com/fhesze/OGSPY
-[gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/master/LICENSE
+[gpl_link]: https://github.com/GeoStat-Framework/ogs5py/blob/main/LICENSE
 [ogs5_link]: https://www.opengeosys.org/ogs-5/
 [doc_link]: https://ogs5py.readthedocs.io/
 [tut1_link]: https://geostat-framework.readthedocs.io/projects/ogs5py/en/stable/tutorial_01_pump.html
