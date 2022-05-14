@@ -21,49 +21,9 @@ import os
 import platform
 import shutil
 import tarfile
-import tempfile
 import zipfile
-from urllib.request import urlopen, urlretrieve
-
-import lxml.html
-
-
-# TemporaryDirectory not avialable in python2
-# from: https://gist.github.com/cpelley/10e2eeaf60dacc7956bb
-class _TemporaryDirectory(object):
-    def __enter__(self):
-        self.dir_name = tempfile.mkdtemp()
-        return self.dir_name
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        shutil.rmtree(self.dir_name)
-
-
-TemporaryDirectory = getattr(
-    tempfile, "TemporaryDirectory", _TemporaryDirectory
-)
-
-
-# https://stackoverflow.com/a/34615446/6696397
-def get_links(url, ext, build=None):
-    """Get links from url ending with ext and containing build."""
-    sublinks = []
-    connection = urlopen(url)
-    dom = lxml.html.fromstring(connection.read())
-    for link in dom.xpath("//a/@href"):
-        if not link or not link.endswith(ext):
-            continue  # skip unwanted
-        if build is None or "build_" + build + "/" in link:
-            sublinks.append(
-                url + link if not link.startswith("http") else link
-            )
-    return sublinks
-
-
-RELEASE = "https://ogsstorage.blob.core.windows.net/binaries/ogs5/"
-BUILD = "https://jenkins.opengeosys.org/job/ufz/job/ogs5/job/master/"
-STABLE = BUILD + "lastStableBuild/"
-SUCCESS = BUILD + "lastSuccessfulBuild/"
+from tempfile import TemporaryDirectory
+from urllib.request import urlretrieve
 
 # https://stackoverflow.com/a/53222876/6696397
 OGS5PY_CONFIG = os.path.join(
@@ -73,6 +33,8 @@ OGS5PY_CONFIG = os.path.join(
     "ogs5py",
 )
 """str: Standard config path for ogs5py."""
+
+RELEASE = "https://ogsstorage.blob.core.windows.net/binaries/ogs5/"
 
 URLS = {
     "5.7": {
@@ -84,8 +46,7 @@ URLS = {
     },
     "5.7.1": {
         "Windows": (
-            "https://github.com/ufz/ogs5/releases/download/"
-            + "5.7.1/ogs-5.7.1-Windows-x64.zip"
+            "https://github.com/ufz/ogs5/releases/download/5.7.1/ogs-5.7.1-Windows-x64.zip"
         )
     },
     "5.8": {
@@ -106,7 +67,7 @@ def download_ogs(
     Parameters
     ----------
     version : :class:`str`, optional
-        Version to download ("5.7", "5.8", "latest" or "stable").
+        Version to download ("5.7", "5.8", "5.7.1").
         Default: "5.7"
     system : :class:`str`, optional
         Target system (Linux, Windows, Darwin). Default: platform.system()
@@ -115,20 +76,7 @@ def download_ogs(
     name : :class:`str`, optional
         Destination file name. Default "ogs[.exe]"
     build : :class:`str`, optional
-        If system is "Linux" and version is "latest" or "stable",
-        you can select a certain build from the ogs 5 builds:
-
-            * "BRNS": Biogeochemical Reaction Network Simulator
-            * "FEM": Finite Element Method
-            * "GEMS": Gibbs Energy Minimization Solver
-            * "IPQC": IPhreeqc
-            * "LIS": Library of Iterative Solvers
-            * "MKL": Intel Math Kernel Library
-            * "MPI": Message Passing Interface
-            * "PETSC": Portable, Extensible Toolkit for Scientific Computation
-            * "PETSC_GEMS": PETSC and GEMS
-            * "PQC": PHREEQC
-            * "SP": Sparse solver
+        Only None and "FEM" supported.
 
     Returns
     -------
@@ -143,18 +91,11 @@ def download_ogs(
     Taken from:
 
         * https://www.opengeosys.org/ogs-5/
-        * https://jenkins.opengeosys.org/job/ufz/job/ogs5/job/master/
     """
-    URLS["latest"] = {
-        "Linux": get_links(SUCCESS, "tar.gz", build="FEM")[0],
-        "Windows": get_links(SUCCESS, "zip", build=None)[0],
-    }
-    URLS["stable"] = {
-        "Linux": get_links(STABLE, "tar.gz", build="FEM")[0],
-        "Windows": get_links(STABLE, "zip", build=None)[0],
-    }
     system = platform.system() if system is None else system
     path = os.path.abspath(path)
+    if build not in [None, "FEM"]:
+        raise ValueError("download_ogs: only build='FEM' supported")
     if not os.path.exists(path):
         os.makedirs(path)
     if version not in URLS:
@@ -168,28 +109,7 @@ def download_ogs(
                 system, version, list(urls_version)
             )
         )
-    if system == "Linux" and build is not None:
-        if version not in ["stable", "latest"]:
-            raise ValueError(
-                "Use version 'stable' or 'latest' for specific build."
-            )
-        base_url = STABLE if version == "stable" else SUCCESS
-        links = get_links(base_url, ".tar.gz", build)
-        if len(links) != 1:
-            raise ValueError(
-                "Can't find unique version for build '{}'. Found: {}".format(
-                    build, links
-                )
-            )
-        ogs_url = links[0]
-    elif build is None or build == "FEM":
-        ogs_url = urls_version[system]
-    else:
-        raise ValueError(
-            "system='{}', build='{}': Could not find matching exe.".format(
-                system, build
-            )
-        )
+    ogs_url = urls_version[system]
     print("Downloading: ", ogs_url)
     ext = ".tar.gz" if ogs_url.endswith(".tar.gz") else ".zip"
     if name is None:
