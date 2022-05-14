@@ -606,10 +606,6 @@ class GLI(File):
 
         Parameters
         ----------
-        points : ndarray
-            Array with new points. Either of shape (n,3) to add new points
-            by their coordinates or a list of points IDs refering to existing
-            points.
         name : str
             name of the new polyline
         points : ndarray
