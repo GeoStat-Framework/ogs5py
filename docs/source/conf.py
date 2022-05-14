@@ -55,6 +55,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",  # parameters look better than with numpydoc only
     "numpydoc",
+    "m2r2",
 ]
 
 # autosummaries from source-files
