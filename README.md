@@ -149,10 +149,10 @@ model.run_model(ogs_exe="path/to/ogs")
 
 - [NumPy >= 1.14.5](https://www.numpy.org)
 - [Pandas >= 0.23.2](https://pandas.pydata.org/)
-- [meshio >= 4.0.3; <5.0](https://github.com/nschloe/meshio)
-- [lxml >= 4.0; <5.0](https://github.com/lxml/lxml)
-- [pexpect >= 4.0; <5.0](https://github.com/pexpect/pexpect)
-- [vtk >= 8.1](https://vtk.org/)
+- [meshio >= 4](https://github.com/nschloe/meshio)
+- [lxml >= 4](https://github.com/lxml/lxml)
+- [pexpect >= 4](https://github.com/pexpect/pexpect)
+- [vtk >= 9](https://vtk.org/)
 
 ## Contact
 
@@ -161,7 +161,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][gpl_link] © 2018-2020 (inspired by Falk Hesse and Miao Jing)
+[MIT][gpl_link] © 2018-2022 (inspired by Falk Hesse and Miao Jing)
 
 This project is based on [OGSPY][ogspy_link].
 

@@ -145,10 +145,10 @@ Requirements
 
 - `NumPy >= 1.14.5 <https://www.numpy.org>`_
 - `Pandas >= 0.23.2 <https://pandas.pydata.org/>`_
-- `meshio >= 4.0.3; <5.0 <https://github.com/nschloe/meshio>`_
-- `lxml >= 4.0; <5.0 <https://github.com/lxml/lxml>`_
-- `pexpect >= 4.0; <5.0 <https://github.com/pexpect/pexpect>`_
-- `vtk >= 8.1 <https://vtk.org/>`_
+- `meshio >= 4 <https://github.com/nschloe/meshio>`_
+- `lxml >= 4 <https://github.com/lxml/lxml>`_
+- `pexpect >= 4 <https://github.com/pexpect/pexpect>`_
+- `vtk >= 9 <https://vtk.org/>`_
 
 
 License
