@@ -530,8 +530,8 @@ def import_mesh(
 
     Parameters
     ----------
-    filepath : string
-        path to the mesh file to import
+    filepath : string or meshio.Mesh instance
+        mesh to import
     file_format : str, optional
         Here you can specify the fileformat. If 'None' it will be
         determined by file extension. Default: None
@@ -569,7 +569,10 @@ def import_mesh(
     and converts the output (see here: https://github.com/nschloe/meshio)
     If there is any "vertex" in the element data, it will be removed.
     """
-    mesh = mio.read(filepath, file_format=file_format)
+    if isinstance(filepath, mio.Mesh):
+        mesh = filepath
+    else:
+        mesh = mio.read(filepath, file_format=file_format)
     out = convert_meshio(
         mesh, ignore_unknown, import_dim, element_id_name, material_id_name
     )

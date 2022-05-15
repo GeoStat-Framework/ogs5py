@@ -2,38 +2,43 @@ Tutorial 2: Interaction with pygmsh
 ===================================
 
 In this example we are generating different meshes with the aid of
-`pygmsh <https://github.com/nschloe/pygmsh>`_..
+`pygmsh <https://github.com/nschloe/pygmsh>`_ and `gmsh <https://gmsh.info>`_
 
 .. code-block:: python
 
     import numpy as np
-    from ogs5py import OGS
     import pygmsh
 
-    geom = pygmsh.built_in.Geometry()
-    poly = geom.add_polygon([
-        [ 0.0,  0.5, 0.0],
-        [-0.1,  0.1, 0.0],
-        [-0.5,  0.0, 0.0],
-        [-0.1, -0.1, 0.0],
-        [ 0.0, -0.5, 0.0],
-        [ 0.1, -0.1, 0.0],
-        [ 0.5,  0.0, 0.0],
-        [ 0.1,  0.1, 0.0]
-        ],
-        lcar=0.05
-    )
-    axis = [0, 0, 1]
-    geom.extrude(
-        poly,
-        translation_axis=axis,
-        rotation_axis=axis,
-        point_on_axis=[0, 0, 0],
-        angle=2.0 / 6.0 * np.pi
-    )
-    model = OGS()  # dummy model
+    from ogs5py import OGS
+
+    with pygmsh.geo.Geometry() as geom:
+        poly = geom.add_polygon(
+            [
+                [+0.0, +0.5],
+                [-0.1, +0.1],
+                [-0.5, +0.0],
+                [-0.1, -0.1],
+                [+0.0, -0.5],
+                [+0.1, -0.1],
+                [+0.5, +0.0],
+                [+0.1, +0.1],
+            ],
+            mesh_size=0.05,
+        )
+
+        geom.twist(
+            poly,
+            translation_axis=[0, 0, 1],
+            rotation_axis=[0, 0, 1],
+            point_on_axis=[0, 0, 0],
+            angle=np.pi / 3,
+        )
+
+        mesh = geom.generate_mesh()
+
+    model = OGS()
     # generate example above
-    model.msh.generate("gmsh", geo_object=geom)
+    model.msh.import_mesh(mesh, import_dim=3)
     model.msh.show()
     # generate a predefined grid adapter in 2D
     model.msh.generate("grid_adapter2D", in_mat=1, out_mat=0, fill=True)

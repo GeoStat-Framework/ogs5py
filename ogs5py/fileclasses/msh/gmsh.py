@@ -4,33 +4,20 @@
 
 def gmsh_code(path_or_code):
     """Generate mesh with gmsh."""
-    try:
-        from pygmsh import Geometry
-    except ImportError:
-        from pygmsh.built_in import Geometry
-
-    geo = Geometry()
     if isinstance(path_or_code, list):
-        code = map(str, path_or_code)
+        code = list(map(str, path_or_code))
     else:
         try:
             with open(path_or_code, "r") as gmsh_f:
                 code = gmsh_f.readlines()
         except (OSError, IOError):
             print("gmsh_code: could not read file...")
-            return geo
-    geo.add_raw_code(code)
-    return geo
+            code = []
+    return code
 
 
 def gmsh_block_adapt3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
     """Generate the mesh adapter."""
-    try:
-        from pygmsh import Geometry
-    except ImportError:
-        from pygmsh.built_in import Geometry
-
-    geo = Geometry()
     code = [
         f"xydim = {xy_dim};",
         f"zdim = {z_dim};",
@@ -49,8 +36,7 @@ def gmsh_block_adapt3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
         "Plane Surface(1) = {1};",
         "Extrude{0,0,zdim}{Surface{1};Layers{1};Recombine;};",
     ]
-    geo.add_raw_code(code)
-    return geo
+    return code
 
 
 def gmsh_grid_adapt3D(
@@ -64,12 +50,6 @@ def gmsh_grid_adapt3D(
     z_pos=0.0,
 ):
     """Generate the mesh adapter."""
-    try:
-        from pygmsh import Geometry
-    except ImportError:
-        from pygmsh.built_in import Geometry
-
-    geo = Geometry()
     code = [
         # "// layer thickness",
         f"dimz = {z_dim};",
@@ -199,8 +179,7 @@ def gmsh_grid_adapt3D(
         "Surface Loop(48) = {39, 28, 33, 35, 37, 31, 47, 41, 43, 45};",
         "Volume(49) = {48};",
     ]
-    geo.add_raw_code(code)
-    return geo
+    return code
 
 
 def gmsh_grid_adapt2D(
@@ -213,12 +192,6 @@ def gmsh_grid_adapt2D(
     z_pos=0.0,
 ):
     """Generate the 2D mesh adapter."""
-    try:
-        from pygmsh import Geometry
-    except ImportError:
-        from pygmsh.built_in import Geometry
-
-    geo = Geometry()
     code = [
         # "// size of the outer block",
         f"outx = {out_dim[0]};",
@@ -271,5 +244,4 @@ def gmsh_grid_adapt2D(
         "Transfinite Line{13, 15} = inx/grix + 1;",
         "Transfinite Line{14, 16} = iny/griy + 1;",
     ]
-    geo.add_raw_code(code)
-    return geo
+    return code

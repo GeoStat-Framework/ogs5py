@@ -3,6 +3,15 @@
 All notable changes to **ogs5py** will be documented in this file.
 
 
+## [1.2.1] - 2020-05-15
+
+### Enhancements
+* `MSH.import_mesh` can handle `meshio.Mesh` as input now [#13](https://github.com/GeoStat-Framework/ogs5py/pull/13)
+
+### Changes
+* `pygmsh` support was removed. You can't use pygmsh Geometry objects to generate meshes anymore. Please generate beforehand and import the generated mesh. Other generators are using `gmsh` directly now. [#13](https://github.com/GeoStat-Framework/ogs5py/pull/13)
+
+
 ## [1.2.0] - 2020-05-15
 
 ### Enhancements
@@ -169,7 +178,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.0.5...v1.1.0
