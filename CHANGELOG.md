@@ -3,7 +3,7 @@
 All notable changes to **ogs5py** will be documented in this file.
 
 
-## [1.2.0] - 2020-05-?
+## [1.2.0] - 2020-05-15
 
 ### Enhancements
 * move to a `pyproject.toml` based installation: [d5ea756](https://github.com/GeoStat-Framework/ogs5py/commit/d5ea756629f3aaad6f4f8e197926f932677a6658)
