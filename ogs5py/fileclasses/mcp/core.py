@@ -101,5 +101,5 @@ class MCP(BlockFile):
     STD = {}
 
     def __init__(self, **OGS_Config):
-        super(MCP, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".mcp"

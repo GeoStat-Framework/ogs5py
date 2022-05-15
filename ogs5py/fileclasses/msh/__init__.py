@@ -15,6 +15,8 @@ File Class
 ^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    MSH
 
 ----

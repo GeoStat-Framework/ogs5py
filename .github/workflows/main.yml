@@ -45,10 +45,6 @@ jobs:
         run: |
           python -m isort --check --diff --color .
 
-      # - name: pylint check
-      #   run: |
-      #     python -m pylint gstools/
-
   build_sdist:
     name: sdist on ${{ matrix.os }} with py ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}

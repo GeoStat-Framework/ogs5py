@@ -32,7 +32,7 @@ tecreader_dict = {
 ###############################################################################
 
 
-class inspect_tecplot(object):
+class inspect_tecplot:
     """A simple inspector for multiblock data tecplot files."""
 
     def __init__(self, infile, get_zone_sizes=True):

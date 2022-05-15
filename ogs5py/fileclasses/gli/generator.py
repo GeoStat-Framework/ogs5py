@@ -9,6 +9,8 @@ Generators
 These generators can be called with :any:`GLI.generate`
 
 .. autosummary::
+   :toctree: generated
+
    rectangular
    radial
 

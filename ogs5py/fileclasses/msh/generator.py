@@ -10,6 +10,8 @@ Generators
 These generators can be called with :any:`MSH.generate`
 
 .. autosummary::
+   :toctree: generated
+
    rectangular
    radial
    grid_adapter2D

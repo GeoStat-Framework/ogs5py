@@ -22,9 +22,9 @@ OGS model Base Class
 ^^^^^^^^^^^^^^^^^^^^
 Class to setup an ogs model
 
-.. currentmodule:: ogs5py.ogs
-
 .. autosummary::
+   :toctree: generated
+
    OGS
 
 File Classes
@@ -174,7 +174,7 @@ from ogs5py.tools.vtk_viewer import show_vtk
 
 try:
     from ogs5py._version import __version__
-except ImportError:  # pragma: nocover
+except ModuleNotFoundError:  # pragma: nocover
     # package is not installed
     __version__ = "0.0.0.dev0"
 

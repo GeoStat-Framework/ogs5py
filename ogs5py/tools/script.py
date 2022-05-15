@@ -8,12 +8,16 @@ Generator
 ^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    gen_script
 
 Helpers
 ^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    formater
    get_line
    tab

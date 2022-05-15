@@ -55,6 +55,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",  # parameters look better than with numpydoc only
     "numpydoc",
+    "m2r2",
 ]
 
 # autosummaries from source-files
@@ -65,9 +66,6 @@ autoclass_content = "class"
 autodoc_member_order = "groupwise"
 # autodoc_member_order = 'bysource'
 
-# don't add full path to module
-add_module_names = False
-
 # Notes in boxes
 napoleon_use_admonition_for_notes = True
 # Attributes like parameters
@@ -77,14 +75,15 @@ numpydoc_show_class_members = True
 # class members have no separate file, so they are not in a toctree
 numpydoc_class_members_toctree = False
 # for the covmodels alot of classmembers show up...
+# maybe switch off with:    :no-inherited-members:
 numpydoc_show_inherited_class_members = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
+source_suffix = [".rst", ".md"]
+# source_suffix = ".rst"
 
 # The master toctree document.
 # --> this is the sitemap (or content-list in latex -> needs a heading)
@@ -95,7 +94,7 @@ master_doc = "contents"
 # General information about the project.
 curr_year = datetime.datetime.now().year
 project = "ogs5py"
-copyright = "2019 - {}, Sebastian Mueller".format(curr_year)
+copyright = f"2019 - {curr_year}, Sebastian Mueller"
 author = "Sebastian Mueller"
 
 # The version info for the project you're documenting, acts as replacement for

@@ -8,6 +8,8 @@ File Classes
 ^^^^^^^^^^^^
 
 .. autosummary::
+   :toctree: generated
+
    File
    LineFile
    BlockFile
@@ -52,7 +54,7 @@ BOT_COM = (
 )
 
 
-class File(object):
+class File:
     """
     File class with minimal functionality.
 
@@ -273,7 +275,7 @@ class LineFile(File):
         task_root=None,
         task_id="model",
     ):
-        super(LineFile, self).__init__(task_root, task_id, file_ext)
+        super().__init__(task_root, task_id, file_ext)
         self.lines = [] if lines is None else lines
         self.name = name
 
@@ -395,7 +397,7 @@ class BlockFile(File):
     """:class:`dict`: Standard Block OGS-BlockFile"""
 
     def __init__(self, task_root=None, task_id="model", file_ext=".std"):
-        super(BlockFile, self).__init__(task_root, task_id, file_ext)
+        super().__init__(task_root, task_id, file_ext)
 
         # list of main keywords indicated by "#"
         self.mainkw = []
@@ -1128,7 +1130,7 @@ class BlockFile(File):
         return out
 
 
-class MultiFile(object):
+class MultiFile:
     """
     Class holding mulitple files of the same type.
 

@@ -62,7 +62,7 @@ class MSHsgl(File):
     """
 
     def __init__(self, mesh_dict=None, **OGS_Config):
-        super(MSHsgl, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".msh"
         self.force_writing = True
 
@@ -1206,7 +1206,7 @@ class MSH(MSHsgl):
     """
 
     def __init__(self, mesh_list=None, **OGS_Config):
-        super(MSH, self).__init__(None, **OGS_Config)
+        super().__init__(None, **OGS_Config)
 
         if mesh_list is None:
             self.__meshlist = [EMPTY_MSH]

@@ -22,10 +22,29 @@ You can install the latest version with the following command:
 
     pip install ogs5py
 
+Or with conda:
+
+    conda install ogs5py
+
+
+## Citation
+
+If you are using ogs5py in your publication please cite our paper:
+
+> Müller, S., Zech, A. and Heße, F.:
+> ogs5py: A Python-API for the OpenGeoSys 5 Scientific Modeling Package.
+> Groundwater, 59: 117-122. https://doi.org/10.1111/gwat.13017, 2021.
+
+You can cite the Zenodo code publication of ogs5py by:
+
+> Sebastian Müller. GeoStat-Framework/ogs5py. Zenodo. https://doi.org/10.5281/zenodo.2546767
+
+If you want to cite a specific version, have a look at the [Zenodo site](https://doi.org/10.5281/zenodo.2546767).
+
 
 ## Documentation for ogs5py
 
-You can find the documentation under [geostat-framework.readthedocs.io][doc_link].
+You can find the documentation under [ogs5py.readthedocs.io][doc_link].
 
 
 ### Further Information
@@ -125,10 +144,8 @@ when a model is run.
 
 You can pass a ``version`` statement to the ``download_ogs`` routine, to
 obtain a specific version (5.7, 5.7.1 (win only) and 5.8).
-Also "latest" and "stable" are possible.
 For OGS 5.7 there are executables for Windows/Linux and MacOS.
-For "5.8", "latest" and "stable" there are no MacOS pre-builds.
-Have a look at the documentation for all options.
+For "5.8" there are no MacOS pre-builds.
 
 If you have compiled your own OGS5 version, you can add your executable
 to the ogs5py config path with:
@@ -149,10 +166,10 @@ model.run_model(ogs_exe="path/to/ogs")
 
 - [NumPy >= 1.14.5](https://www.numpy.org)
 - [Pandas >= 0.23.2](https://pandas.pydata.org/)
-- [meshio >= 4.0.3; <5.0](https://github.com/nschloe/meshio)
-- [lxml >= 4.0; <5.0](https://github.com/lxml/lxml)
-- [pexpect >= 4.0; <5.0](https://github.com/pexpect/pexpect)
-- [vtk >= 8.1](https://vtk.org/)
+- [meshio >= 4](https://github.com/nschloe/meshio)
+- [lxml >= 4](https://github.com/lxml/lxml)
+- [pexpect >= 4](https://github.com/pexpect/pexpect)
+- [vtk >= 9](https://vtk.org/)
 
 ## Contact
 
@@ -161,7 +178,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][gpl_link] © 2018-2020 (inspired by Falk Hesse and Miao Jing)
+[MIT][gpl_link] © 2018-2022 (inspired by Falk Hesse and Miao Jing)
 
 This project is based on [OGSPY][ogspy_link].
 

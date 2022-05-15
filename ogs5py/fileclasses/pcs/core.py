@@ -117,6 +117,6 @@ class PCS(BlockFile):
     STD = {"PCS_TYPE": "GROUNDWATER_FLOW", "NUM_TYPE": "NEW"}
 
     def __init__(self, **OGS_Config):
-        super(PCS, self).__init__(**OGS_Config)
+        super().__init__(**OGS_Config)
         self.file_ext = ".pcs"
         self.force_writing = True

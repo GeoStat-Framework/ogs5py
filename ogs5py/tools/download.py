@@ -10,6 +10,8 @@ Downloader
 A downloading routine to get the OSG5 executable.
 
 .. autosummary::
+   :toctree: generated
+
    download_ogs
    add_exe
    reset_download
@@ -99,15 +101,11 @@ def download_ogs(
     if not os.path.exists(path):
         os.makedirs(path)
     if version not in URLS:
-        raise ValueError(
-            "'{}': unknown version. Use: {}".format(version, list(URLS))
-        )
+        raise ValueError(f"'{version}': unknown version. Use: {URLS}")
     urls_version = URLS[version]
     if system not in urls_version:
         raise ValueError(
-            "'{}': unsupported system for version '{}'. Use: {}".format(
-                system, version, list(urls_version)
-            )
+            f"'{system}': unsupported system for version '{version}'. Use: {urls_version}"
         )
     ogs_url = urls_version[system]
     print("Downloading: ", ogs_url)

@@ -340,7 +340,7 @@ def save_ogs5gli(
                 if gli["point_md"][pnt_i] == -np.inf:
                     pnt_md = ""
                 else:
-                    pnt_md = " $MD {}".format(gli["point_md"][pnt_i])
+                    pnt_md = f" $MD {gli['point_md'][pnt_i]}"
                 # generate string for actual point
                 tupl = (pnt_i,) + tuple(pnt) + (name, pnt_md)
                 print("{} {} {} {}{}{}".format(*tupl), file=gli_f)
@@ -355,11 +355,11 @@ def save_ogs5gli(
                 for key in PLY_KEY_LIST:
                     if key != "POINTS" and ply[key] is not None:
                         print(sub_ind + "$" + key, file=gli_f)
-                        print(con_ind + "{}".format(ply[key]), file=gli_f)
+                        print(con_ind + f"{ply[key]}", file=gli_f)
                     elif ply[key] is not None:
                         print(sub_ind + "$POINTS", file=gli_f)
                         for pnt in ply["POINTS"]:
-                            print(con_ind + "{}".format(pnt), file=gli_f)
+                            print(con_ind + f"{pnt}", file=gli_f)
 
         if verbose:
             print("write #SURFACES")
@@ -371,11 +371,11 @@ def save_ogs5gli(
                 for key in SRF_KEY_LIST:
                     if key != "POLYLINES" and srf[key] is not None:
                         print(sub_ind + "$" + key, file=gli_f)
-                        print(con_ind + "{}".format(srf[key]), file=gli_f)
+                        print(con_ind + f"{srf[key]}", file=gli_f)
                     elif srf[key] is not None:
                         print(sub_ind + "$POLYLINES", file=gli_f)
                         for ply in srf["POLYLINES"]:
-                            print(con_ind + "{}".format(ply), file=gli_f)
+                            print(con_ind + f"{ply}", file=gli_f)
 
         if verbose:
             print("write #VOLUMES")
@@ -387,11 +387,11 @@ def save_ogs5gli(
                 for key in VOL_KEY_LIST:
                     if key != "SURFACES" and vol[key] is not None:
                         print(sub_ind + "$" + key, file=gli_f)
-                        print(con_ind + "{}".format(vol[key]), file=gli_f)
+                        print(con_ind + f"{vol[key]}", file=gli_f)
                     elif vol[key] is not None:
                         print(sub_ind + "$SURFACES", file=gli_f)
                         for srf in vol["SURFACES"]:
-                            print(con_ind + "{}".format(srf), file=gli_f)
+                            print(con_ind + f"{srf}", file=gli_f)
 
         if verbose:
             print("write #STOP")
