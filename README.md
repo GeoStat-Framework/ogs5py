@@ -144,10 +144,8 @@ when a model is run.
 
 You can pass a ``version`` statement to the ``download_ogs`` routine, to
 obtain a specific version (5.7, 5.7.1 (win only) and 5.8).
-Also "latest" and "stable" are possible.
 For OGS 5.7 there are executables for Windows/Linux and MacOS.
-For "5.8", "latest" and "stable" there are no MacOS pre-builds.
-Have a look at the documentation for all options.
+For "5.8" there are no MacOS pre-builds.
 
 If you have compiled your own OGS5 version, you can add your executable
 to the ogs5py config path with:
