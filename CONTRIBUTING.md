@@ -23,9 +23,9 @@ print(ogs5py.__version__)
 
 Open a [new issue](https://github.com/GeoStat-Framework/ogs5py/issues)
 with your idea or suggestion and we'd love to discuss about it.
- 
 
-## Do you want to enhance GSTools or fix something?
+
+## Do you want to enhance ogs5py or fix something?
 
 - Fork the repo on [GitHub](https://github.com/GeoStat-Framework/ogs5py).
 - Add yourself to AUTHORS.md (if you want to).
