@@ -773,8 +773,8 @@ class MSHsgl(File):
 
         Parameters
         ----------
-        filepath : string
-            path to the mesh file to import
+        filepath : string or meshio.Mesh instance
+            mesh to import
         file_format : str, optional
             Here you can specify the fileformat. If 'None' it will be
             determined by file extension. Default: None

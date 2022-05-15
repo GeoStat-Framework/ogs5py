@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 """
 Generators for the ogs MESH file.
 
@@ -585,13 +584,12 @@ def block_adapter3D(xy_dim=10.0, z_dim=5.0, in_res=1.0):
 
 def gmsh(geo_object, import_dim=(1, 2, 3)):
     """
-    Generate mesh from pygmsh Geometry instance, gmsh code or gmsh .geo file.
+    Generate mesh from gmsh code or gmsh .geo file.
 
     Parameters
     ----------
-    geo_object : str or list of str or Geometry instance from pygmsh
-        Either path to the gmsh .geo file, list of codelines for a .geo file
-        or a pygmsh Geometry instance from pygmsh.
+    geo_object : str or list of str
+        Either path to the gmsh .geo file or list of codelines for a .geo file.
     import_dim : iterable of int or single int, optional
         State which elements should be imported by dimensionality.
         Default: (1, 2, 3)
@@ -621,11 +619,8 @@ def gmsh(geo_object, import_dim=(1, 2, 3)):
             element_id : dict
                 contains element ids for each element sorted by element types
     """
-    import pygmsh as pg
+    from ogs5py.fileclasses.msh.helpers import generate_mesh
 
-    if hasattr(geo_object, "get_code"):
-        geo = geo_object
-    else:
-        geo = gmsh_code(geo_object)
-    mesh = pg.generate_mesh(geo)
+    geo = gmsh_code(geo_object)
+    mesh = generate_mesh(geo)
     return convert_meshio(mesh, import_dim=import_dim)
