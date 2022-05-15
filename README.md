@@ -22,10 +22,29 @@ You can install the latest version with the following command:
 
     pip install ogs5py
 
+Or with conda:
+
+    conda install ogs5py
+
+
+## Citation
+
+If you are using ogs5py in your publication please cite our paper:
+
+> Müller, S., Zech, A. and Heße, F.:
+> ogs5py: A Python-API for the OpenGeoSys 5 Scientific Modeling Package.
+> Groundwater, 59: 117-122. https://doi.org/10.1111/gwat.13017, 2021.
+
+You can cite the Zenodo code publication of ogs5py by:
+
+> Sebastian Müller. GeoStat-Framework/ogs5py. Zenodo. https://doi.org/10.5281/zenodo.2546767
+
+If you want to cite a specific version, have a look at the [Zenodo site](https://doi.org/10.5281/zenodo.2546767).
+
 
 ## Documentation for ogs5py
 
-You can find the documentation under [geostat-framework.readthedocs.io][doc_link].
+You can find the documentation under [ogs5py.readthedocs.io][doc_link].
 
 
 ### Further Information
