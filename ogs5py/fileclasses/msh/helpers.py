@@ -8,7 +8,6 @@ from pathlib import Path
 import meshio
 import numpy
 
-
 MESHIO_VERSION = list(map(int, meshio.__version__.split(".")[:2]))
 
 
