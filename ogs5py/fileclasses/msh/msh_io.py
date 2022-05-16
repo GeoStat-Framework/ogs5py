@@ -186,13 +186,16 @@ def load_ogs5msh(
                 filepos = msh.tell()
                 # read the elements with pandas
                 # names=range(max_node_no) to assure rectangular shape by cols
-                tmp = pd.read_csv(
-                    msh,
-                    engine="c",
+                pd_kwargs = dict(
                     delim_whitespace=True,
                     nrows=no_elements,
                     names=range(max_node_no + 4),  # +4 for the "-1" entry
-                ).values
+                )
+                try:
+                    tmp = pd.read_csv(msh, engine="c", **pd_kwargs).values
+                except pd.errors.ParserError:
+                    msh.seek(filepos)
+                    tmp = pd.read_csv(msh, engine="python", **pd_kwargs).values
                 # check if all given element-typs are OGS known
                 pos_ele = 2  # can be shift to right, if "-1" occures
                 check_elem = np.in1d(tmp[:, pos_ele], ELEM_NAMES)
