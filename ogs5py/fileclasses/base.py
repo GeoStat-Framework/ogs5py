@@ -343,9 +343,6 @@ class LineFile(File):
         verbose : bool, optional
             Print information of the reading process. Default: False
         """
-        # in python3 open was replaced with io.open
-        # so we can use encoding keyword in python2
-        from io import open
 
         self.reset()
         try:
@@ -941,9 +938,6 @@ class BlockFile(File):
         verbose : bool, optional
             Print information of the reading process. Default: False
         """
-        # in python3 open was replaced with io.open
-        # so we can use encoding key word in python2
-        from io import open
 
         self.reset()
 

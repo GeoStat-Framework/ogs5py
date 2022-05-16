@@ -309,8 +309,6 @@ class RFR(File):
 
     def read_file(self, path, encoding=None, verbose=False):
         """Write the actual RFR input file to the given folder."""
-        # in python3 open was replaced with io.open
-        from io import open
 
         headers = []
         variables = []

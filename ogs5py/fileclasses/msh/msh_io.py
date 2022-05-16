@@ -74,8 +74,6 @@ def load_ogs5msh(
     The $AREA keyword within the Nodes definition is NOT supported
     and will violate the read data if present.
     """
-    # in python3 open was replaced with io.open
-    from io import open
 
     import pandas as pd
 
@@ -304,8 +302,6 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
             element_id : dict
                 contains element ids for each element sorted by element types
     """
-    # in python3 open was replaced with io.open
-    from io import open
 
     import pandas as pd
 
