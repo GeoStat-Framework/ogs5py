@@ -6,7 +6,7 @@ All notable changes to **ogs5py** will be documented in this file.
 ## [1.2.2] - 2022-05-25
 
 ### Bugfixes
-* `MSH.load`: use `engine='python'` as fallback in pandas to read ogs mesh [#16](https://github.com/GeoStat-Framework/ogs5py/pull/16)
+* `MSH.load` now uses `engine="python"` as fallback in pandas to successfully read ogs meshes in some corner cases [#16](https://github.com/GeoStat-Framework/ogs5py/pull/16)
 * removed redundant `from io import open` which were there for py2 compatibility [#16](https://github.com/GeoStat-Framework/ogs5py/pull/16)
 
 
