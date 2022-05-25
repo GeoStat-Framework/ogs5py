@@ -303,9 +303,6 @@ class GEMinit:
         -----
         This also reads the given files in the lst-file. (dch, ipm, dbr)
         """
-        # in python3 open was replaced with io.open
-        # so we can use encoding key word in python2
-        from io import open
 
         root = os.path.dirname(path)
 

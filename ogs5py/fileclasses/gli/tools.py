@@ -70,8 +70,6 @@ def load_ogs5gli(filepath, verbose=True, encoding=None):
                 - ``LAYER`` (int or None)
 
     """
-    # in python3 open was replaced with io.open
-    from io import open
 
     out = dcp(EMPTY_GLI)
 
