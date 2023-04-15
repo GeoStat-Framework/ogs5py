@@ -112,11 +112,11 @@ info/
 *.cpp
 
 # generated version file
-ogs5py/_version.py
+src/ogs5py/_version.py
 
 # generated docs
 docs/source/examples/
-docs/source/generated/
+docs/source/api/
 
 # other settings
 .vscode/

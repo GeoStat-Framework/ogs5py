@@ -178,7 +178,7 @@ You can contact us via <info@geostat-framework.org>.
 
 ## License
 
-[MIT][gpl_link] © 2018-2022 (inspired by Falk Hesse and Miao Jing)
+[MIT][gpl_link] © 2018-2023 (inspired by Falk Hesse and Miao Jing)
 
 This project is based on [OGSPY][ogspy_link].
 

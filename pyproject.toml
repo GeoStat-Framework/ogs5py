@@ -1,16 +1,97 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel",
-    "setuptools_scm[toml]>=3.5",
+    "hatchling>=1.8.0",
+    "hatch-vcs",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
 
-[tool.setuptools_scm]
-write_to = "ogs5py/_version.py"
-write_to_template = "__version__ = '{version}'"
-local_scheme = "no-local-version"
+[project]
+requires-python = ">=3.7"
+name = "ogs5py"
+description = "ogs5py: a python API for OpenGeoSys5"
+authors = [
+    {name = "Sebastian Müller, Falk Heße", email = "info@geostat-framework.org"},
+]
+readme = "README.md"
+license = "MIT"
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: Unix",
+    "Operating System :: Microsoft",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "numpy>=1.14.5",
+    "pandas>=0.23.2",
+    "meshio>=4",
+    "lxml>=4",
+    "pexpect>=4",
+    "vtk>=9",
+]
+
+[project.urls]
+Homepage = "https://geostat-framework.org/#ogs5py"
+Documentation = "https://ogs5py.readthedocs.io"
+Source = "https://github.com/GeoStat-Framework/ogs5py"
+Tracker = "https://github.com/GeoStat-Framework/ogs5py/issues"
+Changelog = "https://github.com/GeoStat-Framework/ogs5py/blob/main/CHANGELOG.md"
+Conda-Forge = "https://anaconda.org/conda-forge/ogs5py"
+
+[project.optional-dependencies]
+check = [
+  "black>=23,<24",
+  "isort[colors]<6",
+]
+doc = [
+    "m2r2>=0.2.8",
+    "numpydoc>=1.1",
+    "sphinx>=4",
+    "sphinx-rtd-theme>=1",
+]
+show = ["mayavi"]
+gmsh = ["gmsh"]
+test = ["pytest-cov>=3"]
+
+[tool.hatch.version]
+source = "vcs"
 fallback_version = "0.0.0.dev0"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/ogs5py/_version.py"
+template = "__version__ = '{version}'"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ogs5py"]
 
 [tool.isort]
 profile = "black"
@@ -20,11 +101,7 @@ line_length = 79
 [tool.black]
 exclude = "_version.py"
 line-length = 79
-target-version = [
-    "py36",
-    "py37",
-    "py38",
-]
+target-version = ["py37"]
 
 [tool.coverage]
     [tool.coverage.run]
