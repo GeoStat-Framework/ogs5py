@@ -245,9 +245,9 @@ def radial(
         element_no = angles * (r_no - 1)
         if closed:
             node_no += 1
-            elem_mid_arr = np.zeros((angles, 3), dtype=np.int)
+            elem_mid_arr = np.zeros((angles, 3), dtype=int)
 
-        element_arr = np.zeros((element_no, 4), dtype=np.int)
+        element_arr = np.zeros((element_no, 4), dtype=int)
         node_arr = np.zeros((node_no, 3))
 
         for ri, re in enumerate(rad):
@@ -279,9 +279,9 @@ def radial(
         element_no = angles * (r_no - 1) * (z_no - 1)
         if closed:
             node_no += z_no
-            elem_mid_arr = np.zeros((angles * (z_no - 1), 6), dtype=np.int)
+            elem_mid_arr = np.zeros((angles * (z_no - 1), 6), dtype=int)
 
-        element_arr = np.zeros((element_no, 8), dtype=np.int)
+        element_arr = np.zeros((element_no, 8), dtype=int)
         node_arr = np.zeros((node_no, 3))
 
         # write nodes
