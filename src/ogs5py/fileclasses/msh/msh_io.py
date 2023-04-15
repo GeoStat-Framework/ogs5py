@@ -309,7 +309,6 @@ def load_ogs5msh_old(filepath, verbose=True, max_node_no=8, encoding=None):
     out = dcp(EMPTY_MSH)
 
     with open(filepath, "r", encoding=encoding) as msh:
-
         head = msh.readline()
         if head.strip().startswith("#0#0#0#1#"):
             if verbose:
@@ -443,7 +442,6 @@ def save_ogs5msh(
             print(str(top_com), file=msh)
 
         for i, mesh_i in enumerate(mesh):
-
             if verbose:
                 print("write 'FEM_MSH' number: " + str(i))
             msh.write("#FEM_MSH\n")
