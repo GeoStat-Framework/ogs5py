@@ -315,7 +315,7 @@ def format_content(content):
     if isinstance(content, STRTYPE):
         return [[content]]
     # convert iterators (like zip)
-    if isinstance(content, collections.Iterator):
+    if isinstance(content, collections.abc.Iterator):
         content = list(content)
     # check for a single content thats not a string
     try:
