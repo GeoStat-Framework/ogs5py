@@ -3,6 +3,21 @@
 All notable changes to **ogs5py** will be documented in this file.
 
 
+## [1.3.0] - 2023-04
+
+See [#18](https://github.com/GeoStat-Framework/ogs5py/pull/18)
+
+### Enhancements
+- move to `src/` base package structure
+- use [hatchling](https://pypi.org/project/hatchling/) as build backend
+- drop py36 support
+- added archive support
+- simplify documentation
+
+### Bugfixes
+- remove usage of deprecated `np.int`
+
+
 ## [1.2.2] - 2022-05-25
 
 ### Bugfixes
@@ -185,7 +200,8 @@ All notable changes to **ogs5py** will be documented in this file.
 First release of ogs5py.
 
 
-[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/GeoStat-Framework/ogs5py/compare/v1.1.1...v1.2.0
