@@ -62,7 +62,6 @@ Conda-Forge = "https://anaconda.org/conda-forge/ogs5py"
 check = [
   "black>=23,<24",
   "isort[colors]<6",
-  "pydocstyle",
 ]
 doc = [
     "m2r2>=0.2.8",
