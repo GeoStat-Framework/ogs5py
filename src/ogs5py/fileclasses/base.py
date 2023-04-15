@@ -8,7 +8,7 @@ File Classes
 ^^^^^^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    File
    LineFile
@@ -500,7 +500,7 @@ class BlockFile(File):
         return main_key, sub_key, cont
 
     def update_block(self, index=None, main_key=None, **block):
-        """
+        r"""
         Update a Block from the actual file.
 
         Parameters
@@ -536,7 +536,7 @@ class BlockFile(File):
         self.add_block(index=index, **upd_block)
 
     def add_block(self, index=None, main_key=None, **block):
-        """
+        r"""
         Add a new Block to the actual file.
 
         Keywords are the sub keywords of the actual file type:
@@ -617,7 +617,7 @@ class BlockFile(File):
             self.add_multi_content(block[skey], main_index=index)
 
     def append_to_block(self, index=None, **block):
-        """
+        r"""
         Append data to an existing Block in the actual file.
 
         Keywords are the sub keywords of the actual file type:
@@ -1125,7 +1125,7 @@ class BlockFile(File):
 
 
 class MultiFile:
-    """
+    r"""
     Class holding mulitple files of the same type.
 
     Parameters
@@ -1182,7 +1182,7 @@ class MultiFile:
         return None
 
     def add(self, *args, **kwargs):
-        """Add a new instance of the base class with *args and **kwargs."""
+        r"""Add a new instance of the base class with given args and kwargs."""
         kw = copy.deepcopy(self.standard)
         kw.update(kwargs)
         self.append(self._base(*args, **kw))

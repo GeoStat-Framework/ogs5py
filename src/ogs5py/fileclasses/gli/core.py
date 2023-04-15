@@ -481,7 +481,7 @@ class GLI(File):
         """
         Use a gli-generator from the generator module.
 
-        See: :any:`ogs5py.fileclasses.gli.generator`
+        See: :py:mod:`ogs5py.fileclasses.gli.generator`
 
         Parameters
         ----------

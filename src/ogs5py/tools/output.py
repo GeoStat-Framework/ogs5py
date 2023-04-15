@@ -1,5 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Tools for ogs5py output files (independent from VTK package)."""
+"""
+Tools for ogs5py output files (independent from VTK package).
+
+.. currentmodule:: ogs5py.tools.output
+
+Helpers
+^^^^^^^
+
+.. autosummary::
+   :toctree:
+
+   get_output_files
+   readpvd_single
+   split_ply_path
+   split_pnt_path
+"""
 import glob
 import os
 import re
@@ -288,7 +303,7 @@ def readpvd_single(infile):
 
 
 def get_output_files(task_root, task_id, pcs=None, typ="VTK", element=None):
-    """
+    r"""
     Get a list of output file paths.
 
     Parameters
@@ -301,7 +316,7 @@ def get_output_files(task_root, task_id, pcs=None, typ="VTK", element=None):
         specify the PCS type that should be collected
         Possible values are:
 
-            - None/"" (no PCS_TYPE specified in *.out)
+            - None/"" (no PCS_TYPE specified in \*.out)
             - "NO_PCS"
             - "GROUNDWATER_FLOW"
             - "LIQUID_FLOW"

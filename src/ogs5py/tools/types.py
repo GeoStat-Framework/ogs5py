@@ -54,6 +54,81 @@ General Constants
    OGS_EXT
    MULTI_FILES
 
+----
+
+.. autodata:: EMPTY_GLI
+
+.. autodata:: GLI_KEYS
+
+.. autodata:: GLI_KEY_LIST
+
+.. autodata:: EMPTY_PLY
+
+.. autodata:: PLY_KEYS
+
+.. autodata:: PLY_KEY_LIST
+
+.. autodata:: PLY_TYPES
+
+.. autodata:: EMPTY_SRF
+
+.. autodata:: SRF_KEYS
+
+.. autodata:: SRF_KEY_LIST
+
+.. autodata:: SRF_TYPES
+
+.. autodata:: EMPTY_VOL
+
+.. autodata:: VOL_KEYS
+
+.. autodata:: VOL_KEY_LIST
+
+.. autodata:: VOL_TYPES
+
+.. autodata:: EMPTY_MSH
+
+.. autodata:: MESH_KEYS
+
+.. autodata:: MESH_DATA_KEYS
+
+.. autodata:: ELEM_1D
+
+.. autodata:: ELEM_2D
+
+.. autodata:: ELEM_3D
+
+.. autodata:: ELEM_DIM
+
+.. autodata:: ELEM_NAMES
+
+.. autodata:: ELEM_TYP
+
+.. autodata:: ELEM_TYP1D
+
+.. autodata:: ELEM_TYP2D
+
+.. autodata:: ELEM_TYP3D
+
+.. autodata:: VTK_TYP
+
+.. autodata:: MESHIO_NAMES
+
+.. autodata:: NODE_NO
+
+.. autodata:: STRTYPE
+
+.. autodata:: PCS_TYP
+
+.. autodata:: PCS_EXT
+
+.. autodata:: PRIM_VAR
+
+.. autodata:: PRIM_VAR_BY_PCS
+
+.. autodata:: OGS_EXT
+
+.. autodata:: MULTI_FILES
 """
 import numpy as np
 

@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Viewer for a vtk file."""
+"""
+Viewer for a vtk file.
+
+.. currentmodule:: ogs5py.tools.vtk_viewer
+
+Viewer
+^^^^^^
+
+.. autosummary::
+   :toctree:
+
+   show_vtk
+"""
 # import os
 # os.environ["QT_API"] = "pyqt"
 # os.environ["ETS_TOOLKIT"] = "qt4"

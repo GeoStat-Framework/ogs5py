@@ -1,18 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Base Class for an OGS5 run.
-
-.. currentmodule:: ogs5py.ogs
-
-OGS Class
-^^^^^^^^^
-
-.. autosummary::
-
-   OGS
-
-----
-"""
+"""Base Class for an OGS5 run."""
 import glob
 import os
 import shutil
@@ -1022,7 +1009,7 @@ class OGS:
             specify the PCS type that should be collected
             Possible values are:
 
-                - None/"" (no PCS_TYPE specified in *.out)
+                - None/"" (no PCS_TYPE specified in \*.out)
                 - "NO_PCS"
                 - "GROUNDWATER_FLOW"
                 - "LIQUID_FLOW"

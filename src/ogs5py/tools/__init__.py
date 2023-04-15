@@ -8,10 +8,12 @@ Subpackages
 ^^^^^^^^^^^
 
 .. autosummary::
-    tools
-    script
-    download
-    output
-    vtk_viewer
-    types
+   :toctree:
+
+   tools
+   script
+   download
+   output
+   vtk_viewer
+   types
 """

@@ -6,16 +6,19 @@ Class for the ogs MESH file.
 
 Subpackages
 ^^^^^^^^^^^
-The generators can be called with :any:`MSH.generate`
+The generators can be called with :py:meth:`~ogs5py.fileclasses.MSH.generate`
 
 .. autosummary::
+   :toctree:
+
    generator
 
 File Class
 ^^^^^^^^^^
 
+.. currentmodule:: ogs5py.fileclasses
+
 .. autosummary::
-   :toctree: generated
 
    MSH
 

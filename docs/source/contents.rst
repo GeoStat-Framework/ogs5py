@@ -4,9 +4,9 @@ Contents
 
 .. toctree::
    :includehidden:
-   :maxdepth: 3
+   :maxdepth: 5
 
    index
    tutorials
-   package
+   api
    changelog

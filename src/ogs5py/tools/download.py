@@ -10,14 +10,12 @@ Downloader
 A downloading routine to get the OSG5 executable.
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    download_ogs
    add_exe
    reset_download
    OGS5PY_CONFIG
-
-----
 """
 import os
 import platform

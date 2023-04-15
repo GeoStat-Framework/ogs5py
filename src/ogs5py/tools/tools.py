@@ -8,7 +8,7 @@ Classes
 ^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    Output
 
@@ -16,7 +16,7 @@ File related
 ^^^^^^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    search_mkey
    uncomment
@@ -37,7 +37,7 @@ Geometric tools
 ^^^^^^^^^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    rotate_points
    shift_points
@@ -51,15 +51,13 @@ Array tools
 ^^^^^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    unique_rows
    replace
    by_id
    specialrange
    generate_time
-
-----
 """
 import ast
 import collections

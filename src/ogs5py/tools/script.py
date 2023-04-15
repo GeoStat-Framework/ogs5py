@@ -8,7 +8,7 @@ Generator
 ^^^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    gen_script
 
@@ -16,7 +16,7 @@ Helpers
 ^^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    formater
    get_line
@@ -24,8 +24,6 @@ Helpers
    add_block_file
    add_load_file
    add_list_file
-
-----
 """
 import os
 import shutil

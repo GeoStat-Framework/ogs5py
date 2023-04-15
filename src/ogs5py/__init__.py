@@ -11,9 +11,11 @@ Subpackages
 ===========
 
 .. autosummary::
-    fileclasses
-    reader
-    tools
+   :toctree: api
+
+   fileclasses
+   reader
+   tools
 
 Classes
 =======
@@ -23,7 +25,7 @@ OGS model Base Class
 Class to setup an ogs model
 
 .. autosummary::
-   :toctree: generated
+   :toctree: api
 
    OGS
 

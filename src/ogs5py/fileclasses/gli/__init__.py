@@ -9,13 +9,16 @@ Subpackages
 The generators can be called with :any:`GLI.generate`
 
 .. autosummary::
+   :toctree:
+
    generator
 
 File Classes
 ^^^^^^^^^^^^
 
+.. currentmodule:: ogs5py.fileclasses
+
 .. autosummary::
-   :toctree: generated
 
    GLI
    GLIext

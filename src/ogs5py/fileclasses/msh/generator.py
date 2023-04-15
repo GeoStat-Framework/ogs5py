@@ -9,7 +9,7 @@ Generators
 These generators can be called with :any:`MSH.generate`
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    rectangular
    radial

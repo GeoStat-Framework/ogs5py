@@ -8,6 +8,8 @@ Subpackages
 ^^^^^^^^^^^
 
 .. autosummary::
+   :toctree:
+
    base
    gli
    msh
@@ -17,7 +19,7 @@ File Classes
 Classes for all OGS5 Files
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    ASC
    BC

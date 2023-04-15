@@ -8,7 +8,7 @@ Reader
 ^^^^^^
 
 .. autosummary::
-   :toctree: generated
+   :toctree:
 
    readvtk
    readpvd

@@ -1000,7 +1000,7 @@ class MSHsgl(File):
         """
         Use a mesh-generator from the generator module.
 
-        See: :any:`ogs5py.fileclasses.msh.generator`
+        See: :py:mod:`ogs5py.fileclasses.msh.generator`
 
         Parameters
         ----------
